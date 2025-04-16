@@ -1,0 +1,168 @@
+.resultsPageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  margin: 20px;
+  background-color: #232529; 
+  color: #E2E8F0; 
+  max-height: 100vh; 
+  overflow-y: auto; 
+  font-family: 'Roboto', sans-serif; /* Use modern, clean font */
+}
+
+.resultsSummary {
+  width: 100%;
+  max-width: 800px;
+  padding: 30px;
+  background-color: #2b3136;
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  transition: box-shadow 0.3s ease-in-out; /* Smooth shadow transition */
+  margin-bottom: 30px;
+}
+
+.resultsSummary:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Hover effect for depth */
+}
+
+.resultsTitle {
+  text-align: center;
+  font-size: 2.8rem; /* Larger title */
+  margin-bottom: 15px;
+  color: #A6AAFB;
+  font-weight: 600; /* Bold title */
+}
+
+.resultsDescription {
+  font-size: 1.2em;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #E2E8F0;
+}
+
+.scoreSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.scoreText {
+  font-size: 1.6em;
+  margin: 5px 0;
+  color: #E2E8F0;
+  font-weight: 500; /* Bold for score details */
+}
+
+.chartContainer {
+  width: 100%;
+  max-width: 300px;
+  margin: 30px auto;
+  transition: transform 0.3s ease; /* Animation for chart */
+}
+
+.chartContainer:hover {
+  transform: scale(1.05); /* Zoom in on hover */
+}
+
+.explanationText {
+  font-size: 1.2em;
+  margin-top: 20px;
+  color: #E2E8F0;
+  line-height: 1.6; /* Increase line height for readability */
+}
+
+.detailedResults {
+  margin-top: 30px;
+  background-color: #2b3136;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.challengeList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.challengeItem {
+  margin-bottom: 20px;
+  background-color: #383c42;
+  padding: 15px;
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.challengeItem:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.challengeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.challengeHeader h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #A6AAFB;
+}
+
+.resultStatus {
+  font-size: 1.1rem;
+  color: #A6AAFB;
+  font-weight: 500;
+}
+
+.challengeBody {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #E2E8F0;
+  line-height: 1.5; /* Increase line height for readability */
+}
+
+.goBackButtonContainer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.goBackButton {
+  background-color: #A6AAFB;
+  color: white;
+  padding: 14px 28px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 50px; /* Rounded edges for the button */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.goBackButton:hover {
+  background-color: #8c90e6;
+  transform: scale(1.05); /* Button zoom effect */
+}
+
+.goBackButton:focus {
+  outline: none;
+}
+
+/* Scrollbar styles */
+.resultsPageContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.resultsPageContainer::-webkit-scrollbar-thumb {
+  background-color: #A6AAFB;
+  border-radius: 4px;
+}
+
+.resultsPageContainer::-webkit-scrollbar-track {
+  background-color: #383c42;
+}

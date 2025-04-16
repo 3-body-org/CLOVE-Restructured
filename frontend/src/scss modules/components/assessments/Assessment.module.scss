@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+    --primary: #6c5ce7;
+    --secondary: #a8a5e6;
+    --accent: #ff7675;
+    --bg: #0f0f1a;
+    --card-bg: #1e1e2e;
+    --text: #ffffff;
+    --correct: #64ff96;
+    --incorrect: #ff6464;
+    --progress-bar: rgba(255, 255, 255, 0.1);
+    --button-text: white;
+}
+
+/* Page container */
+.pageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--bg);
+}
+
+/* PreAssessment card container styles */
+.testContainer {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(108, 92, 231, 0.2);
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    color: var(--text);
+}
+
+/* Progress bar styles */
+.progressBar {
+    height: 10px;
+    background: var(--progress-bar);
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    width: 0%;
+}
+
+/* Question count style */
+.questionCount {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+}
+
+/* Question text style */
+.questionText {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+/* Option container styles */
+.optionsContainer {
+    display: grid;
+    gap: 20px;
+}
+
+/* Option styles */
+.option {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(108, 92, 231, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text);
+}
+
+/* Correct answer styling */
+.option.correct {
+    background-color: var(--correct);
+    border-color: var(--correct);
+}
+
+/* Incorrect answer styling */
+.option.incorrect {
+    background-color: var(--incorrect);
+    border-color: var(--incorrect);
+}
+
+/* Shake animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.option.shake {
+    animation: shake 0.5s ease forwards;
+}
+
+/* Disabled state */
+.option.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Hover effect */
+.option:hover {
+    background-color: rgba(108, 92, 231, 0.1);
+}
+
+/* Button styles */
+.nextBtn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--button-text);
+    border: none;
+    padding: 18px 40px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.nextBtn:hover {
+    transform: translateY(-3px);
+}
+
+.nextBtn:active {
+    transform: translateY(0);
+}
