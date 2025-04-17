@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import TimerRing from "../../components/challenges/TimerRing";
 // import { challenges } from "./challenges";
 // import styles from "../../scss modules/pages/challenges page/ChallengesPage.module.scss";
+import CodeFixer from "../challenges page/modes page/CodeFixer";
+import CodeCompletion from "../challenges page/modes page/CodeCompletion";
 import OutputTracing from "../challenges page/modes page/OutputTracing";
 
 const ChallengesPage = () => {
@@ -19,7 +21,9 @@ const ChallengesPage = () => {
 
   return (
     <>
-      <OutputTracing />
+      <CodeFixer />
+      {/* <CodeCompletion /> */}
+      {/* <OutputTracing /> */}
     </>
   );
 };
