@@ -45,9 +45,9 @@ The project should now be running successfully. Access it via the provided local
 
 To access the Database without pgAdmin, use the AWS CloudShell:
 
-```bash
+
 ![image](https://github.com/user-attachments/assets/01ad7223-0729-4cc0-b227-399bf42060b3)
-```
+
 
 Install postgresql
 ```bash
