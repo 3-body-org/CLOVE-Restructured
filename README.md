@@ -40,3 +40,22 @@ npm run dev
 ```
 
 The project should now be running successfully. Access it via the provided local development URL.
+
+## Accessing AWS RDS Database
+
+To access the Database without pgAdmin, use the AWS CloudShell:
+
+```bash
+![image](https://github.com/user-attachments/assets/01ad7223-0729-4cc0-b227-399bf42060b3)
+```
+
+Install postgresql
+```bash
+sudo dnf install postgresql15 -y
+```
+
+Then connect to RDS:
+```bash
+psql -h YOUR_RDS_ENDPOINT.rds.amazonaws.com -U YOUR_USERNAME -d YOUR_DB_NAME
+```
+
