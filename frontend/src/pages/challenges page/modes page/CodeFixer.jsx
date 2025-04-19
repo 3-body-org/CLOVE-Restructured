@@ -1,14 +1,34 @@
-//react
 import React, { useEffect, useState } from "react";
-//scss
 import styles from "../../../scss modules/pages/challenges page/modes page/CodeFixer.module.scss";
 
 const CosmicJava = () => {
-  const [timeLeft, setTimeLeft] = useState(480); // 8 minutes
+  const [timeLeft, setTimeLeft] = useState(480);
   const [score, setScore] = useState(0);
   const [bugsFixed, setBugsFixed] = useState(0);
   const [hintsLeft, setHintsLeft] = useState(2);
   const [showHint, setShowHint] = useState(false);
+  const [userFixes, setUserFixes] = useState({
+    fix1: "String",
+    fix2: "||",
+    fix3: "power.length()",
+    fix4: "Double",
+    fix5: "duration.toUpperCase()",
+  });
+  const [verifiedFixes, setVerifiedFixes] = useState(new Set());
+  const [testCases, setTestCases] = useState([
+    {
+      description: "setPower(2, 85)",
+      expected: "Thruster 2 power set to 85",
+      actual: "Not executed yet",
+      passed: null, // null = not tested yet
+    },
+    {
+      description: "fireThrusters(1.5)",
+      expected: "All thrusters fired successfully",
+      actual: "Not executed yet",
+      passed: null,
+    },
+  ]);
 
   const correctAnswers = {
     fix1: "int",
@@ -18,7 +38,6 @@ const CosmicJava = () => {
     fix5: "thrusterPower[i]",
   };
 
-  // Timer effect
   useEffect(() => {
     const timerInterval = setInterval(() => {
       setTimeLeft((prev) => {
@@ -34,7 +53,6 @@ const CosmicJava = () => {
     return () => clearInterval(timerInterval);
   }, []);
 
-  // Format time display
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -43,10 +61,8 @@ const CosmicJava = () => {
       .padStart(2, "0")}`;
   };
 
-  // Calculate system integrity
   const systemIntegrity = Math.floor((timeLeft / 480) * 100);
 
-  // Handle hint button click
   const handleHintClick = () => {
     if (hintsLeft > 0) {
       setShowHint(true);
@@ -57,59 +73,79 @@ const CosmicJava = () => {
     }
   };
 
-  // Update score
   const updateScore = (points) => {
-    setScore((prev) => prev + points);
+    setScore((prev) => Math.max(0, prev + points));
   };
 
-  // Update bugs fixed count
-  const updateBugsFixed = () => {
-    setBugsFixed((prev) => prev + 1);
-    updateScore(20);
+  const handleFixChange = (fixId, value) => {
+    setUserFixes((prev) => ({
+      ...prev,
+      [fixId]: value,
+    }));
   };
 
-  // Check single input
-  const checkSingleInput = (input) => {
-    const id = input.id;
-    if (input.value === correctAnswers[id]) {
-      input.classList.add("correct");
-      input.classList.remove("wrong");
-      return true;
-    } else {
-      input.classList.add("wrong");
-      input.classList.remove("correct");
-      return false;
-    }
+  const validateFix = (fixId) => {
+    return userFixes[fixId] === correctAnswers[fixId];
   };
 
-  // Check all solutions
+  const updateTestCases = () => {
+    const newTestCases = testCases.map((testCase) => {
+      if (testCase.description === "setPower(2, 85)") {
+        const condition1 = validateFix("fix1");
+        const condition2 = validateFix("fix2");
+        const condition3 = validateFix("fix3");
+        const passed = condition1 && condition2 && condition3;
+
+        return {
+          ...testCase,
+          passed,
+          actual: passed
+            ? "Thruster 2 power set to 85"
+            : condition1 && condition2
+            ? "Invalid power assignment"
+            : "Array index out of bounds",
+        };
+      }
+
+      if (testCase.description === "fireThrusters(1.5)") {
+        const condition4 = validateFix("fix4");
+        const condition5 = validateFix("fix5");
+        const passed = condition4 && condition5;
+
+        return {
+          ...testCase,
+          passed,
+          actual: passed
+            ? "All thrusters fired successfully"
+            : condition4
+            ? "Invalid thruster power value"
+            : "Type mismatch error",
+        };
+      }
+
+      return testCase;
+    });
+
+    setTestCases(newTestCases);
+  };
+
   const checkSolution = () => {
-    let allCorrect = true;
+    let newVerified = new Set(verifiedFixes);
     let newBugsFixed = 0;
 
-    // Check each input
-    for (const [id, answer] of Object.entries(correctAnswers)) {
-      const input = document.getElementById(id);
-      if (checkSingleInput(input)) {
-        if (!input.classList.contains("verified")) {
-          newBugsFixed++;
-          input.classList.add("verified");
-        }
-      } else {
-        allCorrect = false;
+    Object.keys(correctAnswers).forEach((fixId) => {
+      if (validateFix(fixId) && !verifiedFixes.has(fixId)) {
+        newVerified.add(fixId);
+        newBugsFixed++;
       }
-    }
+    });
 
-    // Update score and bugs fixed
-    if (newBugsFixed > 0) {
-      updateScore(newBugsFixed * 20);
-      for (let i = 0; i < newBugsFixed; i++) {
-        updateBugsFixed();
-      }
-    }
+    setVerifiedFixes(newVerified);
+    setBugsFixed(newVerified.size);
+    updateScore(newBugsFixed * 20);
+    updateTestCases();
 
-    // Show appropriate message
-    if (allCorrect) {
+    if (newVerified.size === 5) {
       setTimeout(() => {
         alert(
           "SYSTEM RESTORED! Thrusters operational!\n+50pt bonus for perfect repair!"
@@ -123,157 +159,79 @@ const CosmicJava = () => {
     }
   };
 
-  // Handle bug indicator click
   const handleBugClick = (bugNum) => {
     const input = document.getElementById(`fix${bugNum}`);
-    input.focus();
-
-    // Highlight corresponding code
-    document.querySelectorAll(".buggy-code").forEach((code) => {
-      code.style.background = "rgba(255, 100, 100, 0.1)";
-    });
-
-    input.parentElement.style.background = "rgba(255, 100, 100, 0.3)";
-    setTimeout(() => {
-      input.parentElement.style.background = "";
-    }, 2000);
+    if (input) input.focus();
   };
 
-  // Handle drag and drop events
-  useEffect(() => {
-    // Toolbox drag start
-    document.querySelectorAll(".tool-item").forEach((tool) => {
-      tool.addEventListener("dragstart", function (e) {
-        this.classList.add("dragging");
-        e.dataTransfer.setData("text/plain", this.getAttribute("data-value"));
-        e.dataTransfer.effectAllowed = "copy";
-      });
-
-      tool.addEventListener("dragend", function () {
-        this.classList.remove("dragging");
-      });
-    });
-
-    // Code input drop events
-    document.querySelectorAll(".code-input").forEach((input) => {
-      input.addEventListener("dragover", function (e) {
-        e.preventDefault();
-        this.classList.add("drag-over");
-        e.dataTransfer.dropEffect = "copy";
-      });
-
-      input.addEventListener("dragenter", function (e) {
-        e.preventDefault();
-        this.classList.add("drag-over");
-      });
-
-      input.addEventListener("dragleave", function () {
-        this.classList.remove("drag-over");
-      });
-
-      input.addEventListener("drop", function (e) {
-        e.preventDefault();
-        this.classList.remove("drag-over");
-        const data = e.dataTransfer.getData("text/plain");
-        this.value = data;
-        checkSingleInput(this);
-      });
-    });
-
-    // Initialize with first bug highlighted
-    handleBugClick(1);
-
-    // Cleanup event listeners
-    return () => {
-      document.querySelectorAll(".tool-item").forEach((tool) => {
-        tool.removeEventListener("dragstart", () => {});
-        tool.removeEventListener("dragend", () => {});
-      });
-
-      document.querySelectorAll(".code-input").forEach((input) => {
-        input.removeEventListener("dragover", () => {});
-        input.removeEventListener("dragenter", () => {});
-        input.removeEventListener("dragleave", () => {});
-        input.removeEventListener("drop", () => {});
-      });
-    };
-  }, []);
+  const getInputClass = (fixId) => {
+    if (verifiedFixes.has(fixId)) return styles.verified;
+    return validateFix(fixId) ? styles.correct : styles.wrong;
+  };
 
   return (
     <div className={styles.missionContainer}>
-      {/* Game Mechanics Panel */}
+      {/* Left Panel - Game Mechanics */}
       <div className={styles.gamePanel}>
         <div className={styles.missionInfo}>
           <h2 className={styles.missionTitle}>MISSION: BETA-9</h2>
           <p className={styles.missionDescription}>
             Debug the spacecraft's thruster control system before it's too late!
-            Find and fix all bugs to prevent catastrophic failure.
+            Find and fix all syntax errors to prevent catastrophic failure.
           </p>
         </div>
 
         <div className={styles.timerContainer}>
           <div>EMERGENCY TIMER</div>
-          <div
-            className={styles.timer}
-            id="timer"
-            style={
-              timeLeft < 120
-                ? { color: styles.accent, animation: "pulse 1s infinite" }
-                : null
-            }
-          >
-            {formatTime(timeLeft)}
-          </div>
+          <div className={styles.timer}>{formatTime(timeLeft)}</div>
         </div>
 
         <div className={styles.hintSystem}>
           <div className={styles.hintTitle}>ENGINEERING MANUAL</div>
-          <p>Need help? Consult the manual (costs 15pts)</p>
-          <div
-            className={styles.hintContent}
-            id="hint-content"
-            style={{ display: showHint ? "block" : "none" }}
-          >
-            Common thruster issues:
-            <br />
-            1. Incorrect loop conditions
-            <br />
-            2. Wrong variable types
-            <br />
-            3. Missing termination statements
-          </div>
           <button
             className={styles.hintBtn}
-            id="hint-btn"
             onClick={handleHintClick}
+            disabled={hintsLeft === 0}
           >
-            REQUEST HELP ({hintsLeft} LEFT)
+            REQUEST HELP ({hintsLeft} LEFT) -15pts
           </button>
+          {showHint && (
+            <div className={styles.hintContent}>
+              <p>Common Issues:</p>
+              <ul>
+                <li>Check variable types</li>
+                <li>Verify logical operators</li>
+                <li>Array index boundaries</li>
+                <li>Method return types</li>
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className={styles.scoring}>
           <div className={styles.scoreDisplay}>
-            CREDITS: <span id="score">{score}</span>
+            CREDITS: <span>{score}</span>
           </div>
           <div>
-            Bugs Fixed: <span id="bugs-fixed">{bugsFixed}</span>/5
+            BUGS FIXED: <span>{bugsFixed}</span>/5
           </div>
           <div>
-            System Integrity: <span id="integrity">{systemIntegrity}</span>%
+            SYSTEM INTEGRITY: <span>{systemIntegrity}%</span>
           </div>
         </div>
       </div>
 
-      {/* Challenge Area */}
+      {/* Right Panel - Coding Challenge */}
       <div className={styles.challengeArea}>
-        <h2 className={styles.challengeTitle}>CODE FIXER CHALLENGE</h2>
+        <h2 className={styles.challengeTitle}>THRUSTER CONTROL SYSTEM</h2>
 
         <div className={styles.bugRadar}>
           {[1, 2, 3, 4, 5].map((num) => (
             <div
               key={num}
-              className={`${styles.bugIndicator} ${bugsFixed >= num ? styles.found : ""}`}
-              data-bug={num}
+              className={`${styles.bugIndicator} ${
+                verifiedFixes.has(`fix${num}`) ? styles.fixed : ""
+              }`}
               onClick={() => handleBugClick(num)}
             >
               {num}
@@ -281,149 +239,105 @@ const CosmicJava = () => {
           ))}
         </div>
 
-        <div className={styles.codeFixerEditor}>
-          <p style={{ color: "var(--bug)", marginBottom: "15px" }}>
-            // THRUSTER CONTROL SYSTEM - DEBUG REQUIRED
-          </p>
+        <div className={styles.codeEditor}>
+          <pre>
+            <code>
+              {`public class ThrusterController { private int[] thrusterPower = {0, 0, 0, 0}; public void setPower(int thruster, `}
+              <input
+                id="fix1"
+                className={`${styles.codeInput} ${getInputClass("fix1")}`}
+                value={userFixes.fix1}
+                onChange={(e) => handleFixChange("fix1", e.target.value)}
+              />
+              {` power) {
+    if (thruster >= 0 `}
+              <input
+                id="fix2"
+                className={`${styles.codeInput} ${getInputClass("fix2")}`}
+                value={userFixes.fix2}
+                onChange={(e) => handleFixChange("fix2", e.target.value)}
+              />
+              {` thruster < thrusterPower.length) {
+      thrusterPower[thruster] = `}
+              <input
+                id="fix3"
+                className={`${styles.codeInput} ${getInputClass("fix3")}`}
+                value={userFixes.fix3}
+                onChange={(e) => handleFixChange("fix3", e.target.value)}
+              />
+              {`;
+    }
+  }
 
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>1</span>
-            <span>public class ThrusterController {"{"}</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>2</span>
-            <span> private int[] thrusterPower = {"{0, 0, 0, 0}"};</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>3</span>
-            <span> </span>
-          </div>
-          <div className={styles.codeLineBuggy}>
-            <span className={styles.lineNumber}>4</span>
-            <span> public void setPower(int thruster, </span>
-            <input
-              type="text"
-              className={styles.codeInput}
-              id="fix1"
-              defaultValue="String"
-              placeholder="Fix type"
-            />
-            <span>power) {"{"}</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>5</span>
-            <span> if (thruster &gt;= 0 </span>
-            <input
-              type="text"
-              className={styles.codeInput}
-              id="fix2"
-              defaultValue="||"
-              placeholder="Fix operator"
-            />
-            <span>
-              {" "}
-              thruster {"<"} thrusterPower.length) {"{"}
-            </span>
-          </div>
-          <div className={styles.codeLineBuggy}>
-            <span className={styles.lineNumber}>6</span>
-            <span> thrusterPower[thruster] = </span>
-            <input
-              type="text"
-              className={styles.codeInput}
-              id="fix3"
-              defaultValue="power.length()"
-              placeholder="Fix value"
-            />
-            <span>;</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>7</span>
-            <span> {"}"}</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>8</span>
-            <span> {"}"}</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>9</span>
-            <span> </span>
-          </div>
-          <div className={styles.codeLineBuggy}>
-            <span className={styles.lineNumber}>10</span>
-            <span> public void fireThrusters(</span>
-            <input
-              type="text"
-              className={styles.codeInput}
-              id="fix4"
-              defaultValue="Double"
-              placeholder="Fix type"
-            />
-            <span>duration) {"{"}</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>11</span>
-            <span>
-              {" "}
-              for (int i = 0; i {"<"} thrusterPower.length; i++) {"{"}
-            </span>
-          </div>
-          <div className={styles.codeLineBuggy}>
-            <span className={styles.lineNumber}>12</span>
-            <span> System.out.println("Thruster " + i + " firing at " + </span>
-            <input
-              type="text"
-              className={styles.codeInput}
-              id="fix5"
-              defaultValue="duration.toUpperCase()"
-              placeholder="Fix value"
-            />
-            <span> + "% power");</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>13</span>
-            <span> {"}"}</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>14</span>
-            <span> {"}"}</span>
-          </div>
-          <div className={styles.codeLine}>
-            <span className={styles.lineNumber}>15</span>
-            <span>{"}"}</span>
-          </div>
+  public void fireThrusters(`}
+              <input
+                id="fix4"
+                className={`${styles.codeInput} ${getInputClass("fix4")}`}
+                value={userFixes.fix4}
+                onChange={(e) => handleFixChange("fix4", e.target.value)}
+              />
+              {` duration) {
+    for (int i = 0; i < thrusterPower.length; i++) {
+      System.out.println("Thruster " + i + " firing at " + `}
+              <input
+                id="fix5"
+                className={`${styles.codeInput} ${getInputClass("fix5")}`}
+                value={userFixes.fix5}
+                onChange={(e) => handleFixChange("fix5", e.target.value)}
+              />
+              {` + "% power");
+    }
+  }
+}`}
+            </code>
+          </pre>
         </div>
 
-        <div className={styles.toolbox}>
-          <div className={styles.toolboxTitle}>DEBUGGING TOOLS</div>
-          <div className={styles.toolItems}>
-            <div className={styles.toolItem} draggable="true" data-value="int">
-              int
-            </div>
-            <div className={styles.toolItem} draggable="true" data-value="double">
-              double
-            </div>
-            <div className={styles.toolItem} draggable="true" data-value="power">
-              power
-            </div>
-            <div className={styles.toolItem} draggable="true" data-value="||">
-              ||
-            </div>
-            <div className={styles.toolItem} draggable="true" data-value="&&">
-              &&
-            </div>
+        <div className={styles.testCases}>
+          <h3>INTEGRATION TESTS</h3>
+          {testCases.map((testCase, index) => (
             <div
-              className={styles.toolItem}
-              draggable="true"
-              data-value="thrusterPower[i]"
+              className={`${styles.testCase} ${
+                testCase.passed === null
+                  ? styles.pending
+                  : testCase.passed
+                  ? styles.passed
+                  : styles.failed
+              }`}
             >
-              thrusterPower[i]
+              <div className={styles.testHeader}>
+                <span>TEST #{index + 1}</span>
+                <span>
+                  {testCase.passed === null
+                    ? "🟡 PENDING"
+                    : testCase.passed
+                    ? "✅ PASSED"
+                    : "❌ FAILED"}
+                </span>
+              </div>
+              <div className={styles.testDescription}>
+                {testCase.description}
+              </div>
+              <div className={styles.testResults}>
+                <div>
+                  <strong>Expected:</strong>
+                  <pre>{testCase.expected}</pre>
+                </div>
+                <div>
+                  <strong>Actual:</strong>
+                  <pre>{testCase.actual}</pre>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
 
-        <button className={styles.submitBtn} onClick={checkSolution}>
-          LAUNCH REPAIRS
+        <button
+          className={styles.submitBtn}
+          onClick={checkSolution}
+          disabled={timeLeft <= 0}
+        >
+          {timeLeft > 0 ? "VALIDATE REPAIRS" : "SYSTEM FAILURE"}
         </button>
       </div>
     </div>

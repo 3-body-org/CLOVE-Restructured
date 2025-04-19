@@ -1,10 +1,7 @@
-//react
 import React, { useState, useEffect, useRef } from "react";
-//scss
 import styles from "../../../scss modules/pages/challenges page/modes page/CodeCompletion.module.scss";
 
 const CosmicCompletion = () => {
-  // Game state
   const [timeLeft, setTimeLeft] = useState(300);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -23,13 +20,12 @@ const CosmicCompletion = () => {
     missing3: "",
   });
 
-  // Refs
   const missing1Ref = useRef(null);
   const missing2Ref = useRef(null);
   const missing3Ref = useRef(null);
   const challengeAreaRef = useRef(null);
 
-  // Timer
+  // Timer effect
   useEffect(() => {
     const timerInterval = setInterval(() => {
       setTimeLeft((prev) => {
@@ -45,29 +41,40 @@ const CosmicCompletion = () => {
     return () => clearInterval(timerInterval);
   }, []);
 
+  // Click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        challengeAreaRef.current &&
+        !challengeAreaRef.current.contains(event.target)
+      ) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
+    const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Hint system
   const handleHintClick = () => {
     if (hintsLeft > 0) {
       setShowHint(true);
       setHintsLeft((prev) => prev - 1);
-      updateScore(-10);
+      setScore((prev) => Math.max(0, prev - 10));
     } else {
       alert("No hints remaining!");
     }
   };
 
-  // Code completion
   const showOptions = (id, event) => {
     event.stopPropagation();
-    setActiveDropdown(id);
+    setActiveDropdown(activeDropdown === id ? null : id);
     setActiveMissingId(id);
   };
 
@@ -83,30 +90,11 @@ const CosmicCompletion = () => {
     }));
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (activeDropdown) {
-        const currentId = activeDropdown;
-        setActiveDropdown(null);
-        setTimeout(() => setActiveDropdown(currentId), 0);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [activeDropdown]);
-
-  // Scoring
   const updateScore = (points) => {
-    setScore((prev) => prev + points);
-    if (points > 0) {
-      setStreak((prev) => prev + 1);
-    } else {
-      setStreak(0);
-    }
+    setScore((prev) => Math.max(0, prev + points));
+    setStreak((prev) => (points > 0 ? prev + 1 : 0));
   };
 
-  // Solution check
   const checkSolution = () => {
     const correctAnswers = {
       missing1: "fuel * fuelEfficiency",
@@ -154,31 +142,74 @@ const CosmicCompletion = () => {
     if (ref.current && challengeAreaRef.current) {
       const codeRect = ref.current.getBoundingClientRect();
       const challengeRect = challengeAreaRef.current.getBoundingClientRect();
-
-      const left = codeRect.left - challengeRect.left;
-      const top = codeRect.bottom - challengeRect.top;
-
-      let adjustedLeft = left;
-      if (left < 0) adjustedLeft = challengeRect.width / 2 - 100;
-      if (left > challengeRect.width - 200)
-        adjustedLeft = challengeRect.width / 2 - 100;
-
       return {
-        left: `${adjustedLeft}px`,
-        top: `${top}px`,
+        left: `${codeRect.left - challengeRect.left}px`,
+        top: `${codeRect.bottom - challengeRect.top + 10}px`,
       };
     }
-
     return { left: "50%", top: "50%" };
   };
 
-  const getCodeMissingClass = (id) => {
-    let className = styles.codeMissing;
-    if (!codeAnswers[id]) className += ` ${styles.codeMissingEmpty}`;
-    if (feedback[id] === "correct")
-      className += ` ${styles.codeMissingCorrect}`;
-    if (feedback[id] === "wrong") className += ` ${styles.codeMissingWrong}`;
-    return className;
+  const getLineContent = (lineNumber) => {
+    switch(lineNumber) {
+      case 1: return 'public class SpacecraftNavigation {';
+      case 2: return '  private double fuelEfficiency = 0.85;';
+      case 4: return '  public double calculateSpeed(double fuel) {';
+      case 5: return '    // Calculate speed using fuel and efficiency';
+      case 6: return (
+        <>
+          {'    double speed = '}
+          <span
+            ref={missing1Ref}
+            className={`${styles.codeMissing} ${styles[feedback.missing1]}`}
+            onClick={(e) => showOptions("missing1", e)}
+          >
+            {codeAnswers.missing1 || <span className={styles.placeholder}>[calculation]</span>}
+          </span>;
+        </>
+      );
+      case 7: return '    return speed;';
+      case 8: return '  }';
+      case 10: return '  public boolean checkFuel(double fuel) {';
+      case 11: return '    // Check fuel level safety';
+      case 12: return (
+        <>
+          {'    if('}
+          <span
+            ref={missing2Ref}
+            className={`${styles.codeMissing} ${styles[feedback.missing2]}`}
+            onClick={(e) => showOptions("missing2", e)}
+          >
+            {codeAnswers.missing2 || <span className={styles.placeholder}>[condition]</span>}
+          </span>
+          {') {'}
+        </>
+      );
+      case 13: return '      System.out.println("WARNING: Low fuel!");';
+      case 14: return '    return false;';
+      case 16: return '    return true;';
+      case 17: return '  }';
+      case 19: return (
+        <>
+          {'  public void adjustCourse('}
+          <span
+            ref={missing3Ref}
+            className={`${styles.codeMissing} ${styles[feedback.missing3]}`}
+            onClick={(e) => showOptions("missing3", e)}
+          >
+            {codeAnswers.missing3 || <span className={styles.placeholder}>[type]</span>}
+          </span>
+          {' angle) {'}
+        </>
+      );
+      case 20: return '    // Validate course adjustment';
+      case 21: return '    if (angle > 30 || angle < -30) {';
+      case 22: return '      throw new IllegalArgumentException("Adjustment too extreme");';
+      case 24: return '    this.courseAngle += angle;';
+      case 25: return '  }';
+      case 26: return '}';
+      default: return '';
+    }
   };
 
   return (
@@ -189,8 +220,8 @@ const CosmicCompletion = () => {
           <div className={styles.missionInfo}>
             <h2 className={styles.missionTitle}>MISSION: ALPHA-7</h2>
             <p className={styles.missionDescription}>
-              Complete the spacecraft's navigation system by fixing the Java
-              code. Earn points for correct solutions and speed bonuses.
+              Complete the spacecraft's navigation system by fixing the Java code.
+              Earn points for correct solutions and speed bonuses.
             </p>
           </div>
 
@@ -201,261 +232,56 @@ const CosmicCompletion = () => {
 
           <div className={styles.hintSystem}>
             <div className={styles.hintTitle}>CRYSTAL OF KNOWLEDGE</div>
-            <p>Stuck? Use hints to reveal clues (costs 10pts)</p>
-            <div
-              className={styles.hintContent}
-              style={{ display: showHint ? "block" : "none" }}
+            <button
+              className={styles.hintBtn}
+              onClick={handleHintClick}
+              disabled={hintsLeft === 0}
             >
-              The spacecraft's speed should be calculated based on fuel
-              efficiency. Remember the formula: speed = fuel *
-              efficiencyConstant.
-            </div>
-            <button className={styles.hintBtn} onClick={handleHintClick}>
-              REQUEST HINT ({hintsLeft} LEFT)
+              REQUEST HINT ({hintsLeft} LEFT) -10pts
             </button>
+            {showHint && (
+              <div className={styles.hintContent}>
+                The spacecraft's speed should be calculated using fuel and efficiency.
+                Fuel warnings should trigger below 15.0 units. Course adjustments
+                require precise decimal values.
+              </div>
+            )}
           </div>
 
-          <div className="scoring">
-            <div className="scoreDisplay">
-              SCORE: <span>{score}</span>pts
-            </div>
-            <div>Difficulty: Medium</div>
+          <div className={styles.scoring}>
             <div>
-              Current Streak: <span>{streak}</span>✧
+              <span>SCORE:</span>
+              <span>{score}pts</span>
+            </div>
+            <div>
+              <span>STREAK:</span>
+              <span>{streak}✧</span>
+            </div>
+            <div>
+              <span>HINTS:</span>
+              <span>{hintsLeft}</span>
             </div>
           </div>
         </div>
 
         {/* Challenge Area */}
         <div className={styles.challengeArea} ref={challengeAreaRef}>
-          <h2 className={styles.challengeTitle}>CODE COMPLETION CHALLENGE</h2>
+          <h2 className={styles.challengeTitle}>NAVIGATION SYSTEM CODE</h2>
 
-          <div className={styles.codeChallenge}>
-            <p>Complete the spacecraft navigation system code:</p>
-
-            <div className={styles.codeEditor}>
-              {/* Line 1 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>1</span>
-                <span className={styles.codeContent}>
-                  public class SpacecraftNavigation {"{"}
-                </span>
-              </div>
-
-              {/* Line 2 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>2</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  private double fuelEfficiency = 0.85;
-                </span>
-              </div>
-
-              {/* Line 3 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>3</span>
-                <span className={styles.codeContent}></span>
-              </div>
-
-              {/* Line 4 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>4</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  public double calculateSpeed(double fuel) {"{"}
-                </span>
-              </div>
-
-              {/* Line 5 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>5</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  // Complete this calculation
-                </span>
-              </div>
-
-              {/* Line 6 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>6</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  double speed =
-                  <span
-                    ref={missing1Ref}
-                    className={getCodeMissingClass("missing1")}
-                    onClick={(e) => showOptions("missing1", e)}
-                  >
-                    {codeAnswers.missing1}
+          <div className={styles.codeFixerEditor}>
+            <p className={styles.codeComment}>// COMPLETE THE MISSING CODE SECTIONS</p>
+            
+            <div className={styles.codeBlock}>
+              {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26].map((line) => (
+                <div key={line} className={styles.codeLine}>
+                  <span className={styles.lineNumber}>{line}</span>
+                  <span className={styles.codeContent}>
+                    {getLineContent(line)}
                   </span>
-                  ;
-                </span>
-              </div>
-
-              {/* Line 7 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>7</span>
-                <span className={styles.codeContent}> return speed;</span>
-              </div>
-
-              {/* Line 8 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>8</span>
-                <span className={styles.codeContent}> {"}"}</span>
-              </div>
-
-              {/* Line 9 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>9</span>
-                <span className={styles.codeContent}></span>
-              </div>
-
-              {/* Line 10 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>10</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  public boolean checkFuel(double fuel) {"{"}
-                </span>
-              </div>
-
-              {/* Line 11 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>11</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  // Implement safety check
-                </span>
-              </div>
-
-              {/* Line 12 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>12</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  if (
-                  <span
-                    ref={missing2Ref}
-                    className={getCodeMissingClass("missing2")}
-                    onClick={(e) => showOptions("missing2", e)}
-                  >
-                    {codeAnswers.missing2}
-                  </span>
-                  ) {"{"}
-                </span>
-              </div>
-
-              {/* Line 13 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>13</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  System.out.println("WARNING: Low fuel!");
-                </span>
-              </div>
-
-              {/* Line 14 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>14</span>
-                <span className={styles.codeContent}> return false;</span>
-              </div>
-
-              {/* Line 15 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>15</span>
-                <span className={styles.codeContent}> {"}"}</span>
-              </div>
-
-              {/* Line 16 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>16</span>
-                <span className={styles.codeContent}> return true;</span>
-              </div>
-
-              {/* Line 17 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>17</span>
-                <span className={styles.codeContent}> {"}"}</span>
-              </div>
-
-              {/* Line 18 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>18</span>
-                <span className={styles.codeContent}></span>
-              </div>
-
-              {/* Line 19 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>19</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  public void adjustCourse(
-                  <span
-                    ref={missing3Ref}
-                    className={getCodeMissingClass("missing3")}
-                    onClick={(e) => showOptions("missing3", e)}
-                  >
-                    {codeAnswers.missing3}
-                  </span>
-                  ) {"{"}
-                </span>
-              </div>
-
-              {/* Line 20 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>20</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  // Validate course adjustment
-                </span>
-              </div>
-
-              {/* Line 21 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>21</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  if (angle &gt; 30 || angle &lt; -30) {"{"}
-                </span>
-              </div>
-
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>22</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  throw new IllegalArgumentException("Adjustment too extreme");
-                </span>
-              </div>
-
-              {/* Line 23 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>23</span>
-                <span className={styles.codeContent}> {"}"}</span>
-              </div>
-
-              {/* Line 24 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>24</span>
-                <span className={styles.codeContent}>
-                  {" "}
-                  this.courseAngle += angle;
-                </span>
-              </div>
-
-              {/* Line 25 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>25</span>
-                <span className={styles.codeContent}> {"}"}</span>
-              </div>
-
-              {/* Line 26 */}
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>26</span>
-                <span className={styles.codeContent}>{"}"}</span>
-              </div>
+                </div>
+              ))}
             </div>
 
-            {/* Dropdowns */}
             {activeDropdown && (
               <div
                 className={styles.codeDropdown}
@@ -464,22 +290,13 @@ const CosmicCompletion = () => {
               >
                 {activeDropdown === "missing1" && (
                   <>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("fuel * fuelEfficiency")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("fuel * fuelEfficiency")}>
                       fuel * fuelEfficiency
                     </div>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("fuel / fuelEfficiency")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("fuel / fuelEfficiency")}>
                       fuel / fuelEfficiency
                     </div>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("Math.sqrt(fuel)")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("Math.sqrt(fuel)")}>
                       Math.sqrt(fuel)
                     </div>
                   </>
@@ -487,22 +304,13 @@ const CosmicCompletion = () => {
 
                 {activeDropdown === "missing2" && (
                   <>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("fuel < 15.0")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("fuel < 15.0")}>
                       fuel &lt; 15.0
                     </div>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("fuel > 100.0")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("fuel > 100.0")}>
                       fuel &gt; 100.0
                     </div>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("fuel == 0")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("fuel == 0")}>
                       fuel == 0
                     </div>
                   </>
@@ -510,22 +318,13 @@ const CosmicCompletion = () => {
 
                 {activeDropdown === "missing3" && (
                   <>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("int")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("int")}>
                       int
                     </div>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("double")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("double")}>
                       double
                     </div>
-                    <div
-                      className={styles.codeOption}
-                      onClick={() => selectOption("float")}
-                    >
+                    <div className={styles.codeOption} onClick={() => selectOption("float")}>
                       float
                     </div>
                   </>
@@ -534,7 +333,7 @@ const CosmicCompletion = () => {
             )}
 
             <button className={styles.submitBtn} onClick={checkSolution}>
-              LAUNCH SOLUTION
+              VALIDATE SOLUTION
             </button>
           </div>
         </div>

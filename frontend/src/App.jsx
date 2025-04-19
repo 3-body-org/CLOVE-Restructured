@@ -6,7 +6,7 @@ import LoginSignupPage from "./pages/authentication page/Forms";
 import DashboardPage from "./pages/main page/dashboard page/DashboardPage";
 import ProgressPage from "./pages/main page/progress page/ProgressPage";
 import MyDeckPage from "./pages/main page/mydeck page/TopicPage";
-import PreAssessmentPage from "./components/assessments/PreAssessment";
+import AssessmentPage from "./components/assessments/Assessment";
 import AssessmentResultPage from "./components/assessments/AssessmentResult";
 import SubtopicPage from "./pages/main page/mydeck page/SubtopicPage";
 import LessonsPage from "./pages/lessons page/LessonsPage";
@@ -69,7 +69,7 @@ function App() {
               path="/my-deck/:topicId/pre-assessment"
               element={
                 <ProtectedRoutes>
-                  <PreAssessmentPage />
+                  <AssessmentPage />
                 </ProtectedRoutes>
               }
             />
@@ -106,21 +106,21 @@ function App() {
               }
             />
             <Route
-            path="/lesson/:topicId/:subtopicId/exercise"
-            element={
-              <ProtectedRoutes>
-                <ExercisePage />
-              </ProtectedRoutes>
-            }
-          />
+              path="/lesson/:topicId/:subtopicId/exercise"
+              element={
+                <ProtectedRoutes>
+                  <ExercisePage />
+                </ProtectedRoutes>
+              }
+            />
             <Route
-            path="/lesson/:topicId/:subtopicId/challenges"
-            element={
-              <ProtectedRoutes>
-                <ChallengesPage />
-              </ProtectedRoutes>
-            }
-          />
+              path="/lesson/:topicId/:subtopicId/challenges"
+              element={
+                <ProtectedRoutes>
+                  <ChallengesPage />
+                </ProtectedRoutes>
+              }
+            />
             {/* <Route
             path="/my-deck/:topicId/:subtopicId/results"
             element={
