@@ -1,121 +1,107 @@
+// ChallengesPage.module.scss
 .challengesContainer {
   display: flex;
-  padding: 3rem;
-  gap: 3rem;
+  flex-direction: column;
+  align-items: center;
+  // padding: 2rem;
   background-color: #232529;
   color: #fff;
   min-height: 100vh;
-  justify-content: space-between;
-  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+
+  // Responsive padding
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 }
 
-.leftSection {
-  flex: 1.5;
+// If you need to keep the original layout structure:
+.challengeWrapper {
+  width: 100%;
+  // max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  max-width: 600px;
+  // gap: 2rem;
+
+  // For code-focused challenges
+  .fullWidthChallenge {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+
+    // If using the CodeFixer component
+    .missionContainer {
+      grid-template-columns: 1fr;
+      max-width: 100%;
+      padding: 0;
+
+      .gamePanel {
+        position: static;
+        margin-bottom: 2rem;
+      }
+
+      .challengeArea {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+      }
+    }
+  }
 }
 
+// If you need to maintain card styling for other components:
 .card {
   background-color: #2c2f38;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  color: #E2E8F0;
+  color: #e2e8f0;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 }
 
-.cardTitle {
-  font-size: 1.6rem;
-  color: #A6AAFB;
-  margin-bottom: 1rem;
+// Clean mobile experience
+@media (max-width: 768px) {
+  .missionContainer {
+    gap: 1.5rem;
+  }
+
+  .codeEditor {
+    padding: 1rem;
+  }
+
+  .testCases {
+    margin-top: 1.5rem;
+  }
 }
 
-.subTitle {
-  font-size: 1.2rem;
-  color: #A6AAFB;
-  margin-bottom: 0.5rem;
-}
+@media (max-width: 480px) {
+  .challengesContainer {
+    padding: 0.5rem;
+  }
 
-.mechanicsList {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  color: #E2E8F0;
-  margin-top: 1rem;
-}
+  .card {
+    border-radius: 8px;
+  }
 
-.rightSection {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 900px;
-  padding-right: 3rem;
-  overflow-y: auto;
-}
-
-.scoreContainer {
-  margin-bottom: 1rem;
-}
-
-.timerAndHintContainer {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.timerContainer {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.timerText {
-  font-size: 1.2rem;
-  color: #E2E8F0;
-}
-
-.timerContainer svg {
-  width: 40px;
-  height: 40px;
-}
-.hintButtonContainer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  justify-content: flex-start;
-  margin-left: auto;
-  position: relative;
-  margin-right: 10px;
-}
-
-.hintButtonContainer .hintIcon {
-  font-size: 18px;
-}
-
-.hintButtonContainer span {
-  font-size: 16px;
-  color: #A6AAFB;
-}
-
-/* The Hint Description (positioned above the button) */
-.hintText {
-  position: absolute;
-  top: -35px;  /* Ensure it floats above the button */
-  left: 50%;   /* Position it horizontally at the center of the container */
-  transform: translateX(-50%);  /* Center it precisely */
-  font-size: 14px;
-  color: #A6AAFB;
-  padding: 5px 10px;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 8px;
-  z-index: 10;
-  opacity: 1;
-  transition: opacity 0.3s ease-out;
-}
-
-.hintText.hidden {
-  display: none;
+  .codeInput {
+    min-width: 60px;
+    padding: 2px 4px;
+  }
 }
