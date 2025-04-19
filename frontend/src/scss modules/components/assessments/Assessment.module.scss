@@ -115,6 +115,13 @@
     background-color: rgba(108, 92, 231, 0.1);
 }
 
+/* Error Message */
+.errorMessage {
+    color: var(--incorrect);
+    margin-top: 1rem;
+    font-weight: 500;
+} 
+
 /* Button styles */
 .nextBtn {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
