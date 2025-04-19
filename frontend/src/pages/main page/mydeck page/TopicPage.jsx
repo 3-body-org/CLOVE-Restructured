@@ -17,56 +17,72 @@ const topicsData = [
     id: "topic1",
     name: "Variables and Data Types",
     description: "Learn about Java concepts.",
+    progress: 0,
     locked: false,
   },
   {
     id: "topic2",
     name: "Coming Soon",
     description: "Learn about Java concepts.",
+    progress: 0,
     locked: true,
   },
   {
     id: "topic3",
     name: "Coming Soon",
     description: "Learn about Java concepts.",
+    progress: 0,
     locked: true,
   },
   {
     id: "topic4",
     name: "Coming Soon",
     description: "Learn about Java concepts.",
+    progress: 0,
     locked: true,
   },
   {
     id: "topic5",
     name: "Coming Soon",
     description: "Learn about Java concepts.",
+    progress: 0,
     locked: true,
   },
 ];
 
 const TopicCard = React.memo(({ topic, onClick }) => (
   <Col
+    xs={12}
     sm={6}
     md={4}
     lg={3}
-    className={`${styles.floatCard} ${
-      topic.locked ? styles.lockedCard : ""
-    } p-0 mt-3`}
+    className={`${styles.floatCard} ${topic.locked ? styles.lockedCard : ""}`}
   >
-    <div className={styles.holographicEffect}></div>
+    <div
+      className={`${styles.holographicEffect} ${
+        topic.locked ? styles.lockedEffect : ""
+      }`}
+    ></div>
     <div className={styles.cardContent}>
       <h2 className={styles.cardTitle}>{topic.name}</h2>
       <p className={styles.cardDesc}>{topic.description}</p>
+
+      {/* Progress Bar Section - Updated */}
       <div className={styles.cardProgress}>
-        <div className={styles.progressFill}></div>
+        <div
+          className={styles.progressFill}
+          style={{ width: `${topic.progress}%` }}
+        ></div>
       </div>
+
       <button
-        className={styles.startButton}
+        className={`${styles.startButton} ${
+          topic.locked ? styles.lockedButton : ""
+        }`}
         disabled={topic.locked}
         onClick={() => onClick(topic)}
       >
-        {topic.locked ? "Locked" : "Continue Learning"}
+        {topic.locked ? "Coming Soon" : "Continue Learning"}
       </button>
     </div>
     {topic.locked && <div className={styles.lockedIcon}>🔒</div>}

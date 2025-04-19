@@ -1,68 +1,69 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHome,
-  faChartLine,
-  faLayerGroup,
-  faSignOutAlt,
   faBookOpen,
   faFire,
-  faChartBar,
-  faTrophy,
   faCheckCircle,
   faCheck,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../../scss modules/pages/main page/dashboard page/DashboardPage.module.scss";
+import { DashboardAnalytics } from "./DashboardAnalytics";
+import TitleAndProfile from "../../../components/navbar/TitleAndProfile";
+
+// Reusable components
+const CompletedTopicItem = ({ topicNumber, date, badgeText }) => (
+  <div className={styles.completedTopic}>
+    <div className={styles.topicInfo}>
+      <h5>
+        <FontAwesomeIcon icon={faCheck} /> Topic {topicNumber}: ...
+      </h5>
+      <small>Completed on {date}</small>
+    </div>
+    <div className={styles.topicBadge}>{badgeText}</div>
+  </div>
+);
+
+const StreakDay = ({ day, filled }) => (
+  <div className={`${styles.day} ${filled ? styles.streakFilled : ""}`}>
+    {day}
+  </div>
+);
 
 const Dashboard = () => {
+  // Data arrays
+  const progressData = [
+    { topic: "Topic 1 – Variables and Data Types", percentage: 0 },
+    { topic: "Topic 2 – Coming Soon", percentage: 0 },
+    { topic: "Topic 3 – Coming Soon", percentage: 0 },
+  ];
+
+  const challengesData = {
+    percentage: 0,
+    label: "completed",
+    description:
+      "You've solved 0 challenges. Keep up answering the challenges!",
+  };
+
+  const streakDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+
+  const completedTopics = [
+    { topicNumber: "#", date: "April 1, 2025", badgeText: "Mastered" },
+    { topicNumber: "#", date: "April 1, 2025", badgeText: "Proficient" },
+    { topicNumber: "#", date: "April 1, 2025", badgeText: "Learned" },
+  ];
+
   return (
     <div className={styles.container}>
-      {/* <aside className={styles.sidebar}>
-        <div className={styles.logo}>
-          <div className={styles.logoIcon}>📚</div>
-          CodeMaster
-        </div>
-
-        <nav>
-          <a href="#" className={`${styles.navItem} ${styles.active}`}>
-            <FontAwesomeIcon icon={faHome} />
-            Dashboard
-          </a>
-          <a href="#" className={styles.navItem}>
-            <FontAwesomeIcon icon={faChartLine} />
-            Progress
-          </a>
-          <a href="#" className={styles.navItem}>
-            <FontAwesomeIcon icon={faLayerGroup} />
-            Courses
-          </a>
-          <a href="#" className={styles.navItem}>
-            <FontAwesomeIcon icon={faBookOpen} />
-            Library
-          </a>
-        </nav>
-
-        <a href="#" className={styles.logout}>
-          <FontAwesomeIcon icon={faSignOutAlt} />
-          Log Out
-        </a>
-      </aside> */}
-
       <main className={styles.dashboard}>
-        <header>
-          <div className={styles.headerLeft}>
-            <h2>
-              Hello, <span className={styles.username}>John Doe!</span>
-            </h2>
-            <p>Here's your learning journey progress 🌱</p>
-          </div>
-          <img
-            className={styles.profile}
-            src="https://i.pravatar.cc/48?img=12"
-            alt="User avatar"
-          />
-        </header>
+
+        <TitleAndProfile
+          nonColored={"Hello,"}
+          colored={"John Doe!"}
+          description={
+            "Here's your learning journey progress 🌱<"
+          }
+        />
 
         <div className={styles.mainContent}>
           <div className={styles.topRow}>
@@ -85,15 +86,9 @@ const Dashboard = () => {
               </h3>
               <div className={styles.streak}>
                 <div className={styles.days}>
-                  <div className={`${styles.day} ${styles.streakFilled}`}>
-                    Mo
-                  </div>
-                  <div className={styles.day}>Tu</div>
-                  <div className={styles.day}>We</div>
-                  <div className={styles.day}>Th</div>
-                  <div className={styles.day}>Fr</div>
-                  <div className={styles.day}>Sa</div>
-                  <div className={styles.day}>Su</div>
+                  {streakDays.map((day, index) => (
+                    <StreakDay key={day} day={day} filled={index === 0} />
+                  ))}
                 </div>
                 <p className={styles.streakText}>
                   You're on a <strong>1-day streak</strong>. Consistency is key.
@@ -102,99 +97,24 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className={styles.card}>
-            <h3>
-              <FontAwesomeIcon icon={faChartBar} /> Progress Overview
-            </h3>
-            <div className={styles.barChart}>
-              <div className={styles.barContainer}>
-                <div className={styles.barLabel}>
-                  <span>Topic 1 – Variables and Data Types</span>
-                  <span>0%</span>
-                </div>
-                <div className={styles.bar}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: "0%" }}
-                  ></div>
-                </div>
-              </div>
-              <div className={styles.barContainer}>
-                <div className={styles.barLabel}>
-                  <span>Topic 2 – Coming Soon </span>
-                  <span>0%</span>
-                </div>
-                <div className={styles.bar}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: "0%" }}
-                  ></div>
-                </div>
-              </div>
-              <div className={styles.barContainer}>
-                <div className={styles.barLabel}>
-                  <span>Topic 3 – Coming Soon </span>
-                  <span>0%</span>
-                </div>
-                <div className={styles.bar}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: "0%" }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <h3>
-              <FontAwesomeIcon icon={faTrophy} /> Challenges Solved
-            </h3>
-            <div className={styles.chartWrapper}>
-              <div className={styles.donutChart}>
-                <div className={styles.donutCenter}>
-                  <div className={styles.donutCenterText}>0%</div>
-                  <div className={styles.donutCenterLabel}>completed</div>
-                </div>
-              </div>
-              <div className={styles.chartLabel}>
-                You've solved 0 challenges. Keep up answering the challenges!
-              </div>
-            </div>
-          </div>
+          <DashboardAnalytics
+            progressData={progressData}
+            challengesData={challengesData}
+          />
 
           <div className={styles.card}>
             <h3>
               <FontAwesomeIcon icon={faCheckCircle} /> Completed Topics
             </h3>
             <div className={styles.completedTopics}>
-              <div className={styles.completedTopic}>
-                <div className={styles.topicInfo}>
-                  <h5>
-                    <FontAwesomeIcon icon={faCheck} /> Topic #: ...
-                  </h5>
-                  <small>Completed on April 1, 2025</small>
-                </div>
-                <div className={styles.topicBadge}>Mastered</div>
-              </div>
-              <div className={styles.completedTopic}>
-                <div className={styles.topicInfo}>
-                  <h5>
-                    <FontAwesomeIcon icon={faCheck} /> Topic #: ...
-                  </h5>
-                  <small>Completed on April 1, 2025</small>
-                </div>
-                <div className={styles.topicBadge}>Proficient</div>
-              </div>
-              <div className={styles.completedTopic}>
-                <div className={styles.topicInfo}>
-                  <h5>
-                    <FontAwesomeIcon icon={faCheck} /> Topic #: ...
-                  </h5>
-                  <small>Completed on April 1, 2025</small>
-                </div>
-                <div className={styles.topicBadge}>Learned</div>
-              </div>
+              {completedTopics.map((topic, index) => (
+                <CompletedTopicItem
+                  key={index}
+                  topicNumber={topic.topicNumber}
+                  date={topic.date}
+                  badgeText={topic.badgeText}
+                />
+              ))}
             </div>
           </div>
         </div>

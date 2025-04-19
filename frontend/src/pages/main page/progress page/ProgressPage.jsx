@@ -5,18 +5,115 @@ import {
   faQuestionCircle,
   faLayerGroup,
   faTrophy,
-  faChartLine,
-  faBrain,
-  faChartPie,
-  faThumbsUp,
-  faThumbsDown,
   faStar,
-  faStarHalfAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../../scss modules/pages/main page/progress page/ProgressPage.module.scss";
 import TitleAndProfile from "../../../components/navbar/TitleAndProfile";
+import ProgressAnalytics from "./ProgressAnalytics";
+
+const ModeCard = ({ icon, name, category, stats }) => (
+  <div className={styles.modeCard}>
+    <div className={styles.modeHeader}>
+      <div className={styles.modeIcon}>
+        <FontAwesomeIcon icon={icon} />
+      </div>
+      <div className={styles.modeInfo}>
+        <div className={styles.modeName}>{name}</div>
+        <div className={styles.modeCategory}>{category}</div>
+      </div>
+    </div>
+    <div className={styles.modeStats}>
+      {stats.map((stat, index) => (
+        <div key={index} className={styles.statItem}>
+          <span className={`${styles.statValue} ${stat.className || ""}`}>
+            {stat.value}
+          </span>
+          <span className={styles.statLabel}>{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const SubtopicCard = ({ name, masteryLevel, ...analyticsProps }) => (
+  <div className={styles.subtopicCard}>
+    <div className={styles.subtopicHeader}>
+      <h3 className={styles.subtopicName}>{name}</h3>
+      <span
+        className={`${styles.masteryLevel} ${styles[`mastery${masteryLevel}`]}`}
+      >
+        <FontAwesomeIcon icon={faStar} />
+        {masteryLevel}
+      </span>
+    </div>
+    <ProgressAnalytics {...analyticsProps} />
+  </div>
+);
 
 const ProgressPage = () => {
+  const learningModes = [
+    {
+      icon: faCheckCircle,
+      name: "Code Completion Mode",
+      category: "Needs Improvement",
+      stats: [
+        { value: "0%", label: "Accuracy Rate", className: styles.accuracyLow },
+        { value: "0", label: "Attempts" },
+        { value: "0h", label: "Time Spent" },
+        { value: "0%", label: "Completion Rate" },
+      ],
+    },
+    {
+      icon: faQuestionCircle,
+      name: "Code Fixer Mode",
+      category: "Needs Improvement",
+      stats: [
+        { value: "0%", label: "Accuracy Rate", className: styles.accuracyLow },
+        { value: "0", label: "Attempts" },
+        { value: "0h", label: "Time Spent" },
+        { value: "0%", label: "Completion Rate" },
+      ],
+    },
+    {
+      icon: faLayerGroup,
+      name: "Output Tracing Mode",
+      category: "Needs Improvement",
+      stats: [
+        { value: "0%", label: "Accuracy Rate", className: styles.accuracyLow },
+        { value: "0", label: "Attempts" },
+        { value: "0h", label: "Time Spent" },
+        { value: "0%", label: "Completion Rate" },
+      ],
+    },
+  ];
+
+  const subtopics = [
+    {
+      name: "Subtopic 1: Declaring Variables",
+      masteryLevel: "Beginner",
+      progress: 0,
+      knowledge: 0,
+      strengths: [],
+      weaknesses: [],
+    },
+    {
+      name: "Subtopic 2: Primitive Data Types",
+      masteryLevel: "Beginner",
+      progress: 0,
+      knowledge: 0,
+      strengths: [],
+      weaknesses: [],
+    },
+    {
+      name: "Subtopic 3: Non-Primitive Data Types",
+      masteryLevel: "Beginner",
+      progress: 0,
+      knowledge: 0,
+      strengths: [],
+      weaknesses: [],
+    },
+  ];
+
   return (
     <main className={styles.progressContent}>
       <TitleAndProfile
@@ -25,7 +122,6 @@ const ProgressPage = () => {
         description={"Detailed analysis of your learning performance 📊"}
       />
 
-      {/* Learning Mode Performance Section */}
       <section className={styles.learningModesSection}>
         <div className={styles.performanceCard}>
           <h2 className={styles.sectionTitle}>
@@ -33,119 +129,19 @@ const ProgressPage = () => {
             Learning Mode Performance
           </h2>
           <div className={styles.modePerformanceGrid}>
-            {/* Mode Cards */}
-            <div className={styles.modeCard}>
-              <div className={styles.modeHeader}>
-                <div className={styles.modeIcon}>
-                  <FontAwesomeIcon icon={faCheckCircle} />
-                </div>
-                <div className={styles.modeInfo}>
-                  <div className={styles.modeName}>Code Completion Mode</div>
-                  <div className={styles.modeCategory}>Needs Improvement</div>
-                </div>
-              </div>
-              <div className={styles.modeStats}>
-                <div className={styles.statItem}>
-                  <span
-                    className={`${styles.statValue} ${styles.accuracyLow}`}
-                  >
-                    0%
-                  </span>
-                  <span className={styles.statLabel}>Accuracy Rate</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0</span>
-                  <span className={styles.statLabel}>Attempts</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0h</span>
-                  <span className={styles.statLabel}>Time Spent</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0%</span>
-                  <span className={styles.statLabel}>Completion Rate</span>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.modeCard}>
-              <div className={styles.modeHeader}>
-                <div className={styles.modeIcon}>
-                  <FontAwesomeIcon icon={faQuestionCircle} />
-                </div>
-                <div className={styles.modeInfo}>
-                  <div className={styles.modeName}>Code Fixer Mode</div>
-                  <div className={styles.modeCategory}>Needs improvement</div>
-                </div>
-              </div>
-              <div className={styles.modeStats}>
-                <div className={styles.statItem}>
-                  <span
-                    className={`${styles.statValue} ${styles.accuracyLow}`}
-                  >
-                    0%
-                  </span>
-                  <span className={styles.statLabel}>Accuracy Rate</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0</span>
-                  <span className={styles.statLabel}>Attempts</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0h</span>
-                  <span className={styles.statLabel}>Time Spent</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0%</span>
-                  <span className={styles.statLabel}>Completion Rate</span>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.modeCard}>
-              <div className={styles.modeHeader}>
-                <div className={styles.modeIcon}>
-                  <FontAwesomeIcon icon={faLayerGroup} />
-                </div>
-                <div className={styles.modeInfo}>
-                  <div className={styles.modeName}>Output Tracing Mode</div>
-                  <div className={styles.modeCategory}>
-                    Needs Improvement
-                  </div>
-                </div>
-              </div>
-              <div className={styles.modeStats}>
-                <div className={styles.statItem}>
-                  <span
-                    className={`${styles.statValue} ${styles.accuracyLow}`}
-                  >
-                    0%
-                  </span>
-                  <span className={styles.statLabel}>Accuracy Rate</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0</span>
-                  <span className={styles.statLabel}>Attempts</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0h</span>
-                  <span className={styles.statLabel}>Time Spent</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statValue}>0%</span>
-                  <span className={styles.statLabel}>Completion Rate</span>
-                </div>
-              </div>
-            </div>
+            {learningModes.map((mode, index) => (
+              <ModeCard key={index} {...mode} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Topic Progress Section */}
       <section className={styles.topicProgress}>
         <div className={styles.topicCard}>
           <div className={styles.topicHeader}>
-            <h2 className={styles.topicTitle}>Topic 1 : Variables and Data Types</h2>
+            <h2 className={styles.topicTitle}>
+              Topic 1 : Variables and Data Types
+            </h2>
             <div className={styles.overallProgress}>
               <div className={styles.progressCircle}>
                 <span className={styles.progressPercent}>0%</span>
@@ -154,237 +150,9 @@ const ProgressPage = () => {
             </div>
           </div>
 
-          {/* Subtopic 1 - Declaring Variables */}
-          <div className={styles.subtopicCard}>
-            <div className={styles.subtopicHeader}>
-              <h3 className={styles.subtopicName}>Subtopic 1: Declaring Variables</h3>
-              <span
-                className={`${styles.masteryLevel} ${styles.masteryBeginner}`}
-              >
-                <FontAwesomeIcon icon={faStar} />
-                Beginner
-              </span>
-            </div>
-
-            <div className={styles.progressDetails}>
-              <div className={styles.progressMetrics}>
-                <div className={styles.metricCard}>
-                  <div className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faChartLine} />
-                    Progress Completion
-                  </div>
-                  <div className={styles.progressBarContainer}>
-                    <div
-                      className={styles.progressBar}
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                  <small>0% completed</small>
-                </div>
-
-                <div className={styles.metricCard}>
-                  <div className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faBrain} />
-                    Knowledge Retention
-                  </div>
-                  <div className={styles.progressBarContainer}>
-                    <div
-                      className={styles.progressBar}
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                  <small>0% retention score</small>
-                </div>
-              </div>
-
-              <div className={styles.performanceAnalytics}>
-                <div className={styles.metricCard}>
-                  <h4 className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faChartPie} />
-                    Performance Analysis
-                  </h4>
-
-                  <div className={styles.strengthsWeaknesses}>
-                    <div className={`${styles.swCard} ${styles.strengthCard}`}>
-                      <h5 className={styles.swTitle}>
-                        <FontAwesomeIcon icon={faThumbsUp} />
-                        Strengths
-                      </h5>
-                      <div className={styles.swList}>
-                        <div className={styles.swItem}></div>
-                      </div>
-                    </div>
-
-                    <div className={`${styles.swCard} ${styles.weaknessCard}`}>
-                      <h5 className={styles.swTitle}>
-                        <FontAwesomeIcon icon={faThumbsDown} />
-                        Weaknesses
-                      </h5>
-                      <div className={styles.swList}>
-                        <div className={styles.swItem}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Subtopic 2 - Primitive Data Types */}
-          <div className={styles.subtopicCard}>
-            <div className={styles.subtopicHeader}>
-              <h3 className={styles.subtopicName}>
-                Subtopic 2: Primitive Data Types
-              </h3>
-              <span
-                className={`${styles.masteryLevel} ${styles.masteryBeginner}`}
-              >
-                <FontAwesomeIcon icon={faStar} />
-                Beginner
-              </span>
-            </div>
-
-            <div className={styles.progressDetails}>
-              <div className={styles.progressMetrics}>
-                <div className={styles.metricCard}>
-                  <div className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faChartLine} />
-                    Progress Completion
-                  </div>
-                  <div className={styles.progressBarContainer}>
-                    <div
-                      className={styles.progressBar}
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                  <small>0% completed</small>
-                </div>
-
-                <div className={styles.metricCard}>
-                  <div className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faBrain} />
-                    Knowledge Retention
-                  </div>
-                  <div className={styles.progressBarContainer}>
-                    <div
-                      className={styles.progressBar}
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                  <small>0% retention score</small>
-                </div>
-              </div>
-
-              <div className={styles.performanceAnalytics}>
-                <div className={styles.metricCard}>
-                  <h4 className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faChartPie} />
-                    Performance Analysis
-                  </h4>
-
-                  <div className={styles.strengthsWeaknesses}>
-                    <div className={`${styles.swCard} ${styles.strengthCard}`}>
-                      <h5 className={styles.swTitle}>
-                        <FontAwesomeIcon icon={faThumbsUp} />
-                        Strengths
-                      </h5>
-                      <div className={styles.swList}>
-                        <div className={styles.swItem}></div>
-                      </div>
-                    </div>
-
-                    <div className={`${styles.swCard} ${styles.weaknessCard}`}>
-                      <h5 className={styles.swTitle}>
-                        <FontAwesomeIcon icon={faThumbsDown} />
-                        Weaknesses
-                      </h5>
-                      <div className={styles.swList}>
-                        <div className={styles.swItem}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Subtopic 3 - Non-Primitive Data Types */}
-          <div className={styles.subtopicCard}>
-            <div className={styles.subtopicHeader}>
-              <h3 className={styles.subtopicName}>
-                Subtopic 3: Non-Primitive Data Types
-              </h3>
-              <span
-                className={`${styles.masteryLevel} ${styles.masteryBeginner}`}
-              >
-                <FontAwesomeIcon icon={faStar} />
-                Beginner
-              </span>
-            </div>
-
-            <div className={styles.progressDetails}>
-              <div className={styles.progressMetrics}>
-                <div className={styles.metricCard}>
-                  <div className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faChartLine} />
-                    Progress Completion
-                  </div>
-                  <div className={styles.progressBarContainer}>
-                    <div
-                      className={styles.progressBar}
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                  <small>0% completed</small>
-                </div>
-
-                <div className={styles.metricCard}>
-                  <div className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faBrain} />
-                    Knowledge Retention
-                  </div>
-                  <div className={styles.progressBarContainer}>
-                    <div
-                      className={styles.progressBar}
-                      style={{ width: "0%" }}
-                    ></div>
-                  </div>
-                  <small>0% retention score</small>
-                </div>
-              </div>
-
-              <div className={styles.performanceAnalytics}>
-                <div className={styles.metricCard}>
-                  <h4 className={styles.metricTitle}>
-                    <FontAwesomeIcon icon={faChartPie} />
-                    Performance Analysis
-                  </h4>
-
-                  <div className={styles.strengthsWeaknesses}>
-                    <div className={`${styles.swCard} ${styles.strengthCard}`}>
-                      <h5 className={styles.swTitle}>
-                        <FontAwesomeIcon icon={faThumbsUp} />
-                        Strengths
-                      </h5>
-                      <div className={styles.swList}>
-                        <div className={styles.swItem}></div>
-                      </div>
-                    </div>
-
-                    <div className={`${styles.swCard} ${styles.weaknessCard}`}>
-                      <h5 className={styles.swTitle}>
-                        <FontAwesomeIcon icon={faThumbsDown} />
-                        Weaknesses
-                      </h5>
-                      <div className={styles.swList}>
-                        <div className={styles.swItem}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {subtopics.map((subtopic, index) => (
+            <SubtopicCard key={index} {...subtopic} />
+          ))}
         </div>
       </section>
     </main>
