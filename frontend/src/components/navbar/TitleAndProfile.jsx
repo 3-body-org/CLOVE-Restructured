@@ -14,7 +14,7 @@ export default function TitleAndProfile({ nonColored, colored, description }) {
         <p>{description}</p>
       </div>
       <img
-        // className={styles.profile}
+        className={styles.profile}
         src="https://i.pravatar.cc/48?img=12"
         alt="User avatar"
       />
