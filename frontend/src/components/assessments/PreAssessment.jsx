@@ -36,15 +36,11 @@ const getRandomQuestions = () => {
     // Pick 5 random questions with mixed difficulties
     const chosen = pool.slice(0, 5);
 
-    // ✅ Simplified debug: Just log total selected
-    console.log(`Selected ${chosen.length} questions from subtopic: "${subtopic.title}"`);
-
     selectedQuestions.push(...chosen);
   });
 
   return selectedQuestions;
 };
-
 
 const PreAssessment = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -54,6 +50,7 @@ const PreAssessment = () => {
   const [isAnswered, setIsAnswered] = useState(false);
   const [questionsToAsk, setQuestionsToAsk] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showError, setShowError] = useState(false);
 
   const { topicId } = useParams();
   const navigate = useNavigate();
@@ -90,6 +87,12 @@ const PreAssessment = () => {
   };
 
   const handleNextQuestion = () => {
+    if (!isAnswered) {
+      setShowError(true); 
+      return;
+    }
+  
+    setShowError(false); 
     if (questionIndex < questionsToAsk.length - 1) {
       setQuestionIndex(questionIndex + 1);
       setProgress(((questionIndex + 1) / questionsToAsk.length) * 100);
@@ -105,7 +108,7 @@ const PreAssessment = () => {
       });
     }
   };
-
+  
   return (
     <div className={styles.pageContainer}>
       <div className={styles.testContainer}>
@@ -144,6 +147,12 @@ const PreAssessment = () => {
             </div>
           ))}
         </div>
+        
+        {showError && (
+          <div className={styles.errorMessage}>
+            Please select an answer before proceeding.
+          </div>
+        )}
 
         <button className={styles.nextBtn} onClick={handleNextQuestion}>
           {questionIndex < questionsToAsk.length - 1 ? "Next Question" : "Finish"}
