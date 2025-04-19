@@ -51,7 +51,7 @@ To access the Database without pgAdmin, use the AWS CloudShell:
 
 Install postgresql
 ```bash
-sudo dnf install postgresql15 -y
+sudo dnf install postgresql17 -y
 ```
 
 Then connect to RDS:
