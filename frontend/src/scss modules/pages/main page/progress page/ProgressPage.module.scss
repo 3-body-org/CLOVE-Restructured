@@ -196,8 +196,8 @@
   height: 60px;
   border-radius: 50%;
   background: conic-gradient(
-    var(--primary) 0% 80%,
-    var(--surface-light) 80% 100%
+    var(--primary) 0% 0%,
+    var(--surface-light) 1% 100%
   );
   display: flex;
   align-items: center;
@@ -365,6 +365,7 @@
 
 .swList {
   display: flex;
+  height: 80px;
   flex-direction: column;
   gap: 0.5rem;
 }

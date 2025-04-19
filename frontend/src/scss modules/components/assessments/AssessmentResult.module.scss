@@ -9,6 +9,7 @@
   --text: #ffffff;
   --correct: #64ff96;
   --incorrect: #ff6464;
+  --neutral: #3a3a4f;
 }
 
 .pageContainer {
@@ -85,7 +86,7 @@
   height: 10px;  /* Increased height of the lines */
   width: 60px;   /* Increased width of the lines */
   margin-right: 10px;  /* Increased gap between lines */
-  background-color: gray; /* Default color */
+  background-color: var(--neutral); /* Default color */
   border-radius: 5px;  /* More rounded edges */
   transition: background-color 0.3s ease;
 }

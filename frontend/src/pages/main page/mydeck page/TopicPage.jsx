@@ -15,31 +15,31 @@ import TitleAndProfile from "../../../components/navbar/TitleAndProfile";
 const topicsData = [
   {
     id: "topic1",
-    name: "Data Types and Variables",
+    name: "Variables and Data Types",
     description: "Learn about Java concepts.",
     locked: false,
   },
   {
     id: "topic2",
-    name: "Operators",
+    name: "Coming Soon",
     description: "Learn about Java concepts.",
     locked: true,
   },
   {
     id: "topic3",
-    name: "Conditionals",
+    name: "Coming Soon",
     description: "Learn about Java concepts.",
     locked: true,
   },
   {
     id: "topic4",
-    name: "Loops",
+    name: "Coming Soon",
     description: "Learn about Java concepts.",
     locked: true,
   },
   {
     id: "topic5",
-    name: "Methods and Functions",
+    name: "Coming Soon",
     description: "Learn about Java concepts.",
     locked: true,
   },

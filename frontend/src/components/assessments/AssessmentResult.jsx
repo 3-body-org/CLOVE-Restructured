@@ -28,29 +28,19 @@ const AssessmentResult = () => {
 
   // Initialize subtopics dictionary with default structure
   const subtopics = {
-    "Basic Loops": { correctAnswers: 0, total: 0 },
-    "Conditional Statements": { correctAnswers: 0, total: 0 },
-    "Advanced Loops": { correctAnswers: 0, total: 0 },
+    "Declaring Variables": { correctAnswers: 0, total: 0 },
+    "Primitive Data Types": { correctAnswers: 0, total: 0 },
+    "Non-Primitive Data Types": { correctAnswers: 0, total: 0 }
   };
 
-  // Categorize answers based on question IDs and count correct answers
-  userAnswers.forEach((answer) => {
-    const { questionId, isCorrect } = answer;
-    let category = "";
-
-    if (questionId >= 5 && questionId < 10) {
-      category = "Basic Loops";
-    } else if (questionId >= 10 && questionId < 15) {
-      category = "Conditional Statements";
-    } else {
-      category = "Advanced Loops";
-    }
-
+  // Count correct/total per subtopic using the stored category
+  userAnswers.forEach(({ category, isCorrect }) => {
     if (subtopics[category]) {
-      subtopics[category].total++; // Increment total questions in the category
-      if (isCorrect) subtopics[category].correctAnswers++; // Increment correct answers if the answer is correct
+      subtopics[category].total++;
+      if (isCorrect) subtopics[category].correctAnswers++;
     }
   });
+
 
   // Handle the finish button to navigate to the topic page
   const handleFinish = () => {

@@ -86,26 +86,17 @@ const Dashboard = () => {
               <div className={styles.streak}>
                 <div className={styles.days}>
                   <div className={`${styles.day} ${styles.streakFilled}`}>
-                    M
+                    Mo
                   </div>
-                  <div className={`${styles.day} ${styles.streakFilled}`}>
-                    T
-                  </div>
-                  <div className={`${styles.day} ${styles.streakFilled}`}>
-                    W
-                  </div>
-                  <div className={`${styles.day} ${styles.streakFilled}`}>
-                    Th
-                  </div>
-                  <div className={`${styles.day} ${styles.streakFilled}`}>
-                    F
-                  </div>
-                  <div className={styles.day}>S</div>
-                  <div className={styles.day}>S</div>
+                  <div className={styles.day}>Tu</div>
+                  <div className={styles.day}>We</div>
+                  <div className={styles.day}>Th</div>
+                  <div className={styles.day}>Fr</div>
+                  <div className={styles.day}>Sa</div>
+                  <div className={styles.day}>Su</div>
                 </div>
                 <p className={styles.streakText}>
-                  You're on a <strong>4-day streak</strong>! Consistency is key.
-                  Keep that brain fired up! 🔥
+                  You're on a <strong>1-day streak</strong>. Consistency is key.
                 </p>
               </div>
             </div>
@@ -118,37 +109,37 @@ const Dashboard = () => {
             <div className={styles.barChart}>
               <div className={styles.barContainer}>
                 <div className={styles.barLabel}>
-                  <span>Topic 1 – Variables</span>
-                  <span>80%</span>
+                  <span>Topic 1 – Variables and Data Types</span>
+                  <span>0%</span>
                 </div>
                 <div className={styles.bar}>
                   <div
                     className={styles.barFill}
-                    style={{ width: "80%" }}
+                    style={{ width: "0%" }}
                   ></div>
                 </div>
               </div>
               <div className={styles.barContainer}>
                 <div className={styles.barLabel}>
-                  <span>Topic 2 – Loops</span>
-                  <span>45%</span>
+                  <span>Topic 2 – Coming Soon </span>
+                  <span>0%</span>
                 </div>
                 <div className={styles.bar}>
                   <div
                     className={styles.barFill}
-                    style={{ width: "45%" }}
+                    style={{ width: "0%" }}
                   ></div>
                 </div>
               </div>
               <div className={styles.barContainer}>
                 <div className={styles.barLabel}>
-                  <span>Topic 3 – Functions</span>
-                  <span>20%</span>
+                  <span>Topic 3 – Coming Soon </span>
+                  <span>0%</span>
                 </div>
                 <div className={styles.bar}>
                   <div
                     className={styles.barFill}
-                    style={{ width: "20%" }}
+                    style={{ width: "0%" }}
                   ></div>
                 </div>
               </div>
@@ -162,12 +153,12 @@ const Dashboard = () => {
             <div className={styles.chartWrapper}>
               <div className={styles.donutChart}>
                 <div className={styles.donutCenter}>
-                  <div className={styles.donutCenterText}>75%</div>
+                  <div className={styles.donutCenterText}>0%</div>
                   <div className={styles.donutCenterLabel}>completed</div>
                 </div>
               </div>
               <div className={styles.chartLabel}>
-                You've solved 75 out of 100 challenges. Keep up the great work!
+                You've solved 0 challenges. Keep up answering the challenges!
               </div>
             </div>
           </div>
@@ -180,7 +171,7 @@ const Dashboard = () => {
               <div className={styles.completedTopic}>
                 <div className={styles.topicInfo}>
                   <h5>
-                    <FontAwesomeIcon icon={faCheck} /> Topic 1: Variables
+                    <FontAwesomeIcon icon={faCheck} /> Topic #: ...
                   </h5>
                   <small>Completed on April 1, 2025</small>
                 </div>
@@ -189,18 +180,18 @@ const Dashboard = () => {
               <div className={styles.completedTopic}>
                 <div className={styles.topicInfo}>
                   <h5>
-                    <FontAwesomeIcon icon={faCheck} /> Topic 2: Loops
+                    <FontAwesomeIcon icon={faCheck} /> Topic #: ...
                   </h5>
-                  <small>Completed on April 4, 2025</small>
+                  <small>Completed on April 1, 2025</small>
                 </div>
                 <div className={styles.topicBadge}>Proficient</div>
               </div>
               <div className={styles.completedTopic}>
                 <div className={styles.topicInfo}>
                   <h5>
-                    <FontAwesomeIcon icon={faCheck} /> Topic 3: Functions
+                    <FontAwesomeIcon icon={faCheck} /> Topic #: ...
                   </h5>
-                  <small>Completed on April 7, 2025</small>
+                  <small>Completed on April 1, 2025</small>
                 </div>
                 <div className={styles.topicBadge}>Learned</div>
               </div>

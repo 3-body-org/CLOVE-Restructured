@@ -41,28 +41,28 @@ const ProgressPage = () => {
                 </div>
                 <div className={styles.modeInfo}>
                   <div className={styles.modeName}>Code Completion Mode</div>
-                  <div className={styles.modeCategory}>Your strongest mode</div>
+                  <div className={styles.modeCategory}>Needs Improvement</div>
                 </div>
               </div>
               <div className={styles.modeStats}>
                 <div className={styles.statItem}>
                   <span
-                    className={`${styles.statValue} ${styles.accuracyHigh}`}
+                    className={`${styles.statValue} ${styles.accuracyLow}`}
                   >
-                    92%
+                    0%
                   </span>
                   <span className={styles.statLabel}>Accuracy Rate</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>127</span>
+                  <span className={styles.statValue}>0</span>
                   <span className={styles.statLabel}>Attempts</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>24h</span>
+                  <span className={styles.statValue}>0h</span>
                   <span className={styles.statLabel}>Time Spent</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>87%</span>
+                  <span className={styles.statValue}>0%</span>
                   <span className={styles.statLabel}>Completion Rate</span>
                 </div>
               </div>
@@ -81,22 +81,22 @@ const ProgressPage = () => {
               <div className={styles.modeStats}>
                 <div className={styles.statItem}>
                   <span
-                    className={`${styles.statValue} ${styles.accuracyMedium}`}
+                    className={`${styles.statValue} ${styles.accuracyLow}`}
                   >
-                    68%
+                    0%
                   </span>
                   <span className={styles.statLabel}>Accuracy Rate</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>84</span>
+                  <span className={styles.statValue}>0</span>
                   <span className={styles.statLabel}>Attempts</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>15h</span>
+                  <span className={styles.statValue}>0h</span>
                   <span className={styles.statLabel}>Time Spent</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>72%</span>
+                  <span className={styles.statValue}>0%</span>
                   <span className={styles.statLabel}>Completion Rate</span>
                 </div>
               </div>
@@ -110,29 +110,29 @@ const ProgressPage = () => {
                 <div className={styles.modeInfo}>
                   <div className={styles.modeName}>Output Tracing Mode</div>
                   <div className={styles.modeCategory}>
-                    Moderate performance
+                    Needs Improvement
                   </div>
                 </div>
               </div>
               <div className={styles.modeStats}>
                 <div className={styles.statItem}>
                   <span
-                    className={`${styles.statValue} ${styles.accuracyMedium}`}
+                    className={`${styles.statValue} ${styles.accuracyLow}`}
                   >
-                    75%
+                    0%
                   </span>
                   <span className={styles.statLabel}>Accuracy Rate</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>63</span>
+                  <span className={styles.statValue}>0</span>
                   <span className={styles.statLabel}>Attempts</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>9h</span>
+                  <span className={styles.statValue}>0h</span>
                   <span className={styles.statLabel}>Time Spent</span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statValue}>81%</span>
+                  <span className={styles.statValue}>0%</span>
                   <span className={styles.statLabel}>Completion Rate</span>
                 </div>
               </div>
@@ -145,24 +145,24 @@ const ProgressPage = () => {
       <section className={styles.topicProgress}>
         <div className={styles.topicCard}>
           <div className={styles.topicHeader}>
-            <h2 className={styles.topicTitle}>Topic: Conditionals and Loops</h2>
+            <h2 className={styles.topicTitle}>Topic 1 : Variables and Data Types</h2>
             <div className={styles.overallProgress}>
               <div className={styles.progressCircle}>
-                <span className={styles.progressPercent}>65%</span>
+                <span className={styles.progressPercent}>0%</span>
               </div>
               <span>Overall Progress</span>
             </div>
           </div>
 
-          {/* Subtopic 1 - Basic Loops */}
+          {/* Subtopic 1 - Declaring Variables */}
           <div className={styles.subtopicCard}>
             <div className={styles.subtopicHeader}>
-              <h3 className={styles.subtopicName}>Subtopic 1: Basic Loops</h3>
+              <h3 className={styles.subtopicName}>Subtopic 1: Declaring Variables</h3>
               <span
-                className={`${styles.masteryLevel} ${styles.masteryIntermediate}`}
+                className={`${styles.masteryLevel} ${styles.masteryBeginner}`}
               >
-                <FontAwesomeIcon icon={faStarHalfAlt} />
-                Intermediate
+                <FontAwesomeIcon icon={faStar} />
+                Beginner
               </span>
             </div>
 
@@ -176,10 +176,10 @@ const ProgressPage = () => {
                   <div className={styles.progressBarContainer}>
                     <div
                       className={styles.progressBar}
-                      style={{ width: "70%" }}
+                      style={{ width: "0%" }}
                     ></div>
                   </div>
-                  <small>70% completed (14/20 lessons)</small>
+                  <small>0% completed</small>
                 </div>
 
                 <div className={styles.metricCard}>
@@ -190,10 +190,10 @@ const ProgressPage = () => {
                   <div className={styles.progressBarContainer}>
                     <div
                       className={styles.progressBar}
-                      style={{ width: "62%" }}
+                      style={{ width: "0%" }}
                     ></div>
                   </div>
-                  <small>62% retention score</small>
+                  <small>0% retention score</small>
                 </div>
               </div>
 
@@ -211,13 +211,7 @@ const ProgressPage = () => {
                         Strengths
                       </h5>
                       <div className={styles.swList}>
-                        <div className={styles.swItem}>
-                          For loop implementation
-                        </div>
-                        <div className={styles.swItem}>
-                          While loop understanding
-                        </div>
-                        <div className={styles.swItem}>Basic loop control</div>
+                        <div className={styles.swItem}></div>
                       </div>
                     </div>
 
@@ -227,10 +221,7 @@ const ProgressPage = () => {
                         Weaknesses
                       </h5>
                       <div className={styles.swList}>
-                        <div className={styles.swItem}>Loop optimization</div>
-                        <div className={styles.swItem}>
-                          Infinite loop prevention
-                        </div>
+                        <div className={styles.swItem}></div>
                       </div>
                     </div>
                   </div>
@@ -239,11 +230,11 @@ const ProgressPage = () => {
             </div>
           </div>
 
-          {/* Subtopic 2 - Conditional Statements */}
+          {/* Subtopic 2 - Primitive Data Types */}
           <div className={styles.subtopicCard}>
             <div className={styles.subtopicHeader}>
               <h3 className={styles.subtopicName}>
-                Subtopic 2: Conditional Statements
+                Subtopic 2: Primitive Data Types
               </h3>
               <span
                 className={`${styles.masteryLevel} ${styles.masteryBeginner}`}
@@ -263,10 +254,10 @@ const ProgressPage = () => {
                   <div className={styles.progressBarContainer}>
                     <div
                       className={styles.progressBar}
-                      style={{ width: "45%" }}
+                      style={{ width: "0%" }}
                     ></div>
                   </div>
-                  <small>45% completed (9/20 lessons)</small>
+                  <small>0% completed</small>
                 </div>
 
                 <div className={styles.metricCard}>
@@ -277,10 +268,10 @@ const ProgressPage = () => {
                   <div className={styles.progressBarContainer}>
                     <div
                       className={styles.progressBar}
-                      style={{ width: "38%" }}
+                      style={{ width: "0%" }}
                     ></div>
                   </div>
-                  <small>38% retention score</small>
+                  <small>0% retention score</small>
                 </div>
               </div>
 
@@ -298,12 +289,7 @@ const ProgressPage = () => {
                         Strengths
                       </h5>
                       <div className={styles.swList}>
-                        <div className={styles.swItem}>
-                          Basic if-else statements
-                        </div>
-                        <div className={styles.swItem}>
-                          Simple condition evaluation
-                        </div>
+                        <div className={styles.swItem}></div>
                       </div>
                     </div>
 
@@ -313,11 +299,7 @@ const ProgressPage = () => {
                         Weaknesses
                       </h5>
                       <div className={styles.swList}>
-                        <div className={styles.swItem}>Nested conditionals</div>
-                        <div className={styles.swItem}>
-                          Switch statement usage
-                        </div>
-                        <div className={styles.swItem}>Ternary operators</div>
+                        <div className={styles.swItem}></div>
                       </div>
                     </div>
                   </div>
@@ -326,11 +308,11 @@ const ProgressPage = () => {
             </div>
           </div>
 
-          {/* Subtopic 3 - Advanced Loops */}
+          {/* Subtopic 3 - Non-Primitive Data Types */}
           <div className={styles.subtopicCard}>
             <div className={styles.subtopicHeader}>
               <h3 className={styles.subtopicName}>
-                Subtopic 3: Advanced Loops
+                Subtopic 3: Non-Primitive Data Types
               </h3>
               <span
                 className={`${styles.masteryLevel} ${styles.masteryBeginner}`}
@@ -350,10 +332,10 @@ const ProgressPage = () => {
                   <div className={styles.progressBarContainer}>
                     <div
                       className={styles.progressBar}
-                      style={{ width: "30%" }}
+                      style={{ width: "0%" }}
                     ></div>
                   </div>
-                  <small>30% completed (6/20 lessons)</small>
+                  <small>0% completed</small>
                 </div>
 
                 <div className={styles.metricCard}>
@@ -364,10 +346,10 @@ const ProgressPage = () => {
                   <div className={styles.progressBarContainer}>
                     <div
                       className={styles.progressBar}
-                      style={{ width: "25%" }}
+                      style={{ width: "0%" }}
                     ></div>
                   </div>
-                  <small>25% retention score</small>
+                  <small>0% retention score</small>
                 </div>
               </div>
 
@@ -385,9 +367,7 @@ const ProgressPage = () => {
                         Strengths
                       </h5>
                       <div className={styles.swList}>
-                        <div className={styles.swItem}>
-                          Understanding loop concepts
-                        </div>
+                        <div className={styles.swItem}></div>
                       </div>
                     </div>
 
@@ -397,15 +377,7 @@ const ProgressPage = () => {
                         Weaknesses
                       </h5>
                       <div className={styles.swList}>
-                        <div className={styles.swItem}>
-                          Nested loops implementation
-                        </div>
-                        <div className={styles.swItem}>
-                          Loop control statements
-                        </div>
-                        <div className={styles.swItem}>
-                          Performance optimization
-                        </div>
+                        <div className={styles.swItem}></div>
                       </div>
                     </div>
                   </div>
