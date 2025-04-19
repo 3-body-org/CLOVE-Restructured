@@ -344,8 +344,8 @@ header {
   height: 180px;
   border-radius: 50%;
   background: conic-gradient(
-    var(--primary) 0% 75%,
-    var(--surface-light) 75% 100%
+    var(--primary) 0% 0%,
+    var(--surface-light) 1% 100%
   );
   position: relative;
   display: flex;

@@ -90,6 +90,14 @@ function App() {
               }
             />
             <Route
+              path="/my-deck/:topicId/introduction"
+              element={
+                <ProtectedRoutes>
+                  <SubtopicPage />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
               path="/lesson/:topicId/:subtopicId"
               element={
                 <ProtectedRoutes>

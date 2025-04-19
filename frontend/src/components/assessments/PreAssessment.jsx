@@ -1,38 +1,57 @@
-//react
+// React
 import React, { useState, useEffect } from "react";
-//react router
+// React Router
 import { useNavigate, useParams } from "react-router-dom";
-//components
-import { questions } from "./questions.js";
-//scss
+// Import your new quiz data structure
+import { AssessmentData } from "./AssessmentData"; // Adjust path if necessary
+// SCSS styles
 import styles from "../../scss modules/components/assessments/Assessment.module.scss";
 
+// Flatten all questions into one array for easy access
 const getRandomQuestions = () => {
-  const allQuestions = [
-    ...questions.basicLoops,
-    ...questions.conditionalStatements,
-    ...questions.advancedLoops,
-  ];
-  const randomQuestions = [];
-  const selectedIndices = new Set();
+  const selectedQuestions = [];
 
-  while (randomQuestions.length < 15) {
-    const randomIndex = Math.floor(Math.random() * allQuestions.length);
-    if (!selectedIndices.has(randomIndex)) {
-      selectedIndices.add(randomIndex);
-      randomQuestions.push(allQuestions[randomIndex]);
+  AssessmentData.subtopics.forEach((subtopic, subtopicIndex) => {
+    const difficulties = ['easy', 'medium', 'hard'];
+    const pool = [];
+
+    // Collect all questions with labeled difficulty
+    difficulties.forEach((level) => {
+      subtopic.questions[level].forEach((q, idx) => {
+        pool.push({
+          ...q,
+          category: subtopic.title,
+          difficulty: level,
+          id: `${subtopicIndex}-${level}-${idx}`
+        });
+      });
+    });
+
+    // Shuffle pool to randomize
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
     }
-  }
 
-  return randomQuestions;
+    // Pick 5 random questions with mixed difficulties
+    const chosen = pool.slice(0, 5);
+
+    // ✅ Simplified debug: Just log total selected
+    console.log(`Selected ${chosen.length} questions from subtopic: "${subtopic.title}"`);
+
+    selectedQuestions.push(...chosen);
+  });
+
+  return selectedQuestions;
 };
+
 
 const PreAssessment = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
-  const [isAnswered, setIsAnswered] = useState(false); // Track if an answer was selected
+  const [isAnswered, setIsAnswered] = useState(false);
   const [questionsToAsk, setQuestionsToAsk] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,20 +71,11 @@ const PreAssessment = () => {
   const currentQuestion = questionsToAsk[questionIndex];
 
   const handleOptionClick = (option) => {
-    if (isAnswered) return; // Don't allow selection after answering
+    if (isAnswered) return;
 
     const isCorrect = option === currentQuestion.answer;
     setSelectedOption(option);
     setIsAnswered(true);
-
-    let category = "";
-    if (currentQuestion.id >= 5) {
-      category = "Basic Loops";
-    } else if (currentQuestion.id >= 10) {
-      category = "Conditional Statements";
-    } else {
-      category = "Advanced Loops";
-    }
 
     setUserAnswers((prev) => [
       ...prev,
@@ -73,15 +83,16 @@ const PreAssessment = () => {
         questionId: currentQuestion.id,
         selectedOption: option,
         isCorrect,
-        category,
-      },
+        category: currentQuestion.category,
+        difficulty: currentQuestion.difficulty
+      }
     ]);
   };
 
   const handleNextQuestion = () => {
     if (questionIndex < questionsToAsk.length - 1) {
       setQuestionIndex(questionIndex + 1);
-      setProgress((prevProgress) => prevProgress + 100 / questionsToAsk.length);
+      setProgress(((questionIndex + 1) / questionsToAsk.length) * 100);
       setSelectedOption(null);
       setIsAnswered(false);
     } else {
@@ -89,8 +100,8 @@ const PreAssessment = () => {
         state: {
           userAnswers,
           questionsToAsk,
-          topicId,
-        },
+          topicId
+        }
       });
     }
   };
@@ -104,37 +115,38 @@ const PreAssessment = () => {
             style={{ width: `${progress}%` }}
           ></div>
         </div>
+
         <div className={styles.questionCount}>
           Question {questionIndex + 1} of {questionsToAsk.length}
         </div>
+
         <div
           className={styles.questionText}
           dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
         />
+
         <div className={styles.optionsContainer}>
           {currentQuestion.options.map((option, index) => (
             <div
               key={index}
               className={`${styles.option} 
-                ${
-                  selectedOption === option
-                    ? currentQuestion.answer === option
-                      ? styles.correct
-                      : styles.incorrect
-                    : ""
-                } 
-                ${isAnswered ? styles.disabled : ""} 
-                ${selectedOption === option && isAnswered ? styles.shake : ""}`}
+                ${selectedOption === option
+                  ? currentQuestion.answer === option
+                    ? styles.correct
+                    : styles.incorrect
+                  : ""}
+                ${isAnswered ? styles.disabled : ""}
+                ${selectedOption === option && isAnswered ? styles.shake : ""}
+              `}
               onClick={() => handleOptionClick(option)}
             >
               {option}
             </div>
           ))}
         </div>
+
         <button className={styles.nextBtn} onClick={handleNextQuestion}>
-          {questionIndex < questionsToAsk.length - 1
-            ? "Next Question"
-            : "Finish"}
+          {questionIndex < questionsToAsk.length - 1 ? "Next Question" : "Finish"}
         </button>
       </div>
     </div>
