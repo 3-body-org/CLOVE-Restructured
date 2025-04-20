@@ -54,7 +54,7 @@ const LessonsPage = () => {
 
   const handleStartChallenges = () => {
     // setLessonCompleted(subtopicId);
-    navigate(`/lesson/${topicId}/${subtopicId}/exercise`);
+    navigate(`/lesson/${topicId}/${subtopicId}/practice`);
   };
 
   return (
@@ -66,6 +66,23 @@ const LessonsPage = () => {
           <div className={styles.missionPatch}>🚀</div>
           <h1 className={styles.courseTitle}>Cosmic Java</h1>
           <p>Mission: {lessonData?.title || "Loading..."}</p>
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className={styles.lessonContent}>
+          <div className={styles.navButtons}>
+            <Button className={styles.navBtn} onClick={() => navigate(-1)}>
+              <span className={styles.icon}>⬅️</span>
+              Back to Topics
+            </Button>
+            <Button
+              className={`${styles.navBtn} ${styles.nextBtn}`}
+              onClick={handleStartChallenges}
+            >
+              <span className={styles.icon}>⚡</span>
+              Start Practice
+            </Button>
+          </div>
         </div>
 
         {/* Dynamic Lesson Content */}
@@ -129,22 +146,6 @@ const LessonsPage = () => {
           </div>
         ))}
 
-        {/* Navigation Buttons */}
-        <div className={styles.lessonContent}>
-          <div className={styles.navButtons}>
-            <Button className={styles.navBtn} onClick={() => navigate(-1)}>
-              <span className={styles.icon}>⬅️</span>
-              Back to Topics
-            </Button>
-            <Button
-              className={`${styles.navBtn} ${styles.nextBtn}`}
-              onClick={handleStartChallenges}
-            >
-              <span className={styles.icon}>⚡</span>
-              Start Challenges
-            </Button>
-          </div>
-        </div>
       </div>
     </div>
   );

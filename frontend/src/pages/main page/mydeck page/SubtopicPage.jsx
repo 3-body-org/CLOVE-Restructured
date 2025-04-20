@@ -18,7 +18,7 @@ import styles from "../../../scss modules/pages/main page/mydeck page/SubtopicPa
 
 // import background from "../../assets/images/SubtopicSelectionPage/loops background.svg";
 
-import intro from "../../../assets/images/main page/mydeck page/subtopic page/intro.svg";
+import assessment from "../../../assets/images/main page/mydeck page/subtopic page/assessment.svg";
 import subtopic1 from "../../../assets/images/main page/mydeck page/subtopic page/subtopic1.svg";
 import subtopic2 from "../../../assets/images/main page/mydeck page/subtopic page/subtopic2.svg";
 import subtopic3 from "../../../assets/images/main page/mydeck page/subtopic page/subtopic3.svg";
@@ -30,47 +30,47 @@ import leftPath from "../../../assets/images/main page/mydeck page/subtopic page
 import TitleAndProfile from "../../../components/navbar/TitleAndProfile";
 
 const popoverContent = {
-  intro: {
-    id: "intro",
-    title: "Introduction To Loops", // Added title field
-    text: "Introduction to loops: why we use them.",
+  "Pre-Assessment Test": {
+    id: "preassessment",
+    title: "Pre-assessment Test", // Added title field
+    text: "Test your knowledge before starting the course.",
     time: "5 min",
-    image: intro, // Reference to imported image
-    path: rightPath, // Path decoration image
-    requires: null, // No prerequisites
+    image: assessment, 
+    path: rightPath, 
+    requires: null, 
   },
-  forloops: {
-    id: "forloops",
-    title: "For Loops",
-    text: "For Loops: iterating with control.",
+  "Declaring Variables": {
+    id: "declaringvariables",
+    title: "Declaring Variables",
+    text: "Declaring Variables: assigning values to variables.",
     time: "10 min",
     image: subtopic1,
     path: middlePath,
-    requires: "intro", // Requires intro subtopic
+    requires: "Pre-Assessment Test", // Requires intro subtopic
   },
-  whileloops: {
-    id: "whileloops",
-    title: "While Loops",
-    text: "While Loops: condition-based repetition.",
+  "Primitive Data Types": {
+    id: "primitivedatatypes",
+    title: "Primitive Data Types",
+    text: "Primitive Data Types: numbers, strings, booleans.",
     time: "8 min",
     image: subtopic2,
     path: leftPath,
-    requires: "forloops",
+    requires: "Declaring Variables",
   },
-  nestedloops: {
-    id: "nestedloops",
-    title: "Nested Loops",
-    text: "Nested Loops: loops inside loops.",
+  "Non-Primitive Data Types": {
+    id: "nonprimitivedatatypes",
+    title: "Non-Primitive Data Types",
+    text: "Non-Primitive Data Types: arrays, objects, functions.",
     time: "12 min",
     image: subtopic3,
     path: null,
-    requires: "whileloops",
+    requires: "Primitive Data Types",
   },
 };
 
 export default function SubtopicSelectionPage() {
-  const { topicId } = useParams();
   const navigate = useNavigate();
+  const { topicId } = useParams();
   const { preAssessmentTaken, setTopicId, setSubtopicId, completedSubtopics } =
     useContext(MyDeckContext);
 
@@ -80,20 +80,27 @@ export default function SubtopicSelectionPage() {
   }, [topicId, setTopicId]);
 
   const handleSubtopicClick = (subtopicKey) => {
-    if (!preAssessmentTaken) {
-      alert("Complete pre-assessment first!");
-      return;
-    }
-
-    if (isSubtopicLocked(subtopicKey)) {
-      alert(`Complete ${popoverContent[subtopicKey].requires} first!`);
-      return;
-    }
-
     const subtopic = popoverContent[subtopicKey];
-    setSubtopicId(subtopic.id);
+    
+    if (subtopicKey === "Pre-Assessment Test") {
+      navigate(`/my-deck/${topicId}/assessment`);
+      return;
+    }
+  
+    if (isSubtopicLocked(subtopicKey)) {
+      alert(`Complete "${subtopic.requires}" first!`);
+      return;
+    }
+  
+    if (!completedSubtopics.includes(subtopicKey)) {
+      const updatedCompleted = [...completedSubtopics, subtopicKey];
+      setCompletedSubtopics(updatedCompleted);
+      localStorage.setItem("completedSubtopics", JSON.stringify(updatedCompleted));
+    }
+    
     navigate(`/lesson/${topicId}/${subtopic.id}`);
   };
+  
 
   const getPreviousSubtopic = (currentKey) => {
     const keys = ["intro", "forloops", "whileloops", "nestedloops"];
@@ -113,7 +120,13 @@ export default function SubtopicSelectionPage() {
 
   const isSubtopicLocked = (subtopicKey) => {
     const required = popoverContent[subtopicKey]?.requires;
-    return required && !completedSubtopics.includes(required);
+    if (!required) return false;
+    
+    if (required === "Pre-Assessment Test") {
+      return !preAssessmentTaken;
+    }
+    
+    return !completedSubtopics.includes(required);
   };
 
   const renderPopover = (subtopicKey) => {
@@ -164,20 +177,20 @@ export default function SubtopicSelectionPage() {
   return (
     <Container
       fluid
-      className={`${styles.topicDetailContent} ${styles.lessonWrapper} pt-2 m-0`}
+      className={`${styles.myDeckWrapper} ${styles.topicDetailContent} ${styles.lessonWrapper} pt-2 m-0`}
     >
-      <TitleAndProfile colored={"Loops"} />
-
+      <TitleAndProfile colored={"Variables and Data Types"} />
+  
       <div className={styles.stars} id="stars"></div>
-      {/* <div className={`${styles.scrollableContainer}`}> */}
+  
       <Row>
         <Col
           xs={12}
           className="text-center text-white p-3"
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.1)", // Slight white overlay
-            backdropFilter: "blur(3px)", // Blur effect
-            borderRadius: "40px", // Rounded corners for a nice effect
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(3px)",
+            borderRadius: "40px",
           }}
         >
           <p
@@ -191,155 +204,127 @@ export default function SubtopicSelectionPage() {
           >
             Welcome to CyberSpace Outpost Omega, a futuristic hub on the edge of
             space. Your mission is to restore power to the outpost’s failing
-            energy grid and protect its data vaults. As a skilled
-            cyber-engineer, your ability with loops is key to automating tasks
-            and managing resources. The outpost’s smart systems are breaking
-            down. With lights flickering and security failing, you must dive
-            into the code, set up loops, and restore order before the colony’s
-            important data is lost.
+            energy grid and protect its data vaults...
           </p>
         </Col>
       </Row>
+  
+      {/* Pre-Assessment Test */}
       <Row>
-        <Col
-          xs={4}
-          className="p-0 m-0  d-flex align-items-end justify-content-end "
-        >
-          <Image
-            fluid
-            src={rightPath}
-            style={{ width: "200px", objectFit: "cover" }}
-          />
+        <Col xs={4} className="p-0 m-0 d-flex align-items-end justify-content-end">
+          <Image fluid src={popoverContent["Pre-Assessment Test"].path} style={{ width: "200px" }} />
         </Col>
         <Col xs={4} className="p-5 text-white text-center">
-          <h5>Introduction To Loops</h5>
+          <h5>{popoverContent["Pre-Assessment Test"].title}</h5>
           <OverlayTrigger
             trigger={["hover", "focus"]}
             placement="top"
-            overlay={renderPopover("intro")}
+            overlay={renderPopover("Pre-Assessment Test")}
           >
-            {/* <Image
-                src={intro}
-                fluid
-                style={{
-                  cursor: isSubtopicLocked(key) ? "not-allowed" : "pointer",
-                  opacity: isSubtopicLocked(key) ? 0.5 : 1,
-                }}
-                onClick={() => handleSubtopicClick("intro")}
-              /> */}
             <Image
-              src={intro}
+              src={popoverContent["Pre-Assessment Test"].image}
               fluid
               style={{
-                cursor: isSubtopicLocked("intro") ? "not-allowed" : "pointer",
-                opacity: isSubtopicLocked("intro") ? 0.5 : 1,
-                filter: isSubtopicLocked("intro") ? "grayscale(1)" : "none",
+                cursor: "pointer",
+                opacity: 1,
               }}
-              onClick={() =>
-                !isSubtopicLocked("intro") && handleSubtopicClick("intro")
-              }
+              onClick={() => handleSubtopicClick("Pre-Assessment Test")}
             />
           </OverlayTrigger>
         </Col>
         <Col xs={4}></Col>
       </Row>
+  
+      {/* Declaring Variables */}
       <Row>
-        <Col xs={4} className="p-5  text-white text-center">
-          <h5>For Loops</h5>
+        <Col xs={4} className="p-5 text-white text-center">
+          <h5>{popoverContent["Declaring Variables"].title}</h5>
           <OverlayTrigger
             trigger={["hover", "focus"]}
             placement="top"
-            overlay={renderPopover("forloops")}
+            overlay={renderPopover("Declaring Variables")}
           >
             <Image
-              src={subtopic1}
+              src={popoverContent["Declaring Variables"].image}
               fluid
               style={{
-                cursor: isSubtopicLocked("forloops")
-                  ? "not-allowed"
-                  : "pointer",
-                opacity: isSubtopicLocked("forloops") ? 0.5 : 1,
-                filter: isSubtopicLocked("forloops") ? "grayscale(1)" : "none",
+                cursor: isSubtopicLocked("Declaring Variables") ? "not-allowed" : "pointer",
+                opacity: isSubtopicLocked("Declaring Variables") ? 0.5 : 1,
+                filter: isSubtopicLocked("Declaring Variables") ? "grayscale(1)" : "none",
               }}
               onClick={() =>
-                !isSubtopicLocked("forloops") && handleSubtopicClick("forloops")
+                !isSubtopicLocked("Declaring Variables") &&
+                handleSubtopicClick("Declaring Variables")
               }
             />
           </OverlayTrigger>
         </Col>
-        <Col
-          xs={4}
-          className="pt-5 p-0 m-0  d-flex align-items-end justify-content-start"
-        >
+        <Col xs={4} className="pt-5 p-0 m-0 d-flex align-items-end justify-content-start">
           <Image
             fluid
-            src={middlePath}
+            src={popoverContent["Declaring Variables"].path}
             style={{ width: "300px", objectFit: "cover" }}
           />
         </Col>
         <Col xs={4}></Col>
       </Row>
+  
+      {/* Primitive Data Types */}
       <Row>
         <Col xs={4}></Col>
-        <Col xs={4} className="p-5  text-white text-center">
-          <h5>While Loops</h5>
+        <Col xs={4} className="p-5 text-white text-center">
+          <h5>{popoverContent["Primitive Data Types"].title}</h5>
           <OverlayTrigger
             trigger={["hover", "focus"]}
             placement="top"
-            overlay={renderPopover("whileloops")}
+            overlay={renderPopover("Primitive Data Types")}
           >
             <Image
-              src={subtopic2}
+              src={popoverContent["Primitive Data Types"].image}
               fluid
               style={{
-                cursor: isSubtopicLocked("whileloops")
-                  ? "not-allowed"
-                  : "pointer",
-                opacity: isSubtopicLocked("whileloops") ? 0.5 : 1,
-                filter: isSubtopicLocked("whileloops")
-                  ? "grayscale(1)"
-                  : "none",
+                cursor: isSubtopicLocked("Primitive Data Types") ? "not-allowed" : "pointer",
+                opacity: isSubtopicLocked("Primitive Data Types") ? 0.5 : 1,
+                filter: isSubtopicLocked("Primitive Data Types") ? "grayscale(1)" : "none",
               }}
               onClick={() =>
-                !isSubtopicLocked("whileloops") &&
-                handleSubtopicClick("whileloops")
+                !isSubtopicLocked("Primitive Data Types") &&
+                handleSubtopicClick("Primitive Data Types")
               }
             />
           </OverlayTrigger>
         </Col>
-        <Col xs={4} className="pt-5 p-0 m-0  d-flex align-items-end">
+        <Col xs={4} className="pt-5 p-0 m-0 d-flex align-items-end">
           <Image
             fluid
-            src={leftPath}
+            src={popoverContent["Primitive Data Types"].path}
             style={{ width: "120px", objectFit: "cover" }}
           />
         </Col>
       </Row>
+  
+      {/* Non-Primitive Data Types */}
       <Row>
         <Col xs={4}></Col>
         <Col xs={4}></Col>
         <Col xs={4} className="p-5 text-white text-center">
-          <h5>Nested Loops</h5>
+          <h5>{popoverContent["Non-Primitive Data Types"].title}</h5>
           <OverlayTrigger
             trigger={["hover", "focus"]}
             placement="top"
-            overlay={renderPopover("nestedloops")}
+            overlay={renderPopover("Non-Primitive Data Types")}
           >
             <Image
-              src={subtopic3}
+              src={popoverContent["Non-Primitive Data Types"].image}
               fluid
               style={{
-                cursor: isSubtopicLocked("nestedloops")
-                  ? "not-allowed"
-                  : "pointer",
-                opacity: isSubtopicLocked("nestedloops") ? 0.5 : 1,
-                filter: isSubtopicLocked("nestedloops")
-                  ? "grayscale(1)"
-                  : "none",
+                cursor: isSubtopicLocked("Non-Primitive Data Types") ? "not-allowed" : "pointer",
+                opacity: isSubtopicLocked("Non-Primitive Data Types") ? 0.5 : 1,
+                filter: isSubtopicLocked("Non-Primitive Data Types") ? "grayscale(1)" : "none",
               }}
               onClick={() =>
-                !isSubtopicLocked("nestedloops") &&
-                handleSubtopicClick("nestedloops")
+                !isSubtopicLocked("Non-Primitive Data Types") &&
+                handleSubtopicClick("Non-Primitive Data Types")
               }
             />
           </OverlayTrigger>
@@ -347,4 +332,5 @@ export default function SubtopicSelectionPage() {
       </Row>
     </Container>
   );
+  
 }
