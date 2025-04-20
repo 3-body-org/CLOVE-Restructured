@@ -1,7 +1,5 @@
 //react
-import React, { useState, useCallback, useContext } from "react";
-//contex
-import { MyDeckContext } from "../../../context/ContextPage";
+import React, { useCallback } from "react";
 //react router
 import { useNavigate } from "react-router-dom";
 //bootstrap
@@ -67,7 +65,7 @@ const TopicCard = React.memo(({ topic, onClick }) => (
       <h2 className={styles.cardTitle}>{topic.name}</h2>
       <p className={styles.cardDesc}>{topic.description}</p>
 
-      {/* Progress Bar Section - Updated */}
+      {/* Progress Bar Section */}
       <div className={styles.cardProgress}>
         <div
           className={styles.progressFill}
@@ -89,25 +87,14 @@ const TopicCard = React.memo(({ topic, onClick }) => (
   </Col>
 ));
 
-export default function MyDeckPage() {
+export default function TopicPage() {
   const navigate = useNavigate();
-  const { preAssessmentTaken } = useContext(MyDeckContext);
 
-  // Check if the pre-assessment is taken for the topic
   const handleTopicClick = useCallback(
     (topic) => {
-      console.log(preAssessmentTaken); // Check the value of preAssessmentTaken
-      console.log("Topic clicked:", topic); // Check the topic details
-
-      if (!preAssessmentTaken[topic.id]) {
-        // If pre-assessment has not been taken for the topic, redirect to pre-assessment
-        navigate(`/my-deck/${topic.id}/pre-assessment`);
-      } else {
-        // If pre-assessment has been taken, navigate to the lesson page
-        navigate(`/my-deck/${topic.id}`);
-      }
+      navigate(`/my-deck/${topic.id}/introduction`);
     },
-    [navigate, preAssessmentTaken]
+    [navigate]
   );
 
   return (

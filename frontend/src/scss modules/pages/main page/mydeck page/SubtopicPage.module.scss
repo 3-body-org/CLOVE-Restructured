@@ -1,5 +1,17 @@
-body {
-  background-color: #232529;
+.myDeckWrapper {
+  flex-grow: 1;
+  padding: 2.5rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: "Open Sauce One", "Roboto", sans-serif;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
 }
 
 .topicDetailWrapper {
@@ -122,7 +134,6 @@ body {
 
 /* Scrollable Container */
 .scrollableContainer {
-  background-image: url("../../assets/images/TopicDetailPage/loops\ background.svg"); // Path to your image
   max-height: calc(100vh - 85px);
   overflow-y: auto;
   overflow-x: hidden;

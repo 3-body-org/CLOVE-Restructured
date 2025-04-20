@@ -9,8 +9,9 @@ import MyDeckPage from "./pages/main page/mydeck page/TopicPage";
 import AssessmentPage from "./components/assessments/Assessment";
 import AssessmentResultPage from "./components/assessments/AssessmentResult";
 import SubtopicPage from "./pages/main page/mydeck page/SubtopicPage";
+import IntroductionPage from "./pages/main page/mydeck page/IntroductionPage";
 import LessonsPage from "./pages/lessons page/LessonsPage";
-import ExercisePage from "./pages/lessons page/ExercisePage";
+import PracticePage from "./pages/lessons page/PracticePage";
 import ChallengesPage from "./pages/challenges page/ChallengesPage";
 // import ResultsPage from "./pages/Lesson and Challenges Page/ResultsPage";
 
@@ -66,7 +67,7 @@ function App() {
               }
             />
             <Route
-              path="/my-deck/:topicId/pre-assessment"
+              path="/my-deck/:topicId/assessment"
               element={
                 <ProtectedRoutes>
                   <AssessmentPage />
@@ -74,7 +75,7 @@ function App() {
               }
             />
             <Route
-              path="/my-deck/:topicId/pre-assessment/result"
+              path="/my-deck/:topicId/assessment/result"
               element={
                 <ProtectedRoutes>
                   <AssessmentResultPage />
@@ -93,7 +94,7 @@ function App() {
               path="/my-deck/:topicId/introduction"
               element={
                 <ProtectedRoutes>
-                  <SubtopicPage />
+                  <IntroductionPage />
                 </ProtectedRoutes>
               }
             />
@@ -106,10 +107,10 @@ function App() {
               }
             />
             <Route
-              path="/lesson/:topicId/:subtopicId/exercise"
+              path="/lesson/:topicId/:subtopicId/practice"
               element={
                 <ProtectedRoutes>
-                  <ExercisePage />
+                  <PracticePage />
                 </ProtectedRoutes>
               }
             />

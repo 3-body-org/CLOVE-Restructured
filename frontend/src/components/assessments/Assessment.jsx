@@ -1,8 +1,10 @@
 // Assessment.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AssessmentData } from "./AssessmentData";
 import styles from "../../scss modules/components/assessments/Assessment.module.scss";
+
+import { MyDeckContext } from "../../context/ContextPage";
 
 const getRandomQuestions = () => {
   const selectedQuestions = [];
@@ -46,6 +48,7 @@ const Assessment = () => {
 
   const { topicId } = useParams();
   const navigate = useNavigate();
+  const { setPreAssessmentTaken } = useContext(MyDeckContext);
 
   useEffect(() => {
     const randomQuestions = getRandomQuestions();
@@ -91,7 +94,7 @@ const Assessment = () => {
       setSelectedOption(null);
       setIsAnswered(false);
     } else {
-      navigate(`/my-deck/${topicId}/pre-assessment/result`, {
+      navigate(`/my-deck/${topicId}/assessment/result`, {
         state: {
           userAnswers,
           questionsToAsk,
@@ -105,10 +108,7 @@ const Assessment = () => {
     <div className={styles.pageContainer}>
       <div className={styles.testContainer}>
         <div className={styles.progressBar}>
-          <div
-            className={styles.progressFill}
-            style={{ width: `${progress}%` }}
-          ></div>
+          <div className={styles.progressFill} style={{ width: `${progress}%` }}></div>
         </div>
 
         <div className={styles.questionCount}>
@@ -121,25 +121,25 @@ const Assessment = () => {
         />
 
         <div className={styles.optionsContainer}>
-          {currentQuestion.options.map((option, index) => (
-            <div
-              key={index}
-              className={`${styles.option} 
-                ${
-                  selectedOption === option
-                    ? currentQuestion.answer === option
-                      ? styles.correct
-                      : styles.incorrect
-                    : ""
-                }
-                ${isAnswered ? styles.disabled : ""}
-                ${selectedOption === option && isAnswered ? styles.shake : ""}
-              `}
-              onClick={() => handleOptionClick(option)}
-            >
-              {option}
-            </div>
-          ))}
+          {currentQuestion.options.map((option, index) => {
+            const isCorrect = option === currentQuestion.answer;
+            const isSelected = selectedOption === option;
+
+            return (
+              <div
+                key={index}
+                className={`${styles.option} 
+                  ${isSelected && !isCorrect ? styles.incorrect : ''}
+                  ${isAnswered && isCorrect ? styles.correct : ''}
+                  ${isAnswered ? styles.disabled : ''}`}
+                onClick={() => handleOptionClick(option)}
+              >
+                {option}
+                {isAnswered && isCorrect && <div className={styles.checkmark}></div>}
+                {isSelected && !isCorrect && <div className={styles.crossmark}></div>}
+              </div>
+            );
+          })}
         </div>
 
         {showError && (
@@ -149,9 +149,7 @@ const Assessment = () => {
         )}
 
         <button className={styles.nextBtn} onClick={handleNextQuestion}>
-          {questionIndex < questionsToAsk.length - 1
-            ? "Next Question"
-            : "Finish"}
+          {questionIndex < questionsToAsk.length - 1 ? "Next Question" : "Finish"}
         </button>
       </div>
     </div>

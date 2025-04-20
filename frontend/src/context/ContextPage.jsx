@@ -6,9 +6,15 @@ const MyDeckProvider = ({ children }) => {
   const [topicId, setTopicId] = useState(null);
   const [subtopicId, setSubtopicId] = useState(null);
 
-  const [preAssessmentTaken, setPreAssessmentTaken] = useState(true);
+  const [preAssessmentTaken, setPreAssessmentTaken] = useState(() => {
+    const saved = localStorage.getItem("preAssessmentTaken");
+    return saved ? JSON.parse(saved) : false;
+  });
   const [postAssessmentTaken, setPostAssessmentTaken] = useState(false);
-  const [completedSubtopics, setCompletedSubtopics] = useState([]);
+  const [completedSubtopics, setCompletedSubtopics] = useState(() => {
+    const saved = localStorage.getItem("completedSubtopics");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [masteryLevels, setMasteryLevels] = useState({});
 
   const [completedChallenges, setCompletedChallenges] = useState(() => {
@@ -20,13 +26,20 @@ const MyDeckProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : {};
   });
 
-  // State to store the results of the challenges
-  const [results, setResults] = useState([]);
-
   // LocalStorage persistence for various states
+  useEffect(() => {
+    const savedCompleted = localStorage.getItem("completedSubtopics");
+    if (!savedCompleted) {
+      localStorage.setItem("completedSubtopics", JSON.stringify([]));
+    }
+  }, []);
   useEffect(() => {
     localStorage.setItem("preAssessmentTaken", JSON.stringify(preAssessmentTaken));
   }, [preAssessmentTaken]);
+
+  useEffect(() => {
+    localStorage.setItem("completedSubtopics", JSON.stringify(completedSubtopics));
+  }, [completedSubtopics]);
 
   useEffect(() => {
     localStorage.setItem("completedChallenges", JSON.stringify(completedChallenges));
@@ -35,11 +48,6 @@ const MyDeckProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("challengeScores", JSON.stringify(challengeScores));
   }, [challengeScores]);
-
-  // LocalStorage persistence for results (Added)
-  useEffect(() => {
-    localStorage.setItem("results", JSON.stringify(results));
-  }, [results]);
 
   const value = {
     topicId,
@@ -58,8 +66,6 @@ const MyDeckProvider = ({ children }) => {
     setCompletedChallenges,
     challengeScores,
     setChallengeScores,
-    results, // Provide results to components
-    setResults, // Allow components to set results
   };
 
   return (
