@@ -12,9 +12,9 @@ const ChallengesPage = () => {
     <div className={styles.challengesContainer}>
       <div className={styles.challengeWrapper}>
         <div className={styles.fullWidthChallenge}>
-          <CodeFixer />
+          {/* <CodeFixer /> */}
           {/* <CodeCompletion /> */}
-          {/* <OutputTracing /> */}
+          <OutputTracing />
         </div>
       </div>
     </div>

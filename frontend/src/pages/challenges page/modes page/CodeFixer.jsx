@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../scss modules/pages/challenges page/modes page/CodeFixer.module.scss";
+import styles from "../../../scss modules/pages/challenges page/modes page/CodeFixer.module.scss"; 
 
 const CosmicJava = () => {
   const [timeLeft, setTimeLeft] = useState(480);
@@ -12,23 +12,9 @@ const CosmicJava = () => {
     fix2: "||",
     fix3: "power.length()",
     fix4: "Double",
-    fix5: "duration.toUpperCase()",
+    fix5: "thrusterPower[i].toUpperCase()",
   });
   const [verifiedFixes, setVerifiedFixes] = useState(new Set());
-  const [testCases, setTestCases] = useState([
-    {
-      description: "setPower(2, 85)",
-      expected: "Thruster 2 power set to 85",
-      actual: "Not executed yet",
-      passed: null, // null = not tested yet
-    },
-    {
-      description: "fireThrusters(1.5)",
-      expected: "All thrusters fired successfully",
-      actual: "Not executed yet",
-      passed: null,
-    },
-  ]);
 
   const correctAnswers = {
     fix1: "int",
@@ -37,6 +23,8 @@ const CosmicJava = () => {
     fix4: "int",
     fix5: "thrusterPower[i]",
   };
+
+  const expectedOutput = "All thrusters fired successfully at 85% power";
 
   useEffect(() => {
     const timerInterval = setInterval(() => {
@@ -56,9 +44,7 @@ const CosmicJava = () => {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const systemIntegrity = Math.floor((timeLeft / 480) * 100);
@@ -88,47 +74,6 @@ const CosmicJava = () => {
     return userFixes[fixId] === correctAnswers[fixId];
   };
 
-  const updateTestCases = () => {
-    const newTestCases = testCases.map((testCase) => {
-      if (testCase.description === "setPower(2, 85)") {
-        const condition1 = validateFix("fix1");
-        const condition2 = validateFix("fix2");
-        const condition3 = validateFix("fix3");
-        const passed = condition1 && condition2 && condition3;
-
-        return {
-          ...testCase,
-          passed,
-          actual: passed
-            ? "Thruster 2 power set to 85"
-            : condition1 && condition2
-            ? "Invalid power assignment"
-            : "Array index out of bounds",
-        };
-      }
-
-      if (testCase.description === "fireThrusters(1.5)") {
-        const condition4 = validateFix("fix4");
-        const condition5 = validateFix("fix5");
-        const passed = condition4 && condition5;
-
-        return {
-          ...testCase,
-          passed,
-          actual: passed
-            ? "All thrusters fired successfully"
-            : condition4
-            ? "Invalid thruster power value"
-            : "Type mismatch error",
-        };
-      }
-
-      return testCase;
-    });
-
-    setTestCases(newTestCases);
-  };
-
   const checkSolution = () => {
     let newVerified = new Set(verifiedFixes);
     let newBugsFixed = 0;
@@ -143,13 +88,10 @@ const CosmicJava = () => {
     setVerifiedFixes(newVerified);
     setBugsFixed(newVerified.size);
     updateScore(newBugsFixed * 20);
-    updateTestCases();
 
     if (newVerified.size === 5) {
       setTimeout(() => {
-        alert(
-          "SYSTEM RESTORED! Thrusters operational!\n+50pt bonus for perfect repair!"
-        );
+        alert("SYSTEM RESTORED! Thrusters operational!\n+50pt bonus for perfect repair!");
         updateScore(50);
       }, 500);
     } else if (newBugsFixed > 0) {
@@ -171,7 +113,6 @@ const CosmicJava = () => {
 
   return (
     <div className={styles.missionContainer}>
-      {/* Left Panel - Game Mechanics */}
       <div className={styles.gamePanel}>
         <div className={styles.missionInfo}>
           <h2 className={styles.missionTitle}>MISSION: BETA-9</h2>
@@ -221,9 +162,8 @@ const CosmicJava = () => {
         </div>
       </div>
 
-      {/* Right Panel - Coding Challenge */}
       <div className={styles.challengeArea}>
-        <h2 className={styles.challengeTitle}>THRUSTER CONTROL SYSTEM</h2>
+        <h2 className={styles.challengeTitle}>CODE FIXER CHALLENGE</h2>
 
         <div className={styles.bugRadar}>
           {[1, 2, 3, 4, 5].map((num) => (
@@ -293,43 +233,11 @@ const CosmicJava = () => {
           </pre>
         </div>
 
-        <div className={styles.testCases}>
-          <h3>INTEGRATION TESTS</h3>
-          {testCases.map((testCase, index) => (
-            <div
-              className={`${styles.testCase} ${
-                testCase.passed === null
-                  ? styles.pending
-                  : testCase.passed
-                  ? styles.passed
-                  : styles.failed
-              }`}
-            >
-              <div className={styles.testHeader}>
-                <span>TEST #{index + 1}</span>
-                <span>
-                  {testCase.passed === null
-                    ? "🟡 PENDING"
-                    : testCase.passed
-                    ? "✅ PASSED"
-                    : "❌ FAILED"}
-                </span>
-              </div>
-              <div className={styles.testDescription}>
-                {testCase.description}
-              </div>
-              <div className={styles.testResults}>
-                <div>
-                  <strong>Expected:</strong>
-                  <pre>{testCase.expected}</pre>
-                </div>
-                <div>
-                  <strong>Actual:</strong>
-                  <pre>{testCase.actual}</pre>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className={styles.expectedOutput}>
+          <h3>EXPECTED OUTPUT</h3>
+          <div className={styles.outputWindow}>
+            {expectedOutput}
+          </div>
         </div>
 
         <button
