@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../../scss modules/pages/challenges page/modes page/CodeFixer.module.scss";
+import { useNavigate } from "react-router-dom";
 
-const OutputTracing = () => {
+const OutputTracing = ({
+  onComplete,
+  challengeType,
+  isLastChallenge,
+  topicId,
+}) => {
+  const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [timeLeft, setTimeLeft] = useState(300);
   const [hintsLeft, setHintsLeft] = useState(3);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [gameEnded, setGameEnded] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const timerInterval = useRef(null);
 
   const questions = [
@@ -67,16 +74,38 @@ const OutputTracing = () => {
   }, []);
 
   useEffect(() => {
-    if (timeLeft === 0) endGame();
-  }, [timeLeft]);
+    if (timeLeft === 0 && !isCompleted) {
+      handleCompletion();
+    }
+  }, [timeLeft, isCompleted]);
 
   const handleOptionSelect = (option, isCorrect) => {
-    if (!selectedOption) {
+    if (!selectedOption && !isCompleted) {
       setSelectedOption({ option, isCorrect });
       if (isCorrect) {
         setCorrectAnswers((prev) => prev + 1);
         setScore((prev) => prev + 20);
       }
+    }
+  };
+
+  const handleCompletion = () => {
+    if (isCompleted) return;
+
+    clearInterval(timerInterval.current);
+    setIsCompleted(true);
+
+    if (onComplete) {
+      onComplete({
+        success: correctAnswers === questions.length,
+        score: score,
+        type: challengeType,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    if (isLastChallenge) {
+      setTimeout(() => navigate(`/my-deck/${topicId}`), 1000);
     }
   };
 
@@ -86,62 +115,27 @@ const OutputTracing = () => {
       setSelectedOption(null);
       setShowHint(false);
     } else {
-      endGame();
+      handleCompletion();
     }
   };
 
   const handleHint = () => {
-    if (hintsLeft > 0 && score >= 10) {
+    if (hintsLeft > 0 && score >= 10 && !isCompleted) {
       setHintsLeft((prev) => prev - 1);
       setScore((prev) => prev - 10);
       setShowHint(true);
     }
   };
 
-  const endGame = () => {
-    clearInterval(timerInterval.current);
-    setGameEnded(true);
-  };
-
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const systemIntegrity = Math.floor((timeLeft / 300) * 100);
-
-  if (gameEnded) {
-    return (
-      <div className={styles.missionContainer}>
-        <div className={styles.gamePanel}>
-          <div className={styles.missionInfo}>
-            <h2 className={styles.missionTitle}>MISSION REPORT</h2>
-            <div className={styles.scoring}>
-              <div className={styles.scoreDisplay}>
-                CREDITS: <span>{score}</span>
-              </div>
-              <div>
-                CORRECT ANSWERS: <span>{correctAnswers}</span>/{questions.length}
-              </div>
-              <div>
-                ACCURACY:{" "}
-                <span>
-                  {Math.round((correctAnswers / questions.length) * 100)}%
-                </span>
-              </div>
-            </div>
-            <button
-              className={styles.submitBtn}
-              onClick={() => window.location.reload()}
-            >
-              RESTART MISSION
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.missionContainer}>
@@ -156,9 +150,7 @@ const OutputTracing = () => {
 
         <div className={styles.timerContainer}>
           <div>ANALYSIS TIMER</div>
-          <div className={`${styles.timer} ${timeLeft < 60 ? styles.critical : ""}`}>
-            {formatTime(timeLeft)}
-          </div>
+          <div className={styles.timer}>{formatTime(timeLeft)}</div>
         </div>
 
         <div className={styles.hintSystem}>
@@ -166,7 +158,7 @@ const OutputTracing = () => {
           <button
             className={styles.hintBtn}
             onClick={handleHint}
-            disabled={hintsLeft === 0}
+            disabled={hintsLeft === 0 || isCompleted}
           >
             REQUEST HELP ({hintsLeft} LEFT) -10pts
           </button>
@@ -205,10 +197,9 @@ const OutputTracing = () => {
               key={index}
               className={`${styles.bugIndicator} ${
                 index <= currentQuestion ? styles.fixed : ""
-              } ${currentQuestion === index ? styles.active : ""}`}
+              }`}
             >
               {index + 1}
-              {index < currentQuestion && <div className={styles.checkmark}></div>}
             </div>
           ))}
         </div>
@@ -226,44 +217,37 @@ const OutputTracing = () => {
           </pre>
         </div>
 
-        <div className={styles.optionsContainer}>
+        <h3>What is the output of the following code?</h3>
+
+        <div className={styles.optionsGrid}>
           {questions[currentQuestion].options.map((option, i) => (
-            <button
+            <div
               key={i}
-              className={`${styles.optionCard} ${
+              className={`${styles.codeInput} ${
                 selectedOption?.option === option.text
                   ? option.correct
                     ? styles.correct
                     : styles.wrong
                   : ""
               }`}
-              onClick={() => handleOptionSelect(option.text, option.correct)}
-              disabled={!!selectedOption}
+              onClick={() =>
+                !isCompleted && handleOptionSelect(option.text, option.correct)
+              }
             >
-              <div className={styles.optionContent}>
-                <span className={styles.optionNumber}>{i + 1}</span>
-                <span className={styles.optionText}>{option.text}</span>
-              </div>
-              {selectedOption?.option === option.text && (
-                <div className={styles.feedbackIcon}>
-                  {option.correct ? "✓" : "✗"}
-                </div>
-              )}
-            </button>
+              {option.text}
+            </div>
           ))}
         </div>
 
-        <div className={styles.controls}>
-          <button
-            className={styles.submitBtn}
-            onClick={handleNextQuestion}
-            disabled={!selectedOption}
-          >
-            {currentQuestion < questions.length - 1
-              ? "NEXT QUESTION →"
-              : "COMPLETE MISSION"}
-          </button>
-        </div>
+        <button
+          className={styles.submitBtn}
+          onClick={handleNextQuestion}
+          disabled={!selectedOption || isCompleted}
+        >
+          {currentQuestion < questions.length - 1
+            ? "NEXT QUESTION →"
+            : "COMPLETE MISSION"}
+        </button>
       </div>
     </div>
   );

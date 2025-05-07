@@ -1,10 +1,6 @@
-//react
-import { useContext, useEffect } from "react";
-//react router
+import React, { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-//context
 import { MyDeckContext } from "../../../context/ContextPage";
-//react bootstrap
 import {
   Container,
   Row,
@@ -13,10 +9,7 @@ import {
   OverlayTrigger,
   Popover,
 } from "react-bootstrap";
-//scss
 import styles from "../../../scss modules/pages/main page/mydeck page/SubtopicPage.module.scss";
-
-// import background from "../../assets/images/SubtopicSelectionPage/loops background.svg";
 
 import assessment from "../../../assets/images/main page/mydeck page/subtopic page/assessment.svg";
 import subtopic1 from "../../../assets/images/main page/mydeck page/subtopic page/subtopic1.svg";
@@ -32,12 +25,12 @@ import TitleAndProfile from "../../../components/navbar/TitleAndProfile";
 const popoverContent = {
   "Pre-Assessment Test": {
     id: "preassessment",
-    title: "Pre-assessment Test", // Added title field
+    title: "Pre-assessment Test",
     text: "Test your knowledge before starting the course.",
     time: "5 min",
-    image: assessment, 
-    path: rightPath, 
-    requires: null, 
+    image: assessment,
+    path: rightPath,
+    requires: null,
   },
   "Declaring Variables": {
     id: "declaringvariables",
@@ -46,7 +39,7 @@ const popoverContent = {
     time: "10 min",
     image: subtopic1,
     path: middlePath,
-    requires: "Pre-Assessment Test", // Requires intro subtopic
+    requires: "Pre-Assessment Test",
   },
   "Primitive Data Types": {
     id: "primitivedatatypes",
@@ -63,69 +56,90 @@ const popoverContent = {
     text: "Non-Primitive Data Types: arrays, objects, functions.",
     time: "12 min",
     image: subtopic3,
-    path: null,
+    path: rightPath,
     requires: "Primitive Data Types",
+  },
+  "Post-Assessment Test": {
+    id: "postassessment",
+    title: "Post-assessment Test",
+    text: "Test your knowledge after completing the course.",
+    time: "5 min",
+    image: assessment,
+    path: null,
+    requires: null,
   },
 };
 
 export default function SubtopicSelectionPage() {
   const navigate = useNavigate();
   const { topicId } = useParams();
-  const { preAssessmentTaken, setTopicId, setSubtopicId, completedSubtopics } =
-    useContext(MyDeckContext);
+  const {
+    preAssessmentTaken,
+    setPreAssessmentTaken,
+    setTopicId,
+    setSubtopicId,
+    completedSubtopics,
+    setCompletedSubtopics,
+  } = useContext(MyDeckContext);
 
-  // Update context with URL parameter
   useEffect(() => {
     setTopicId(topicId);
   }, [topicId, setTopicId]);
 
+  // Add localStorage sync for pre-assessment status
+  useEffect(() => {
+    const savedPreAssessment = localStorage.getItem("preAssessmentTaken");
+    if (savedPreAssessment) {
+      setPreAssessmentTaken(JSON.parse(savedPreAssessment));
+    }
+  }, [setPreAssessmentTaken]);
+
   const handleSubtopicClick = (subtopicKey) => {
     const subtopic = popoverContent[subtopicKey];
-    
+
     if (subtopicKey === "Pre-Assessment Test") {
+      // Set pre-assessment as taken when starting it
+      setPreAssessmentTaken(true);
+      localStorage.setItem("preAssessmentTaken", JSON.stringify(true));
       navigate(`/my-deck/${topicId}/assessment`);
       return;
     }
-  
+
+    if (subtopicKey === "Post-Assessment Test") {
+      navigate(`/my-deck/${topicId}/assessment`);
+      return;
+    }
+
     if (isSubtopicLocked(subtopicKey)) {
       alert(`Complete "${subtopic.requires}" first!`);
       return;
     }
-  
+
+    setSubtopicId(subtopic.id);
+
+    // Update completed subtopics
     if (!completedSubtopics.includes(subtopicKey)) {
       const updatedCompleted = [...completedSubtopics, subtopicKey];
       setCompletedSubtopics(updatedCompleted);
-      localStorage.setItem("completedSubtopics", JSON.stringify(updatedCompleted));
+      localStorage.setItem(
+        "completedSubtopics",
+        JSON.stringify(updatedCompleted)
+      );
     }
-    
+
     navigate(`/lesson/${topicId}/${subtopic.id}`);
-  };
-  
-
-  const getPreviousSubtopic = (currentKey) => {
-    const keys = ["intro", "forloops", "whileloops", "nestedloops"];
-    const index = keys.indexOf(currentKey);
-    return index > 0 ? popoverContent[keys[index - 1]] : null;
-  };
-
-  const getSubtopicContent = (subtopicKey) => {
-    return (
-      popoverContent[subtopicKey] || {
-        id: "unknown",
-        text: "Content not available",
-        time: "N/A",
-      }
-    );
   };
 
   const isSubtopicLocked = (subtopicKey) => {
     const required = popoverContent[subtopicKey]?.requires;
     if (!required) return false;
-    
+
+    // Check for pre-assessment requirement
     if (required === "Pre-Assessment Test") {
       return !preAssessmentTaken;
     }
-    
+
+    // Check for other dependencies
     return !completedSubtopics.includes(required);
   };
 
@@ -146,7 +160,6 @@ export default function SubtopicSelectionPage() {
     );
   };
 
-  // Stars animation effect
   useEffect(() => {
     const createStars = () => {
       const stars = document.getElementById("stars");
@@ -177,42 +190,36 @@ export default function SubtopicSelectionPage() {
   return (
     <Container
       fluid
-      className={`${styles.myDeckWrapper} ${styles.topicDetailContent} ${styles.lessonWrapper} pt-2 m-0`}
+      className={`${styles.myDeckWrapper} ${styles.lessonWrapper}`}
     >
       <TitleAndProfile colored={"Variables and Data Types"} />
-  
+
       <div className={styles.stars} id="stars"></div>
-  
+
       <Row>
         <Col
           xs={12}
-          className="text-center text-white p-3"
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(3px)",
-            borderRadius: "40px",
-          }}
+          className={`text-center text-white p-3 ${styles.briefContainer}`}
         >
-          <p
-            className="ps-5 pe-5 pb-2 pt-2 p-0 m-0"
-            style={{
-              whiteSpace: "pre-wrap",
-              textAlign: "justify",
-              borderBottom: "2px dashed white",
-              borderTop: "2px dashed white",
-            }}
-          >
+          <p className={`ps-5 pe-5 pb-2 pt-2 p-0 m-0 ${styles.briefText}`}>
             Welcome to CyberSpace Outpost Omega, a futuristic hub on the edge of
-            space. Your mission is to restore power to the outpost’s failing
+            space. Your mission is to restore power to the outpost's failing
             energy grid and protect its data vaults...
           </p>
         </Col>
       </Row>
-  
+
       {/* Pre-Assessment Test */}
-      <Row>
-        <Col xs={4} className="p-0 m-0 d-flex align-items-end justify-content-end">
-          <Image fluid src={popoverContent["Pre-Assessment Test"].path} style={{ width: "200px" }} />
+      <Row className={styles.subtopicRow}>
+        <Col
+          xs={4}
+          className="p-0 m-0 d-flex align-items-end justify-content-end"
+        >
+          <Image
+            fluid
+            src={popoverContent["Pre-Assessment Test"].path}
+            className={styles.pathImage}
+          />
         </Col>
         <Col xs={4} className="p-5 text-white text-center">
           <h5>{popoverContent["Pre-Assessment Test"].title}</h5>
@@ -224,19 +231,16 @@ export default function SubtopicSelectionPage() {
             <Image
               src={popoverContent["Pre-Assessment Test"].image}
               fluid
-              style={{
-                cursor: "pointer",
-                opacity: 1,
-              }}
+              className={styles.subtopicImage}
               onClick={() => handleSubtopicClick("Pre-Assessment Test")}
             />
           </OverlayTrigger>
         </Col>
         <Col xs={4}></Col>
       </Row>
-  
+
       {/* Declaring Variables */}
-      <Row>
+      <Row className={styles.subtopicRow}>
         <Col xs={4} className="p-5 text-white text-center">
           <h5>{popoverContent["Declaring Variables"].title}</h5>
           <OverlayTrigger
@@ -247,30 +251,30 @@ export default function SubtopicSelectionPage() {
             <Image
               src={popoverContent["Declaring Variables"].image}
               fluid
-              style={{
-                cursor: isSubtopicLocked("Declaring Variables") ? "not-allowed" : "pointer",
-                opacity: isSubtopicLocked("Declaring Variables") ? 0.5 : 1,
-                filter: isSubtopicLocked("Declaring Variables") ? "grayscale(1)" : "none",
-              }}
-              onClick={() =>
-                !isSubtopicLocked("Declaring Variables") &&
-                handleSubtopicClick("Declaring Variables")
-              }
+              className={`${styles.subtopicImage} ${
+                isSubtopicLocked("Declaring Variables")
+                  ? styles.lockedImage
+                  : ""
+              }`}
+              onClick={() => handleSubtopicClick("Declaring Variables")}
             />
           </OverlayTrigger>
         </Col>
-        <Col xs={4} className="pt-5 p-0 m-0 d-flex align-items-end justify-content-start">
+        <Col
+          xs={4}
+          className="pt-5 p-0 m-0 d-flex align-items-end justify-content-start"
+        >
           <Image
             fluid
             src={popoverContent["Declaring Variables"].path}
-            style={{ width: "300px", objectFit: "cover" }}
+            className={styles.pathImage}
           />
         </Col>
         <Col xs={4}></Col>
       </Row>
-  
+
       {/* Primitive Data Types */}
-      <Row>
+      <Row className={styles.subtopicRow}>
         <Col xs={4}></Col>
         <Col xs={4} className="p-5 text-white text-center">
           <h5>{popoverContent["Primitive Data Types"].title}</h5>
@@ -282,15 +286,12 @@ export default function SubtopicSelectionPage() {
             <Image
               src={popoverContent["Primitive Data Types"].image}
               fluid
-              style={{
-                cursor: isSubtopicLocked("Primitive Data Types") ? "not-allowed" : "pointer",
-                opacity: isSubtopicLocked("Primitive Data Types") ? 0.5 : 1,
-                filter: isSubtopicLocked("Primitive Data Types") ? "grayscale(1)" : "none",
-              }}
-              onClick={() =>
-                !isSubtopicLocked("Primitive Data Types") &&
-                handleSubtopicClick("Primitive Data Types")
-              }
+              className={`${styles.subtopicImage} ${
+                isSubtopicLocked("Primitive Data Types")
+                  ? styles.lockedImage
+                  : ""
+              }`}
+              onClick={() => handleSubtopicClick("Primitive Data Types")}
             />
           </OverlayTrigger>
         </Col>
@@ -298,15 +299,24 @@ export default function SubtopicSelectionPage() {
           <Image
             fluid
             src={popoverContent["Primitive Data Types"].path}
-            style={{ width: "120px", objectFit: "cover" }}
+            className={styles.pathImage}
           />
         </Col>
       </Row>
-  
+
       {/* Non-Primitive Data Types */}
-      <Row>
+      <Row className={styles.subtopicRow}>
         <Col xs={4}></Col>
-        <Col xs={4}></Col>
+        <Col
+          xs={4}
+          className="p-0 m-0 d-flex align-items-end justify-content-end"
+        >
+          <Image
+            fluid
+            src={popoverContent["Pre-Assessment Test"].path}
+            className={styles.pathImage}
+          />
+        </Col>
         <Col xs={4} className="p-5 text-white text-center">
           <h5>{popoverContent["Non-Primitive Data Types"].title}</h5>
           <OverlayTrigger
@@ -317,20 +327,37 @@ export default function SubtopicSelectionPage() {
             <Image
               src={popoverContent["Non-Primitive Data Types"].image}
               fluid
-              style={{
-                cursor: isSubtopicLocked("Non-Primitive Data Types") ? "not-allowed" : "pointer",
-                opacity: isSubtopicLocked("Non-Primitive Data Types") ? 0.5 : 1,
-                filter: isSubtopicLocked("Non-Primitive Data Types") ? "grayscale(1)" : "none",
-              }}
-              onClick={() =>
-                !isSubtopicLocked("Non-Primitive Data Types") &&
-                handleSubtopicClick("Non-Primitive Data Types")
-              }
+              className={`${styles.subtopicImage} ${
+                isSubtopicLocked("Non-Primitive Data Types")
+                  ? styles.lockedImage
+                  : ""
+              }`}
+              onClick={() => handleSubtopicClick("Non-Primitive Data Types")}
             />
           </OverlayTrigger>
         </Col>
       </Row>
+
+      {/* Post-Assessment Test */}
+      <Row className={styles.subtopicRow}>
+        <Col xs={4}></Col>
+        <Col xs={4} className="p-5 text-white text-center">
+          <h5>{popoverContent["Post-Assessment Test"].title}</h5>
+          <OverlayTrigger
+            trigger={["hover", "focus"]}
+            placement="top"
+            overlay={renderPopover("Post-Assessment Test")}
+          >
+            <Image
+              src={popoverContent["Post-Assessment Test"].image}
+              fluid
+              className={styles.subtopicImage}
+              onClick={() => handleSubtopicClick("Post-Assessment Test")}
+            />
+          </OverlayTrigger>
+        </Col>
+        <Col xs={4}></Col>
+      </Row>
     </Container>
   );
-  
 }

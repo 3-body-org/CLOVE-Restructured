@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../scss modules/pages/challenges page/modes page/CodeFixer.module.scss"; 
+import { useNavigate } from 'react-router-dom';
 
-const CosmicJava = () => {
+import styles from "../../../scss modules/pages/challenges page/modes page/CodeFixer.module.scss";
+
+const CosmicJava = ({
+  onComplete,
+  challengeType,
+  isLastChallenge,
+  topicId,
+}) => {
+  const navigate = useNavigate();
+
   const [timeLeft, setTimeLeft] = useState(480);
   const [score, setScore] = useState(0);
   const [bugsFixed, setBugsFixed] = useState(0);
@@ -15,6 +24,7 @@ const CosmicJava = () => {
     fix5: "thrusterPower[i].toUpperCase()",
   });
   const [verifiedFixes, setVerifiedFixes] = useState(new Set());
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const correctAnswers = {
     fix1: "int",
@@ -31,7 +41,9 @@ const CosmicJava = () => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
           clearInterval(timerInterval);
-          alert("SYSTEM FAILURE! Thrusters offline!");
+          if (!isCompleted) {
+            handleCompletion(false);
+          }
           return 0;
         }
         return prev - 1;
@@ -39,12 +51,14 @@ const CosmicJava = () => {
     }, 1000);
 
     return () => clearInterval(timerInterval);
-  }, []);
+  }, [isCompleted]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const systemIntegrity = Math.floor((timeLeft / 480) * 100);
@@ -74,6 +88,24 @@ const CosmicJava = () => {
     return userFixes[fixId] === correctAnswers[fixId];
   };
 
+  const handleCompletion = (success) => {
+    if (isCompleted) return;
+
+    setIsCompleted(true);
+    if (onComplete) {
+      onComplete({
+        success,
+        score,
+        type: challengeType,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    if (success && isLastChallenge) {
+      setTimeout(() => navigate(`/my-deck/${topicId}`), 1000);
+    }
+  };
+
   const checkSolution = () => {
     let newVerified = new Set(verifiedFixes);
     let newBugsFixed = 0;
@@ -91,8 +123,11 @@ const CosmicJava = () => {
 
     if (newVerified.size === 5) {
       setTimeout(() => {
-        alert("SYSTEM RESTORED! Thrusters operational!\n+50pt bonus for perfect repair!");
+        alert(
+          "SYSTEM RESTORED! Thrusters operational!\n+50pt bonus for perfect repair!"
+        );
         updateScore(50);
+        handleCompletion(true);
       }, 500);
     } else if (newBugsFixed > 0) {
       alert(`Partial repair complete! ${newBugsFixed} bugs fixed!`);
@@ -235,15 +270,13 @@ const CosmicJava = () => {
 
         <div className={styles.expectedOutput}>
           <h3>EXPECTED OUTPUT</h3>
-          <div className={styles.outputWindow}>
-            {expectedOutput}
-          </div>
+          <div className={styles.outputWindow}>{expectedOutput}</div>
         </div>
 
         <button
           className={styles.submitBtn}
           onClick={checkSolution}
-          disabled={timeLeft <= 0}
+          disabled={timeLeft <= 0 || isCompleted}
         >
           {timeLeft > 0 ? "VALIDATE REPAIRS" : "SYSTEM FAILURE"}
         </button>
