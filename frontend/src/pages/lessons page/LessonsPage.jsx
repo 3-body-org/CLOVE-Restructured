@@ -68,23 +68,6 @@ const LessonsPage = () => {
           <p>Mission: {lessonData?.title || "Loading..."}</p>
         </div>
 
-        {/* Navigation Buttons */}
-        <div className={styles.lessonContent}>
-          <div className={styles.navButtons}>
-            <Button className={styles.navBtn} onClick={() => navigate(-1)}>
-              <span className={styles.icon}>⬅️</span>
-              Back to Topics
-            </Button>
-            <Button
-              className={`${styles.navBtn} ${styles.nextBtn}`}
-              onClick={handleStartChallenges}
-            >
-              <span className={styles.icon}>⚡</span>
-              Start Practice
-            </Button>
-          </div>
-        </div>
-
         {/* Dynamic Lesson Content */}
         <div className={styles.lessonContent}>
           <div className={styles.introSection}>
@@ -145,7 +128,22 @@ const LessonsPage = () => {
             </div>
           </div>
         ))}
-
+        {/* Navigation Buttons */}
+        <div className={styles.lessonContent}>
+          <div className={styles.navButtons}>
+            <Button className={styles.navBtn} onClick={() => navigate(-1)}>
+              <span className={styles.icon}>⬅️</span>
+              Back to Topics
+            </Button>
+            <Button
+              className={`${styles.navBtn} ${styles.nextBtn}`}
+              onClick={handleStartChallenges}
+            >
+              <span className={styles.icon}>⚡</span>
+              Start Practice
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

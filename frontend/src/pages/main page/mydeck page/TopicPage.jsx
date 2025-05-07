@@ -14,7 +14,8 @@ const topicsData = [
   {
     id: "topic1",
     name: "Variables and Data Types",
-    description: "Learn about Java concepts.",
+    description:
+      "Java’s foundational elements: declaring variables, primitive types, and non-primitive.",
     progress: 0,
     locked: false,
   },
