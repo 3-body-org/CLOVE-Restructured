@@ -20,16 +20,11 @@ npm install
 Install required packages:
 ```bash
 npm install bootstrap react-bootstrap
-npm install sass
-npm install react-dom
-npm install react-router-dom
-npm install recharts
-npm install framer-motion
-npm install canvas-confetti
-
-npm install --save @fortawesome/fontawesome-svg-core
-npm install --save @fortawesome/free-solid-svg-icons
-npm install --save @fortawesome/react-fontawesome
+sass react-dom react-router-dom recharts
+framer-motion canvas-confetti
+@fortawesome/fontawesome-svg-core
+@fortawesome/free-solid-svg-icons
+@fortawesome/react-fontawesome
 ```
 
 ## Running the Project
