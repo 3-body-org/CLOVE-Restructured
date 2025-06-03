@@ -1,0 +1,18 @@
+fastapi
+uvicorn[standard]
+SQLAlchemy>=1.4
+asyncpg
+alembic
+passlib[bcrypt]
+python-dotenv
+pydantic
+pydantic[email]
+
+# Key dependencies:
+# fastapi & uvicorn[standard]: the web framework + ASGI server.
+# SQLAlchemy>=1.4 & asyncpg: async ORM + Postgres driver.
+# alembic: (optional) for migrations.
+# passlib[bcrypt]: for password hashing.
+# python-dotenv: to load a local .env if you choose to.
+# pydantic: bundled with FastAPI, but listed here for clarity.
+# pydantic[email]: for email validation.
