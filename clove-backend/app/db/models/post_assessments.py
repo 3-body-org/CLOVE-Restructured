@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, Boolean, JSON, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, Integer, Float, Boolean, JSON, TIMESTAMP, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db.base import Base
@@ -9,7 +9,7 @@ class PostAssessment(Base):
     post_assessment_id           = Column(Integer, primary_key=True, index=True)
     user_id                      = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     topic_id                     = Column(Integer, ForeignKey("topics.topic_id", ondelete="CASCADE"), nullable=False, index=True)
-    total_score                  = Column(Float, nullable=False)
+    total_score                  = Column(Numeric(10, 2), nullable=False)
     total_items                  = Column(Integer)
     is_unlocked                  = Column(Boolean, default=False)
     subtopic_scores              = Column(JSON, nullable=False)

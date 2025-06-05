@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 //react confetti
 import ReactConfetti from "react-confetti"; // Import the confetti component
 //scss
-import styles from "components/assessments/styles/AssessmentResult.module.scss";
+import styles from "../../scss modules/components/assessments/AssessmentResult.module.scss";
 
 const AssessmentResult = () => {
   const { state } = useLocation(); // Get state from the location
@@ -30,7 +30,7 @@ const AssessmentResult = () => {
   const subtopics = {
     "Declaring Variables": { correctAnswers: 0, total: 0 },
     "Primitive Data Types": { correctAnswers: 0, total: 0 },
-    "Non-Primitive Data Types": { correctAnswers: 0, total: 0 },
+    "Non-Primitive Data Types": { correctAnswers: 0, total: 0 }
   };
 
   // Count correct/total per subtopic using the stored category
@@ -40,6 +40,7 @@ const AssessmentResult = () => {
       if (isCorrect) subtopics[category].correctAnswers++;
     }
   });
+
 
   // Handle the finish button to navigate to the topic page
   const handleFinish = () => {

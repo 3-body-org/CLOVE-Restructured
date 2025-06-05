@@ -1,6 +1,7 @@
 # app/crud/challenge_attempt.py
 
-from sqlalchemy.future import select
+from typing import List, Optional
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.models.challenge_attempts import ChallengeAttempt
 from app.schemas.challenge_attempt import ChallengeAttemptCreate, ChallengeAttemptUpdate
@@ -11,16 +12,16 @@ from app.services.adaptive_engine import run_adaptive_updates
 async def get_by_id(
     db: AsyncSession,
     attempt_id: int
-) -> ChallengeAttempt | None:
+) -> Optional[ChallengeAttempt]:
     result = await db.execute(
         select(ChallengeAttempt).where(ChallengeAttempt.id == attempt_id)
     )
-    return result.scalars().first()
+    return result.scalar_one_or_none()
 
 async def list_for_user(
     db: AsyncSession,
     user_id: int
-) -> list[ChallengeAttempt]:
+) -> List[ChallengeAttempt]:
     result = await db.execute(
         select(ChallengeAttempt).where(ChallengeAttempt.user_id == user_id)
     )
@@ -29,7 +30,7 @@ async def list_for_user(
 async def list_for_subtopic(
     db: AsyncSession,
     subtopic_id: int
-) -> list[ChallengeAttempt]:
+) -> List[ChallengeAttempt]:
     result = await db.execute(
         select(ChallengeAttempt).where(ChallengeAttempt.subtopic_id == subtopic_id)
     )
@@ -57,8 +58,8 @@ async def create(
     db: AsyncSession,
     attempt_in: ChallengeAttemptCreate
 ) -> ChallengeAttempt:
-    # 1. Insert the new attempt
-    attempt = ChallengeAttempt(**attempt_in.dict())
+    """Create a new challenge attempt"""
+    attempt = ChallengeAttempt(**attempt_in.model_dump())
     db.add(attempt)
     await db.commit()
     await db.refresh(attempt)
@@ -82,10 +83,10 @@ async def update(
     attempt_db: ChallengeAttempt,
     attempt_in: ChallengeAttemptUpdate
 ) -> ChallengeAttempt:
-    attempt_db.is_successful = attempt_in.is_successful
-    attempt_db.time_spent = attempt_in.time_spent
-    attempt_db.hints_used = attempt_in.hints_used
-    attempt_db.points = attempt_in.points
+    """Update a challenge attempt"""
+    update_data = attempt_in.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(attempt_db, field, value)
     db.add(attempt_db)
     await db.commit()
     await db.refresh(attempt_db)
@@ -95,5 +96,6 @@ async def delete(
     db: AsyncSession,
     attempt_db: ChallengeAttempt
 ) -> None:
+    """Delete a challenge attempt"""
     await db.delete(attempt_db)
     await db.commit()

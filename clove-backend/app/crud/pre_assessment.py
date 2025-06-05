@@ -33,7 +33,7 @@ async def create(db: AsyncSession, pre_in: PreAssessmentCreate) -> PreAssessment
     return new_pre
 
 async def update(db: AsyncSession, pre_db: PreAssessment, pre_in: PreAssessmentUpdate) -> PreAssessment:
-    pre_db.total_score = pre_in.total_score
+    pre_db.total_score = round(pre_in.total_score, 2)
     pre_db.total_items = pre_in.total_items
     pre_db.is_unlocked = pre_in.is_unlocked
     pre_db.subtopic_scores = pre_in.subtopic_scores
