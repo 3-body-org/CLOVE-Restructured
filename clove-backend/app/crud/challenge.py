@@ -42,3 +42,12 @@ async def update(db: AsyncSession, challenge_db: Challenge, challenge_in: Challe
 async def delete(db: AsyncSession, challenge_db: Challenge) -> None:
     await db.delete(challenge_db)
     await db.commit()
+
+async def get_challenges_by_type_and_difficulty(db, subtopic_id, challenge_type, difficulty):
+    stmt = select(Challenge).where(
+        Challenge.subtopic_id == subtopic_id,
+        Challenge.type == challenge_type,
+        Challenge.difficulty == difficulty
+    )
+    result = await db.execute(stmt)
+    return result.scalars().all()

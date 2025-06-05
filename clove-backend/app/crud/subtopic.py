@@ -45,7 +45,7 @@ async def delete(db: AsyncSession, subtopic_db: Subtopic) -> None:
     await db.commit()
 
 async def update_knowledge_level(db: AsyncSession, subtopic: Subtopic, new_knowledge: float) -> Subtopic:
-    subtopic.knowledge_level = new_knowledge
+    subtopic.knowledge_level = round(new_knowledge, 2)
     db.add(subtopic)
     await db.commit()
     await db.refresh(subtopic)

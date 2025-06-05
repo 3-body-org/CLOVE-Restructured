@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Float, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Float, TIMESTAMP, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -9,19 +9,20 @@ class Subtopic(Base):
     topic_id            = Column(Integer, ForeignKey("topics.topic_id", ondelete="CASCADE"), nullable=False, index=True)
     user_id             = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     title               = Column(String(255), nullable=False, index=True)
+    description         = Column(String)
     lessons_completed   = Column(Boolean, default=False)
     practice_completed  = Column(Boolean, default=False)
     challenges_completed= Column(Boolean, default=False)
-    is_unlocked         = Column(Boolean, default=False)
+    is_unlocked         = Column(Integer, default=0)
     is_completed        = Column(Boolean, default=False)
     progress_percent    = Column(Float, default=0.0)
-    knowledge_level     = Column(Float, default=0.0)
+    knowledge_level     = Column(Numeric(10, 2), nullable=False, default=0.0)
     unlocked_at         = Column(TIMESTAMP)
     completed_at        = Column(TIMESTAMP)
 
     topic   = relationship("Topic", back_populates="subtopics")
     owner   = relationship("User", back_populates="subtopics")
-    q_values   = relationship("QValue", back_populates="subtopic", cascade="all, delete")
+    q_values   = relationship("QValue", back_populates="subtopic", cascade="all, delete-orphan")
     lessons = relationship("Lesson", back_populates="subtopic", cascade="all, delete")
     challenges  = relationship("Challenge", back_populates="subtopic", cascade="all, delete")
     assessment_questions = relationship("AssessmentQuestion", back_populates="subtopic", cascade="all, delete")
