@@ -1,5 +1,20 @@
 //router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//pages
+import LandingPage from "./pages/landing page/LandingPage";
+import LoginSignupPage from "./pages/authentication page/Forms";
+import DashboardPage from "./pages/main page/dashboard page/DashboardPage";
+import ProgressPage from "./pages/main page/progress page/ProgressPage";
+import MyDeckPage from "./pages/main page/mydeck page/TopicPage";
+import AssessmentPage from "./components/assessments/Assessment";
+import AssessmentResultPage from "./components/assessments/AssessmentResult";
+import SubtopicPage from "./pages/main page/mydeck page/SubtopicPage";
+import IntroductionPage from "./pages/main page/mydeck page/IntroductionPage";
+import LessonsPage from "./pages/lessons page/LessonsPage";
+import PracticePage from "./pages/lessons page/PracticePage";
+import ChallengesPage from "./pages/challenges page/ChallengesPage";
+// import ResultsPage from "./pages/Lesson and Challenges Page/ResultsPage";
+
 //fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -7,40 +22,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 
-//src/features/auth/...
-import Authform from "features/auth/pages/AuthFormPage";
-
-//src/features/challenges/...
-import ChallengesPage from "features/challenges/pages/ChallengesPage";
-// import ResultsPage from "features/challenges/pages/ResultsPage";
-
-//src/features/dashboard/...
-import DashboardPage from "features/dashboard/pages/DashboardPage";
-
-//src/features/landing/...
-import LandingPage from "features/landing/pages/LandingPage";
-
-//src/features/lessons/...
-import LessonsPage from "features/lessons/pages/LessonsPage";
-import PracticePage from "features/lessons/pages/PracticePage";
-
-//src/features/mydeck/...
-import IntroductionPage from "features/mydeck/pages/IntroductionPage";
-import SubtopicPage from "features/mydeck/pages/SubtopicPage";
-import MyDeckPage from "features/mydeck/pages/TopicPage";
-
-//src/features/progress/...
-import ProgressPage from "features/progress/pages/ProgressPage";
-
-//src/components/assessments/...
-import AssessmentPage from "components/assessments/Assessment";
-import AssessmentResultPage from "components/assessments/AssessmentResult";
-
 //components
-import Layout from "components/layout/Sidebar/Layout";
-
+import Layout from "./components/sidebar/Layout";
 //context
-import { MyDeckProvider } from "contexts/MyDeckContext";
+import { MyDeckProvider } from "./context/ContextPage";
 
 // Wrapper for pages that require a sidebar
 function ProtectedRoutes({ children }) {
@@ -55,7 +40,7 @@ function App() {
           <Routes>
             {/* Public Pages (No Sidebar) */}
             <Route path="/" element={<LandingPage />} />
-            <Route path="/login-signup" element={<Authform />} />
+            <Route path="/login-signup" element={<LoginSignupPage />} />
             {/* Protected Pages (With Sidebar) */}
             <Route
               path="/dashboard"

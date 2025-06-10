@@ -21,3 +21,4 @@ class Challenge(Base):
 
     subtopic = relationship("Subtopic", back_populates="challenges")
     attempts = relationship("ChallengeAttempt", back_populates="challenge", cascade="all, delete")
+ 
