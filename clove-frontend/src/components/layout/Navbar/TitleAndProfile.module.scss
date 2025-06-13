@@ -1,0 +1,48 @@
+// .profileContainer {
+//   width: 100px; /* Adjust size */
+//   height: 100px;
+//   border-radius: 50%;
+//   border: 4px solid #2c517b; /* Blue border */
+//   display: flex;
+//   align-items: start;
+//   justify-content: end;
+//   overflow: hidden; /* Ensures image doesn't overflow */
+// }
+
+.profileImg {
+  width: 80px;
+  height: auto;
+  object-fit: cover; /* Keeps aspect ratio */
+}
+
+
+.headerLeft h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.username {
+  color: var(--primary-light);
+  font-weight: 600;
+}
+
+.headerLeft p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.profile {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  object-fit: cover;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.profile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+}

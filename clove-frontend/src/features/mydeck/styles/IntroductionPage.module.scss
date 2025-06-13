@@ -1,0 +1,246 @@
+
+
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
+// Updated SCSS with improved visibility and animations
+:root {
+    --text-primary: rgba(255,255,255,0.95);
+    --text-secondary: #a8a5e6;
+    --accent-primary: #6c5ce7;
+    --accent-secondary: #ff7675;
+    --bg-primary: #0a0a1a;
+    --bg-secondary: #1a1a2e;
+  }
+  
+  .container {
+    min-height: 100vh;
+    background: var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text-primary);
+  }
+  
+  .particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  
+  .content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 4rem;
+    
+    .mainTitle {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      color: var(--accent-primary);
+      text-shadow: 0 0 20px rgba(108,92,231,0.5);
+      margin: 1rem 0;
+    }
+  
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+  }
+  
+  .storySection {
+    background: rgba(0,0,0,0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--accent-primary);
+  
+    h2 {
+      color: var(--accent-secondary);
+      margin-bottom: 1.5rem;
+      font-family: 'Orbitron', sans-serif;
+      
+      svg {
+        margin-right: 0.8rem;
+      }
+    }
+  
+    .storyText {
+      color: var(--text-primary);
+      line-height: 1.7;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+  }
+  
+  .storyGlow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, 
+      rgba(108,92,231,0.1) 0%, 
+      transparent 60%
+    );
+    animation: glowPulse 4s infinite;
+  }
+  
+  .visualizationGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 3rem 0;
+  
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .visCard {
+    background: var(--bg-secondary);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  
+    &:hover {
+      transform: translateY(-5px);
+      
+      .particleEffect {
+        opacity: 0.3;
+      }
+    }
+  
+    h3 {
+      color: var(--accent-secondary);
+      margin: 1.5rem 0;
+    }
+  
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  .visIcon {
+    font-size: 2.5rem;
+    color: var(--accent-primary);
+    position: relative;
+    margin: 0 auto;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    .particleEffect {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, 
+        rgba(108,92,231,0.2) 0%, 
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  }
+  
+  .codeVisual {
+    background: rgba(0,0,0,0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    
+    span {
+      display: block;
+      color: var(--text-secondary);
+      text-align: left;
+      margin: 0.5rem 0;
+    }
+  }
+  
+  .typeVisual {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .typeBadge {
+    background: rgba(108,92,231,0.2);
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid var(--accent-primary);
+    font-size: 0.9rem;
+  }
+  
+  .ctaContainer {
+    text-align: center;
+    margin: 4rem 0;
+  
+    .ctaButton {
+      background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+      border: none;
+      padding: 1.2rem 2.5rem;
+      border-radius: 30px;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+  
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(108,92,231,0.5);
+      }
+    }
+  
+    .buttonGlow {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255,255,255,0.2),
+        transparent
+      );
+      animation: buttonFlow 2s infinite;
+    }
+  }
+  
+  @keyframes glowPulse {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.3; }
+  }
+  
+  @keyframes buttonFlow {
+    to {
+      left: 100%;
+    }
+  }
+  
+  @keyframes particleFloat {
+    from { transform: translateY(0); }
+    to { transform: translateY(-20px); }
+  }
