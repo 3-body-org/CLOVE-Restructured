@@ -1,0 +1,441 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
+// Progress.module.scss
+:root {
+  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.progressContent {
+  flex-grow: 1;
+  padding: 2.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  // gap: 2.5rem;
+  background-color: $light-black;
+  color: $white;
+  font-family: "Inter", sans-serif; ///palitan
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $white;
+  }
+
+  p {
+    color: $dark-white;
+    font-size: 1rem;
+  }
+
+  .profile {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+}
+
+/* Learning Mode Performance Section */
+.learningModesSection {
+  background-color: $black;
+  padding: 1.75rem;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: $white;
+
+  svg {
+    color: $light-purple;
+  }
+}
+
+.modePerformanceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.modeCard {
+  background-color: $lighter-black;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.modeHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modeIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.2),
+    rgba(139, 92, 246, 0.1)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: $light-purple;
+}
+
+.modeInfo {
+  flex-grow: 1;
+}
+
+.modeName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: $white;
+}
+
+.modeCategory {
+  font-size: 0.85rem;
+  color: $dark-white;
+}
+
+.modeStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: $dark-white;
+}
+
+.accuracyHigh {
+  color: $success;
+}
+
+.accuracyMedium {
+  color: $warning;
+}
+
+.accuracyLow {
+  color: $danger;
+}
+
+/* Topic Progress Section */
+.topicProgress {
+  background-color: $black;
+  padding: 1.75rem;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+}
+
+.topicHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.topicTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $light-purple;
+}
+
+.overallProgress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: $dark-white;
+}
+
+.progressCircle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: conic-gradient($light-purple 0% 0%, $lighter-black 1% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: $black;
+    border-radius: 50%;
+  }
+}
+
+.progressPercent {
+  position: relative;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Subtopic Cards */
+.subtopicCard {
+  background-color: $lighter-black;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border-left: 4px solid $light-purple;
+  margin-bottom: 1.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.subtopicHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.subtopicName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.masteryLevel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+
+  svg {
+    font-size: 0.8rem;
+  }
+}
+
+.masteryBeginner {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: $danger;
+}
+
+.masteryIntermediate {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: $warning;
+}
+
+.masteryAdvanced {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: $success;
+}
+
+.progressDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.progressMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.metricCard {
+  background-color: $light-black;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.metricTitle {
+  font-size: 0.95rem;
+  color: $dark-white;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    color: $light-purple;
+  }
+}
+
+.progressBarContainer {
+  height: 8px;
+  background-color: $black;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, $dark-purple, $light-purple);
+  border-radius: 4px;
+}
+
+/* Performance Analytics */
+.performanceAnalytics {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.strengthsWeaknesses {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.swCard {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.strengthCard {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid $success;
+}
+
+.weaknessCard {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid $danger;
+}
+
+.swTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    font-size: 0.9rem;
+  }
+}
+
+.swList {
+  display: flex;
+  height: 80px;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.swItem {
+  font-size: 0.85rem;
+  color: $dark-white;
+  padding-left: 1.25rem;
+  position: relative;
+
+  &::before {
+    content: "•";
+    position: absolute;
+    left: 0.5rem;
+    color: inherit;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .progressContent {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .progressDetails {
+    grid-template-columns: 1fr;
+  }
+  .strengthsWeaknesses {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .progressContent {
+    padding: 1.5rem;
+  }
+  .topicHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .modePerformanceGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .modeStats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.headerLeft h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.username {
+  color: $light-purple;
+  font-weight: 600;
+}
+
+.headerLeft p {
+  color: $dark-white;
+  font-size: 0.95rem;
+}
+
+.profile {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid $light-purple;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.profile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+}
