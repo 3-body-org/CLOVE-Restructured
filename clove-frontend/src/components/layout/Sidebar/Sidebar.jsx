@@ -26,12 +26,22 @@ export default function Sidebar() {
   return (
     <div className={`${styles.sidebar} ${expanded ? styles.expanded : ""}`}>
       {/* Logo Section */}
-      <div className={styles.logoSection}>
+      {/* <div className={styles.logoSection}>
+        
         <div className={styles.logoContainer}>
+          {expanded && <span className={styles.logoText}>CLOVE</span>}
           <div className={styles.logoIcon}>
             <Image fluid src={CloveLogo} className={styles.logoImg} />
           </div>
-          {expanded && <span className={styles.logoText}>CLOVE</span>}
+        </div>
+      </div> */}
+
+      <div className={styles.logoSection}>
+        <div className={styles.logoContainer}>
+          <h1 className={styles.logo}>
+            CLOVE
+            <img src={CloveLogo} alt="Clover Logo" className={styles.logoImg} />
+          </h1>
         </div>
       </div>
 

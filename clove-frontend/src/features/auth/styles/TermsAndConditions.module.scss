@@ -1,3 +1,5 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
 /* TermsAndConditions.module.css */
 .overlay {
   position: fixed;
@@ -13,13 +15,13 @@
 }
 
 .termsContainer {
-  background: #232529;
-  color: #E2E8F0;
+  background: $light-black;
+  color: $white;
   max-width: 600px;
   width: 90%;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
   max-height: 90vh;
 }
@@ -27,14 +29,14 @@
 .termsContainer h2 {
   margin-top: 0;
   font-size: 32px;
-  color: #A6AAFB;
+  color: $light-purple;
 }
 
 .termsContainer h3 {
   margin-top: 24px;
   margin-bottom: 8px;
   font-size: 20px;
-  color: #A6AAFB;
+  color: $light-purple;
 }
 
 .termsContainer p {
@@ -47,15 +49,15 @@
   display: block;
   margin: 20px auto 0 auto;
   padding: 12px 24px;
-  background: #A6AAFB;
+  background: $light-purple;
   border: none;
   border-radius: 5px;
-  color: #232529;
+  color: $light-black;
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 .closeButton:hover {
-  background: #8c90e6;
+  background: $light-purple;
 }

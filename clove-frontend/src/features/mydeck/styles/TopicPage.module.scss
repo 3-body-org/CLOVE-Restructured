@@ -1,3 +1,5 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
 $font-family: "Open Sauce One", "Roboto", sans-serif;
 
 .myDeckWrapper {
@@ -6,8 +8,8 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--background);
-  color: var(--text-primary);
+  background-color: $light-black;
+  color: $white;
   font-family: $font-family;
 
   @media (max-width: 768px) {
@@ -35,8 +37,8 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
 .floatCard {
   background: linear-gradient(145deg, #2a2a3a, #1e1e2e);
   border-radius: 1rem;
-  border: 1px solid #6c5ce7;
-  color: white;
+  border: 1px solid $light-purple;
+  color: $white;
   box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;

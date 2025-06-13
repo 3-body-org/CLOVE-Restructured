@@ -24,9 +24,9 @@ export default function Features() {
         <div className="row">
           <div className="col-md-6">
             <p className={styles.innovateText}>Innovate</p>
-            <h2 className={styles.featuresHeading}>
+            <h1 className={styles.featuresHeading}>
               Unlock Your Learning Potential with Us
-            </h2>
+            </h1>
           </div>
           <div className="col-md-6">
             <p className={styles.featuresParagraph}>

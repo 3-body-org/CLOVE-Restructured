@@ -1,16 +1,7 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
 // Progress.module.scss
 :root {
-  --primary: #8b5cf6;
-  --primary-light: #a78bfa;
-  --primary-dark: #7c3aed;
-  --background: #0f0f15;
-  --surface: #1e1e2a;
-  --surface-light: #2e2e3a;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
   --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
 
@@ -21,9 +12,9 @@
   display: flex;
   flex-direction: column;
   // gap: 2.5rem;
-  background-color: var(--background);
-  color: var(--text-primary);
-  font-family: "Inter", sans-serif;
+  background-color: $light-black;
+  color: $white;
+  font-family: "Inter", sans-serif; ///palitan
 }
 
 .pageHeader {
@@ -35,11 +26,11 @@
   h1 {
     font-size: 2rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: $white;
   }
 
   p {
-    color: var(--text-secondary);
+    color: $dark-white;
     font-size: 1rem;
   }
 
@@ -52,7 +43,7 @@
 
 /* Learning Mode Performance Section */
 .learningModesSection {
-  background-color: var(--surface);
+  background-color: $black;
   padding: 1.75rem;
   border-radius: 1rem;
   box-shadow: var(--card-shadow);
@@ -66,10 +57,10 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--text-primary);
+  color: $white;
 
   svg {
-    color: var(--primary-light);
+    color: $light-purple;
   }
 }
 
@@ -80,7 +71,7 @@
 }
 
 .modeCard {
-  background-color: var(--surface-light);
+  background-color: $lighter-black;
   padding: 1.5rem;
   border-radius: 0.75rem;
   display: flex;
@@ -112,7 +103,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
-  color: var(--primary-light);
+  color: $light-purple;
 }
 
 .modeInfo {
@@ -122,12 +113,12 @@
 .modeName {
   font-weight: 600;
   font-size: 1.1rem;
-  color: var(--text-primary);
+  color: $white;
 }
 
 .modeCategory {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: $dark-white;
 }
 
 .modeStats {
@@ -149,24 +140,24 @@
 
 .statLabel {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: $dark-white;
 }
 
 .accuracyHigh {
-  color: var(--success);
+  color: $success;
 }
 
 .accuracyMedium {
-  color: var(--warning);
+  color: $warning;
 }
 
 .accuracyLow {
-  color: var(--danger);
+  color: $danger;
 }
 
 /* Topic Progress Section */
 .topicProgress {
-  background-color: var(--surface);
+  background-color: $black;
   padding: 1.75rem;
   border-radius: 1rem;
   box-shadow: var(--card-shadow);
@@ -182,24 +173,21 @@
 .topicTitle {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--primary-light);
+  color: $light-purple;
 }
 
 .overallProgress {
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: var(--text-secondary);
+  color: $dark-white;
 }
 
 .progressCircle {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: conic-gradient(
-    var(--primary) 0% 0%,
-    var(--surface-light) 1% 100%
-  );
+  background: conic-gradient($light-purple 0% 0%, $lighter-black 1% 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,7 +198,7 @@
     position: absolute;
     width: 50px;
     height: 50px;
-    background-color: var(--surface);
+    background-color: $black;
     border-radius: 50%;
   }
 }
@@ -223,10 +211,10 @@
 
 /* Subtopic Cards */
 .subtopicCard {
-  background-color: var(--surface-light);
+  background-color: $lighter-black;
   padding: 1.5rem;
   border-radius: 0.75rem;
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid $light-purple;
   margin-bottom: 1.5rem;
 
   &:last-child {
@@ -244,7 +232,7 @@
 .subtopicName {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: $white;
 }
 
 .masteryLevel {
@@ -263,17 +251,17 @@
 
 .masteryBeginner {
   background-color: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
+  color: $danger;
 }
 
 .masteryIntermediate {
   background-color: rgba(245, 158, 11, 0.1);
-  color: var(--warning);
+  color: $warning;
 }
 
 .masteryAdvanced {
   background-color: rgba(16, 185, 129, 0.1);
-  color: var(--success);
+  color: $success;
 }
 
 .progressDetails {
@@ -289,27 +277,27 @@
 }
 
 .metricCard {
-  background-color: var(--background);
+  background-color: $light-black;
   padding: 1rem;
   border-radius: 0.5rem;
 }
 
 .metricTitle {
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: $dark-white;
   margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 
   svg {
-    color: var(--primary-light);
+    color: $light-purple;
   }
 }
 
 .progressBarContainer {
   height: 8px;
-  background-color: var(--surface);
+  background-color: $black;
   border-radius: 4px;
   margin-top: 0.5rem;
   overflow: hidden;
@@ -317,7 +305,7 @@
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(90deg, $dark-purple, $light-purple);
   border-radius: 4px;
 }
 
@@ -344,12 +332,12 @@
 
 .strengthCard {
   background-color: rgba(16, 185, 129, 0.1);
-  border-left: 3px solid var(--success);
+  border-left: 3px solid $success;
 }
 
 .weaknessCard {
   background-color: rgba(239, 68, 68, 0.1);
-  border-left: 3px solid var(--danger);
+  border-left: 3px solid $danger;
 }
 
 .swTitle {
@@ -373,7 +361,7 @@
 
 .swItem {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: $dark-white;
   padding-left: 1.25rem;
   position: relative;
 
@@ -428,12 +416,12 @@
 }
 
 .username {
-  color: var(--primary-light);
+  color: $light-purple;
   font-weight: 600;
 }
 
 .headerLeft p {
-  color: var(--text-secondary);
+  color: $dark-white;
   font-size: 0.95rem;
 }
 
@@ -441,7 +429,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid var(--primary);
+  border: 2px solid $light-purple;
   object-fit: cover;
   transition: all 0.3s ease;
   cursor: pointer;

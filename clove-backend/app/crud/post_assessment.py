@@ -33,7 +33,7 @@ async def create(db: AsyncSession, post_in: PostAssessmentCreate) -> PostAssessm
     return new_post
 
 async def update(db: AsyncSession, post_db: PostAssessment, post_in: PostAssessmentUpdate) -> PostAssessment:
-    post_db.total_score = post_in.total_score
+    post_db.total_score = round(post_in.total_score, 2)
     post_db.total_items = post_in.total_items
     post_db.is_unlocked = post_in.is_unlocked
     post_db.subtopic_scores = post_in.subtopic_scores

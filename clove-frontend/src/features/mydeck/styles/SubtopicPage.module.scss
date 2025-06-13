@@ -1,3 +1,6 @@
+
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
 .myDeckWrapper {
   flex-grow: 1;
   padding: 2.5rem;

@@ -41,6 +41,7 @@ export default function AuthFormPage() {
           </h1>
         </div>
       </header>
+
       {/* ===== MAIN CONTENT ===== */}
       <main className={styles.content}>
         <div className={styles.formWrapper}>
@@ -52,7 +53,7 @@ export default function AuthFormPage() {
               }`}
               onClick={() => setIsLogin(false)}
             >
-              Sign Up
+              <p className={styles.paragraph}>Sign Up</p>
             </button>
             <button
               className={`${styles.toggleButton} ${
@@ -60,7 +61,7 @@ export default function AuthFormPage() {
               }`}
               onClick={() => setIsLogin(true)}
             >
-              Login
+              <p className={styles.paragraph}>Login</p>
             </button>
           </div>
 

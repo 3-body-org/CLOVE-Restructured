@@ -1,25 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@use "/variables" as *; /* import the global variable from _variables.scss */
 
-:root {
-  --primary: #8b5cf6;
-  --primary-light: #a78bfa;
-  --primary-dark: #7c3aed;
-  --background: #0f0f15;
-  --surface: #1e1e2a;
-  --surface-light: #2e2e3a;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 /* Base styles */
 .container {
   font-family: "Inter", sans-serif;
-  background-color: var(--background);
-  color: var(--text-primary);
+  background-color: $light-black;
+  color: $white;
   display: flex;
   width: 100%;
   min-height: 100vh;
@@ -31,20 +18,6 @@
   box-sizing: border-box;
 }
 
-/* Enhanced Sidebar */
-.sidebar {
-  width: 280px;
-  background-color: var(--surface);
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s ease;
-}
-
 .logo {
   display: flex;
   align-items: center;
@@ -52,13 +25,13 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 2.5rem;
-  color: var(--primary-light);
+  color: var($light-purple);
 }
 
 .logoIcon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(135deg, $light-purple, $dark-purple);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -72,7 +45,7 @@ nav {
 }
 
 .navItem {
-  color: var(--text-secondary);
+  color: $dark-white;
   text-decoration: none;
   font-weight: 500;
   padding: 0.75rem 1rem;
@@ -85,15 +58,15 @@ nav {
 }
 
 .navItem:hover {
-  background-color: var(--surface-light);
-  color: var(--text-primary);
+  background-color: $lighter-black;
+  color: $white;
   transform: translateX(4px);
 }
 
 .navItem.active {
   background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), transparent);
-  color: var(--primary-light);
-  border-left: 3px solid var(--primary);
+  color: $light-purple;
+  border-left: 3px solid $light-purple;
 }
 
 .navItem svg {
@@ -105,7 +78,7 @@ nav {
   margin-top: auto;
   padding: 1rem;
   text-decoration: none;
-  color: var(--danger);
+  color: $danger;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -130,7 +103,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.5rem
+  margin-bottom: 2.5rem;
 }
 
 .headerLeft h2 {
@@ -140,12 +113,12 @@ header {
 }
 
 .username {
-  color: var(--primary-light);
+  color: $light-purple;
   font-weight: 600;
 }
 
 .headerLeft p {
-  color: var(--text-secondary);
+  color: $dark-white;
   font-size: 0.95rem;
 }
 
@@ -153,7 +126,7 @@ header {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid var(--primary);
+  border: 2px solid $light-purple;
   object-fit: cover;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -178,11 +151,11 @@ header {
 }
 
 .card {
-  background-color: var(--surface);
+  background-color: $black;
   padding: 1.75rem;
   border-radius: 1.25rem;
   transition: all 0.3s ease;
-  box-shadow: var(--card-shadow);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -194,7 +167,7 @@ header {
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(90deg, $dark-purple, $light-purple);
 }
 
 .card:hover {
@@ -203,7 +176,7 @@ header {
 }
 
 .card.highlight {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(90deg, $dark-purple, $light-purple);
   color: white;
 }
 
@@ -259,7 +232,7 @@ header {
 .day {
   width: 32px;
   height: 32px;
-  background-color: var(--surface-light);
+  background-color: $lighter-black;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -275,7 +248,7 @@ header {
 }
 
 .streakFilled {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(90deg, $dark-purple, $light-purple);
   color: white;
   box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);
 }
@@ -284,11 +257,11 @@ header {
   text-align: center;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: $dark-white;
 }
 
 .streakText strong {
-  color: var(--primary-light);
+  color: $light-purple;
   font-weight: 600;
 }
 
@@ -309,12 +282,12 @@ header {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: $dark-white;
 }
 
 .bar {
   height: 10px;
-  background-color: var(--surface-light);
+  background-color: $lighter-black;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -322,7 +295,7 @@ header {
 
 .barFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(90deg, $light-purple, $dark-purple);
   border-radius: 10px;
   position: absolute;
   top: 0;
@@ -343,10 +316,7 @@ header {
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: conic-gradient(
-    var(--primary) 0% 0%,
-    var(--surface-light) 1% 100%
-  );
+  background: conic-gradient($light-purple 0% 0%, $lighter-black 1% 100%);
   position: relative;
   display: flex;
   align-items: center;
@@ -357,7 +327,7 @@ header {
 .donutCenter {
   width: 120px;
   height: 120px;
-  background-color: var(--surface);
+  background-color: $black;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
@@ -368,19 +338,19 @@ header {
 .donutCenterText {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: $white;
 }
 
 .donutCenterLabel {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: $dark-white;
   margin-top: 0.25rem;
 }
 
 .chartLabel {
   text-align: center;
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: $dark-white;
   max-width: 80%;
 }
 
@@ -392,10 +362,10 @@ header {
 }
 
 .completedTopic {
-  background-color: var(--surface-light);
+  background-color: $lighter-black;
   padding: 1.25rem;
   border-radius: 0.75rem;
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid $light-purple;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -409,7 +379,7 @@ header {
 .topicInfo h5 {
   font-size: 1rem;
   margin-bottom: 0.25rem;
-  color: var(--text-primary);
+  color: $white;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -417,12 +387,12 @@ header {
 
 .topicInfo small {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: $dark-white;
 }
 
 .topicBadge {
   background-color: rgba(16, 185, 129, 0.1);
-  color: var(--success);
+  color: $success;
   padding: 0.35rem 0.75rem;
   border-radius: 50px;
   font-size: 0.75rem;

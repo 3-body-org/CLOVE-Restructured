@@ -1,102 +1,102 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
 .footerSection {
-    background-color: #232529; /* Dark background */
-    color: #E2E8F0;
-    font-family: "Open Sauce One", "Roboto", sans-serif;
-    /* No extra margin-top here */
-  }
-  
-  /* Full-Width Lines */
-  .topLine,
-  .bottomLine {
-    width: 100%;
-    height: 1px;
-    background-color: #4a4a4a;
-    margin: 0;
-  }
-  
-  /* Custom container to match Heading/Features spacing */
+  background-color: $light-black; /* Dark background */
+  color: $white;
+  font-family: "Open Sauce One", "Roboto", sans-serif;
+}
+
+/* Full-Width Lines */
+.topLine,
+.bottomLine {
+  width: 100%;
+  height: 1px;
+  background-color: #4a4a4a;
+  margin: 0;
+}
+
+/* Custom container to match Heading/Features spacing */
+.footerContainer {
+  max-width: 1440px; /* Same max-width as your other sections */
+  margin: 0 auto; /* Center horizontally */
+  padding: 30px 80px; /* Same horizontal padding as your other sections */
+}
+
+/* Grid for the 5 columns */
+.linkContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  text-align: left;
+}
+
+/* Column Title */
+.columnTitle {
+  font-size: 15px;
+  font-weight: bold;
+  color: $white;
+  margin-bottom: 12px;
+}
+
+/* Links */
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linkList li {
+  margin-bottom: 6px;
+  font-size: 15px;
+  color: $white;
+}
+
+/* Bottom Container: Logo + Copyright */
+.bottomContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.footerLogo {
+  width: 120px;
+  height: auto;
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+}
+
+/* If using text logo instead of image */
+.logoText {
+  font-size: 24px;
+  color: $white;
+  margin: 0;
+}
+
+.logoImg {
+  width: 25px;
+  height: auto;
+  margin-left: 8px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
   .footerContainer {
-    max-width: 1440px;       /* Same max-width as your other sections */
-    margin: 0 auto;          /* Center horizontally */
-    padding: 30px 80px;      /* Same horizontal padding as your other sections */
-  }
-  
-  /* Grid for the 5 columns */
-  .linkContainer {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
-    text-align: left;
-  }
-  
-  /* Column Title */
-  .columnTitle {
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 12px;
-  }
-  
-  /* Links */
-  .linkList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .linkList li {
-    margin-bottom: 6px;
-    font-size: 14px;
-    color: #cfcfcf;
-  }
-  
-  /* Bottom Container: Logo + Copyright */
-  .bottomContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .footerLogo {
-    width: 120px;
-    height: auto;
-  }
-  
-  .logoSection {
-    display: flex;
-    align-items: center;
+    padding: 30px 20px; /* Reduce horizontal padding on smaller screens */
   }
 
-  /* If using text logo instead of image */
-  .logoText {
-    font-size: 24px;
-    color: #fff;
-    margin: 0;
+  .linkContainer {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+    text-align: center;
   }
-  
-  .logoImg {
-    width: 25px;  
-    height: auto;
-    margin-left: 8px;
+
+  .bottomContainer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
   }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .footerContainer {
-      padding: 30px 20px; /* Reduce horizontal padding on smaller screens */
-    }
-  
-    .linkContainer {
-      grid-template-columns: 1fr;
-      row-gap: 20px;
-      text-align: center;
-    }
-  
-    .bottomContainer {
-      flex-direction: column;
-      text-align: center;
-      gap: 10px;
-    }
-  }
-  
+}

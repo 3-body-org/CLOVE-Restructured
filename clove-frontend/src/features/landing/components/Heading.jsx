@@ -13,7 +13,7 @@ export default function Heading() {
 
   return (
     <div className={styles.page}>
-      {/* ====== HEADER (Unchanged) ====== */}
+      {/* ====== HEADER ====== */}
       <header className={styles.header}>
         <div className={styles.logoSection}>
           <h1 className={styles.logo}>
@@ -41,7 +41,7 @@ export default function Heading() {
         </div>
       </header>
 
-      {/* ====== HERO SECTION (Modified) ====== */}
+      {/* ====== HERO SECTION ====== */}
       <section className={styles.hero}>
         <div className="container">
           <div className="row align-items-center">

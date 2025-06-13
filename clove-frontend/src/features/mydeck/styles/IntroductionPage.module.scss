@@ -1,3 +1,7 @@
+
+
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
 // Updated SCSS with improved visibility and animations
 :root {
     --text-primary: rgba(255,255,255,0.95);

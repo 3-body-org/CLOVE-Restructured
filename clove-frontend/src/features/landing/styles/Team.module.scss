@@ -1,27 +1,29 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
 .teamSection {
   padding: 60px 20px;
-  background-color: #232529;
-  color: #E2E8F0;
+  background-color: $light-black;
+  color: #e2e8f0;
   font-family: "Open Sauce One", "Roboto", sans-serif;
 }
 
 .teamLabel {
-  font-size: 18px;
-  color: #a0aec0;
+  font-size: 15px;
+  color: $white;
   text-transform: uppercase;
   margin-bottom: 8px;
 }
 
 .teamHeading {
-  font-size: 48px;
+  font-size: 39px;
   font-weight: bold;
-  color: #A6AAFB;
+  color: $light-purple;
   margin-bottom: 12px;
 }
 
 .teamSubheading {
-  font-size: 18px;
-  color: #E2E8F0;
+  font-size: 24px;
+  color: $white;
   margin-bottom: 40px;
 }
 
@@ -32,26 +34,26 @@
   object-fit: cover;
   border-radius: 50%;
   margin-bottom: 16px;
-  background-color: #2d2f33;
+  background-color: $light-black;
 }
 
 .teamName {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
-  color: #A6AAFB;
+  color: $light-purple;
   margin-bottom: 4px;
 }
 
 .teamRole {
-  font-size: 16px;
-  color: #E2E8F0;
+  font-size: 15px;
+  color: $white;
   font-weight: 600;
   margin-bottom: 12px;
 }
 
 .teamDesc {
-  font-size: 14px;
-  color: #cfcfcf;
+  font-size: 15px;
+  color: $white;
   line-height: 1.4;
   margin-bottom: 16px;
 }
@@ -64,9 +66,9 @@
 }
 
 .iconLink {
-  color: #A6AAFB;
+  color: $light-purple;
   font-size: 20px;
-  border: 2px solid #A6AAFB;
+  border: 2px solid $light-purple;
   background-color: transparent;
   border-radius: 5px;
   width: 40px;
@@ -80,8 +82,8 @@
 }
 
 .iconLink:hover {
-  background-color: #A6AAFB;
-  color: #232529;
+  background-color: $light-purple;
+  color: $light-black;
 }
 
 /* Responsive Adjustments */

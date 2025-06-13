@@ -1,6 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "features/landing/styles/Team.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 
 // Replace these with actual images
 import teamPic1 from "assets/images/landing/image-landing-flowers.jpg";
@@ -12,10 +16,10 @@ export default function Team() {
     <section className={styles.teamSection}>
       <div className="container text-center">
         {/* Top Labels */}
-        <p className={styles.teamLabel}>Innovators and RESEARCHERS</p>
-        <h2 className={styles.teamHeading}>Our Team</h2>
+        <p className={styles.teamLabel}>INNOVATORS AND RESEARCHERS</p>
+        <h1 className={styles.teamHeading}>Our Team</h1>
         <p className={styles.teamSubheading}>
-          Meet the developers driving our educational prgramming games.
+          Meet the developers driving our educational programming games.
         </p>
 
         {/* Team Members */}
@@ -40,22 +44,24 @@ export default function Team() {
                 rel="noopener noreferrer"
                 className={styles.iconLink}
               >
-                <i className="bi bi-linkedin"></i>
+                <FontAwesomeIcon icon={faLinkedinIn} />
               </a>
-              <button
-                type="button"
+              <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.iconLink}
-                onClick={() => alert("X icon clicked")}
               >
-                <i className="bi bi-x"></i>
-              </button>
-              <button
-                type="button"
+                <FontAwesomeIcon icon={faTwitter} />
+              </a>
+              <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.iconLink}
-                onClick={() => alert("Gear icon clicked")}
               >
-                <i className="bi bi-gear"></i>
-              </button>
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
             </div>
           </div>
 
@@ -79,22 +85,24 @@ export default function Team() {
                 rel="noopener noreferrer"
                 className={styles.iconLink}
               >
-                <i className="bi bi-linkedin"></i>
+                <FontAwesomeIcon icon={faLinkedinIn} />
               </a>
-              <button
-                type="button"
+              <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.iconLink}
-                onClick={() => alert("X icon clicked")}
               >
-                <i className="bi bi-x"></i>
-              </button>
-              <button
-                type="button"
+                <FontAwesomeIcon icon={faTwitter} />
+              </a>
+              <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.iconLink}
-                onClick={() => alert("Gear icon clicked")}
               >
-                <i className="bi bi-gear"></i>
-              </button>
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
             </div>
           </div>
 
@@ -117,22 +125,24 @@ export default function Team() {
                 rel="noopener noreferrer"
                 className={styles.iconLink}
               >
-                <i className="bi bi-linkedin"></i>
+                <FontAwesomeIcon icon={faLinkedinIn} />
               </a>
-              <button
-                type="button"
+              <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.iconLink}
-                onClick={() => alert("X icon clicked")}
               >
-                <i className="bi bi-x"></i>
-              </button>
-              <button
-                type="button"
+                <FontAwesomeIcon icon={faTwitter} />
+              </a>
+              <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.iconLink}
-                onClick={() => alert("Gear icon clicked")}
               >
-                <i className="bi bi-gear"></i>
-              </button>
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
             </div>
           </div>
         </div>
