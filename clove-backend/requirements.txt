@@ -1,18 +1,42 @@
+# Web Framework
 fastapi
 uvicorn[standard]
-SQLAlchemy>=1.4
+starlette
+python-multipart
+
+# Database
+SQLAlchemy
 asyncpg
 alembic
+psycopg2-binary
+
+# Authentication & Security
 passlib[bcrypt]
+python-jose[cryptography]
 python-dotenv
+backoff
+
+# Data Validation
 pydantic
 pydantic[email]
+pydantic-settings
+
+# Development
+black
+isort
+
+# Scientific Computing
+numpy
 
 # Key dependencies:
 # fastapi & uvicorn[standard]: the web framework + ASGI server.
 # SQLAlchemy>=1.4 & asyncpg: async ORM + Postgres driver.
-# alembic: (optional) for migrations.
+# alembic: for database migrations.
 # passlib[bcrypt]: for password hashing.
-# python-dotenv: to load a local .env if you choose to.
-# pydantic: bundled with FastAPI, but listed here for clarity.
+# python-jose[cryptography]: for JWT token handling.
+# python-dotenv: to load environment variables.
+# pydantic: data validation and settings management.
 # pydantic[email]: for email validation.
+# psycopg2-binary: for PostgreSQL database connection.
+# numpy: for numerical computations and Q-learning tables.
+

@@ -1,5 +1,6 @@
 # app/crud/challenge.py
 from sqlalchemy.future import select
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.models.challenges import Challenge
 from app.schemas.challenge import ChallengeCreate, ChallengeUpdate
@@ -18,12 +19,11 @@ async def create(db: AsyncSession, challenge_in: ChallengeCreate) -> Challenge:
     new_chal = Challenge(
         subtopic_id=challenge_in.subtopic_id,
         type=challenge_in.type,
-        snippet_expectedoutput_choices=challenge_in.snippet_expectedoutput_choices,
+        snippet_choices=challenge_in.snippet_choices,
         difficulty=challenge_in.difficulty,
         hints=challenge_in.hints,
         timer=challenge_in.timer,
         points=challenge_in.points if challenge_in.points is not None else 100,
-        is_solved=challenge_in.is_solved if challenge_in.is_solved is not None else False
     )
     db.add(new_chal)
     await db.commit()
@@ -42,6 +42,10 @@ async def update(db: AsyncSession, challenge_db: Challenge, challenge_in: Challe
 async def delete(db: AsyncSession, challenge_db: Challenge) -> None:
     await db.delete(challenge_db)
     await db.commit()
+
+async def count_all(db: AsyncSession) -> int:
+    result = await db.execute(select(func.count(Challenge.id)))
+    return result.scalar_one()
 
 async def get_challenges_by_type_and_difficulty(db, subtopic_id, challenge_type, difficulty):
     stmt = select(Challenge).where(

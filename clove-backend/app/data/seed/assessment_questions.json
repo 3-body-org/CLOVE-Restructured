@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "subtopic_id": 1,
+    "question_choices_correctanswer": {
+      "question": "Which of the following is a valid variable name in Python?",
+      "choices": ["1st_name", "_name", "my-name", "class"],
+      "correct_answer": "_name",
+      "explanation": "Variable names cannot start with numbers or contain hyphens"
+    },
+    "difficulty": "easy"
+  },
+  {
+    "id": 2,
+    "subtopic_id": 1,
+    "question_choices_correctanswer": {
+      "question": "What is the output of: x = 5; y = '3'; print(str(x) + y)",
+      "choices": ["8", "53", "Error", "15"],
+      "correct_answer": "53",
+      "explanation": "str(5) converts 5 to '5', then '5' + '3' concatenates to '53'"
+    },
+    "difficulty": "medium"
+  },
+  {
+    "id": 3,
+    "subtopic_id": 2,
+    "question_choices_correctanswer": {
+      "question": "Which operator is used for floor division in Python?",
+      "choices": ["/", "//", "%", "**"],
+      "correct_answer": "//",
+      "explanation": "// operator performs division and rounds down to nearest integer"
+    },
+    "difficulty": "hard"
+  }
+] 

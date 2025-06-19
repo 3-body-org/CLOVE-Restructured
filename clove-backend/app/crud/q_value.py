@@ -1,25 +1,21 @@
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import update
 from app.db.models.q_values import QValue
 from app.core.utils import initialize_q_table, round_q_table_values, CHALLENGE_TYPES
 
 async def get_q_table(
     db: AsyncSession,
-    user_id: int,
-    subtopic_id: int
+    user_subtopic_id: int
 ) -> QValue | None:
     """Get existing Q-table from database"""
-    stmt = select(QValue).where(
-        QValue.user_id == user_id,
-        QValue.subtopic_id == subtopic_id
-    )
+    stmt = select(QValue).where(QValue.user_subtopic_id == user_subtopic_id)
     result = await db.execute(stmt)
     return result.scalars().first()
 
 async def create_q_table(
     db: AsyncSession,
-    user_id: int,
-    subtopic_id: int
+    user_subtopic_id: int
 ) -> QValue:
     """Create new Q-table using initialize_q_table from utils.py"""
     # Get initialized Q-table with random values
@@ -30,8 +26,7 @@ async def create_q_table(
     
     # Create database object
     q = QValue(
-        user_id=user_id,
-        subtopic_id=subtopic_id,
+        user_subtopic_id=user_subtopic_id,
         q_table=q_table,
         epsilon=0.8
     )
@@ -52,9 +47,15 @@ async def update_q_table(
     # Round values for consistency
     new_q_table = round_q_table_values(new_q_table)
     
-    # Update database object
-    q_obj.q_table = new_q_table
-    q_obj.epsilon = round(new_epsilon, 2)
+    # Use explicit UPDATE to ensure JSON field is updated
+    await db.execute(
+        update(QValue)
+        .where(QValue.id == q_obj.id)
+        .values(
+            q_table=new_q_table,
+            epsilon=round(new_epsilon, 2)
+        )
+    )
     await db.commit()
 
 async def get_qvalue(
@@ -105,24 +106,7 @@ async def create_qvalue(
     await db.refresh(q)
     return q
 
-async def update_qvalue(
-    db: AsyncSession,
-    q_obj: QValue,
-    new_q_value: float
-) -> None:
-    q_obj.q_value = new_q_value
-    await db.commit()
-
-async def get_by_qid(
-    db: AsyncSession,
-    qv_id: int
-) -> QValue | None:
-    """Get Q-table by ID"""
-    stmt = select(QValue).where(QValue.id == qv_id)
-    result = await db.execute(stmt)
-    return result.scalars().first()
-
-async def delete_qvalue(
+async def delete(
     db: AsyncSession,
     q_obj: QValue
 ) -> None:

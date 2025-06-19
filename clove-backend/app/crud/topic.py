@@ -8,18 +8,16 @@ async def get_by_id(db: AsyncSession, topic_id: int) -> Topic | None:
     result = await db.execute(select(Topic).where(Topic.topic_id == topic_id))
     return result.scalars().first()
 
-async def list_for_user(db: AsyncSession, user_id: int, skip: int = 0, limit: int = 100) -> list[Topic]:
+async def list_all(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[Topic]:
     result = await db.execute(
-        select(Topic).where(Topic.user_id == user_id).offset(skip).limit(limit)
+        select(Topic).offset(skip).limit(limit)
     )
     return result.scalars().all()
 
 async def create(db: AsyncSession, topic_in: TopicCreate) -> Topic:
     new_topic = Topic(
-        user_id=topic_in.user_id,
         title=topic_in.title,
-        description=topic_in.description,
-        unlock_threshold=topic_in.unlock_threshold
+        description=topic_in.description
     )
     db.add(new_topic)
     await db.commit()
@@ -27,9 +25,8 @@ async def create(db: AsyncSession, topic_in: TopicCreate) -> Topic:
     return new_topic
 
 async def update(db: AsyncSession, topic_db: Topic, topic_in: TopicUpdate) -> Topic:
-    for field, value in topic_in:
-        if value is not None:
-            setattr(topic_db, field, value)
+    for field, value in topic_in.model_dump(exclude_unset=True).items():
+        setattr(topic_db, field, value)
     db.add(topic_db)
     await db.commit()
     await db.refresh(topic_db)

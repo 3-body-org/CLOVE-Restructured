@@ -23,7 +23,6 @@ async def list_for_user(db: AsyncSession, user_id: int, skip: int = 0, limit: in
 async def create(db: AsyncSession, subtopic_in: SubtopicCreate) -> Subtopic:
     new_sub = Subtopic(
         topic_id=subtopic_in.topic_id,
-        user_id=subtopic_in.user_id,
         title=subtopic_in.title
     )
     db.add(new_sub)

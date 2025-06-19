@@ -1,32 +1,58 @@
-from pydantic import BaseModel
-from enum import Enum
+from datetime import date, datetime
+from typing import Literal, TypedDict
+from pydantic import BaseModel, Field
+from app.schemas.topic import TopicRead
 
-class ChallengeType(str, Enum):
-    code_fixer = "code_fixer"
-    code_completion = "code_completion"
-    output_tracing = "output_tracing"
+class ModeStat(TypedDict):
+    attempts: int
+    correct:  int
+    time_spent: int
+    completed: int
 
 class StatisticBase(BaseModel):
     user_id: int
-    type: ChallengeType
-    total_number_attempts: int
-    total_number_correct: int
-    total_time_spent: int
-    total_each_modes_solved: int
-    total_all_mode_solved: int
 
-class StatisticCreate(StatisticBase):
-    pass
+    recent_topic_id: int | None = None
 
-class StatisticUpdate(BaseModel):
-    total_number_attempts: int
-    total_number_correct: int
-    total_time_spent: int
-    total_each_modes_solved: int
-    total_all_mode_solved: int
+    last_login_date: date | None = None
+    current_streak: int = 0
+
+    total_challenges_solved: int = 0
+
+    mode_stats: dict[
+        Literal["code_fixer","code_completion","output_tracing"],
+        ModeStat
+    ] = Field(
+        default_factory=lambda: {
+            "code_fixer":      ModeStat(attempts=0,correct=0,time_spent=0,completed=0),
+            "code_completion": ModeStat(attempts=0,correct=0,time_spent=0,completed=0),
+            "output_tracing":  ModeStat(attempts=0,correct=0,time_spent=0,completed=0),
+        }
+    )
+
+    accuracy: dict[
+        Literal["code_fixer","code_completion","output_tracing"], float
+    ] = Field(default_factory=lambda: {"code_fixer":0.0,"code_completion":0.0,"output_tracing":0.0})
+
+    hours_spent: dict[
+        Literal["code_fixer","code_completion","output_tracing"], float
+    ] = Field(default_factory=lambda: {"code_fixer":0.0,"code_completion":0.0,"output_tracing":0.0})
+
+    completion_rate: dict[
+        Literal["code_fixer","code_completion","output_tracing"], float
+    ] = Field(default_factory=lambda: {"code_fixer":0.0,"code_completion":0.0,"output_tracing":0.0})
+
+class StatisticCreate(BaseModel):
+    user_id: int
+    recent_topic_id: int | None = None
+    last_login_date: date | None = None
+    current_streak: int = 0
+    total_challenges_solved: int = 0
 
 class StatisticRead(StatisticBase):
     id: int
+    last_updated: datetime
+    recent_topic: TopicRead | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

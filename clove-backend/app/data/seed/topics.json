@@ -1,0 +1,17 @@
+[
+  {
+    "topic_id": 1,
+    "title": "Basic Programming Concepts",
+    "description": "Introduction to fundamental programming concepts and principles."
+  },
+  {
+    "topic_id": 2,
+    "title": "Control Structures",
+    "description": "Understanding loops, conditionals, and flow control in programming."
+  },
+  {
+    "topic_id": 3,
+    "title": "Functions and Modules",
+    "description": "Learning about functions, modules, and code organization."
+  }
+] 

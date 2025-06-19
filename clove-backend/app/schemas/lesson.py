@@ -1,25 +1,26 @@
+# app/schemas/lesson.py
 from pydantic import BaseModel
-from typing import Optional, Dict
 
 class LessonBase(BaseModel):
+    subtopic_id: int
     title: str
-    introduction: Optional[str]
-    content: Optional[str]
+    introduction: str | None = None
+    content: str | None = None
     question_id: int
-    matching_game: Optional[Dict]
+    matching_game: dict | None = None
 
 class LessonCreate(LessonBase):
-    subtopic_id: int
+    pass
 
 class LessonUpdate(BaseModel):
-    title: Optional[str]
-    introduction: Optional[str]
-    content: Optional[str]
-    matching_game: Optional[Dict]
+    title: str | None = None
+    introduction: str | None = None
+    content: str | None = None
+    question_id: int | None = None
+    matching_game: dict | None = None
 
 class LessonRead(LessonBase):
     id: int
-    subtopic_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

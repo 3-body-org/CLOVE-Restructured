@@ -1,7 +1,6 @@
 # app/core/rl.py
 
 import random
-import numpy as np
 from app.core.utils import (
     alpha, gamma, epsilon, epsilon_decay, min_epsilon,
     CHALLENGE_TYPES, initialize_q_table

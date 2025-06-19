@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "subtopic_id": 1,
+    "title": "Understanding Variables",
+    "introduction": "Learn about variables and how they store data",
+    "content": "Variables are containers for storing data values...",
+    "question_id": 1,
+    "matching_game": "{\"pairs\": [{\"term\": \"int\", \"definition\": \"whole numbers\"}, {\"term\": \"str\", \"definition\": \"text data\"}]}"
+  },
+  {
+    "id": 2,
+    "subtopic_id": 2,
+    "title": "Working with Operators",
+    "introduction": "Explore different types of operators",
+    "content": "Operators are special symbols that perform operations...",
+    "question_id": 2,
+    "matching_game": "{\"pairs\": [{\"term\": \"+\", \"definition\": \"addition\"}, {\"term\": \"*\", \"definition\": \"multiplication\"}]}"
+  },
+  {
+    "id": 3,
+    "subtopic_id": 3,
+    "title": "Input/Output Operations",
+    "introduction": "Learn how to get input and display output",
+    "content": "Programs need to interact with users through input and output...",
+    "question_id": 3,
+    "matching_game": null
+  }
+] 
