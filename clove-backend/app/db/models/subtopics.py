@@ -1,29 +1,37 @@
-from sqlalchemy import Column, Integer, String, Boolean, Float, TIMESTAMP, ForeignKey, Numeric
+# app/db/models/subtopic.py
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
 class Subtopic(Base):
     __tablename__ = "subtopics"
 
-    subtopic_id         = Column(Integer, primary_key=True, index=True)
-    topic_id            = Column(Integer, ForeignKey("topics.topic_id", ondelete="CASCADE"), nullable=False, index=True)
-    user_id             = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    title               = Column(String(255), nullable=False, index=True)
-    description         = Column(String)
-    lessons_completed   = Column(Boolean, default=False)
-    practice_completed  = Column(Boolean, default=False)
-    challenges_completed= Column(Boolean, default=False)
-    is_unlocked         = Column(Integer, default=0)
-    is_completed        = Column(Boolean, default=False)
-    progress_percent    = Column(Float, default=0.0)
-    knowledge_level     = Column(Numeric(10, 2), nullable=False, default=0.0)
-    unlocked_at         = Column(TIMESTAMP)
-    completed_at        = Column(TIMESTAMP)
+    subtopic_id = Column(Integer, primary_key=True, index=True)
+    topic_id    = Column(Integer, ForeignKey("topics.topic_id"), nullable=False)
+    title       = Column(String, nullable=False, default=None)
 
-    topic   = relationship("Topic", back_populates="subtopics")
-    owner   = relationship("User", back_populates="subtopics")
-    q_values   = relationship("QValue", back_populates="subtopic", cascade="all, delete-orphan")
-    lessons = relationship("Lesson", back_populates="subtopic", cascade="all, delete")
-    challenges  = relationship("Challenge", back_populates="subtopic", cascade="all, delete")
-    assessment_questions = relationship("AssessmentQuestion", back_populates="subtopic", cascade="all, delete")
-    challenge_attempts   = relationship("ChallengeAttempt", back_populates="subtopic", cascade="all, delete")
+    # Relationships
+    topic                = relationship(
+        "Topic",
+        back_populates="subtopics"
+    )
+    lessons              = relationship(
+        "Lesson",
+        back_populates="subtopic",
+        cascade="all, delete-orphan"
+    )
+    challenges           = relationship(
+        "Challenge",
+        back_populates="subtopic",
+        cascade="all, delete-orphan"
+    )
+    assessment_questions = relationship(
+        "AssessmentQuestion",
+        back_populates="subtopic",
+        cascade="all, delete-orphan"
+    )
+    user_subtopics       = relationship(
+        "UserSubtopic",
+        back_populates="subtopic",
+        cascade="all, delete-orphan"
+    )

@@ -1,12 +1,12 @@
 # app/api/topics.py
-from typing import List, Optional
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.topic import TopicRead, TopicCreate, TopicUpdate
-from app.crud.topic import get_by_id, list_for_user, create, update, delete
+from app.crud.topic import get_by_id, list_all, create, update, delete
 from app.db.session import get_db
 
-router = APIRouter()
+router = APIRouter(prefix="/topics", tags=["Topics"])
 
 @router.post("/", response_model=TopicRead, status_code=status.HTTP_201_CREATED)
 async def create_topic(topic_in: TopicCreate, db: AsyncSession = Depends(get_db)):
@@ -22,14 +22,11 @@ async def read_topic(topic_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.get("/", response_model=List[TopicRead])
 async def list_topics(
-    user_id: Optional[int] = Query(None),
     skip: int = 0,
     limit: int = 100,
     db: AsyncSession = Depends(get_db)
 ):
-    if user_id is None:
-        raise HTTPException(status_code=400, detail="user_id query parameter is required")
-    return await list_for_user(db, user_id=user_id, skip=skip, limit=limit)
+    return await list_all(db, skip=skip, limit=limit)
 
 @router.patch("/{topic_id}", response_model=TopicRead)
 async def update_topic(topic_id: int, topic_in: TopicUpdate, db: AsyncSession = Depends(get_db)):

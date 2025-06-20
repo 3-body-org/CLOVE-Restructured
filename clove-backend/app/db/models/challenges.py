@@ -1,24 +1,30 @@
-from sqlalchemy import Column, Integer, ForeignKey, Enum, JSON, Boolean
+# app/db/models/challenge.py
+from sqlalchemy import Column, Integer, Enum, JSON, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
-# Use the ENUM types that match your DDL
-challenge_enum = Enum('code_fixer', 'code_completion', 'output_tracing', name="challenge_type", create_type=False)
-difficulty_enum = Enum('easy', 'medium', 'hard', name="difficulty_level", create_type=False)
+ChallengeTypeEnum    = Enum("code_fixer", "code_completion", "output_tracing", name="challenge_type_enum")
+DifficultyEnum       = Enum("easy", "medium", "hard", name="difficulty_enum")
 
 class Challenge(Base):
     __tablename__ = "challenges"
 
-    id                            = Column(Integer, primary_key=True, index=True)
-    subtopic_id                   = Column(Integer, ForeignKey("subtopics.subtopic_id", ondelete="CASCADE"), nullable=False, index=True)
-    type                          = Column(challenge_enum, nullable=False, index=True)
-    snippet_expectedoutput_choices= Column(JSON, nullable=False)
-    difficulty                    = Column(difficulty_enum, nullable=False, index=True)
-    hints                         = Column(JSON)
-    timer                         = Column(Integer)   # time limit in seconds
-    points                        = Column(Integer, default=100)
-    is_solved                     = Column(Boolean, default=False)
+    id              = Column(Integer, primary_key=True, index=True)
+    subtopic_id     = Column(Integer, ForeignKey("subtopics.subtopic_id"), nullable=False)
+    type            = Column(ChallengeTypeEnum, nullable=False)
+    snippet_choices = Column(JSON, nullable=False)
+    difficulty      = Column(DifficultyEnum, nullable=False)
+    hints           = Column(JSON, default=None)
+    timer           = Column(Integer, default=60, comment="Time limit in seconds")
+    points          = Column(Integer, default=100)
 
-    subtopic = relationship("Subtopic", back_populates="challenges")
-    attempts = relationship("ChallengeAttempt", back_populates="challenge", cascade="all, delete")
- 
+    # Relationships
+    subtopic        = relationship(
+        "Subtopic",
+        back_populates="challenges"
+    )
+    user_challenges = relationship(
+        "UserChallenge",
+        back_populates="challenge",
+        cascade="all, delete-orphan"
+    )

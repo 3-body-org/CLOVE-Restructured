@@ -1,0 +1,47 @@
+[
+  {
+    "subtopic_id": 1,
+    "topic_id": 1,
+    "title": "Variables and Data Types"
+  },
+  {
+    "subtopic_id": 2,
+    "topic_id": 1,
+    "title": "Basic Operators"
+  },
+  {
+    "subtopic_id": 3,
+    "topic_id": 1,
+    "title": "Input and Output"
+  },
+  {
+    "subtopic_id": 4,
+    "topic_id": 2,
+    "title": "If-Else Statements"
+  },
+  {
+    "subtopic_id": 5,
+    "topic_id": 2,
+    "title": "Loops"
+  },
+  {
+    "subtopic_id": 6,
+    "topic_id": 2,
+    "title": "Switch Cases"
+  },
+  {
+    "subtopic_id": 7,
+    "topic_id": 3,
+    "title": "Function Basics"
+  },
+  {
+    "subtopic_id": 8,
+    "topic_id": 3,
+    "title": "Parameters and Returns"
+  },
+  {
+    "subtopic_id": 9,
+    "topic_id": 3,
+    "title": "Module Creation"
+  }
+] 

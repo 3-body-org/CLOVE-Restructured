@@ -1,39 +1,40 @@
-from pydantic import BaseModel
-from typing import List, Dict, Optional
+# app/schemas/challenge.py
 from enum import Enum
+from pydantic import BaseModel
+from typing import Dict, Any
 
 class ChallengeType(str, Enum):
     code_fixer = "code_fixer"
     code_completion = "code_completion"
     output_tracing = "output_tracing"
 
-class DifficultyLevel(str, Enum):
+class Difficulty(str, Enum):
     easy = "easy"
     medium = "medium"
     hard = "hard"
 
 class ChallengeBase(BaseModel):
+    subtopic_id: int
     type: ChallengeType
-    snippet_expectedoutput_choices: Dict
-    difficulty: DifficultyLevel
-    hints: Optional[Dict]
-    timer: Optional[int]
-    points: Optional[int]
-    is_solved: Optional[bool]
+    snippet_choices: Dict
+    difficulty: Difficulty
+    hints: Dict | None = None
+    timer: int = 60
+    points: int = 100
 
 class ChallengeCreate(ChallengeBase):
-    subtopic_id: int
+    pass
 
 class ChallengeUpdate(BaseModel):
-    snippet_expectedoutput_choices: Optional[Dict]
-    hints: Optional[Dict]
-    timer: Optional[int]
-    points: Optional[int]
-    is_solved: Optional[bool]
+    type: ChallengeType | None = None
+    snippet_choices: Dict | None = None
+    difficulty: Difficulty | None = None
+    hints: Dict | None = None
+    timer: int | None = 60
+    points: int | None = 100
 
 class ChallengeRead(ChallengeBase):
     id: int
-    subtopic_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

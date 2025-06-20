@@ -3,10 +3,10 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession 
 from app.schemas.challenge import ChallengeRead, ChallengeCreate, ChallengeUpdate
-from app.crud.challenge import get_by_id, list_for_subtopic, create, update, delete
+from app.crud.challenge import get_by_id, list_for_subtopic, create, update, delete, count_all
 from app.db.session import get_db
 
-router = APIRouter()
+router = APIRouter(prefix="/challenges", tags=["Challenges"])
 
 @router.post("/", response_model=ChallengeRead, status_code=status.HTTP_201_CREATED)
 async def create_challenge(chal_in: ChallengeCreate, db: AsyncSession = Depends(get_db)):
@@ -46,3 +46,7 @@ async def delete_challenge(challenge_id: int, db: AsyncSession = Depends(get_db)
         raise HTTPException(status_code=404, detail="Challenge not found")
     await delete(db, chal_obj)
     return
+
+@router.get("/count", response_model=int)
+async def get_challenge_count(db: AsyncSession = Depends(get_db)):
+    return await count_all(db)

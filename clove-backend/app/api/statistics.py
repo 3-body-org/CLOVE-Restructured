@@ -1,43 +1,56 @@
-# app/api/statistics.py
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas.statistic import StatisticRead, StatisticCreate, StatisticUpdate
-from app.crud.statistic import get_by_id, list_for_user, create, update, delete
+from datetime import date
 from app.db.session import get_db
+from app.api.auth import get_current_user
+from app.schemas.statistic import StatisticRead, StatisticCreate
+from app.crud import statistic as crud_stat
 
-router = APIRouter()
+router = APIRouter(prefix="/statistics", tags=["Statistics"], dependencies=[Depends(get_current_user)])
 
-@router.post("/", response_model=StatisticRead, status_code=status.HTTP_201_CREATED)
-async def create_statistic(stat_in: StatisticCreate, db: AsyncSession = Depends(get_db)):
-    created = await create(db, stat_in)
-    return created
+@router.get("/me", response_model=StatisticRead)
+async def get_my_statistics(
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    stat = await crud_stat.get_by_user_id(db, current_user.id)
+    if not stat:
+        raise HTTPException(404, "Statistic record not found")
+    return stat
 
-@router.get("/{stat_id}", response_model=StatisticRead)
-async def read_statistic(stat_id: int, db: AsyncSession = Depends(get_db)):
-    stat_obj = await get_by_id(db, stat_id=stat_id)
-    if not stat_obj:
-        raise HTTPException(status_code=404, detail="Statistic not found")
-    return stat_obj
+@router.post("/", response_model=StatisticRead)
+async def create_statistic(
+    data: StatisticCreate,
+    db: AsyncSession = Depends(get_db),
+):
+    return await crud_stat.create_statistic(db, data)
 
-@router.get("/", response_model=List[StatisticRead])
-async def list_statistics(user_id: Optional[int] = Query(None), db: AsyncSession = Depends(get_db)):
-    if user_id is None:
-        raise HTTPException(status_code=400, detail="user_id query parameter is required")
-    return await list_for_user(db, user_id=user_id)
+@router.post("/update-streak", response_model=StatisticRead)
+async def update_streak(
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    return await crud_stat.update_login_streak(db, current_user.id, date.today())
 
-@router.patch("/{stat_id}", response_model=StatisticRead)
-async def update_statistic(stat_id: int, stat_in: StatisticUpdate, db: AsyncSession = Depends(get_db)):
-    stat_obj = await get_by_id(db, stat_id=stat_id)
-    if not stat_obj:
-        raise HTTPException(status_code=404, detail="Statistic not found")
-    updated = await update(db, stat_obj, stat_in)
-    return updated
+@router.post("/update-recent-topic/{topic_id}", response_model=StatisticRead)
+async def update_recent_topic(
+    topic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    return await crud_stat.update_recent_topic(db, current_user.id, topic_id)
 
-@router.delete("/{stat_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_statistic(stat_id: int, db: AsyncSession = Depends(get_db)):
-    stat_obj = await get_by_id(db, stat_id=stat_id)
-    if not stat_obj:
-        raise HTTPException(status_code=404, detail="Statistic not found")
-    await delete(db, stat_obj)
-    return
+@router.post("/challenge", response_model=StatisticRead)
+async def record_challenge(
+    payload: dict,  # {"type", "is_correct", "time_spent", "completed_type"}
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    return await crud_stat.increment_challenges_solved(
+        db,
+        current_user.id,
+        payload["type"],
+        payload["is_correct"],
+        payload["time_spent"],
+        payload.get("completed_type", False)
+    )

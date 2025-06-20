@@ -6,7 +6,7 @@ from app.schemas.subtopic import SubtopicRead, SubtopicCreate, SubtopicUpdate
 from app.crud.subtopic import get_by_id, list_for_topic, list_for_user, create, update, delete
 from app.db.session import get_db
 
-router = APIRouter()
+router = APIRouter(prefix="/subtopics", tags=["Subtopics"])
 
 @router.post("/", response_model=SubtopicRead, status_code=status.HTTP_201_CREATED)
 async def create_subtopic(subtopic_in: SubtopicCreate, db: AsyncSession = Depends(get_db)):

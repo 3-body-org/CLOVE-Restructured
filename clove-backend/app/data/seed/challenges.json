@@ -1,0 +1,811 @@
+[
+  {
+    "id": 1,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 2,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 3,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 4,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 5,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 6,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 7,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 8,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 9,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 10,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 11,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 12,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 13,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 14,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 15,
+    "subtopic_id": 1,
+    "type": "code_fixer",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 16,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 17,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 18,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 19,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 20,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 21,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 22,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 23,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 24,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 25,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 26,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Check the data type of input()",
+      "2": "What happens when you add string and number?"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 27,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 28,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 29,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 30,
+    "subtopic_id": 1,
+    "type": "code_completion",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 31,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 32,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 33,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 34,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 35,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "easy",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 36,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 37,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 38,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 39,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 40,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "medium",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 41,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "broken_code": "x = input('Enter number') print(x + 5)",
+      "correct_code": "x = int(input('Enter number'))\nprint(x + 5)",
+      "explanation": "Converting string input to integer"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 42,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "template": "def calculate_average(numbers):\n    total = ___\n    for num in numbers:\n        ___ += ___\n    return total / ___",
+      "correct_answers": ["0", "total", "num", "len(numbers)"],
+      "explanation": "Calculating average of numbers"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Initialize total to zero",
+      "2": "Add each number to total",
+      "3": "Divide by count of numbers"
+    },
+    "timer": 600,
+    "points": 20
+  },
+  {
+    "id": 43,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 44,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  },
+  {
+    "id": 45,
+    "subtopic_id": 1,
+    "type": "output_tracing",
+    "snippet_choices": {
+      "code": "x = 5\ny = 2\nprint(x * y)\nprint(x / y)\nprint(x % y)",
+      "expected_output": ["10", "2.5", "1"],
+      "explanation": "Understanding arithmetic operations"
+    },
+    "difficulty": "hard",
+    "hints": {
+      "1": "Multiplication gives whole number",
+      "2": "Division gives decimal",
+      "3": "Modulus gives remainder"
+    },
+    "timer": 300,
+    "points": 10
+  }
+] 

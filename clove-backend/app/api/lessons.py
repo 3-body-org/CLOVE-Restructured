@@ -6,7 +6,7 @@ from app.schemas.lesson import LessonRead, LessonCreate, LessonUpdate
 from app.crud.lesson import get_by_id, list_for_subtopic, create, update, delete
 from app.db.session import get_db
 
-router = APIRouter()
+router = APIRouter(prefix="/lessons", tags=["Lessons"])
 
 @router.post("/", response_model=LessonRead, status_code=status.HTTP_201_CREATED)
 async def create_lesson(lesson_in: LessonCreate, db: AsyncSession = Depends(get_db)):

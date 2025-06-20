@@ -1,86 +1,95 @@
 # app/api/users.py
 
-from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List
 
-from app.schemas.user import UserCreate, UserRead
+from app.schemas.user import UserRead, UserUpdate
 from app.crud.user import (
-    get_by_email,
-    get_by_username,
     get_by_id,
-    create_user,
-    delete_user
+    update_user,
+    delete_user,
+    get_all_users
 )
 from app.db.session import get_db
 from app.utils.security import get_password_hash  
+from app.api.auth import get_current_user
+from app.db.models.users import User
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(prefix="/users", tags=["Users"])
 
-@router.post("/", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-async def create_user_endpoint(
-    user_in: UserCreate,
+@router.get("/", response_model=List[UserRead])
+async def read_users(
+    skip: int = 0,
+    limit: int = 100,
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Create a new user. Checks for existing email/username first.
-    """
-    # 1) Check for duplicate email
-    existing = await get_by_email(db, email=user_in.email)
-    if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
-        )
-
-    # 2) Check for duplicate username
-    existing = await get_by_username(db, username=user_in.username)
-    if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already taken"
-        )
-
-    # 3) Hash the password, then create
-    hashed_pw = get_password_hash(user_in.password)
-    user = await create_user(
-        db,
-        username=user_in.username,
-        email=user_in.email,
-        password_hash=hashed_pw
-    )
-    return user
+    """Get all users. Requires authentication."""
+    users = await get_all_users(db, skip=skip, limit=limit)
+    return users
 
 @router.get("/{user_id}", response_model=UserRead)
 async def read_user(
     user_id: int,
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Fetch a user by their ID.
-    """
-    user_obj = await get_by_id(db, user_id)
-    if not user_obj:
+    """Get a specific user by ID. Requires authentication."""
+    user = await get_by_id(db, user_id)
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    return user_obj
+    return user
+
+@router.put("/{user_id}", response_model=UserRead)
+async def update_user_endpoint(
+    user_id: int,
+    user_in: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Update a user. Users can only update their own profile."""
+    if current_user.id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to update this user"
+        )
+
+    user = await get_by_id(db, user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    # Hash password if provided
+    update_data = user_in.model_dump(exclude_unset=True)
+    if "password" in update_data:
+        update_data["password_hash"] = get_password_hash(update_data.pop("password"))
+
+    updated_user = await update_user(db, user, update_data)
+    return updated_user
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user_endpoint(
     user_id: int,
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    Delete a user by their ID. Returns 204 No Content on success.
-    """
-    user_obj = await get_by_id(db, user_id)
-    if not user_obj:
+    """Delete a user. Users can only delete their own account."""
+    if current_user.id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to delete this user"
+        )
+
+    user = await get_by_id(db, user_id)
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
 
-    await delete_user(db, user_obj)
-    return  
+    await delete_user(db, user)
+    return None  
