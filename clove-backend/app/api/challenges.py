@@ -5,16 +5,27 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.challenge import ChallengeRead, ChallengeCreate, ChallengeUpdate
 from app.crud.challenge import get_by_id, list_for_subtopic, create, update, delete, count_all
 from app.db.session import get_db
+from app.api.auth import get_current_superuser
+from app.db.models.users import User
 
 router = APIRouter(prefix="/challenges", tags=["Challenges"])
 
 @router.post("/", response_model=ChallengeRead, status_code=status.HTTP_201_CREATED)
-async def create_challenge(chal_in: ChallengeCreate, db: AsyncSession = Depends(get_db)):
+async def create_challenge(
+    chal_in: ChallengeCreate, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_superuser)
+):
+    """Create a new challenge. Requires superuser privileges."""
     created = await create(db, chal_in)
     return created
 
 @router.get("/{challenge_id}", response_model=ChallengeRead)
-async def read_challenge(challenge_id: int, db: AsyncSession = Depends(get_db)):
+async def read_challenge(
+    challenge_id: int, 
+    db: AsyncSession = Depends(get_db)
+):
+    """Get a specific challenge by ID. Public endpoint for reading."""
     chal_obj = await get_by_id(db, challenge_id=challenge_id)
     if not chal_obj:
         raise HTTPException(status_code=404, detail="Challenge not found")
@@ -27,12 +38,19 @@ async def list_challenges(
     limit: int = 100,
     db: AsyncSession = Depends(get_db)
 ):
+    """List challenges for a subtopic. Public endpoint for reading."""
     if subtopic_id is None:
         raise HTTPException(status_code=400, detail="subtopic_id query parameter is required")
     return await list_for_subtopic(db, subtopic_id=subtopic_id, skip=skip, limit=limit)
 
 @router.patch("/{challenge_id}", response_model=ChallengeRead)
-async def update_challenge(challenge_id: int, chal_in: ChallengeUpdate, db: AsyncSession = Depends(get_db)):
+async def update_challenge(
+    challenge_id: int, 
+    chal_in: ChallengeUpdate, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_superuser)
+):
+    """Update a challenge. Requires superuser privileges."""
     chal_obj = await get_by_id(db, challenge_id=challenge_id)
     if not chal_obj:
         raise HTTPException(status_code=404, detail="Challenge not found")
@@ -40,7 +58,12 @@ async def update_challenge(challenge_id: int, chal_in: ChallengeUpdate, db: Asyn
     return updated
 
 @router.delete("/{challenge_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_challenge(challenge_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_challenge(
+    challenge_id: int, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_superuser)
+):
+    """Delete a challenge. Requires superuser privileges."""
     chal_obj = await get_by_id(db, challenge_id=challenge_id)
     if not chal_obj:
         raise HTTPException(status_code=404, detail="Challenge not found")
@@ -49,4 +72,5 @@ async def delete_challenge(challenge_id: int, db: AsyncSession = Depends(get_db)
 
 @router.get("/count", response_model=int)
 async def get_challenge_count(db: AsyncSession = Depends(get_db)):
+    """Get total challenge count. Public endpoint for reading."""
     return await count_all(db)

@@ -58,3 +58,20 @@ async def update_progress(
     await db.commit()
     await db.refresh(user_subtopic)
     return user_subtopic
+
+async def update_knowledge_levels_from_assessment(
+    db: AsyncSession,
+    user_id: int,
+    subtopic_scores: dict
+):
+    """Update knowledge_level for multiple subtopics based on assessment scores"""
+    for subtopic_id, score_percentage in subtopic_scores.items():
+        # Convert percentage to 0-1 scale (divide by 100)
+        knowledge_level = score_percentage / 100.0
+        
+        # Get or create user_subtopic record
+        user_subtopic = await get_by_user_and_subtopic(db, user_id, int(subtopic_id))
+        if user_subtopic:
+            user_subtopic.knowledge_level = knowledge_level
+            await db.commit()
+            await db.refresh(user_subtopic)

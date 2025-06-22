@@ -1,0 +1,261 @@
+/* Page Container: Grid with Header, Content, Footer */
+.page {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    background-color: #232529;
+    font-family: 'Open Sauce One', 'Roboto', sans-serif;
+  }
+  
+  /* Header */
+  .header {
+    grid-row: 1;
+    padding: 20px;
+  }
+  
+  .logoSection {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Logo Text & Image */
+  .logo {
+    font-size: 48px;
+    font-weight: bold;
+    color: #fff;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logoImg {
+    width: 50px;
+    height: auto;
+    margin-left: 8px;
+  }
+  
+  /* Main Content */
+  .content {
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 16px;
+  }
+  
+  /* Form Wrapper */
+  .formWrapper {
+    width: 100%;
+    max-width: 600px;
+    padding: 32px;
+    margin-top: 20px;
+    background-color: #232529;
+    color: #fff;
+  }
+  
+  /* Toggle Nav: Sign Up / Login Buttons */
+  .toggleNav {
+    display: flex;
+    justify-content: space-evenly; /* Evenly space the 2 buttons */
+    align-items: center;
+    flex-wrap: nowrap; /* Prevent wrap */
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+  }
+  
+  /* Toggle Buttons */
+  .toggleButton {
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #E2E8F0;
+    padding: 12px 0;
+    background: transparent;
+    border: none;
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+  
+  .toggleButton.active {
+    color: #A6AAFB;
+  }
+  
+  /* Underline animation */
+  .toggleButton::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #A6AAFB;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  
+  .toggleButton.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  
+  /* Headings */
+  .loginHeading,
+  .signupHeading {
+    font-size: 55px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  
+  .loginDescription,
+  .signupDescription {
+    text-align: center;
+    color: #E2E8F0;
+    margin-bottom: 1.5rem;
+    font-size: 20px;
+  }
+  
+  /* Form Fields */
+  .formField {
+    width: 100%;
+    padding: 16px;
+    background-color: transparent;
+    border: 2px solid #A6AAFB;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Checkbox Wrapper */
+  .checkboxWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .checkbox {
+    margin-right: 8px;
+    accent-color: #A6AAFB;
+  }
+  
+  .checkboxLabel {
+    font-size: 16px;
+    color: #E2E8F0;
+  }
+  
+  /* Terms Link */
+  .termsLink {
+    cursor: pointer;
+    color: #A6AAFB;
+    text-decoration: underline;
+  }
+  
+  /* Form Button */
+  .formButton {
+    width: 100%;
+    background-color: #A6AAFB;
+    padding: 14px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+  }
+  
+  .formButton:hover {
+    background-color: #7b4dcf;
+  }
+  
+  /* Forgot Password */
+  .forgotPassword {
+    text-align: right;
+    font-size: 16px;
+    color: #A6AAFB;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  /* Footer */
+  .footer {
+    grid-row: 3;
+    text-align: center;
+    padding: 16px;
+    color: #E2E8F0;
+    font-size: 14px;
+  }
+  
+  /* Responsive Media Queries */
+  @media (max-width: 768px) {
+    .header {
+      padding: 15px;
+    }
+  
+    .logo {
+      font-size: 36px;
+      margin-left: 10px;
+    }
+  
+    .formWrapper {
+      width: 90%;
+      padding: 24px;
+    }
+  
+    .toggleButton {
+      font-size: 18px;
+      padding: 10px 0;
+    }
+  
+    .loginHeading,
+    .signupHeading {
+      font-size: 40px;
+    }
+  
+    .loginDescription,
+    .signupDescription {
+      font-size: 16px;
+    }
+  
+    .formField {
+      font-size: 16px;
+      padding: 12px;
+    }
+  
+    .formButton {
+      font-size: 16px;
+      padding: 12px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logo {
+      font-size: 32px;
+    }
+  
+    .loginHeading,
+    .signupHeading {
+      font-size: 32px;
+    }
+  
+    .formWrapper {
+      padding: 20px;
+    }
+  
+    .formField {
+      font-size: 14px;
+      padding: 10px;
+    }
+  
+    .formButton {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  

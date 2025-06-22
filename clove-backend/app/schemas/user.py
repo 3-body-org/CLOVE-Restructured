@@ -6,7 +6,7 @@ from pydantic import BaseModel, EmailStr, Field
 class UserBase(BaseModel):
     username: str = Field(min_length=3, max_length=50)
     email: EmailStr
-    is_adaptive: bool = False
+    is_adaptive: bool = True
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8)

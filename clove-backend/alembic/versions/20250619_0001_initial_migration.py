@@ -121,6 +121,7 @@ def upgrade() -> None:
     sa.Column('is_unlocked', sa.Boolean(), nullable=True),
     sa.Column('subtopic_scores', sa.JSON(), nullable=False),
     sa.Column('questions_answers_iscorrect', sa.JSON(), nullable=False),
+    sa.Column('attempt_count', sa.Integer(), nullable=False, default=0),
     sa.Column('taken_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['user_topic_id'], ['user_topics.id'], ),
     sa.PrimaryKeyConstraint('post_assessment_id')
@@ -134,6 +135,7 @@ def upgrade() -> None:
     sa.Column('is_unlocked', sa.Boolean(), nullable=True),
     sa.Column('subtopic_scores', sa.JSON(), nullable=False),
     sa.Column('questions_answers_iscorrect', sa.JSON(), nullable=False),
+    sa.Column('attempt_count', sa.Integer(), nullable=False, default=0),
     sa.Column('taken_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['user_topic_id'], ['user_topics.id'], ),
     sa.PrimaryKeyConstraint('pre_assessment_id')

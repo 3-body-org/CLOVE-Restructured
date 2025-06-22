@@ -13,27 +13,40 @@ from app.crud.user import (
 )
 from app.db.session import get_db
 from app.utils.security import get_password_hash  
-from app.api.auth import get_current_user
+from app.api.auth import get_current_user, get_current_superuser
 from app.db.models.users import User
 
 router = APIRouter(prefix="/users", tags=["Users"])
+
+@router.get("/me", response_model=UserRead)
+async def read_users_me(current_user: User = Depends(get_current_user)):
+    """Get current user's profile"""
+    return current_user
 
 @router.get("/", response_model=List[UserRead])
 async def read_users(
     skip: int = 0,
     limit: int = 100,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_superuser)
 ):
-    """Get all users. Requires authentication."""
+    """Get all users. Requires superuser privileges."""
     users = await get_all_users(db, skip=skip, limit=limit)
     return users
 
 @router.get("/{user_id}", response_model=UserRead)
 async def read_user(
     user_id: int,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    """Get a specific user by ID. Requires authentication."""
+    """Get a specific user by ID. Users can only view their own profile, superusers can view any."""
+    if not current_user.is_superuser and current_user.id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to view this user"
+        )
+    
     user = await get_by_id(db, user_id)
     if not user:
         raise HTTPException(

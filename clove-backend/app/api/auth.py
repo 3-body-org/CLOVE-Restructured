@@ -5,13 +5,14 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, timezone
 
+from app.db.models.users import User
 from app.schemas.user import UserCreate, UserRead, Token, UserLogin
 from app.crud.user import (
     get_by_email,
     get_by_username,
     create_user,
-    init_user_data,
-    get_by_id
+    get_by_id,
+    update_user
 )
 from app.db.session import get_db
 from app.utils.security import (
@@ -35,8 +36,14 @@ async def oauth2_form_login(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # Constants for login attempt tracking
-MAX_LOGIN_ATTEMPTS = 5
-COOLDOWN_MINUTES = 15
+MAX_LOGIN_ATTEMPTS = 10
+
+# Progressive cooldown system
+COOLDOWN_THRESHOLDS = {
+    3: 10,   # 3 attempts = 10 minutes
+    5: 30,   # 5 attempts = 30 minutes  
+    10: 60   # 10 attempts = 1 hour
+}
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
@@ -49,7 +56,20 @@ async def get_current_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Inactive user"
+        )
     return user
+
+async def get_current_superuser(current_user: User = Depends(get_current_user)):
+    if not current_user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user doesn't have enough privileges"
+        )
+    return current_user
 
 @router.post("/signup", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def create_user_endpoint(
@@ -85,8 +105,6 @@ async def create_user_endpoint(
         password_hash=hashed_pw
     )
 
-    await init_user_data(db, user.id)
-    
     return user
 
 @router.post("/login", response_model=Token)
@@ -107,10 +125,29 @@ async def login(
 
     # Check if user is in cooldown
     if user.login_cooldown_until and user.login_cooldown_until > datetime.now(timezone.utc):
-        remaining_time = (user.login_cooldown_until - datetime.now(timezone.utc)).total_seconds() / 60
+        remaining_seconds = (user.login_cooldown_until - datetime.now(timezone.utc)).total_seconds()
+        remaining_hours = int(remaining_seconds // 3600)
+        remaining_minutes = int((remaining_seconds % 3600) // 60)
+        remaining_secs = int(remaining_seconds % 60)
+        
+        # Build time message with appropriate units
+        time_parts = []
+        if remaining_hours > 0:
+            time_parts.append(f"{remaining_hours} hour{'s' if remaining_hours != 1 else ''}")
+        if remaining_minutes > 0:
+            time_parts.append(f"{remaining_minutes} minute{'s' if remaining_minutes != 1 else ''}")
+        if remaining_secs > 0:
+            time_parts.append(f"{remaining_secs} second{'s' if remaining_secs != 1 else ''}")
+        
+        # If no time parts (edge case), show "less than a minute"
+        if not time_parts:
+            time_message = "less than a minute"
+        else:
+            time_message = ", ".join(time_parts)
+            
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail=f"Too many failed attempts. Please try again in {int(remaining_time)} minutes",
+            detail=f"Too many failed attempts. Please try again in {time_message}",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -120,9 +157,17 @@ async def login(
         user.login_attempts += 1
         user.last_failed_login = datetime.now(timezone.utc)
         
-        # If max attempts reached, set cooldown
-        if user.login_attempts >= MAX_LOGIN_ATTEMPTS:
-            user.login_cooldown_until = datetime.now(timezone.utc) + timedelta(minutes=COOLDOWN_MINUTES)
+        # Check if we need to set cooldown based on progressive thresholds
+        cooldown_minutes = None
+        for threshold, minutes in COOLDOWN_THRESHOLDS.items():
+            if user.login_attempts == threshold:
+                cooldown_minutes = minutes
+                print(f"Login cooldown triggered: {user.login_attempts} attempts = {minutes} minutes")
+                break
+        
+        # If cooldown is needed, set it
+        if cooldown_minutes:
+            user.login_cooldown_until = datetime.now(timezone.utc) + timedelta(minutes=cooldown_minutes)
         
         await db.commit()
         
@@ -175,7 +220,24 @@ async def refresh_token(
         "token_type": "bearer"
     }
 
+@router.put("/users/{user_id}/set-adaptive", response_model=UserRead)
+async def set_user_adaptive_mode(
+    user_id: int,
+    is_adaptive: bool,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_superuser)
+):
+    """
+    (Admin Only) Manually set a user's is_adaptive flag.
+    """
+    user_to_update = await get_by_id(db, user_id)
+    if not user_to_update:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    updated_user = await update_user(db, user_to_update, {"is_adaptive": is_adaptive})
+    return updated_user
+
 @router.get("/me", response_model=UserRead)
-async def read_users_me(current_user = Depends(get_current_user)):
+async def read_users_me(current_user: User = Depends(get_current_user)):
     """Get current user information."""
     return current_user

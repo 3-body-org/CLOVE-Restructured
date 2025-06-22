@@ -26,12 +26,12 @@ async def create(db: AsyncSession, lesson_in: LessonCreate) -> Lesson:
     db.add(new_lesson)
     await db.commit()
     await db.refresh(new_lesson)
+    
     return new_lesson
 
 async def update(db: AsyncSession, lesson_db: Lesson, lesson_in: LessonUpdate) -> Lesson:
-    for field, value in lesson_in:
-        if value is not None:
-            setattr(lesson_db, field, value)
+    for field, value in lesson_in.model_dump(exclude_unset=True).items():
+        setattr(lesson_db, field, value)
     db.add(lesson_db)
     await db.commit()
     await db.refresh(lesson_db)

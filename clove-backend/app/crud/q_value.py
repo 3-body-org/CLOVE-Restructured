@@ -13,6 +13,37 @@ async def get_q_table(
     result = await db.execute(stmt)
     return result.scalars().first()
 
+async def get_by_user_and_subtopic(
+    db: AsyncSession,
+    user_id: int,
+    subtopic_id: int
+) -> QValue | None:
+    """Get Q-table by user_id and subtopic_id"""
+    stmt = (
+        select(QValue)
+        .join(QValue.user_subtopic)
+        .where(QValue.user_subtopic.has(user_id=user_id, subtopic_id=subtopic_id))
+    )
+    result = await db.execute(stmt)
+    return result.scalars().first()
+
+async def list_for_user(
+    db: AsyncSession,
+    user_id: int,
+    skip: int = 0,
+    limit: int = 100
+) -> list[QValue]:
+    """Get all Q-values for a specific user"""
+    stmt = (
+        select(QValue)
+        .join(QValue.user_subtopic)
+        .where(QValue.user_subtopic.has(user_id=user_id))
+        .offset(skip)
+        .limit(limit)
+    )
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
 async def create_q_table(
     db: AsyncSession,
     user_subtopic_id: int
