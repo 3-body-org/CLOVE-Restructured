@@ -1,0 +1,44 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
+.profileImg {
+  object-fit: cover;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.headerLeft h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.username {
+  color: $light-purple;
+  font-weight: bold;
+}
+
+.headerLeft p {
+  color: $dark-white;
+  font-size: 24;
+}
+
+.profile {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2px solid $light-purple;
+  object-fit: cover;
+  align-self: start;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.profile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+}

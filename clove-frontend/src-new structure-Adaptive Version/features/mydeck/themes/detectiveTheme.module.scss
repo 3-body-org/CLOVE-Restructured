@@ -1,0 +1,65 @@
+// NeoCipher Noir Theme Variables
+$detective-theme: (
+  // 1. Page & Global Styles
+  // Defines the overall look: fonts, text colors, backgrounds, and transitions.
+  // ----------------------------------------------------------------
+  "font-primary": '"Lora", serif',
+  "font-heading": '"Playfair Display", serif',
+  "font-mono": '"Courier New", monospace',
+  "text-primary": #dcdcdc,
+  // Pale Gray
+  "text-secondary": #888c94,
+  // Steel Gray
+  "bg-primary": #121212,
+  // Deep Charcoal
+  "bg-secondary": #1a1a1a,
+  // Darkened Charcoal
+  "theme-bg": #121212,
+  "theme-text": #dcdcdc,
+  "accent-color": #00bcd4,
+  "glow-color": "rgba(0, 188, 212, 0.4)",
+  "transition-speed": "0.3s",
+  "transition-easing": "ease",
+
+  // 2. Header & Title Styles
+  // Colors for main headings (h1, h2) and icons.
+  // ----------------------------------------------------------------
+  "accent-primary": #00bcd4,
+  // Cyber Neon Blue
+  "accent-secondary": #f4e04d,
+
+  // Crime Yellow
+  // 3. Card & Section Styles
+  // Used for the Story Section and individual TypeCards.
+  // ----------------------------------------------------------------
+  "card-bg": rgba(43, 47, 56, 0.9),
+  // Gunmetal
+  "card-hover": rgba(54, 59, 70, 0.95),
+  // Darkened Gunmetal
+  "card-border": "1px solid #2b2f38",
+  // Gunmetal border
+  "card-shadow": "0 4px 6px rgba(0, 0, 0, 0.5)",
+  // Cyber Neon Blue glow
+  // 5. Additional Colors
+  // For specific UI elements
+  // ----------------------------------------------------------------
+  "error-alert": "#b53939" // Blood Crimson
+);
+
+// Export the theme map
+:export {
+  @each $key, $value in $detective-theme {
+    #{$key}: $value;
+  }
+}
+
+:global(body.theme-detective) {
+  // Apply all theme variables
+  @each $var, $value in $detective-theme {
+    --#{$var}: #{$value};
+  }
+
+  // Explicitly set the page background
+  background-color: var(--theme-bg);
+  transition: background-color 0.3s ease;
+}

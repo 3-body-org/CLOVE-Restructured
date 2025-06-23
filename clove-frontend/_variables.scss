@@ -1,0 +1,59 @@
+// =============================================
+// GLOBAL VARIABLES
+// =============================================
+
+// Base Colors
+$light-purple: #a6aafb;
+$dark-purple: #7c3aed;
+
+$pitch-black: #0f0f15;
+$light-black: #232529;
+$lighter-black: #2e2e3a;
+$black: #1c1e22;
+
+$white: #e2e8f0;
+$dark-white: #94a3b8;
+
+// Semantic Colors
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+
+// Fonts
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+$open-sauce: "Inter";
+
+// =============================================
+// THEME VARIABLES
+// =============================================
+
+// Default Theme (Light/Dark agnostic)
+:root {
+  // Colors
+  --primary-color: #6b46c1;
+  --secondary-color: #805ad5;
+  --background-start: #1a202c;
+  --background-end: #2d3748;
+  --text-color: #e2e8f0;
+
+  // Cards
+  --card-bg: rgba(45, 55, 72, 0.8);
+  --card-hover: rgba(74, 85, 104, 0.8);
+
+  // Progress
+  --progress-bg: #4a5568;
+  --progress-fill: #68d391;
+
+  // States
+  --locked-bg: rgba(45, 55, 72, 0.5);
+
+  // Effects
+  --holographic-effect: linear-gradient(
+    45deg,
+    rgba(107, 70, 193, 0.2) 0%,
+    rgba(159, 122, 234, 0.2) 50%,
+    rgba(107, 70, 193, 0.2) 100%
+  );
+}
+
+
