@@ -59,6 +59,14 @@
         {
             "folderPath": "frontend\\src\\assets\\images\\",
             "color": "foldercolorizer.color_ccff00"
+        },
+        {
+            "folderPath": "clove-frontend\\src\\features\\mydeck\\",
+            "color": "foldercolorizer.color_66cc00"
+        },
+        {
+            "folderPath": "clove-frontend\\src\\features\\progress\\",
+            "color": "foldercolorizer.color_6666ff"
         }
     ]
 }
