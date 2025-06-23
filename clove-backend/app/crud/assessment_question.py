@@ -7,6 +7,8 @@ from typing import List, Dict, Any
 from app.db.models.assessment_questions import AssessmentQuestion
 from app.db.models.subtopics import Subtopic
 from app.schemas.assessment_question import AssessmentQuestionCreate, AssessmentQuestionUpdate
+from app.crud.pre_assessment import list_for_user_topic as get_pre_assessment_for_user_topic
+from app.crud.post_assessment import list_for_user_topic as get_post_assessment_for_user_topic
 
 async def get_by_id(db: AsyncSession, question_id: int) -> AssessmentQuestion | None:
     result = await db.execute(select(AssessmentQuestion).where(AssessmentQuestion.id == question_id))
@@ -27,6 +29,7 @@ async def create(db: AsyncSession, ques_in: AssessmentQuestionCreate) -> Assessm
     db.add(new_q)
     await db.commit()
     await db.refresh(new_q)
+    
     return new_q
 
 async def update(db: AsyncSession, ques_db: AssessmentQuestion, ques_in: AssessmentQuestionUpdate) -> AssessmentQuestion:
@@ -40,6 +43,15 @@ async def update(db: AsyncSession, ques_db: AssessmentQuestion, ques_in: Assessm
 async def delete(db: AsyncSession, ques_db: AssessmentQuestion) -> None:
     await db.delete(ques_db)
     await db.commit()
+
+async def get_questions_by_ids(db: AsyncSession, question_ids: list[int]) -> List[AssessmentQuestion]:
+    """Get multiple assessment questions by their IDs, preserving order."""
+    if not question_ids:
+        return []
+    result = await db.execute(select(AssessmentQuestion).where(AssessmentQuestion.id.in_(question_ids)))
+    questions_map = {q.id: q for q in result.scalars().all()}
+    # Return questions in the same order as the provided list of IDs
+    return [questions_map[qid] for qid in question_ids if qid in questions_map]
 
 # New functions for randomized questions logic
 async def get_subtopics_for_topic(db: AsyncSession, topic_id: int) -> List[Subtopic]:
@@ -59,17 +71,46 @@ async def get_questions_for_subtopics(db: AsyncSession, subtopic_ids: List[int])
 async def get_randomized_questions_for_topic(
     db: AsyncSession, 
     topic_id: int, 
-    questions_per_difficulty: int = 5
+    user_id: int,
+    assessment_type: str,
+    questions_per_subtopic: int = 5
 ) -> List[AssessmentQuestion]:
     """
-    Get randomized assessment questions from a topic:
-    - 5 easy questions (or specified amount)
-    - 5 medium questions (or specified amount)  
-    - 5 hard questions (or specified amount)
-    - Distributed across all subtopics in the topic
-    
-    Returns questions in randomized order for one-by-one display
+    Get randomized assessment questions from a topic.
+    - For post-assessments, it reuses questions from a completed pre-assessment.
+    - For second attempts, questions from the first attempt are excluded.
     """
+    
+    # If this is for a post-assessment, check pre-assessment status first.
+    if assessment_type == 'post':
+        pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
+        if pre_assessments:
+            pre_assessment = pre_assessments[0]
+            # If pre-assessment was completed (15+ items), reuse the same questions.
+            if pre_assessment.total_items >= 15 and pre_assessment.questions_answers_iscorrect:
+                question_ids_to_reuse = [int(qid) for qid in pre_assessment.questions_answers_iscorrect.keys()]
+                reused_questions = await get_questions_by_ids(db, question_ids_to_reuse)
+                random.shuffle(reused_questions) # Shuffle to make the order different
+                return reused_questions
+
+    # Determine which questions to exclude from the random pool.
+    answered_question_ids = set()
+    
+    # For a post-assessment, exclude any questions from an incomplete pre-assessment.
+    if assessment_type == 'post':
+        pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
+        if pre_assessments and pre_assessments[0].questions_answers_iscorrect:
+            answered_question_ids.update(int(qid) for qid in pre_assessments[0].questions_answers_iscorrect.keys())
+
+    # Always exclude questions from previous attempts of the *same* assessment type.
+    current_assessment_list = []
+    if assessment_type == 'pre':
+        current_assessment_list = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
+    else: # 'post'
+        current_assessment_list = await get_post_assessment_for_user_topic(db, user_id, topic_id)
+
+    if current_assessment_list and current_assessment_list[0].questions_answers_iscorrect:
+        answered_question_ids.update(int(qid) for qid in current_assessment_list[0].questions_answers_iscorrect.keys())
     
     # First, get all subtopics for this topic
     subtopics = await get_subtopics_for_topic(db, topic_id)
@@ -81,35 +122,37 @@ async def get_randomized_questions_for_topic(
     
     # Get all questions for all subtopics in this topic
     all_questions = await get_questions_for_subtopics(db, subtopic_ids)
+
+    # Filter out questions that have already been answered
+    if answered_question_ids:
+        all_questions = [q for q in all_questions if q.id not in answered_question_ids]
     
     if not all_questions:
-        raise ValueError(f"No assessment questions found for topic_id {topic_id}")
+        raise ValueError(f"No new assessment questions found for topic_id {topic_id} for this attempt.")
     
-    # Group questions by difficulty
-    questions_by_difficulty = {
-        'easy': [],
-        'medium': [],
-        'hard': []
-    }
-    
+    # Group questions by subtopic
+    questions_by_subtopic = {}
     for question in all_questions:
-        questions_by_difficulty[question.difficulty].append(question)
+        subtopic_id = question.subtopic_id
+        if subtopic_id not in questions_by_subtopic:
+            questions_by_subtopic[subtopic_id] = []
+        questions_by_subtopic[subtopic_id].append(question)
     
-    # Select random questions per difficulty
+    # Select random questions per subtopic
     selected_questions = []
     
-    for difficulty in ['easy', 'medium', 'hard']:
-        available_questions = questions_by_difficulty[difficulty]
+    for subtopic_id in subtopic_ids:
+        available_questions = questions_by_subtopic.get(subtopic_id, [])
         
-        if len(available_questions) < questions_per_difficulty:
+        if len(available_questions) < questions_per_subtopic:
             raise ValueError(
-                f"Not enough {difficulty} questions available. "
-                f"Need {questions_per_difficulty}, but only {len(available_questions)} found for topic_id {topic_id}"
+                f"Not enough new questions available for subtopic {subtopic_id}. "
+                f"Need {questions_per_subtopic}, but only {len(available_questions)} found."
             )
         
-        # Randomly select questions for this difficulty
-        selected_for_difficulty = random.sample(available_questions, questions_per_difficulty)
-        selected_questions.extend(selected_for_difficulty)
+        # Randomly select questions for this subtopic
+        selected_for_subtopic = random.sample(available_questions, questions_per_subtopic)
+        selected_questions.extend(selected_for_subtopic)
     
     # Shuffle the final list to randomize the order
     random.shuffle(selected_questions)
@@ -119,21 +162,25 @@ async def get_randomized_questions_for_topic(
 async def get_randomized_questions_summary(
     db: AsyncSession, 
     topic_id: int, 
-    questions_per_difficulty: int = 5
+    user_id: int,
+    assessment_type: str,
+    questions_per_subtopic: int = 5
 ) -> Dict[str, Any]:
     """
     Get a summary of randomized questions for a topic.
     Returns question IDs and metadata for frontend to track progress.
     """
     
-    # Get the randomized questions
-    questions = await get_randomized_questions_for_topic(db, topic_id, questions_per_difficulty)
+    # Get the randomized questions, excluding any from previous attempts
+    questions = await get_randomized_questions_for_topic(
+        db, topic_id, user_id, assessment_type, questions_per_subtopic
+    )
     
     # Create summary with question IDs and metadata
     summary = {
         "topic_id": topic_id,
         "total_questions": len(questions),
-        "questions_per_difficulty": questions_per_difficulty,
+        "questions_per_subtopic": questions_per_subtopic,
         "questions": [
             {
                 "id": q.id,

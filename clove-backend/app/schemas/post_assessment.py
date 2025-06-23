@@ -10,6 +10,7 @@ class PostAssessmentBase(BaseModel):
     is_unlocked: bool = False
     subtopic_scores: Dict = {}
     questions_answers_iscorrect: Dict = {}
+    attempt_count: int = 0
 
 class PostAssessmentCreate(PostAssessmentBase):
     pass
@@ -20,6 +21,7 @@ class PostAssessmentUpdate(BaseModel):
     is_unlocked: bool | None = False
     subtopic_scores: Dict | None = {}
     questions_answers_iscorrect: Dict | None = {}
+    attempt_count: int | None = None
 
 class PostAssessmentRead(PostAssessmentBase):
     post_assessment_id: int

@@ -4,7 +4,9 @@ import os
 from pathlib import Path
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.models import Topic, Subtopic, Challenge, Lesson, AssessmentQuestion
+from app.db.models import Topic, Subtopic, Challenge, Lesson, AssessmentQuestion, User
+from app.utils.security import get_password_hash
+from app.crud.user import init_user_data
 import logging
 import asyncio
 from app.db.session import get_db
@@ -22,6 +24,7 @@ class DatabaseSeeder:
         self.challenges: List[Dict[str, Any]] = []
         self.lessons: List[Dict[str, Any]] = []
         self.assessment_questions: List[Dict[str, Any]] = []
+        self.users: List[Dict[str, Any]] = []
 
     async def load_json_data(self):
         """Load all JSON seed data files"""
@@ -64,11 +67,13 @@ class DatabaseSeeder:
         try:
             # Tables that were seeded with explicit IDs
             tables_to_fix = [
+                ('users', 'id'),
                 ('topics', 'topic_id'),
                 ('subtopics', 'subtopic_id'),
                 ('assessment_questions', 'id'),
                 ('challenges', 'id'),
-                ('lessons', 'id')
+                ('lessons', 'id'),
+                ('statistics', 'id')
             ]
             
             for table_name, column_name in tables_to_fix:
@@ -97,6 +102,7 @@ class DatabaseSeeder:
             await self.session.flush()
             await self._seed_lessons()
             await self._seed_challenges()
+            await self._seed_users()
             
             # Fix sequences after seeding is complete
             await self.fix_sequences()
@@ -107,6 +113,43 @@ class DatabaseSeeder:
             await self.session.rollback()
             logger.error(f"Error seeding database: {str(e)}")
             raise
+
+    async def _seed_users(self):
+        """Seed users table with predefined accounts."""
+        # Note: In a real production app, passwords should not be hardcoded.
+        # This is for development and testing purposes.
+        hashed_pw = get_password_hash("dangalngbayan")
+        
+        # 1. Create Superuser (commented out - use create_superuser.py instead)
+        # users_to_seed = [
+        #     User(id=1, username="superuser", email="superuser@clove.com", password_hash=hashed_pw, is_adaptive=True, is_superuser=True)
+        # ]
+        
+        users_to_seed = []
+        
+        # 2. Create Adaptive Users (23)
+        for i in range(1, 24): # 1 to 23
+            users_to_seed.append(
+                User(id=i, username=f"adaptive{i}", email=f"adaptive{i}@clove.com", password_hash=hashed_pw, is_adaptive=True)
+            )
+            
+        # 3. Create Non-Adaptive Users (22)
+        for i in range(1, 23): # 1 to 22
+            users_to_seed.append(
+                User(id=i+23, username=f"nonadaptive{i}", email=f"nonadaptive{i}@clove.com", password_hash=hashed_pw, is_adaptive=False)
+            )
+
+        for user in users_to_seed:
+            await self.session.merge(user)
+        
+        await self.session.flush()
+        logger.info(f"Seeded {len(users_to_seed)} users (inserted or updated)")
+        
+        # Initialize user data for all seeded users (since merge() doesn't trigger create_user())
+        for user in users_to_seed:
+            await init_user_data(self.session, user.id)
+        
+        logger.info("Initialized user data (UserTopics, UserSubtopics, Pre/PostAssessments, Statistics) for all users")
 
     async def _seed_topics(self):
         """Seed topics table"""
@@ -157,6 +200,7 @@ class DatabaseSeeder:
             return count == 0
         except Exception as e:
             logger.warning(f"Could not check seeding status: {str(e)}")
+            # If topics table doesn't exist yet (e.g., initial migration), it needs seeding.
             return True
 
 async def deploy():
@@ -175,6 +219,7 @@ async def deploy():
         async for session in get_db():
             if await DatabaseSeeder.needs_seeding(session):
                 logger.info("Starting database seeding...")
+                logger.warning("NOTE: Superuser should be created separately using 'scripts/create_superuser.py'")
                 seeder = DatabaseSeeder(session)
                 await seeder.seed_database()
                 logger.info("Seeding completed successfully")

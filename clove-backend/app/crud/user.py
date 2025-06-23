@@ -37,16 +37,22 @@ async def create_user(
     db: AsyncSession,
     username: str,
     email: str,
-    password_hash: str
+    password_hash: str,
+    is_superuser: bool = False
 ) -> User:
     user = User(
         username=username,
         email=email,
-        password_hash=password_hash
+        password_hash=password_hash,
+        is_superuser=is_superuser
     )
     db.add(user)
     await db.commit()
     await db.refresh(user)
+    
+    # Initialize all user data (UserTopics, UserSubtopics, Pre/PostAssessments, Statistics)
+    await init_user_data(db, user.id)
+    
     return user
 
 async def update_user(
@@ -111,7 +117,8 @@ async def init_user_data(db: AsyncSession, user_id: int):
             total_items=0,
             is_unlocked=False,
             subtopic_scores={},
-            questions_answers_iscorrect={}
+            questions_answers_iscorrect={},
+            attempt_count=0
         )
         db.add(pre_assessment)
 
@@ -121,7 +128,8 @@ async def init_user_data(db: AsyncSession, user_id: int):
             total_items=0,
             is_unlocked=False,
             subtopic_scores={},
-            questions_answers_iscorrect={}
+            questions_answers_iscorrect={},
+            attempt_count=0
         )
         db.add(post_assessment)
 

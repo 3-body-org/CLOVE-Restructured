@@ -10,6 +10,7 @@ class PreAssessmentBase(BaseModel):
     is_unlocked: bool = False
     subtopic_scores: Dict
     questions_answers_iscorrect: Dict
+    attempt_count: int = 0
 
 class PreAssessmentCreate(PreAssessmentBase):
     pass
@@ -20,6 +21,7 @@ class PreAssessmentUpdate(BaseModel):
     is_unlocked: bool | None = None
     subtopic_scores: Dict | None = None
     questions_answers_iscorrect: Dict | None = None
+    attempt_count: int | None = None
 
 class PreAssessmentRead(PreAssessmentBase):
     pre_assessment_id: int

@@ -13,6 +13,7 @@ class PostAssessment(Base):
     is_unlocked            = Column(Boolean, default=False)
     subtopic_scores        = Column(JSON, nullable=False, default=dict)
     questions_answers_iscorrect = Column(JSON, nullable=False, default=dict)
+    attempt_count          = Column(Integer, default=0)
     taken_at               = Column(TIMESTAMP, server_default=func.now())
 
     # Relationships

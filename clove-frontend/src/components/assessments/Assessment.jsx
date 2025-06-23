@@ -2,11 +2,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AssessmentData } from "./AssessmentData";
+import styles from "../../scss modules/components/assessments/Assessment.module.scss";
 
-import styles from "components/assessments/styles/Assessment.module.scss";
-
-import { MyDeckContext } from "contexts/MyDeckContext";
-// import Assessment from "./Assessment";
+import { MyDeckContext } from "../../context/ContextPage";
 
 const getRandomQuestions = () => {
   const selectedQuestions = [];
@@ -110,10 +108,7 @@ const Assessment = () => {
     <div className={styles.pageContainer}>
       <div className={styles.testContainer}>
         <div className={styles.progressBar}>
-          <div
-            className={styles.progressFill}
-            style={{ width: `${progress}%` }}
-          ></div>
+          <div className={styles.progressFill} style={{ width: `${progress}%` }}></div>
         </div>
 
         <div className={styles.questionCount}>
@@ -134,18 +129,14 @@ const Assessment = () => {
               <div
                 key={index}
                 className={`${styles.option} 
-                  ${isSelected && !isCorrect ? styles.incorrect : ""}
-                  ${isAnswered && isCorrect ? styles.correct : ""}
-                  ${isAnswered ? styles.disabled : ""}`}
+                  ${isSelected && !isCorrect ? styles.incorrect : ''}
+                  ${isAnswered && isCorrect ? styles.correct : ''}
+                  ${isAnswered ? styles.disabled : ''}`}
                 onClick={() => handleOptionClick(option)}
               >
                 {option}
-                {isAnswered && isCorrect && (
-                  <div className={styles.checkmark}></div>
-                )}
-                {isSelected && !isCorrect && (
-                  <div className={styles.crossmark}></div>
-                )}
+                {isAnswered && isCorrect && <div className={styles.checkmark}></div>}
+                {isSelected && !isCorrect && <div className={styles.crossmark}></div>}
               </div>
             );
           })}
@@ -158,9 +149,7 @@ const Assessment = () => {
         )}
 
         <button className={styles.nextBtn} onClick={handleNextQuestion}>
-          {questionIndex < questionsToAsk.length - 1
-            ? "Next Question"
-            : "Finish"}
+          {questionIndex < questionsToAsk.length - 1 ? "Next Question" : "Finish"}
         </button>
       </div>
     </div>

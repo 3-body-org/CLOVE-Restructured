@@ -10,9 +10,10 @@ from app.db.models.challenges import Challenge
 from app.schemas.challenge_attempt import ChallengeAttemptCreate
 
 # Keep the import of run_adaptive_updates here:
-from app.services.adaptive_engine import run_adaptive_updates
+from app.services.engine import run_updates
 from app.crud.user_subtopic import get_by_user_and_subtopic
 from app.crud.challenge import get_by_id as get_challenge_by_id
+from app.crud.user import get_by_id as get_user_by_id
 
 async def get_by_id(
     db: AsyncSession,
@@ -22,6 +23,24 @@ async def get_by_id(
         select(ChallengeAttempt).where(ChallengeAttempt.id == attempt_id)
     )
     return result.scalar_one_or_none()
+
+async def get_by_user_id(
+    db: AsyncSession,
+    user_id: int,
+    skip: int = 0,
+    limit: int = 100
+) -> List[ChallengeAttempt]:
+    """Get all challenge attempts for a specific user"""
+    stmt = (
+        select(ChallengeAttempt)
+        .join(UserChallenge, ChallengeAttempt.user_challenge_id == UserChallenge.id)
+        .where(UserChallenge.user_id == user_id)
+        .order_by(desc(ChallengeAttempt.attempted_at))
+        .offset(skip)
+        .limit(limit)
+    )
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 async def get_by_user_challenge(
     db: AsyncSession,
@@ -58,6 +77,11 @@ async def create(
     # Get user_challenge and challenge to access subtopic_id
     user_challenge = attempt.user_challenge
     challenge = await get_challenge_by_id(db, user_challenge.challenge_id)
+    user = await get_user_by_id(db, user_challenge.user_id)
+    
+    if not user:
+        # This case should ideally not be reached if FK constraints are solid
+        raise ValueError(f"User with ID {user_challenge.user_id} not found.")
 
     # Get the correct user_subtopic using user_id and subtopic_id
     user_subtopic = await get_by_user_and_subtopic(
@@ -69,13 +93,14 @@ async def create(
         raise ValueError(f"No user_subtopic found for user {user_challenge.user_id} and subtopic {challenge.subtopic_id}")
 
     # Run BKT-RL adaptiveness
-    await run_adaptive_updates(
+    await run_updates(
         db=db,
         user_subtopic_id=user_subtopic.id,
         challenge_id=challenge.id,
         is_correct=attempt.is_successful,
         hints_used=attempt.hints_used,
-        time_spent=attempt.time_spent
+        time_spent=attempt.time_spent,
+        is_adaptive=user.is_adaptive
     )
 
     return attempt
