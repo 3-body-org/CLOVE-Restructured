@@ -16,6 +16,7 @@ class StatisticBase(BaseModel):
 
     last_login_date: date | None = None
     current_streak: int = 0
+    login_days_this_week: list[int] = Field(default_factory=list)
 
     total_challenges_solved: int = 0
 
@@ -48,6 +49,7 @@ class StatisticCreate(BaseModel):
     last_login_date: date | None = None
     current_streak: int = 0
     total_challenges_solved: int = 0
+    login_days_this_week: list[int] = Field(default_factory=list)
 
 class StatisticRead(StatisticBase):
     id: int

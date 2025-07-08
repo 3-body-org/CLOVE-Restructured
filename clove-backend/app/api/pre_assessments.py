@@ -2,7 +2,7 @@
 from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession 
-from app.schemas.pre_assessment import PreAssessmentRead, PreAssessmentCreate, PreAssessmentUpdate
+from app.schemas.pre_assessment import PreAssessmentRead, PreAssessmentCreate, PreAssessmentUpdate, SingleAnswerSubmission
 from app.crud.pre_assessment import (
     get_by_id,
     create,
@@ -69,20 +69,23 @@ async def list_pres(
 
 @router.post("/submit-single-answer")
 async def submit_single_answer_endpoint(
-    user_id: int,
-    topic_id: int,
-    question_id: int,
-    user_answer: Any,
+    submission: SingleAnswerSubmission,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Submit a single answer and update assessment progress"""
     # Users can only submit answers for themselves, superusers can submit for any user
-    if not current_user.is_superuser and user_id != current_user.id:
+    if not current_user.is_superuser and submission.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to submit answers for this user")
     
     try:
-        result = await submit_single_answer(db, user_id, topic_id, question_id, user_answer)
+        result = await submit_single_answer(
+            db,
+            submission.user_id,
+            submission.topic_id,
+            submission.question_id,
+            submission.user_answer
+        )
         return result
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

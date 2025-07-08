@@ -13,6 +13,7 @@ class UserTopic(Base):
     post_assessment_completed   = Column(Boolean, default=False)
     is_unlocked                 = Column(Boolean, default=False)
     is_completed                = Column(Boolean, default=False)
+    introduction_seen           = Column(Boolean, default=False)
     completed_subtopics_count   = Column(Integer, default=0)
     progress_percent            = Column(Float, default=0.0)
     unlocked_at                 = Column(TIMESTAMP, default=None)

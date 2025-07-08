@@ -25,6 +25,7 @@ def upgrade() -> None:
     sa.Column('topic_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('theme', sa.String(length=50), nullable=True, server_default='space'),
     sa.PrimaryKeyConstraint('topic_id')
     )
     op.create_index(op.f('ix_topics_topic_id'), 'topics', ['topic_id'], unique=False)
@@ -32,6 +33,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=50), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
+    sa.Column('first_name', sa.String(length=100), nullable=True),
+    sa.Column('last_name', sa.String(length=100), nullable=True),
+    sa.Column('birthday', sa.Date(), nullable=True),
     sa.Column('is_adaptive', sa.Boolean(), nullable=False),
     sa.Column('password_hash', sa.String(length=255), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
@@ -42,6 +46,8 @@ def upgrade() -> None:
     sa.Column('login_attempts', sa.Integer(), nullable=False),
     sa.Column('last_failed_login', sa.DateTime(timezone=True), nullable=True),
     sa.Column('login_cooldown_until', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('bio', sa.String(), nullable=True),
+    sa.Column('profile_photo_url', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
@@ -53,6 +59,7 @@ def upgrade() -> None:
     sa.Column('recent_topic_id', sa.Integer(), nullable=True),
     sa.Column('last_login_date', sa.Date(), nullable=True),
     sa.Column('current_streak', sa.Integer(), nullable=False),
+    sa.Column('login_days_this_week', sa.JSON(), nullable=False, server_default=sa.text("'[]'")),
     sa.Column('total_challenges_solved', sa.Integer(), nullable=False),
     sa.Column('mode_stats', sa.JSON(), nullable=False),
     sa.Column('accuracy', sa.JSON(), nullable=False),
@@ -81,6 +88,7 @@ def upgrade() -> None:
     sa.Column('post_assessment_completed', sa.Boolean(), nullable=True),
     sa.Column('is_unlocked', sa.Boolean(), nullable=True),
     sa.Column('is_completed', sa.Boolean(), nullable=True),
+    sa.Column('introduction_seen', sa.Boolean(), nullable=True, server_default='false'),
     sa.Column('completed_subtopics_count', sa.Integer(), nullable=True),
     sa.Column('progress_percent', sa.Float(), nullable=True),
     sa.Column('unlocked_at', sa.TIMESTAMP(), nullable=True),
@@ -118,7 +126,7 @@ def upgrade() -> None:
     sa.Column('user_topic_id', sa.Integer(), nullable=False),
     sa.Column('total_score', sa.Float(), nullable=False),
     sa.Column('total_items', sa.Integer(), nullable=True),
-    sa.Column('is_unlocked', sa.Boolean(), nullable=True),
+    sa.Column('is_unlocked', sa.Boolean(), nullable=True, server_default='false'),
     sa.Column('subtopic_scores', sa.JSON(), nullable=False),
     sa.Column('questions_answers_iscorrect', sa.JSON(), nullable=False),
     sa.Column('attempt_count', sa.Integer(), nullable=False, default=0),
@@ -132,7 +140,7 @@ def upgrade() -> None:
     sa.Column('user_topic_id', sa.Integer(), nullable=False),
     sa.Column('total_score', sa.Float(), nullable=False),
     sa.Column('total_items', sa.Integer(), nullable=True),
-    sa.Column('is_unlocked', sa.Boolean(), nullable=True),
+    sa.Column('is_unlocked', sa.Boolean(), nullable=True, server_default='false'),
     sa.Column('subtopic_scores', sa.JSON(), nullable=False),
     sa.Column('questions_answers_iscorrect', sa.JSON(), nullable=False),
     sa.Column('attempt_count', sa.Integer(), nullable=False, default=0),
@@ -148,7 +156,7 @@ def upgrade() -> None:
     sa.Column('lessons_completed', sa.Boolean(), nullable=True),
     sa.Column('practice_completed', sa.Boolean(), nullable=True),
     sa.Column('challenges_completed', sa.Boolean(), nullable=True),
-    sa.Column('is_unlocked', sa.Boolean(), nullable=True),
+    sa.Column('is_unlocked', sa.Boolean(), nullable=True, server_default='false'),
     sa.Column('is_completed', sa.Boolean(), nullable=True),
     sa.Column('progress_percent', sa.Float(), nullable=True),
     sa.Column('knowledge_level', sa.Float(), nullable=True),

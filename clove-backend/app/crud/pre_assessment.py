@@ -8,7 +8,7 @@ from app.db.models.assessment_questions import AssessmentQuestion
 from app.db.models.user_topics import UserTopic
 from app.schemas.pre_assessment import PreAssessmentCreate, PreAssessmentUpdate
 from app.crud.user_subtopic import update_knowledge_levels_from_assessment
-from app.crud.assessment_question import get_questions_by_ids
+from app.crud.user_subtopic import unlock_first_subtopic_for_user
 
 async def get_by_id(db: AsyncSession, pre_id: int) -> PreAssessment | None:
     result = await db.execute(select(PreAssessment).where(PreAssessment.pre_assessment_id == pre_id))
@@ -178,66 +178,78 @@ async def _update_existing_assessment(
     is_correct: bool,
     user_topic: UserTopic
 ) -> Dict[str, Any]:
-    """Update existing assessment with new answer"""
-    questions_answers = existing.questions_answers_iscorrect or {}
-    subtopic_scores = existing.subtopic_scores or {}
+    """Update existing assessment with new answer. Recalculates all scores on each submission for consistency."""
+    questions_answers = (existing.questions_answers_iscorrect or {}).copy()
     
-    # Update the specific answer
-    questions_answers[question_id] = {
+    s_question_id = str(question_id)
+
+    # If this is the start of a second attempt, reset previous answers
+    if existing.attempt_count == 1 and existing.total_items < 15 and s_question_id not in questions_answers:
+        questions_answers = {}
+    
+    # Update the specific answer, now including the correct_answer
+    questions_answers[s_question_id] = {
         'user_answer': user_answer,
         'correct_answer': correct_answer,
         'is_correct': is_correct
     }
     
-    # Get question for subtopic_id
-    question = await get_question(db, question_id)
-    subtopic_id = question.subtopic_id
+    # Recalculate subtopic_scores from scratch for consistency
+    subtopic_scores_counts = {}
+    all_answered_qids = [int(qid_str) for qid_str in questions_answers.keys()]
     
-    # Update subtopic scores
-    if subtopic_id not in subtopic_scores:
-        subtopic_scores[subtopic_id] = {'correct': 0, 'total': 0}
+    if all_answered_qids:
+        all_questions = await get_questions_by_ids(db, all_answered_qids)
+        for q_id_str, answer_data in questions_answers.items():
+            q_id_int = int(q_id_str)
+            if q_id_int in all_questions:
+                q_subtopic_id_str = str(all_questions[q_id_int].subtopic_id)
+                
+                if q_subtopic_id_str not in subtopic_scores_counts:
+                    subtopic_scores_counts[q_subtopic_id_str] = {'correct': 0, 'total': 0}
+                
+                subtopic_scores_counts[q_subtopic_id_str]['total'] += 1
+                if answer_data.get('is_correct'):
+                    subtopic_scores_counts[q_subtopic_id_str]['correct'] += 1
+
+    # Convert counts to percentage scores for storage
+    subtopic_scores = {
+        sid: round(scores['correct'] / scores['total'], 2) if scores['total'] > 0 else 0.0
+        for sid, scores in subtopic_scores_counts.items()
+    }
+
+    # Recalculate total score and items from the counts
+    total_correct = sum(score.get('correct', 0) for score in subtopic_scores_counts.values())
+    total_items = sum(score.get('total', 0) for score in subtopic_scores_counts.values())
     
-    # Remove previous answer for this question if it exists
-    if question_id in questions_answers:
-        prev_answer = questions_answers[question_id]
-        if prev_answer.get('is_correct'):
-            subtopic_scores[subtopic_id]['correct'] -= 1
-        subtopic_scores[subtopic_id]['total'] -= 1
-    
-    # Add new answer
-    if is_correct:
-        subtopic_scores[subtopic_id]['correct'] += 1
-    subtopic_scores[subtopic_id]['total'] += 1
-    
-    # Calculate total score
-    total_correct = sum(1 for ans in questions_answers.values() if ans.get('is_correct'))
-    total_items = len(questions_answers)
-    final_score = (total_correct / total_items) * 100 if total_items > 0 else 0
-    
-    # Check if this is a new attempt (first submission or starting 2nd attempt)
-    is_new_attempt = (
-        # First time ever answering (1st attempt)
-        (existing.total_items == 0 and total_items > 0) 
-        or 
-        # Starting 2nd attempt (after incomplete 1st)
-        (existing.attempt_count == 1 and existing.total_items < 15 and total_items > 0)
-    )
-    
-    # Increment attempt count if this is a new attempt
-    if is_new_attempt and existing.attempt_count < 2:
-        existing.attempt_count += 1
+    # When an attempt is completed, decide the denominator for scoring
+    is_attempt_completed = total_items >= 15 and existing.total_items < 15
+
+    if is_attempt_completed:
+        # The attempt is now finished, use 15 as the denominator
+        denominator = 15
+        final_score = (total_correct / denominator) * 100
+        if existing.attempt_count < 2:
+            existing.attempt_count += 1
+        # Lock the pre-assessment
+        existing.is_unlocked = False
+        # Unlock the first subtopic for this user/topic
+        await unlock_first_subtopic_for_user(db, user_topic.user_id, user_topic.topic_id)
+    else:
+        # The attempt is still in progress, score based on answered questions
+        final_score = (total_correct / total_items) * 100 if total_items > 0 else 0
     
     # Update the record
     existing.questions_answers_iscorrect = questions_answers
     existing.subtopic_scores = subtopic_scores
-    existing.total_score = final_score
+    existing.total_score = round(final_score, 2)
     existing.total_items = total_items
     
     await db.commit()
     await db.refresh(existing)
     
-    # Always update knowledge levels (even incomplete attempts)
-    await update_knowledge_levels_from_assessment(db, user_topic.user_id, subtopic_scores)
+    # Always update knowledge levels (even incomplete attempts), passing the detailed counts
+    await update_knowledge_levels_from_assessment(db, user_topic.user_id, subtopic_scores_counts)
     
     return {
         "message": "Answer submitted successfully",
@@ -258,7 +270,7 @@ async def submit_multiple_answers(
     topic_id: int,
     answers: Dict[int, Any]
 ) -> PreAssessment:
-    """Submit all assessment answers at once and calculate scores"""
+    """Submit all assessment answers at once and calculate scores, applying penalty for incomplete tests."""
     
     # Get or create user_topic relationship
     user_topic = await get_or_create_user_topic(db, user_id, topic_id)
@@ -286,56 +298,56 @@ async def submit_multiple_answers(
     
     # Calculate scores
     questions_answers = {}
-    subtopic_scores = {}
+    subtopic_scores_counts = {}
     
     for question_id, user_answer in answers.items():
         question = questions[question_id]
         correct_answer = question.question_choices_correctanswer.get('correct_answer')
         is_correct = user_answer == correct_answer
         
-        questions_answers[question_id] = {
+        questions_answers[str(question_id)] = {
             'user_answer': user_answer,
             'correct_answer': correct_answer,
             'is_correct': is_correct
         }
         
         # Update subtopic scores
-        subtopic_id = question.subtopic_id
-        if subtopic_id not in subtopic_scores:
-            subtopic_scores[subtopic_id] = {'correct': 0, 'total': 0}
+        subtopic_id = str(question.subtopic_id)
+        if subtopic_id not in subtopic_scores_counts:
+            subtopic_scores_counts[subtopic_id] = {'correct': 0, 'total': 0}
         
+        subtopic_scores_counts[subtopic_id]['total'] += 1
         if is_correct:
-            subtopic_scores[subtopic_id]['correct'] += 1
-        subtopic_scores[subtopic_id]['total'] += 1
+            subtopic_scores_counts[subtopic_id]['correct'] += 1
     
-    # Calculate total score
-    total_correct = sum(1 for ans in questions_answers.values() if ans.get('is_correct'))
-    total_items = len(questions_answers)
-    final_score = (total_correct / total_items) * 100 if total_items > 0 else 0
+    # Convert counts to percentage scores for storage
+    subtopic_scores = {
+        sid: round(scores['correct'] / scores['total'], 2) if scores['total'] > 0 else 0.0
+        for sid, scores in subtopic_scores_counts.items()
+    }
     
-    # Check if this is a new attempt (first submission or starting 2nd attempt)
-    is_new_attempt = (
-        # First time ever answering (1st attempt)
-        (existing.total_items == 0 and total_items > 0) 
-        or 
-        # Starting 2nd attempt (after incomplete 1st)
-        (existing.attempt_count == 1 and existing.total_items < 15 and total_items > 0)
-    )
+    # Calculate total score, applying penalty for incomplete submissions
+    total_correct = sum(score.get('correct', 0) for score in subtopic_scores_counts.values())
+    total_items = len(answers)
     
-    # Increment attempt count if this is a new attempt
-    if is_new_attempt and existing.attempt_count < 2:
+    # Use 15 as the denominator if the user submits fewer than 15 answers
+    denominator = 15 if total_items < 15 else total_items
+    final_score = (total_correct / denominator) * 100 if denominator > 0 else 0
+    
+    # Since this is a submission, the attempt is considered completed.
+    if existing.attempt_count < 2:
         existing.attempt_count += 1
     
     # Update the record
     existing.questions_answers_iscorrect = questions_answers
     existing.subtopic_scores = subtopic_scores
-    existing.total_score = final_score
+    existing.total_score = round(final_score, 2)
     existing.total_items = total_items
     
     await db.commit()
     await db.refresh(existing)
     
-    # Always update knowledge levels (even incomplete attempts)
-    await update_knowledge_levels_from_assessment(db, user_topic.user_id, subtopic_scores)
+    # Always update knowledge levels
+    await update_knowledge_levels_from_assessment(db, user_topic.user_id, subtopic_scores_counts)
     
     return existing

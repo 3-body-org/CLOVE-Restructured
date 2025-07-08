@@ -9,10 +9,11 @@ from app.crud.user import (
     get_by_id,
     update_user,
     delete_user,
-    get_all_users
+    get_all_users,
+    get_by_username
 )
 from app.db.session import get_db
-from app.utils.security import get_password_hash  
+from app.utils.security import get_password_hash, verify_password  
 from app.api.auth import get_current_user, get_current_superuser
 from app.db.models.users import User
 
@@ -76,8 +77,39 @@ async def update_user_endpoint(
             detail="User not found"
         )
 
-    # Hash password if provided
     update_data = user_in.model_dump(exclude_unset=True)
+    
+    # Check for sensitive changes that require password verification
+    sensitive_fields = ["email", "password"]
+    has_sensitive_changes = any(field in update_data for field in sensitive_fields)
+    
+    if has_sensitive_changes:
+        if not update_data.get("current_password"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Current password is required for email or password changes"
+            )
+        
+        # Verify current password
+        if not verify_password(update_data["current_password"], user.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Current password is incorrect"
+            )
+        
+        # Remove current_password from update data
+        update_data.pop("current_password")
+
+    # Check for username conflicts if username is being updated
+    if "username" in update_data:
+        existing_user = await get_by_username(db, update_data["username"])
+        if existing_user and existing_user.id != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Username already taken"
+            )
+
+    # Hash password if provided
     if "password" in update_data:
         update_data["password_hash"] = get_password_hash(update_data.pop("password"))
 

@@ -1,148 +1,188 @@
-2025-06-21 12:13:16,307 - alembic - INFO - Running online migrations
-2025-06-21 12:13:16,307 - alembic - INFO - Running online migrations
-2025-06-21 12:13:16,741 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:13:16,741 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:13:16,742 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 12:13:16,742 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 12:13:16,787 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 12:13:16,787 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 12:13:40,695 - alembic - INFO - Running online migrations
-2025-06-21 12:13:40,695 - alembic - INFO - Running online migrations
-2025-06-21 12:13:40,790 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:13:40,790 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:13:40,791 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 12:13:40,791 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 12:28:13,822 - alembic - INFO - Running online migrations
-2025-06-21 12:28:13,822 - alembic - INFO - Running online migrations
-2025-06-21 12:28:13,928 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:28:13,928 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:28:13,929 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 12:28:13,929 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 12:28:13,953 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 12:28:13,953 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 12:28:20,086 - alembic - INFO - Running online migrations
-2025-06-21 12:28:20,086 - alembic - INFO - Running online migrations
-2025-06-21 12:28:20,309 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:28:20,309 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 12:28:20,309 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 12:28:20,309 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:02:07,684 - alembic - INFO - Running online migrations
-2025-06-21 13:02:07,684 - alembic - INFO - Running online migrations
-2025-06-21 13:02:07,930 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:02:07,930 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:02:07,931 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:02:07,931 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:02:07,955 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 13:02:07,955 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 13:02:19,018 - alembic - INFO - Running online migrations
-2025-06-21 13:02:19,018 - alembic - INFO - Running online migrations
-2025-06-21 13:02:19,121 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:02:19,121 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:02:19,121 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:02:19,121 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:49:27,116 - alembic - INFO - Running online migrations
-2025-06-21 13:49:27,116 - alembic - INFO - Running online migrations
-2025-06-21 13:49:27,220 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:49:27,220 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:49:27,221 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:49:27,221 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:49:27,241 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 13:49:27,241 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 13:49:41,996 - alembic - INFO - Running online migrations
-2025-06-21 13:49:41,996 - alembic - INFO - Running online migrations
-2025-06-21 13:49:42,224 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:49:42,224 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 13:49:42,224 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 13:49:42,224 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 14:58:20,564 - alembic - INFO - Running online migrations
-2025-06-21 14:58:20,564 - alembic - INFO - Running online migrations
-2025-06-21 14:58:20,668 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 14:58:20,668 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 14:58:20,668 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 14:58:20,668 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 14:58:20,692 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 14:58:20,692 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 14:58:26,946 - alembic - INFO - Running online migrations
-2025-06-21 14:58:26,946 - alembic - INFO - Running online migrations
-2025-06-21 14:58:27,036 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 14:58:27,036 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 14:58:27,036 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 14:58:27,036 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:33:26,027 - alembic - INFO - Running online migrations
-2025-06-21 20:33:26,027 - alembic - INFO - Running online migrations
-2025-06-21 20:33:26,474 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:33:26,474 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:33:26,475 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:33:26,475 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:33:26,508 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 20:33:26,508 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 20:33:40,000 - alembic - INFO - Running online migrations
-2025-06-21 20:33:40,000 - alembic - INFO - Running online migrations
-2025-06-21 20:33:40,126 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:33:40,126 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:33:40,126 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:33:40,126 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:40:03,883 - alembic - INFO - Running online migrations
-2025-06-21 20:40:03,883 - alembic - INFO - Running online migrations
-2025-06-21 20:40:03,998 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:40:03,998 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:40:03,999 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:40:03,999 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:40:04,034 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 20:40:04,034 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-21 20:40:15,382 - alembic - INFO - Running online migrations
-2025-06-21 20:40:15,382 - alembic - INFO - Running online migrations
-2025-06-21 20:40:15,483 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:40:15,483 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-21 20:40:15,483 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-21 20:40:15,483 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 11:30:20,103 - alembic - INFO - Running online migrations
-2025-06-22 11:30:20,103 - alembic - INFO - Running online migrations
-2025-06-22 11:30:20,564 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 11:30:20,564 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 11:30:20,565 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 11:30:20,565 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 11:31:29,041 - alembic - INFO - Running online migrations
-2025-06-22 11:31:29,041 - alembic - INFO - Running online migrations
-2025-06-22 11:31:29,227 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 11:31:29,227 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 11:31:29,227 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 11:31:29,227 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:13:51,523 - alembic - INFO - Running online migrations
-2025-06-22 12:13:51,523 - alembic - INFO - Running online migrations
-2025-06-22 12:13:51,627 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:13:51,627 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:13:51,628 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:13:51,628 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:13:51,665 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-22 12:13:51,665 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-22 12:14:08,280 - alembic - INFO - Running online migrations
-2025-06-22 12:14:08,280 - alembic - INFO - Running online migrations
-2025-06-22 12:14:08,494 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:14:08,494 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:14:08,494 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:14:08,494 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:29:01,924 - alembic - INFO - Running online migrations
-2025-06-22 12:29:01,924 - alembic - INFO - Running online migrations
-2025-06-22 12:29:02,042 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:29:02,042 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:29:02,042 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:29:02,042 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:29:02,068 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-22 12:29:02,068 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-22 12:36:06,567 - alembic - INFO - Running online migrations
-2025-06-22 12:36:06,567 - alembic - INFO - Running online migrations
-2025-06-22 12:36:06,652 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:36:06,652 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:36:06,652 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:36:06,652 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:36:06,672 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-22 12:36:06,672 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-22 12:48:20,445 - alembic - INFO - Running online migrations
-2025-06-22 12:48:20,445 - alembic - INFO - Running online migrations
-2025-06-22 12:48:20,531 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:48:20,531 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
-2025-06-22 12:48:20,532 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:48:20,532 - alembic.runtime.migration - INFO - Will assume transactional DDL.
-2025-06-22 12:48:20,551 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
-2025-06-22 12:48:20,551 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-06-30 12:49:54,439 - alembic - INFO - Running online migrations
+2025-06-30 12:49:54,439 - alembic - INFO - Running online migrations
+2025-06-30 12:49:54,772 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-06-30 12:49:54,772 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-06-30 12:49:54,772 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-06-30 12:49:54,772 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-06-30 12:49:54,799 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-06-30 12:49:54,799 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-06-30 20:43:14,887 - alembic - INFO - Running online migrations
+2025-06-30 20:43:14,887 - alembic - INFO - Running online migrations
+2025-06-30 20:43:15,361 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-06-30 20:43:15,361 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-06-30 20:43:15,362 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-06-30 20:43:15,362 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-06-30 20:43:15,415 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-06-30 20:43:15,415 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-01 16:08:57,098 - alembic - INFO - Running online migrations
+2025-07-01 16:08:57,098 - alembic - INFO - Running online migrations
+2025-07-01 16:08:57,382 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-01 16:08:57,382 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-01 16:08:57,382 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-01 16:08:57,382 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-01 16:08:57,416 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-01 16:08:57,416 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-01 17:39:47,618 - alembic - INFO - Running online migrations
+2025-07-01 17:39:47,618 - alembic - INFO - Running online migrations
+2025-07-01 17:39:47,838 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-01 17:39:47,838 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-01 17:39:47,838 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-01 17:39:47,838 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-01 17:39:47,869 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-01 17:39:47,869 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-01 17:47:39,447 - alembic - INFO - Running online migrations
+2025-07-01 17:47:39,447 - alembic - INFO - Running online migrations
+2025-07-01 17:47:39,661 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-01 17:47:39,661 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-01 17:47:39,661 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-01 17:47:39,661 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-01 17:47:39,684 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-01 17:47:39,684 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-02 11:10:20,500 - alembic - INFO - Running online migrations
+2025-07-02 11:10:20,500 - alembic - INFO - Running online migrations
+2025-07-02 11:10:20,784 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-02 11:10:20,784 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-02 11:10:20,784 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-02 11:10:20,784 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-02 11:10:20,818 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-02 11:10:20,818 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 13:10:21,818 - alembic - INFO - Running online migrations
+2025-07-06 13:10:21,818 - alembic - INFO - Running online migrations
+2025-07-06 13:10:22,095 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 13:10:22,095 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 13:10:22,096 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 13:10:22,096 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 13:10:22,126 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 13:10:22,126 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 14:12:31,087 - alembic - INFO - Running online migrations
+2025-07-06 14:12:31,087 - alembic - INFO - Running online migrations
+2025-07-06 14:12:31,190 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 14:12:31,190 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 14:12:31,190 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 14:12:31,190 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 14:12:31,236 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 14:12:31,236 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 14:57:32,947 - alembic - INFO - Running online migrations
+2025-07-06 14:57:32,947 - alembic - INFO - Running online migrations
+2025-07-06 14:58:41,015 - alembic - INFO - Running online migrations
+2025-07-06 14:58:41,015 - alembic - INFO - Running online migrations
+2025-07-06 14:58:41,108 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 14:58:41,108 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 14:58:41,108 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 14:58:41,108 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 14:58:41,129 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 14:58:41,129 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 16:25:02,190 - alembic - INFO - Running online migrations
+2025-07-06 16:25:02,190 - alembic - INFO - Running online migrations
+2025-07-06 16:25:02,288 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 16:25:02,288 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 16:25:02,288 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 16:25:02,288 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 16:25:02,310 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 16:25:02,310 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 18:49:09,918 - alembic - INFO - Running online migrations
+2025-07-06 18:49:09,918 - alembic - INFO - Running online migrations
+2025-07-06 18:49:10,120 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 18:49:10,120 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 18:49:10,120 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 18:49:10,120 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 18:49:10,146 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 18:49:10,146 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 18:53:27,631 - alembic - INFO - Running online migrations
+2025-07-06 18:53:27,631 - alembic - INFO - Running online migrations
+2025-07-06 18:53:27,720 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 18:53:27,720 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 18:53:27,721 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 18:53:27,721 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 18:53:27,748 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 18:53:27,748 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:09:54,905 - alembic - INFO - Running online migrations
+2025-07-06 19:09:54,905 - alembic - INFO - Running online migrations
+2025-07-06 19:09:55,011 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:09:55,011 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:09:55,011 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:09:55,011 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:09:55,039 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:09:55,039 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:34:45,907 - alembic - INFO - Running online migrations
+2025-07-06 19:34:45,907 - alembic - INFO - Running online migrations
+2025-07-06 19:34:46,036 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:34:46,036 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:34:46,037 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:34:46,037 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:34:46,070 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:34:46,070 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:37:44,253 - alembic - INFO - Running online migrations
+2025-07-06 19:37:44,253 - alembic - INFO - Running online migrations
+2025-07-06 19:37:44,348 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:37:44,348 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:37:44,348 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:37:44,348 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:37:44,368 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:37:44,368 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:42:31,869 - alembic - INFO - Running online migrations
+2025-07-06 19:42:31,869 - alembic - INFO - Running online migrations
+2025-07-06 19:42:31,975 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:42:31,975 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:42:31,975 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:42:31,975 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:42:32,007 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:42:32,007 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:51:55,806 - alembic - INFO - Running online migrations
+2025-07-06 19:51:55,806 - alembic - INFO - Running online migrations
+2025-07-06 19:51:55,911 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:51:55,911 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 19:51:55,912 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:51:55,912 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 19:51:55,941 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 19:51:55,941 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 20:30:32,784 - alembic - INFO - Running online migrations
+2025-07-06 20:30:32,784 - alembic - INFO - Running online migrations
+2025-07-06 20:31:06,195 - alembic - INFO - Running online migrations
+2025-07-06 20:31:06,195 - alembic - INFO - Running online migrations
+2025-07-06 20:31:06,295 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 20:31:06,295 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 20:31:06,295 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 20:31:06,295 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 20:31:06,325 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 20:31:06,325 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 20:33:42,363 - alembic - INFO - Running online migrations
+2025-07-06 20:33:42,363 - alembic - INFO - Running online migrations
+2025-07-06 20:33:42,562 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 20:33:42,562 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 20:33:42,563 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 20:33:42,563 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 20:33:42,588 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 20:33:42,588 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 21:01:05,755 - alembic - INFO - Running online migrations
+2025-07-06 21:01:05,755 - alembic - INFO - Running online migrations
+2025-07-06 21:01:05,979 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 21:01:05,979 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 21:01:05,979 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 21:01:05,979 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 21:01:06,011 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 21:01:06,011 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 21:57:08,841 - alembic - INFO - Running online migrations
+2025-07-06 21:57:08,841 - alembic - INFO - Running online migrations
+2025-07-06 21:57:08,936 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 21:57:08,936 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 21:57:08,936 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 21:57:08,936 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 21:57:08,966 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 21:57:08,966 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 22:42:36,332 - alembic - INFO - Running online migrations
+2025-07-06 22:42:36,332 - alembic - INFO - Running online migrations
+2025-07-06 22:42:36,425 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 22:42:36,425 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-06 22:42:36,425 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 22:42:36,425 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-06 22:42:36,455 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-06 22:42:36,455 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-07 11:44:42,070 - alembic - INFO - Running online migrations
+2025-07-07 11:44:42,070 - alembic - INFO - Running online migrations
+2025-07-07 11:44:42,462 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-07 11:44:42,462 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-07 11:44:42,462 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-07 11:44:42,462 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-07 11:44:42,515 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-07-07 11:44:42,515 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration

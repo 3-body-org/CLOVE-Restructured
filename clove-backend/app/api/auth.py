@@ -26,13 +26,6 @@ from app.crud.statistic import update_login_streak
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# Custom OAuth2 form handler that maps username to email
-async def oauth2_form_login(
-    username: str = Form(...),  # This will be treated as email
-    password: str = Form(...)
-):
-    return {"email": username, "password": password}
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # Constants for login attempt tracking
@@ -77,7 +70,7 @@ async def create_user_endpoint(
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Create a new user. Checks for existing email/username first.
+    Create a new user. Checks for existing email first, then auto-generates username.
     """
     print('DEBUG: type(db) in signup =', type(db))
     # 1) Check for duplicate email
@@ -88,32 +81,26 @@ async def create_user_endpoint(
             detail="Email already registered"
         )
 
-    # 2) Check for duplicate username
-    existing = await get_by_username(db, username=user_in.username)
-    if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already taken"
-        )
-
-    # 3) Hash the password, then create
+    # 2) Hash the password, then create (username will be auto-generated)
     hashed_pw = get_password_hash(user_in.password)
     user = await create_user(
         db,
-        username=user_in.username,
         email=user_in.email,
-        password_hash=hashed_pw
+        password_hash=hashed_pw,
+        first_name=user_in.first_name,
+        last_name=user_in.last_name,
+        birthday=user_in.birthday
     )
 
     return user
 
 @router.post("/login", response_model=Token)
 async def login(
-    form_data: dict = Depends(oauth2_form_login),
+    user_in: UserLogin,
     db: AsyncSession = Depends(get_db)
 ):
     """Login user and return access and refresh tokens using email and password."""
-    user = await get_by_email(db, email=form_data["email"])
+    user = await get_by_email(db, email=user_in.email)
     
     # Check if user exists
     if not user:
@@ -152,7 +139,7 @@ async def login(
         )
 
     # Verify password
-    if not verify_password(form_data["password"], user.password_hash):
+    if not verify_password(user_in.password, user.password_hash):
         # Increment failed login attempts
         user.login_attempts += 1
         user.last_failed_login = datetime.now(timezone.utc)
@@ -182,6 +169,7 @@ async def login(
     user.last_failed_login = None
     user.login_cooldown_until = None
     user.last_login = datetime.now(timezone.utc)
+    user.is_active = True
     await db.commit()
 
     # Update login streak

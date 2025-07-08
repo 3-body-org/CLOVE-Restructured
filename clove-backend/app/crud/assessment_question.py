@@ -3,7 +3,7 @@ from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 import random
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from app.db.models.assessment_questions import AssessmentQuestion
 from app.db.models.subtopics import Subtopic
 from app.schemas.assessment_question import AssessmentQuestionCreate, AssessmentQuestionUpdate
@@ -77,8 +77,9 @@ async def get_randomized_questions_for_topic(
 ) -> List[AssessmentQuestion]:
     """
     Get randomized assessment questions from a topic.
-    - For post-assessments, it reuses questions from a completed pre-assessment.
-    - For second attempts, questions from the first attempt are excluded.
+    - For post-assessments, it reuses the full set of questions from a completed pre-assessment.
+    - For pre-assessments, it automatically provides the remaining number of questions for an incomplete attempt,
+      while maintaining the subtopic balance.
     """
     
     # If this is for a post-assessment, check pre-assessment status first.
@@ -86,23 +87,17 @@ async def get_randomized_questions_for_topic(
         pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
         if pre_assessments:
             pre_assessment = pre_assessments[0]
-            # If pre-assessment was completed (15+ items), reuse the same questions.
+            # If pre-assessment was completed, reuse the same full set of questions.
             if pre_assessment.total_items >= 15 and pre_assessment.questions_answers_iscorrect:
                 question_ids_to_reuse = [int(qid) for qid in pre_assessment.questions_answers_iscorrect.keys()]
                 reused_questions = await get_questions_by_ids(db, question_ids_to_reuse)
-                random.shuffle(reused_questions) # Shuffle to make the order different
+                random.shuffle(reused_questions)
                 return reused_questions
 
     # Determine which questions to exclude from the random pool.
     answered_question_ids = set()
-    
-    # For a post-assessment, exclude any questions from an incomplete pre-assessment.
-    if assessment_type == 'post':
-        pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
-        if pre_assessments and pre_assessments[0].questions_answers_iscorrect:
-            answered_question_ids.update(int(qid) for qid in pre_assessments[0].questions_answers_iscorrect.keys())
+    answered_count_by_subtopic = {}
 
-    # Always exclude questions from previous attempts of the *same* assessment type.
     current_assessment_list = []
     if assessment_type == 'pre':
         current_assessment_list = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
@@ -110,51 +105,59 @@ async def get_randomized_questions_for_topic(
         current_assessment_list = await get_post_assessment_for_user_topic(db, user_id, topic_id)
 
     if current_assessment_list and current_assessment_list[0].questions_answers_iscorrect:
-        answered_question_ids.update(int(qid) for qid in current_assessment_list[0].questions_answers_iscorrect.keys())
+        answered_qids_str = current_assessment_list[0].questions_answers_iscorrect.keys()
+        answered_question_ids.update(int(qid) for qid in answered_qids_str)
+        
+        # Count answered questions per subtopic to handle resumes intelligently
+        if answered_question_ids:
+            answered_questions = await get_questions_by_ids(db, list(answered_question_ids))
+            for q in answered_questions:
+                answered_count_by_subtopic[q.subtopic_id] = answered_count_by_subtopic.get(q.subtopic_id, 0) + 1
+
+    # For a post-assessment, also exclude any questions from an incomplete pre-assessment.
+    if assessment_type == 'post':
+        pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
+        if pre_assessments and pre_assessments[0].questions_answers_iscorrect:
+            answered_question_ids.update(int(qid) for qid in pre_assessments[0].questions_answers_iscorrect.keys())
     
     # First, get all subtopics for this topic
     subtopics = await get_subtopics_for_topic(db, topic_id)
-    
     if not subtopics:
         raise ValueError(f"No subtopics found for topic_id {topic_id}")
     
-    subtopic_ids = [subtopic.subtopic_id for subtopic in subtopics]
-    
     # Get all questions for all subtopics in this topic
-    all_questions = await get_questions_for_subtopics(db, subtopic_ids)
+    all_questions = await get_questions_for_subtopics(db, subtopic_ids=[s.subtopic_id for s in subtopics])
 
-    # Filter out questions that have already been answered
-    if answered_question_ids:
-        all_questions = [q for q in all_questions if q.id not in answered_question_ids]
+    # Filter out all questions that have already been answered
+    unanswered_questions = [q for q in all_questions if q.id not in answered_question_ids]
     
-    if not all_questions:
-        raise ValueError(f"No new assessment questions found for topic_id {topic_id} for this attempt.")
-    
-    # Group questions by subtopic
+    # Group the remaining unanswered questions by subtopic
     questions_by_subtopic = {}
-    for question in all_questions:
+    for question in unanswered_questions:
         subtopic_id = question.subtopic_id
         if subtopic_id not in questions_by_subtopic:
             questions_by_subtopic[subtopic_id] = []
         questions_by_subtopic[subtopic_id].append(question)
     
-    # Select random questions per subtopic
+    # Select questions needed for each subtopic to meet the goal
     selected_questions = []
+    for subtopic in subtopics:
+        sid = subtopic.subtopic_id
+        answered_count = answered_count_by_subtopic.get(sid, 0)
+        needed_count = questions_per_subtopic - answered_count
+
+        if needed_count > 0:
+            available_for_subtopic = questions_by_subtopic.get(sid, [])
+            if len(available_for_subtopic) < needed_count:
+                raise ValueError(
+                    f"Not enough new questions available for subtopic {sid} to create a balanced assessment. "
+                    f"Need {needed_count}, but only {len(available_for_subtopic)} found."
+                )
+            
+            selected_for_subtopic = random.sample(available_for_subtopic, needed_count)
+            selected_questions.extend(selected_for_subtopic)
     
-    for subtopic_id in subtopic_ids:
-        available_questions = questions_by_subtopic.get(subtopic_id, [])
-        
-        if len(available_questions) < questions_per_subtopic:
-            raise ValueError(
-                f"Not enough new questions available for subtopic {subtopic_id}. "
-                f"Need {questions_per_subtopic}, but only {len(available_questions)} found."
-            )
-        
-        # Randomly select questions for this subtopic
-        selected_for_subtopic = random.sample(available_questions, questions_per_subtopic)
-        selected_questions.extend(selected_for_subtopic)
-    
-    # Shuffle the final list to randomize the order
+    # Shuffle the final list to randomize the order of questions from different subtopics
     random.shuffle(selected_questions)
     
     return selected_questions

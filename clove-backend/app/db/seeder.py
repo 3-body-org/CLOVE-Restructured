@@ -12,6 +12,7 @@ import asyncio
 from app.db.session import get_db
 import subprocess
 import sys
+from datetime import date
 
 logger = logging.getLogger(__name__)
 
@@ -130,13 +131,35 @@ class DatabaseSeeder:
         # 2. Create Adaptive Users (23)
         for i in range(1, 24): # 1 to 23
             users_to_seed.append(
-                User(id=i, username=f"adaptive{i}", email=f"adaptive{i}@clove.com", password_hash=hashed_pw, is_adaptive=True)
+                User(
+                    id=i, 
+                    username=f"adaptive{i}", 
+                    email=f"adaptive{i}@clove.com", 
+                    password_hash=hashed_pw, 
+                    first_name=f"Adaptive{i}",
+                    last_name="User",
+                    birthday=date(2000, 1, 1),
+                    is_adaptive=True,
+                    bio="",
+                    profile_photo_url=""
+                )
             )
             
         # 3. Create Non-Adaptive Users (22)
         for i in range(1, 23): # 1 to 22
             users_to_seed.append(
-                User(id=i+23, username=f"nonadaptive{i}", email=f"nonadaptive{i}@clove.com", password_hash=hashed_pw, is_adaptive=False)
+                User(
+                    id=i+23, 
+                    username=f"nonadaptive{i}", 
+                    email=f"nonadaptive{i}@clove.com", 
+                    password_hash=hashed_pw, 
+                    first_name=f"NonAdaptive{i}",
+                    last_name="User",
+                    birthday=date(2000, 1, 1),
+                    is_adaptive=False,
+                    bio="",
+                    profile_photo_url=""
+                )
             )
 
         for user in users_to_seed:
