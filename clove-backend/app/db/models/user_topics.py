@@ -1,5 +1,5 @@
 # app/db/models/user_topic.py
-from sqlalchemy import Column, Integer, Boolean, Float, TIMESTAMP, ForeignKey, func
+from sqlalchemy import Column, Integer, Boolean, Float, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -16,9 +16,9 @@ class UserTopic(Base):
     introduction_seen           = Column(Boolean, default=False)
     completed_subtopics_count   = Column(Integer, default=0)
     progress_percent            = Column(Float, default=0.0)
-    unlocked_at                 = Column(TIMESTAMP, default=None)
-    completed_at                = Column(TIMESTAMP, default=None)
-    last_accessed_at            = Column(TIMESTAMP, default=None)
+    unlocked_at                 = Column(DateTime(timezone=True), default=None)
+    completed_at                = Column(DateTime(timezone=True), default=None)
+    last_accessed_at            = Column(DateTime(timezone=True), default=None)
 
     # Relationships
     user             = relationship(

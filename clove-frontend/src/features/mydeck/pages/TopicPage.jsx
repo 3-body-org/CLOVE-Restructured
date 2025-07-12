@@ -10,7 +10,7 @@ import TopicCard from "../components/TopicCard";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 // services
-import { useMyDeckService } from "../hooks/useMydeckService";
+import { useMyDeckApi } from "../hooks/useMyDeckApi";
 // styles
 import styles from "../styles/TopicPage.module.scss";
 import spaceTheme from "../themes/spaceTheme.module.scss";
@@ -28,10 +28,17 @@ const THEMES = {
 
 export default function TopicPage() {
   const navigate = useNavigate();
-  const { getTopicsWithProgress, getTopicById } = useMyDeckService();
+  const { getTopicsWithProgress, getTopicById, updateRecentTopic } = useMyDeckApi();
   const { topics, setTopics } = useContext(MyDeckContext);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Add a short guaranteed loading effect
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Load topics with user progress only if not already in context
   useEffect(() => {
@@ -72,15 +79,25 @@ export default function TopicPage() {
 
   const handleTopicClick = useCallback(
     async (topic) => {
-      // Fetch the latest topic state from backend
-      const res = await getTopicById(topic.id);
-      if (res.introduction_seen) {
-        navigate(`/my-deck/${topic.id}-${topic.slug}`);
-      } else {
+      try {
+        // Update recent topic and fetch the latest topic state from backend
+        await Promise.all([
+          updateRecentTopic(topic.id),
+          getTopicById(topic.id)
+        ]).then(([_, res]) => {
+          if (res.introduction_seen) {
+            navigate(`/my-deck/${topic.id}-${topic.slug}`);
+          } else {
+            navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
+          }
+        });
+      } catch (error) {
+        console.error("Failed to handle topic click:", error);
+        // Fallback navigation if update fails
         navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
       }
     },
-    [navigate, getTopicById]
+    [navigate, getTopicById, updateRecentTopic]
   );
 
   if (loading) return <LoadingScreen message="Loading topics..." />;

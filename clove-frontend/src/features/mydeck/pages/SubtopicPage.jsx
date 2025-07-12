@@ -7,35 +7,20 @@ import styles from "../styles/SubtopicPage.module.scss";
 import { getSubtopicContent } from "../content/subtopicContent";
 import SubtopicLayout from "../components/SubtopicLayout";
 import TitleAndProfile from "../../../components/layout/Navbar/TitleAndProfile";
-import RainfallBackground from '../components/RainfallBackground';
-import RuneBackground from '../components/RuneBackground';
+import ThemeBackground from "../components/ThemeBackground";
+import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
+import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 
-// Map topic IDs to their corresponding themes
 const topicThemeMap = {
-  // Data Types and Variables
-  'data-types': 'wizard',
-  'variables': 'wizard',
-  // Operators
+  'data-types-and-variables': 'wizard',
   'operators': 'detective',
-  // Conditionals and Loops
-  'conditionals': 'space',
-  'loops': 'space',
-  // Add more topicId to theme mappings as needed
-};
-
-const effectComponents = {
-  stars: () => <div className={styles.stars} id="stars"></div>,
-  starfield: () => <div className={styles.stars} id="stars"></div>,
-  fog: () => <RainfallBackground />, // fallback for detective
-  rainfall: () => <RainfallBackground />,
-  runes: () => <RuneBackground />,
-  runeGlow: () => <RuneBackground glow />,
+  'conditional-and-loops': 'space',
 };
 
 export default function SubtopicSelectionPage() {
   const navigate = useNavigate();
   const { topicId } = useParams();
-  const { setTheme } = useTheme();
+  const { setTheme, currentTheme } = useTheme();
   const {
     preAssessmentTaken,
     setPreAssessmentTaken,
@@ -44,22 +29,13 @@ export default function SubtopicSelectionPage() {
     completedSubtopics,
     setCompletedSubtopics,
   } = useContext(MyDeckContext);
+  const [loading, setLoading] = useState(true);
+  const [error] = useState("");
 
-  // Add theme switcher for demo
-  const [demoTheme, setDemoTheme] = useState("");
-  const themeOptions = [
-    { label: "Wizard", value: "wizard" },
-    { label: "Detective", value: "detective" },
-    { label: "Space", value: "space" },
-    { label: "Default", value: "default" },
-  ];
+  const topicSlug = topicId ? topicId.split('-').slice(1).join('-') : '';
+  const theme = topicThemeMap[topicSlug] || 'space';
+  const { story, subtopics } = getSubtopicContent(theme);
 
-  // Get theme and content
-  const theme = demoTheme || topicThemeMap[topicId] || 'default';
-  const { story, subtopics, styling, layout } = getSubtopicContent(theme);
-  const EffectComponent = effectComponents[styling?.background] || effectComponents[styling?.effect] || null;
-
-  // Set topic ID and theme when topic changes
   useEffect(() => {
     if (topicId) {
       setTopicId(topicId);
@@ -67,7 +43,12 @@ export default function SubtopicSelectionPage() {
     }
   }, [topicId, setTopicId, setTheme, theme]);
 
-  // Add localStorage sync for pre-assessment status
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 400);
+    return () => clearTimeout(timer);
+  }, [topicId]);
+
   useEffect(() => {
     const savedPreAssessment = localStorage.getItem("preAssessmentTaken");
     if (savedPreAssessment) {
@@ -79,28 +60,21 @@ export default function SubtopicSelectionPage() {
     const subtopicKey = Object.keys(subtopics).find(
       key => subtopics[key].id === subtopic.id
     );
-
     if (subtopic.id === "preassessment") {
-      // Set pre-assessment as taken when starting it
       setPreAssessmentTaken(true);
       localStorage.setItem("preAssessmentTaken", JSON.stringify(true));
       navigate(`/my-deck/${topicId}/assessment/pre`);
       return;
     }
-
     if (subtopic.id === "postassessment") {
       navigate(`/my-deck/${topicId}/assessment/post`);
       return;
     }
-
     if (isSubtopicLocked(subtopic)) {
       alert(`Complete "${subtopic.requires}" first!`);
       return;
     }
-
     setSubtopicId(subtopic.id);
-
-    // Update completed subtopics
     if (!completedSubtopics.includes(subtopicKey)) {
       const updatedCompleted = [...completedSubtopics, subtopicKey];
       setCompletedSubtopics(updatedCompleted);
@@ -109,82 +83,44 @@ export default function SubtopicSelectionPage() {
         JSON.stringify(updatedCompleted)
       );
     }
-
     navigate(`/lesson/${topicId}/${subtopic.id}`);
   };
 
   const isSubtopicLocked = (subtopic) => {
     const required = subtopic.requires;
     if (!required) return false;
-
-    // Check for pre-assessment requirement
     if (required === "pre-assessment") {
       return !preAssessmentTaken;
     }
-
-    // Check for other dependencies
     const requiredKey = Object.keys(subtopics).find(
       key => subtopics[key].id === required
     );
     return !completedSubtopics.includes(requiredKey);
   };
 
-  useEffect(() => {
-    const createStars = () => {
-      const stars = document.getElementById("stars");
-      if (!stars) return;
+  const getThemeClass = () => {
+    switch (currentTheme) {
+      case 'space':
+        return styles.spaceTheme;
+      case 'wizard':
+        return styles.wizardTheme;
+      case 'detective':
+        return styles.detectiveTheme;
+      default:
+        return '';
+    }
+  };
 
-      stars.innerHTML = "";
-
-      for (let i = 0; i < 200; i++) {
-        const star = document.createElement("div");
-        star.style.position = "absolute";
-        star.style.width = `${Math.random() * 3}px`;
-        star.style.height = star.style.width;
-        star.style.backgroundColor = "white";
-        star.style.borderRadius = "50%";
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.opacity = Math.random();
-        star.style.animation = `twinkle ${
-          2 + Math.random() * 3
-        }s infinite alternate`;
-        stars.appendChild(star);
-      }
-    };
-
-    createStars();
-  }, []);
+  if (loading) return <LoadingScreen message="Loading subtopic..." />;
+  if (error) return <ErrorScreen message={error} />;
 
   return (
     <Container
       fluid
-      className={`${styles.myDeckWrapper} ${styles.lessonWrapper}`}
-      style={{
-        background: styling?.colors?.bg,
-        color: styling?.colors?.text,
-        transition: 'background 0.5s cubic-bezier(0.4,0,0.2,1)',
-        minHeight: '100vh',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
+      className={`${styles.myDeckWrapper} ${styles.lessonWrapper} ${getThemeClass()}`}
     >
-      {/* Theme Switcher for Demo */}
-      <div style={{ position: 'absolute', top: 24, right: 24, zIndex: 10 }}>
-        <select
-          value={demoTheme}
-          onChange={e => setDemoTheme(e.target.value)}
-          style={{ padding: '8px 16px', borderRadius: 8, fontSize: 16 }}
-        >
-          <option value="">(Theme by Topic)</option>
-          {themeOptions.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-      </div>
+      <ThemeBackground theme={theme} />
       <TitleAndProfile colored={story.title} />
-      {EffectComponent && <EffectComponent />}
-
       <Row>
         <Col
           xs={12}
@@ -195,16 +131,13 @@ export default function SubtopicSelectionPage() {
           </p>
         </Col>
       </Row>
-
-      {/* Render all subtopics using the new layout system */}
-      {layout.map((row, rowIndex) => (
+      {Object.entries(subtopics).map(([key, subtopic]) => (
         <SubtopicLayout
-          key={rowIndex}
-          subtopicKeys={row}
-          subtopics={subtopics}
-          isSubtopicLocked={isSubtopicLocked}
+          key={key}
+          subtopic={subtopic}
+          isLocked={isSubtopicLocked(subtopic)}
           onSubtopicClick={handleSubtopicClick}
-          theme={theme}
+          position={subtopic.position}
         />
       ))}
     </Container>

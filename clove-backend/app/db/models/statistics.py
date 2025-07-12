@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Date, JSON, TIMESTAMP, func
+    Column, Integer, ForeignKey, Date, JSON, DateTime, func
 )
 from sqlalchemy.orm import relationship
 from app.db.base import Base
@@ -51,7 +51,7 @@ class Statistic(Base):
 
     # — Timestamp —
     last_updated    = Column(
-        TIMESTAMP,
+        DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False

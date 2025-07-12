@@ -172,7 +172,7 @@ async def login(
     user.is_active = True
     await db.commit()
 
-    # Update login streak
+    # Update login streak (NEW: always update on login)
     await update_login_streak(db, user.id, datetime.now(timezone.utc).date())
 
     # Create tokens

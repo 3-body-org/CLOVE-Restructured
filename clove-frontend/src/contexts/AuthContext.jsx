@@ -105,6 +105,20 @@ export function AuthProvider({ children }) {
           if (res.ok) {
             const data = await res.json();
             setUser(data);
+            // Update streak on every visit after user is authenticated
+            try {
+              const streakRes = await makeAuthenticatedRequest(`${API_BASE}/statistics/update-streak`, { method: "POST" });
+              if (streakRes.ok) {
+                // Immediately fetch latest statistics after streak update
+                try {
+                  const statsRes = await makeAuthenticatedRequest(`${API_BASE}/statistics/me`);
+                  if (statsRes.ok) {
+                    const statsData = await statsRes.json();
+                    setUser(prev => ({ ...prev, statistics: statsData }));
+                  }
+                } catch (statsErr) {}
+              }
+            } catch (e) {}
           } else if (res.status === 401) {
             // Token is invalid and refresh failed, clear everything
             setUser(null);

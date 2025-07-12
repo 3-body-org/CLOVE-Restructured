@@ -2,7 +2,7 @@
 
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 import re
 import random
 
@@ -139,7 +139,7 @@ async def init_user_data(db: AsyncSession, user_id: int, login_days_this_week=No
     
     # Identify first topic once (lowest topic_id)
     first_topic_id = topics[0].topic_id if topics else None
-    current_time = datetime.utcnow()
+    current_time = datetime.now(timezone.utc)
     
     # Prepare all objects for bulk insertion
     user_topics = []

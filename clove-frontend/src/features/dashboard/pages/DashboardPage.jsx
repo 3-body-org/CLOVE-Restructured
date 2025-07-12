@@ -49,37 +49,32 @@ const Dashboard = () => {
     let mounted = true;
     if (!user) return;
     setLoading(true);
-    // First, update streak
-    post('/statistics/update-streak')
-      .catch(() => {}) // ignore errors for now
-      .finally(() => {
-        // Now fetch stats and topic progress
-        Promise.all([
-          get('/statistics/me'),
-          get(`/user_topics/user/${user.id}`)
-        ])
-          .then(async ([statsRes, topicsRes]) => {
-            if (!mounted) return;
-            if (statsRes.ok) {
-              const statsData = await statsRes.json();
-              setStats(statsData);
-            } else {
-              setError("Failed to load dashboard stats");
-            }
-            if (topicsRes.ok) {
-              const topics = await topicsRes.json();
-              setTopicProgress(topics);
-            } else {
-              setTopicProgress([]);
-            }
-            setLoading(false);
-          })
-          .catch(() => {
-            if (mounted) {
-              setError("Failed to load dashboard stats");
-              setLoading(false);
-            }
-          });
+    // Now fetch stats and topic progress
+    Promise.all([
+      get('/statistics/me'),
+      get(`/user_topics/user/${user.id}`)
+    ])
+      .then(async ([statsRes, topicsRes]) => {
+        if (!mounted) return;
+        if (statsRes.ok) {
+          const statsData = await statsRes.json();
+          setStats(statsData);
+        } else {
+          setError("Failed to load dashboard stats");
+        }
+        if (topicsRes.ok) {
+          const topics = await topicsRes.json();
+          setTopicProgress(topics);
+        } else {
+          setTopicProgress([]);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        if (mounted) {
+          setError("Failed to load dashboard stats");
+          setLoading(false);
+        }
       });
     return () => { mounted = false; };
   }, [user]);
@@ -111,11 +106,8 @@ const Dashboard = () => {
 
   // Streak Data
   const streakDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-  const streakIndex = (() => {
-    if (!stats?.last_login_date) return -1;
-    const lastLogin = new Date(stats.last_login_date);
-    return lastLogin.getDay() === 0 ? 6 : lastLogin.getDay() - 1;
-  })();
+  // Use login_days_this_week from stats to color the streak
+  const filledDays = stats?.login_days_this_week || [];
 
   // Completed Topics with Badge
   const completedTopics = topicProgress
@@ -189,7 +181,7 @@ const Dashboard = () => {
               <div className={styles.streak}>
                 <div className={styles.days}>
                   {streakDays.map((day, index) => (
-                    <StreakDay key={day} day={day} filled={index === streakIndex} />
+                    <StreakDay key={day} day={day} filled={filledDays.includes(index)} />
                   ))}
                 </div>
                 <p className={styles.streakText}>
