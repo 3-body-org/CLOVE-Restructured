@@ -10,7 +10,7 @@ import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 
 const ProfilePage = () => {
-  const { user, refreshUser } = useAuth();
+  const { user, refreshUser, loading: authLoading } = useAuth();
   const { put } = useApi();
   const [formData, setFormData] = useState({
     username: user?.username || "",
@@ -26,11 +26,19 @@ const ProfilePage = () => {
   const [avatarPreview, setAvatarPreview] = useState(user?.profile_photo_url || "");
   const [avatarFile, setAvatarFile] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(!user);
+  const [saving, setSaving] = useState(false); // Only for save operations
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [editingSection, setEditingSection] = useState(null); // 'profile', 'about', 'info', 'account'
+  const [minTimePassed, setMinTimePassed] = useState(false);
+
+  // Minimum loading time effect
+  useEffect(() => {
+    setMinTimePassed(false);
+    const timer = setTimeout(() => setMinTimePassed(true), 200);
+    return () => clearTimeout(timer);
+  }, []); // Only on mount
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,39 +58,39 @@ const ProfilePage = () => {
 
   const handleSave = async () => {
     setError("");
-    setLoading(true);
+    setSaving(true);
     try {
       if (formData.username.length < 3) {
         toast.error("Username must be at least 3 characters long");
-        setLoading(false);
+        setSaving(false);
         return;
       }
       if (formData.username.length > 50) {
         toast.error("Username must be less than 50 characters");
-        setLoading(false);
+        setSaving(false);
         return;
       }
       if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
         toast.error("Username can only contain letters, numbers, and underscores");
-        setLoading(false);
+        setSaving(false);
         return;
       }
       if (formData.password || formData.confirm_password) {
         if (formData.password.length < 8) {
           toast.error("New password must be at least 8 characters long");
-          setLoading(false);
+          setSaving(false);
           return;
         }
         if (formData.password !== formData.confirm_password) {
           toast.error("New password and confirm password do not match");
-          setLoading(false);
+          setSaving(false);
           return;
         }
       }
       const sensitiveChanges = formData.email !== user?.email || formData.password;
       if (sensitiveChanges && !formData.current_password) {
         toast.error("Current password is required to change email or password");
-        setLoading(false);
+        setSaving(false);
         return;
       }
       const changedFields = {};
@@ -96,13 +104,13 @@ const ProfilePage = () => {
       delete changedFields.confirm_password;
       if (avatarFile) {
         toast.error("Avatar upload logic not implemented.");
-        setLoading(false);
+        setSaving(false);
         return;
       }
       const userId = String(user.id).split(':')[0];
       if (!userId || isNaN(Number(userId))) {
         toast.error("Invalid user ID. Please reload the page and try again.");
-        setLoading(false);
+        setSaving(false);
         return;
       }
       const response = await put(`/users/${userId}`, changedFields);
@@ -132,7 +140,7 @@ const ProfilePage = () => {
       toast.error("Failed to update profile. Please try again.");
       console.error("Error updating profile:", error);
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
@@ -161,14 +169,8 @@ const ProfilePage = () => {
     });
   };
 
-  useEffect(() => {
-    if (!user) {
-      setLoading(true);
-      // Optionally, trigger a refreshUser() here if needed
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
+  // Remove minTimePassed and local loading for initial load
+  // Only use saving for save operations
 
   useEffect(() => {
     const msg = sessionStorage.getItem('profileSuccess');
@@ -206,7 +208,7 @@ const ProfilePage = () => {
     return false;
   };
 
-  if (loading) return <LoadingScreen message="Loading profile..." />;
+  if (authLoading || !user || !minTimePassed) return <LoadingScreen message="Loading profile..." />;
   if (error) return <ErrorScreen message={error} />;
 
   return (
@@ -284,7 +286,7 @@ const ProfilePage = () => {
                       <button onClick={handleCancelSection} className={styles.cancelButton}>
                         <FontAwesomeIcon icon={faTimes} /> Cancel
                       </button>
-                      <button onClick={handleSave} className={styles.saveButton} disabled={loading || !isFormChanged()}>
+                      <button onClick={handleSave} className={styles.saveButton} disabled={saving || !isFormChanged()}>
                         <FontAwesomeIcon icon={faSave} /> Save
                   </button>
                     </div>
@@ -314,7 +316,7 @@ const ProfilePage = () => {
                       <button onClick={handleCancelSection} className={styles.cancelButton}>
                         <FontAwesomeIcon icon={faTimes} /> Cancel
                       </button>
-                      <button onClick={handleSave} className={styles.saveButton} disabled={loading || !isFormChanged()}>
+                      <button onClick={handleSave} className={styles.saveButton} disabled={saving || !isFormChanged()}>
                         <FontAwesomeIcon icon={faSave} /> Save
                       </button>
                     </div>
@@ -371,7 +373,7 @@ const ProfilePage = () => {
                     <button onClick={handleCancelSection} className={styles.cancelButton}>
                       <FontAwesomeIcon icon={faTimes} /> Cancel
                     </button>
-                    <button onClick={handleSave} className={styles.saveButton} disabled={loading || !isFormChanged()}>
+                    <button onClick={handleSave} className={styles.saveButton} disabled={saving || !isFormChanged()}>
                       <FontAwesomeIcon icon={faSave} /> Save
                     </button>
                   </div>
@@ -453,7 +455,7 @@ const ProfilePage = () => {
                     <button onClick={handleCancelSection} className={styles.cancelButton}>
                     <FontAwesomeIcon icon={faTimes} /> Cancel
                   </button>
-                    <button onClick={handleSave} className={styles.saveButton} disabled={loading || !isFormChanged()}>
+                    <button onClick={handleSave} className={styles.saveButton} disabled={saving || !isFormChanged()}>
                       <FontAwesomeIcon icon={faSave} /> Save
                   </button>
                 </div>
