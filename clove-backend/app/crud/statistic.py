@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import func, update
 from sqlalchemy.orm import joinedload
+from sqlalchemy.orm.attributes import flag_modified
 from app.db.models.statistics import Statistic
 from app.db.models.challenges import Challenge
 from app.schemas.statistic import StatisticCreate
@@ -32,29 +33,34 @@ async def update_login_streak(db: AsyncSession, user_id: int, today_date):
     if not stat:
         raise ValueError("Statistic not found")
 
-    # Calculate start of the current week (Monday)
     monday = today_date - timedelta(days=today_date.weekday())
-    # If last_login_date is not in this week, reset login_days_this_week
     if not stat.last_login_date or stat.last_login_date < monday:
         stat.login_days_this_week = []
 
-    # Add today's weekday index if not already present
-    today_weekday = today_date.weekday()  # Monday=0, Sunday=6
+    today_weekday = today_date.weekday()
+    updated = False
     if today_weekday not in stat.login_days_this_week:
         stat.login_days_this_week.append(today_weekday)
         stat.login_days_this_week.sort()
+        flag_modified(stat, "login_days_this_week")
+        updated = True
 
-    if stat.last_login_date == today_date:
-        await db.commit(); await db.refresh(stat)
-        return stat
+    if stat.last_login_date != today_date:
+        stat.last_login_date = today_date
+        updated = True
 
-    if stat.last_login_date and (today_date - stat.last_login_date).days == 1:
-        stat.current_streak += 1
-    else:
-        stat.current_streak = 1
+    # Calculate streak: number of consecutive days ending today
+    streak = 0
+    for i in range(today_weekday, -1, -1):
+        if i in stat.login_days_this_week:
+            streak += 1
+        else:
+            break
+    stat.current_streak = streak if streak > 0 else 1
 
-    stat.last_login_date = today_date
-    await db.commit(); await db.refresh(stat)
+    if updated:
+        await db.commit()
+        await db.refresh(stat)
     return stat
 
 async def update_recent_topic(db: AsyncSession, user_id: int, topic_id: int):

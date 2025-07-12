@@ -1,5 +1,5 @@
 # app/db/models/post_assessment.py
-from sqlalchemy import Column, Integer, Float, Boolean, JSON, TIMESTAMP, ForeignKey, func
+from sqlalchemy import Column, Integer, Float, Boolean, JSON, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -14,7 +14,7 @@ class PostAssessment(Base):
     subtopic_scores        = Column(JSON, nullable=False, default=dict)
     questions_answers_iscorrect = Column(JSON, nullable=False, default=dict)
     attempt_count          = Column(Integer, default=0)
-    taken_at               = Column(TIMESTAMP, server_default=func.now())
+    taken_at               = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
     user_topic = relationship(

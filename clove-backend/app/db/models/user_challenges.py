@@ -3,7 +3,7 @@ from sqlalchemy import (
     Column,
     Integer,
     Boolean,
-    TIMESTAMP,
+    DateTime,
     ForeignKey,
     Enum as SQLEnum,
     func,
@@ -22,7 +22,7 @@ class UserChallenge(Base):
     user_id           = Column(Integer, ForeignKey("users.id"), nullable=False)
     challenge_id      = Column(Integer, ForeignKey("challenges.id"), nullable=False)
     is_solved         = Column(Boolean, default=False, nullable=False)
-    last_attempted_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
+    last_attempted_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     status            = Column(StatusEnum, default="pending", nullable=False)
 
     # Relationships

@@ -1,29 +1,22 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Image, OverlayTrigger, Popover } from "react-bootstrap";
 import styles from "../styles/SubtopicPage.module.scss";
 
-const SubtopicNode = ({
-  subtopic,
-  isLocked,
-  onSubtopicClick,
-  theme,
-  className = "",
-}) => {
-  const renderPopover = () => {
-    return (
-      <Popover id={`popover-${subtopic.id}`}>
-        <Popover.Body>
-          <strong>{subtopic.description}</strong>
-          <br />⏳ Estimated Time: {subtopic.time}
-          {isLocked && (
-            <div className={styles.lockedHint}>
-              🔒 Requires {subtopic.requires}
-            </div>
-          )}
-        </Popover.Body>
-      </Popover>
-    );
-  };
+const SubtopicNode = React.memo(function SubtopicNode({ subtopic, isLocked, onSubtopicClick, className = "" }) {
+  const renderPopover = () => (
+    <Popover id={`popover-${subtopic.id}`}>
+      <Popover.Body>
+        <strong>{subtopic.description}</strong>
+        <br />⏳ Estimated Time: {subtopic.time}
+        {isLocked && (
+          <div className={styles.lockedHint}>
+            🔒 Requires {subtopic.requires}
+          </div>
+        )}
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <div className={`text-center text-white ${className}`}>
@@ -33,15 +26,25 @@ const SubtopicNode = ({
         placement="top"
         overlay={renderPopover()}
       >
-        <div
-          className={`${styles.subtopicIconWrapper} ${isLocked ? styles.lockedImage : ""}`}
+        <Image
+          src={subtopic.image}
+          fluid
+          className={[
+            styles.subtopicImage,
+            isLocked ? styles.lockedImage : ""
+          ].join(" ")}
           onClick={() => onSubtopicClick(subtopic)}
-        >
-          <img src={subtopic.icon} alt={subtopic.title} width={64} height={64} />
-        </div>
+        />
       </OverlayTrigger>
     </div>
   );
+});
+
+SubtopicNode.propTypes = {
+  subtopic: PropTypes.object.isRequired,
+  isLocked: PropTypes.bool,
+  onSubtopicClick: PropTypes.func.isRequired,
+  className: PropTypes.string
 };
 
 export default SubtopicNode; 

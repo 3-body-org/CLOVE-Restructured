@@ -65,7 +65,7 @@ def upgrade() -> None:
     sa.Column('accuracy', sa.JSON(), nullable=False),
     sa.Column('hours_spent', sa.JSON(), nullable=False),
     sa.Column('completion_rate', sa.JSON(), nullable=False),
-    sa.Column('last_updated', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('last_updated', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['recent_topic_id'], ['topics.topic_id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -91,9 +91,9 @@ def upgrade() -> None:
     sa.Column('introduction_seen', sa.Boolean(), nullable=True, server_default='false'),
     sa.Column('completed_subtopics_count', sa.Integer(), nullable=True),
     sa.Column('progress_percent', sa.Float(), nullable=True),
-    sa.Column('unlocked_at', sa.TIMESTAMP(), nullable=True),
-    sa.Column('completed_at', sa.TIMESTAMP(), nullable=True),
-    sa.Column('last_accessed_at', sa.TIMESTAMP(), nullable=True),
+    sa.Column('unlocked_at', sa.TIMESTAMP(timezone=True), nullable=True),
+    sa.Column('completed_at', sa.TIMESTAMP(timezone=True), nullable=True),
+    sa.Column('last_accessed_at', sa.TIMESTAMP(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['topic_id'], ['topics.topic_id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -130,7 +130,7 @@ def upgrade() -> None:
     sa.Column('subtopic_scores', sa.JSON(), nullable=False),
     sa.Column('questions_answers_iscorrect', sa.JSON(), nullable=False),
     sa.Column('attempt_count', sa.Integer(), nullable=False, default=0),
-    sa.Column('taken_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=True),
+    sa.Column('taken_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['user_topic_id'], ['user_topics.id'], ),
     sa.PrimaryKeyConstraint('post_assessment_id')
     )
@@ -144,7 +144,7 @@ def upgrade() -> None:
     sa.Column('subtopic_scores', sa.JSON(), nullable=False),
     sa.Column('questions_answers_iscorrect', sa.JSON(), nullable=False),
     sa.Column('attempt_count', sa.Integer(), nullable=False, default=0),
-    sa.Column('taken_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=True),
+    sa.Column('taken_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['user_topic_id'], ['user_topics.id'], ),
     sa.PrimaryKeyConstraint('pre_assessment_id')
     )
@@ -160,8 +160,8 @@ def upgrade() -> None:
     sa.Column('is_completed', sa.Boolean(), nullable=True),
     sa.Column('progress_percent', sa.Float(), nullable=True),
     sa.Column('knowledge_level', sa.Float(), nullable=True),
-    sa.Column('unlocked_at', sa.TIMESTAMP(), nullable=True),
-    sa.Column('completed_at', sa.TIMESTAMP(), nullable=True),
+    sa.Column('unlocked_at', sa.TIMESTAMP(timezone=True), nullable=True),
+    sa.Column('completed_at', sa.TIMESTAMP(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['subtopic_id'], ['subtopics.subtopic_id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -194,7 +194,7 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('challenge_id', sa.Integer(), nullable=False),
     sa.Column('is_solved', sa.Boolean(), nullable=False),
-    sa.Column('last_attempted_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('last_attempted_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('status', sa.Enum('pending', 'completed', 'cancelled', name='uc_status_enum'), nullable=False),
     sa.ForeignKeyConstraint(['challenge_id'], ['challenges.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -208,7 +208,7 @@ def upgrade() -> None:
     sa.Column('time_spent', sa.Integer(), nullable=True, comment='Seconds'),
     sa.Column('hints_used', sa.Integer(), nullable=True),
     sa.Column('points', sa.Integer(), nullable=True),
-    sa.Column('attempted_at', sa.TIMESTAMP(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('attempted_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['user_challenge_id'], ['user_challenges.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

@@ -1,5 +1,5 @@
 # app/db/models/user_subtopic.py
-from sqlalchemy import Column, Integer, Boolean, Float, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, Integer, Boolean, Float, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -16,8 +16,8 @@ class UserSubtopic(Base):
     is_completed          = Column(Boolean, default=False)
     progress_percent      = Column(Float, default=0.0)
     knowledge_level       = Column(Float, default=0.1)
-    unlocked_at           = Column(TIMESTAMP)
-    completed_at          = Column(TIMESTAMP)
+    unlocked_at           = Column(DateTime(timezone=True))
+    completed_at          = Column(DateTime(timezone=True))
 
     # Relationships
     user               = relationship(

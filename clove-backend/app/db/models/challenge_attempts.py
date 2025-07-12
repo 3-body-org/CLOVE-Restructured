@@ -1,5 +1,5 @@
 # app/db/models/challenge_attempt.py
-from sqlalchemy import Column, Integer, Boolean, Enum, ForeignKey, TIMESTAMP, func
+from sqlalchemy import Column, Integer, Boolean, Enum, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 from datetime import datetime
@@ -16,10 +16,10 @@ class ChallengeAttempt(Base):
     time_spent       = Column(Integer, comment="Seconds")
     hints_used       = Column(Integer, default=0)
     points           = Column(Integer)
-    attempted_at     = Column(TIMESTAMP, server_default=func.now())
+    attempted_at     = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
     user_challenge = relationship(
         "UserChallenge",
         back_populates="challenge_attempts"
-        )
+    )
