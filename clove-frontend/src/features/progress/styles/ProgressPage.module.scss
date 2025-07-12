@@ -1,0 +1,813 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
+// Progress.module.scss
+:root {
+  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.progressContent {
+  flex-grow: 1;
+  min-height: 100vh;
+  padding: 2.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: $light-black;
+  color: $white;
+  font-family: "Inter", sans-serif;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $white;
+  }
+
+  p {
+    color: $dark-white;
+    font-size: 1rem;
+  }
+
+  .profile {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+}
+
+/* Learning Mode Performance Section */
+.learningModesSection {
+  background-color: $black;
+  padding: 1.75rem;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: $white;
+}
+
+.modePerformanceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.modeCard {
+  background-color: $lighter-black;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.modeHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modeIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.2),
+    rgba(139, 92, 246, 0.1)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: $light-purple;
+}
+
+.modeInfo {
+  flex-grow: 1;
+}
+
+.modeName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: $white;
+}
+
+.modeCategory {
+  font-size: 0.85rem;
+  color: $dark-white;
+}
+
+.modeStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: $dark-white;
+}
+
+.accuracyHigh {
+  color: $success;
+}
+
+.accuracyMedium {
+  color: $warning;
+}
+
+.accuracyLow {
+  color: $danger;
+}
+
+/* Topic Progress Section */
+.topicSection {
+  margin: 0 0 2.5rem 0;
+
+  & > *:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+
+  .topicCard {
+    background: #1c1e22;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    min-height: 120px;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.2);
+    }
+  }
+
+  .topicHeader {
+    padding: 1.75rem 2rem;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      opacity: 0.95;
+    }
+
+    .topicHeaderContent {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+    }
+
+    .topicTitle {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .topicStats {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      position: relative;
+      padding-right: 3rem;
+
+      .progressWrapper {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        .progressCircle {
+          position: relative;
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          background: conic-gradient(
+            $light-purple 0%,
+            $light-purple calc(var(--progress, 0) * 1%),
+            $lighter-black calc(var(--progress, 0) * 1%),
+            $lighter-black 100%
+          );
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2);
+
+          &::before {
+            content: "";
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: $black;
+            border-radius: 50%;
+            top: 15px;
+            left: 15px;
+          }
+
+          .progressText {
+            position: relative;
+            color: $white;
+            font-weight: 600;
+            font-size: 18px;
+            z-index: 1;
+          }
+        }
+
+        .progressLabel {
+          color: white;
+          font-size: 15px;
+          font-weight: bold;
+          white-space: nowrap;
+          margin-left: 0.5rem;
+        }
+      }
+
+      .topicChevron {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 22px;
+        opacity: 0.9;
+        transition: transform 0.2s ease;
+      }
+
+      .statItem {
+        display: none;
+
+        .statValue {
+          font-size: 22px;
+          font-weight: bold;
+          line-height: 1;
+          margin-bottom: 0.25rem;
+        }
+
+        .statLabel {
+          font-size: 15px;
+          opacity: 0.9;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+      }
+    }
+  }
+
+  .topicHeader:focus-visible, .topicHeader:active {
+    outline: 2px solid $light-purple;
+    outline-offset: 2px;
+  }
+
+  .subtopicsContainer {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.subtopicCard {
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.expanded {
+    .subtopicHeader {
+      background: $dark-purple !important;
+    }
+  }
+
+  .subtopicHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: $lighter-black !important;
+
+    &:hover {
+      background: $dark-purple !important;
+    }
+
+    .subtopicName {
+      margin: 0;
+      font-size: 22px;
+      font-weight: bold;
+      color: $white;
+      transition: color 0.2s ease;
+    }
+
+    .headerRight {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .chevronIcon {
+      color: $white;
+      transition: transform 0.3s ease, color 0.2s ease;
+    }
+  }
+
+  .subtopicHeader:focus-visible, .subtopicHeader:active {
+    outline: 2px solid $success;
+    outline-offset: 2px;
+  }
+
+  .subtopicContent {
+    background: $lighter-black;
+  }
+
+  // Mastery Level Badges
+  .masteryLevel {
+    &.statusBeginner {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: $danger;
+    }
+
+    &.statusIntermediate {
+      background-color: rgba(249, 115, 22, 0.1);
+      color: $warning;
+    }
+
+    &.statusAdvanced {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: $success;
+    }
+  }
+}
+
+.progressDetails {
+  padding: 2rem;
+
+  .progressSection {
+    margin-bottom: 2rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .progressHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    .sectionTitle {
+      margin: 0;
+      font-size: 22px;
+      font-weight: bold;
+      color: $white;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .statusBadge {
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: capitalize;
+
+      &.statusBeginner {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: $danger;
+      }
+
+      &.statusIntermediate {
+        background-color: rgba(249, 115, 22, 0.1);
+        color: $warning;
+      }
+
+      &.statusAdvanced {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: $success;
+      }
+    }
+  }
+
+  .progressBars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .progressGroup {
+    margin-bottom: 1rem;
+    .sectionTitle {
+      font-size: 15px;
+    }
+    .sectionIcon {
+      color: $light-purple;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .progressLabel {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 15px;
+    color: $white;
+
+    span:first-child {
+      font-weight: bold;
+      color: $white;
+    }
+
+    span:last-child {
+      font-weight: bold;
+      color: $dark-purple;
+    }
+  }
+
+  .progressBar {
+    height: 8px;
+    background: $black;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progressFill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, $dark-purple, $light-purple);
+    transition: width 0.6s ease;
+  }
+}
+
+.performanceAnalytics {
+  margin-top: 2rem;
+
+  .sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1.5rem 0;
+    font-size: 15px;
+    color: $white;
+
+    .sectionIcon {
+      color: $light-purple;
+    }
+  }
+
+  .strengthsWeaknesses {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+.swCard {
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: $black;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &.strengthCard {
+    background: linear-gradient(
+      to bottom,
+      rgba(16, 185, 129, 0.15),
+      rgba(16, 185, 129, 0.05)
+    );
+    border-top-color: $success;
+
+    .swIcon {
+      color: $success;
+    }
+
+    .swTitle {
+      color: $success;
+    }
+  }
+
+  &.weaknessCard {
+    background: linear-gradient(
+      to bottom,
+      rgba(239, 68, 68, 0.15),
+      rgba(239, 68, 68, 0.05)
+    );
+    border-top-color: $danger;
+
+    .swIcon {
+      color: $danger;
+    }
+
+    .swTitle {
+      color: $danger;
+    }
+  }
+
+  .swHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .swIcon {
+    font-size: 22px;
+  }
+
+  .swTitle {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: $white;
+  }
+
+  .swList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .swItem {
+    position: relative;
+    padding: 0.75rem 1rem;
+    background: $pitch-black;
+    border-radius: 8px;
+    font-size: 15px;
+    color: $light-purple;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      transform: translateX(4px);
+      color: var(--text-primary);
+    }
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .progressContent {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .progressDetails {
+    grid-template-columns: 1fr;
+  }
+  .strengthsWeaknesses {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .progressContent {
+    padding: 1.5rem;
+  }
+  .topicHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .modePerformanceGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .modeStats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.headerLeft h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.username {
+  color: $light-purple;
+  font-weight: 600;
+}
+
+.headerLeft p {
+  color: $dark-white;
+  font-size: 0.95rem;
+}
+
+.profile {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid $light-purple;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.profile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+}
+
+.performanceAnalysisCard {
+  background: #23232b;
+  border-radius: 16px;
+  border: 1px solid #353545;
+  margin: 2rem 2rem 2rem 2rem;
+  padding: 2rem 2.5rem;
+  box-shadow: none;
+  transition: border 0.2s, background 0.2s, padding 0.2s, box-shadow 0.2s;
+  &:hover {
+    background: #29293a;
+    box-shadow: 0 4px 24px 0 rgba(139, 92, 246, 0.10);
+    border-color: #4b4b5e;
+    z-index: 2;
+  }
+  &.minimized {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0 0.5rem 0;
+    margin-bottom: 1.5rem;
+    box-shadow: none;
+    &:hover {
+      background: #23232b;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px 0 rgba(139, 92, 246, 0.08);
+      border: 1px solid #353545;
+    }
+  }
+}
+.performanceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+  transition: padding 0.2s;
+  &.minimizedHeader {
+    padding: 0 1.5rem !important;
+    min-height: 48px;
+    background: transparent;
+    border-radius: 0;
+    border-bottom: 1px solid #353545;
+    margin-bottom: 0;
+    box-shadow: none;
+  }
+}
+.performanceHeader:focus-visible, .performanceHeader:active {
+  outline: 2px solid $light-purple;
+  outline-offset: 2px;
+}
+.performanceTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $white;
+}
+.strengthsWeaknessesRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  position: relative;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    &::before { display: none; }
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #353545;
+    opacity: 0.7;
+    z-index: 1;
+    transform: translateX(-50%);
+  }
+}
+.dotGreen {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $success;
+  margin-right: 0.6em;
+  vertical-align: middle;
+}
+.dotRed {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: $danger;
+  margin-right: 0.6em;
+  vertical-align: middle;
+}
+.swChip {
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.12);
+  color: $white;
+  border-radius: 16px;
+  padding: 0.4em 1em;
+  margin: 0.2em 0.4em 0.2em 0;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);
+  cursor: default;
+}
+.swChip:focus-visible, .swChip:active {
+  outline: 2px solid $light-purple;
+  outline-offset: 2px;
+}
+.strengthCard .swChip {
+  background: rgba(16, 185, 129, 0.18);
+  color: $success;
+}
+.weaknessCard .swChip {
+  background: rgba(239, 68, 68, 0.18);
+  color: $danger;
+}
+.swPercent {
+  font-weight: 400;
+  color: $dark-white;
+  margin-left: 0.5em;
+}
+
+.performanceIcon {
+  margin-right: 0.75rem;
+  color: $light-purple;
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+.chipIcon {
+  margin-right: 0.5em;
+  font-size: 1em;
+  vertical-align: middle;
+  color: inherit;
+}

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.user_subtopic import UserSubtopicRead, UserSubtopicCreate, UserSubtopicUpdate
 from app.crud.user_subtopic import (
     get_by_id, get_by_user_and_subtopic, list_for_user,
-    list_for_user_topic, create, update, delete
+    create, update, delete, update_user_subtopic_progress
 )
 from app.db.session import get_db
 from app.api.auth import get_current_user, get_current_superuser
@@ -57,16 +57,6 @@ async def list_user_subtopics(
     
     return await list_for_user(db, user_id=user_id, skip=skip, limit=limit)
 
-@router.get("/user-topic/{user_topic_id}", response_model=List[UserSubtopicRead])
-async def list_user_subtopics_for_topic(
-    user_topic_id: int,
-    skip: int = 0,
-    limit: int = 100,
-    db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    return await list_for_user_topic(db, user_topic_id=user_topic_id, skip=skip, limit=limit)
-
 @router.patch("/user/{user_id}/subtopic/{subtopic_id}", response_model=UserSubtopicRead)
 async def update_user_subtopic(
     user_id: int,
@@ -103,3 +93,57 @@ async def delete_user_subtopic(
     
     await delete(db, user_subtopic)
     return 
+
+@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-lesson", response_model=UserSubtopicRead)
+async def complete_lesson(
+    user_id: int,
+    subtopic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if not current_user.is_superuser and user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
+    user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
+    if not user_subtopic:
+        raise HTTPException(status_code=404, detail="User subtopic not found")
+    user_subtopic.lessons_completed = True
+    await db.commit()
+    await db.refresh(user_subtopic)
+    await update_user_subtopic_progress(db, user_id, subtopic_id)
+    return user_subtopic
+
+@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-practice", response_model=UserSubtopicRead)
+async def complete_practice(
+    user_id: int,
+    subtopic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if not current_user.is_superuser and user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
+    user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
+    if not user_subtopic:
+        raise HTTPException(status_code=404, detail="User subtopic not found")
+    user_subtopic.practice_completed = True
+    await db.commit()
+    await db.refresh(user_subtopic)
+    await update_user_subtopic_progress(db, user_id, subtopic_id)
+    return user_subtopic
+
+@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-challenge", response_model=UserSubtopicRead)
+async def complete_challenge(
+    user_id: int,
+    subtopic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if not current_user.is_superuser and user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
+    user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
+    if not user_subtopic:
+        raise HTTPException(status_code=404, detail="User subtopic not found")
+    user_subtopic.challenges_completed = True
+    await db.commit()
+    await db.refresh(user_subtopic)
+    await update_user_subtopic_progress(db, user_id, subtopic_id)
+    return user_subtopic 

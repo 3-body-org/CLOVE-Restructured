@@ -29,3 +29,9 @@ class PreAssessmentRead(PreAssessmentBase):
 
     class Config:
         from_attributes = True
+
+class SingleAnswerSubmission(BaseModel):
+    user_id: int
+    topic_id: int
+    question_id: int
+    user_answer: str  # or Any if needed

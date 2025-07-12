@@ -2,46 +2,46 @@
   {
     "subtopic_id": 1,
     "topic_id": 1,
-    "title": "Variables and Data Types"
+    "title": "Declaring Variables"
   },
   {
     "subtopic_id": 2,
     "topic_id": 1,
-    "title": "Basic Operators"
+    "title": "Primitive Data Types"
   },
   {
     "subtopic_id": 3,
     "topic_id": 1,
-    "title": "Input and Output"
+    "title": "Non-primitive Data Types"
   },
   {
     "subtopic_id": 4,
     "topic_id": 2,
-    "title": "If-Else Statements"
+    "title": "Arithmetic"
   },
   {
     "subtopic_id": 5,
     "topic_id": 2,
-    "title": "Loops"
+    "title": "Comparison"
   },
   {
     "subtopic_id": 6,
     "topic_id": 2,
-    "title": "Switch Cases"
+    "title": "Logical"
   },
   {
     "subtopic_id": 7,
     "topic_id": 3,
-    "title": "Function Basics"
+    "title": "If-Else"
   },
   {
     "subtopic_id": 8,
     "topic_id": 3,
-    "title": "Parameters and Returns"
+    "title": "While and Do While Loop"
   },
   {
     "subtopic_id": 9,
     "topic_id": 3,
-    "title": "Module Creation"
+    "title": "For Loop"
   }
 ] 

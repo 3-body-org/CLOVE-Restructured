@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class TopicBase(BaseModel):
     title: str
     description: str | None = None
+    theme: str | None = 'space'
 
 class TopicCreate(TopicBase):
     pass
@@ -11,6 +12,7 @@ class TopicCreate(TopicBase):
 class TopicUpdate(BaseModel):
     title: str | None = None
     description: str | None = None
+    theme: str | None = None
 
 class TopicRead(TopicBase):
     topic_id: int

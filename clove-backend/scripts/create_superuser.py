@@ -4,6 +4,7 @@ import getpass
 from sqlalchemy.ext.asyncio import AsyncSession
 import sys
 import os
+from datetime import date
 
 # This is a bit of a hack to make the script runnable from the root directory
 # It ensures that the app module can be found
@@ -30,6 +31,18 @@ async def main():
                 return
 
             username = input("Enter superuser username: ")
+            first_name = input("Enter first name: ")
+            last_name = input("Enter last name: ")
+            
+            # Get birthday
+            while True:
+                try:
+                    birthday_str = input("Enter birthday (YYYY-MM-DD): ")
+                    birthday = date.fromisoformat(birthday_str)
+                    break
+                except ValueError:
+                    print("Invalid date format. Please use YYYY-MM-DD (e.g., 1990-01-15)")
+            
             password = getpass.getpass("Enter superuser password: ")
             confirm_password = getpass.getpass("Confirm superuser password: ")
 
@@ -40,13 +53,17 @@ async def main():
             # Create the user with superuser flag
             user = await create_user(
                 db=session,
-                username=username,
                 email=email,
                 password_hash=get_password_hash(password),
+                first_name=first_name,
+                last_name=last_name,
+                birthday=birthday,
                 # Note: We are now explicitly setting is_superuser
-                is_superuser=True
+                is_superuser=True,
+                bio='Admin user',
+                profile_photo_url=''
             )
-            
+
             print(f"Superuser '{username}' created successfully with all required data.")
 
         except Exception as e:

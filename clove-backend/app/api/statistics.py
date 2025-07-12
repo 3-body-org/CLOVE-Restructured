@@ -6,6 +6,7 @@ from app.api.auth import get_current_user
 from app.db.models.users import User
 from app.schemas.statistic import StatisticRead, StatisticCreate
 from app.crud import statistic as crud_stat
+from app.crud.challenge import count_all as count_all_challenges
 
 router = APIRouter(prefix="/statistics", tags=["Statistics"], dependencies=[Depends(get_current_user)])
 
@@ -17,7 +18,13 @@ async def get_my_statistics(
     stat = await crud_stat.get_by_user_id(db, current_user.id)
     if not stat:
         raise HTTPException(404, "Statistic record not found")
-    return stat
+    total_challenges = await count_all_challenges(db)
+    # Convert stat to dict if needed
+    stat_dict = stat.__dict__.copy()
+    stat_dict["total_challenges"] = total_challenges
+    # Remove SQLAlchemy state if present
+    stat_dict.pop("_sa_instance_state", None)
+    return stat_dict
 
 @router.post("/", response_model=StatisticRead)
 async def create_statistic(

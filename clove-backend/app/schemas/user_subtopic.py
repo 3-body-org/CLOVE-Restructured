@@ -1,6 +1,7 @@
 # app/schemas/user_subtopic.py
 from datetime import datetime
 from pydantic import BaseModel
+from app.schemas.subtopic import SubtopicRead
 
 class UserSubtopicBase(BaseModel):
     user_id: int
@@ -32,6 +33,7 @@ class UserSubtopicRead(UserSubtopicBase):
     knowledge_level: float
     unlocked_at: datetime | None
     completed_at: datetime | None
+    subtopic: SubtopicRead
 
     class Config:
         from_attributes = True

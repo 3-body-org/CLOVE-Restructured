@@ -1,17 +1,20 @@
 [
   {
     "topic_id": 1,
-    "title": "Basic Programming Concepts",
-    "description": "Introduction to fundamental programming concepts and principles."
+    "title": "Data Types and Variables",
+    "description": "Understanding variables, data types, and how to declare and use them in programming.",
+    "theme": "wizard"
   },
   {
     "topic_id": 2,
-    "title": "Control Structures",
-    "description": "Understanding loops, conditionals, and flow control in programming."
+    "title": "Operators",
+    "description": "Learning about different types of operators used in programming for calculations and comparisons.",
+    "theme": "detective"
   },
   {
     "topic_id": 3,
-    "title": "Functions and Modules",
-    "description": "Learning about functions, modules, and code organization."
+    "title": "Conditional and Loops",
+    "description": "Understanding control flow with conditional statements and different types of loops.",
+    "theme": "space"
   }
 ] 

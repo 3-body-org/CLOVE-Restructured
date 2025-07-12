@@ -18,6 +18,7 @@ class Statistic(Base):
     # — Daily Streak —
     last_login_date = Column(Date, nullable=True, default=None)
     current_streak  = Column(Integer, default=0, nullable=False)
+    login_days_this_week = Column(JSON, nullable=False, default=list)
 
     # — Challenges & Modes, raw counts —
     total_challenges_solved = Column(Integer, default=0, nullable=False)

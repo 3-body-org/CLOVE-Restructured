@@ -1,12 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import func, update
+from sqlalchemy.orm import joinedload
 from app.db.models.statistics import Statistic
 from app.db.models.challenges import Challenge
 from app.schemas.statistic import StatisticCreate
+from datetime import date, timedelta
 
 async def get_by_user_id(db: AsyncSession, user_id: int) -> Statistic | None:
-    r = await db.execute(select(Statistic).where(Statistic.user_id == user_id))
+    r = await db.execute(
+        select(Statistic)
+        .options(joinedload(Statistic.recent_topic))
+        .where(Statistic.user_id == user_id)
+    )
     return r.scalars().first()
 
 async def create_statistic(db: AsyncSession, data: StatisticCreate) -> Statistic:
@@ -26,7 +32,20 @@ async def update_login_streak(db: AsyncSession, user_id: int, today_date):
     if not stat:
         raise ValueError("Statistic not found")
 
+    # Calculate start of the current week (Monday)
+    monday = today_date - timedelta(days=today_date.weekday())
+    # If last_login_date is not in this week, reset login_days_this_week
+    if not stat.last_login_date or stat.last_login_date < monday:
+        stat.login_days_this_week = []
+
+    # Add today's weekday index if not already present
+    today_weekday = today_date.weekday()  # Monday=0, Sunday=6
+    if today_weekday not in stat.login_days_this_week:
+        stat.login_days_this_week.append(today_weekday)
+        stat.login_days_this_week.sort()
+
     if stat.last_login_date == today_date:
+        await db.commit(); await db.refresh(stat)
         return stat
 
     if stat.last_login_date and (today_date - stat.last_login_date).days == 1:

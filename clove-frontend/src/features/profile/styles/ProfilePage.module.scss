@@ -1,0 +1,622 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* Base styles - matching other pages */
+.container {
+  font-family: "Inter", sans-serif;
+  background-color: $light-black;
+  color: $white;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  flex-grow: 1;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.dashboard {
+  flex-grow: 1;
+  padding: 2.5rem;
+  width: 100%;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Hero + Clean Grid Layout */
+.profileHeroWrap {
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.profileHero {
+  background: linear-gradient(135deg, 
+    rgba($light-purple, 0.08) 0%, 
+    rgba($dark-purple, 0.04) 25%, 
+    rgba($light-purple, 0.06) 50%, 
+    rgba($dark-purple, 0.03) 75%, 
+    rgba($light-purple, 0.02) 100%);
+  padding: 3rem 2rem 2rem 2rem;
+  border-bottom: 1px solid rgba($light-purple, 0.15);
+  border-radius: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.profileHero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba($light-purple, 0.3) 25%, 
+    rgba($dark-purple, 0.3) 50%, 
+    rgba($light-purple, 0.3) 75%, 
+    transparent 100%);
+}
+
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.avatarHeroOuter {
+  position: relative;
+  display: inline-block;
+}
+
+.avatarHero {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  background: linear-gradient(45deg, $light-purple, $dark-purple, $light-purple) border-box;
+  background-clip: border-box;
+  box-shadow: 
+    0 8px 32px 0 rgba($light-purple, 0.25),
+    0 0 0 1px rgba($light-purple, 0.1) inset;
+  background: $lighter-black;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.avatarHero::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, $light-purple, $dark-purple, $light-purple);
+  z-index: -1;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.avatarHeroOuter:hover .avatarHero {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 
+    0 12px 40px 0 rgba($light-purple, 0.35),
+    0 0 0 1px rgba($light-purple, 0.2) inset;
+}
+
+.avatarHeroOuter:hover .avatarHero::before {
+  opacity: 1;
+}
+
+.avatarHeroUploadOverlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(135deg, $light-purple, $dark-purple);
+  color: $white;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid $light-black;
+  box-shadow: 
+    0 2px 8px 0 rgba($light-purple, 0.3),
+    0 0 0 1px rgba($light-purple, 0.2) inset;
+  cursor: pointer;
+  font-size: 1.4rem;
+  transition: all 0.3s ease;
+  z-index: 2;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 2px 8px 0 rgba($light-purple, 0.3),
+      0 0 0 1px rgba($light-purple, 0.2) inset;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 
+      0 4px 16px 0 rgba($light-purple, 0.4),
+      0 0 0 1px rgba($light-purple, 0.3) inset;
+  }
+}
+
+.avatarHeroUploadOverlay:hover {
+  background: linear-gradient(135deg, $dark-purple, $light-purple);
+  transform: scale(1.15);
+  box-shadow: 
+    0 4px 16px 0 rgba($light-purple, 0.4),
+    0 0 0 1px rgba($light-purple, 0.3) inset;
+  animation: none;
+}
+
+.heroInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.heroName {
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, $white 0%, #e2e8f0 50%, $light-purple 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.heroBadge {
+  background: linear-gradient(90deg, $dark-purple 0%, $light-purple 100%);
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.36rem 1.8rem 0.36rem 1.2rem;
+  min-width: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1.5px solid rgba($dark-purple, 0.18);
+  box-shadow: 0 2px 8px 0 rgba($dark-purple, 0.10);
+  position: relative;
+  margin-left: 0.7rem;
+  margin-bottom: 0.1rem;
+  letter-spacing: 0.01em;
+  transition: box-shadow 0.2s, border 0.2s, background 0.2s;
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.heroBadge span, .heroBadge strong, .heroBadge b {
+  color: #fff;
+  font-weight: 700;
+}
+
+.heroBadge svg {
+  color: #fff;
+  font-size: 1.1em;
+  margin-right: 0.18em;
+  margin-bottom: 1px;
+}
+
+.heroBadge:hover {
+  box-shadow: 0 4px 16px 0 rgba($dark-purple, 0.18);
+  border: 1.5px solid $light-purple;
+  background: linear-gradient(90deg, $dark-purple 0%, $light-purple 100%);
+}
+
+.heroUsername {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.usernameText {
+  color: $light-purple;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba($light-purple, 0.3);
+}
+
+.accountTypeBadge {
+  background: linear-gradient(135deg, rgba($light-purple, 0.2) 0%, rgba($light-purple, 0.1) 100%);
+  color: $light-purple;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 1rem;
+  padding: 0.3rem 1rem;
+  border: 1px solid rgba($light-purple, 0.2);
+  box-shadow: 0 0 10px rgba($light-purple, 0.1);
+}
+
+.heroEditButton {
+  background: transparent;
+  color: $light-purple;
+  border: 1.5px solid $light-purple;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: none;
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroEditButton:hover {
+  background: $light-purple;
+  color: #fff;
+  border-color: $dark-purple;
+}
+
+.profileContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.bioSection, .infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, $white 0%, $light-purple 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(90deg, $light-purple, $dark-purple, $light-purple) 1;
+}
+
+.bioText {
+  color: $dark-white;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 0;
+  text-shadow: 0 0 5px rgba($light-purple, 0.1);
+}
+
+.bioInput {
+  width: 100%;
+  background: linear-gradient(135deg, rgba($light-purple, 0.05) 0%, rgba($dark-purple, 0.03) 100%);
+  border: 2px solid rgba($light-purple, 0.2);
+  border-radius: 0.75rem;
+  color: $white;
+  font-size: 1.2rem;
+  padding: 1rem;
+  outline: none;
+  resize: vertical;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  box-shadow: 0 0 10px rgba($light-purple, 0.05);
+}
+
+.bioInput:focus {
+  border-color: $light-purple;
+  box-shadow: 
+    0 0 0 2px rgba($light-purple, 0.15),
+    0 0 20px rgba($light-purple, 0.1);
+  background: linear-gradient(135deg, rgba($light-purple, 0.08) 0%, rgba($dark-purple, 0.05) 100%);
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.8rem;
+  background: linear-gradient(135deg, 
+    rgba($light-purple, 0.03) 0%, 
+    rgba($dark-purple, 0.02) 50%, 
+    rgba($light-purple, 0.02) 100%);
+  border-radius: 0.75rem;
+  border: 1px solid rgba($light-purple, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.infoItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, $light-purple, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.infoItem:hover {
+  background: linear-gradient(135deg, 
+    rgba($light-purple, 0.08) 0%, 
+    rgba($dark-purple, 0.05) 50%, 
+    rgba($light-purple, 0.05) 100%);
+  border-color: rgba($light-purple, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba($light-purple, 0.1);
+}
+
+.infoItem:hover::before {
+  opacity: 1;
+}
+
+.infoHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.infoIcon {
+  color: $light-purple;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba($light-purple, 0.3);
+}
+
+.infoLabel {
+  color: $light-purple;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-shadow: 0 0 5px rgba($light-purple, 0.2);
+}
+
+.infoValue {
+  color: $white;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding-left: 2rem;
+  text-shadow: 0 0 5px rgba($light-purple, 0.1);
+}
+
+.infoInput {
+  width: 100%;
+  background: linear-gradient(135deg, rgba($light-purple, 0.05) 0%, rgba($dark-purple, 0.03) 100%);
+  border: 2px solid rgba($light-purple, 0.2);
+  border-radius: 0.5rem;
+  color: $white;
+  font-size: 1.1rem;
+  padding: 0.8rem;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  box-shadow: 0 0 10px rgba($light-purple, 0.05);
+}
+
+.infoInput:focus {
+  border-color: $light-purple;
+  box-shadow: 
+    0 0 0 2px rgba($light-purple, 0.15),
+    0 0 20px rgba($light-purple, 0.1);
+  background: linear-gradient(135deg, rgba($light-purple, 0.08) 0%, rgba($dark-purple, 0.05) 100%);
+}
+
+.editActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid;
+  border-image: linear-gradient(90deg, transparent, rgba($light-purple, 0.2), transparent) 1;
+}
+
+.saveButton {
+  background: $light-purple;
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.4rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: none;
+  position: relative;
+  outline: none;
+}
+
+.saveButton:hover {
+  background: $dark-purple;
+}
+
+.saveButton:disabled {
+  background: #888;
+  color: #fff;
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: #888;
+  box-shadow: none;
+}
+
+.cancelButton {
+  background: #2e2e3a;
+  color: $white;
+  border: 1px solid #444;
+  padding: 0.55rem 1.4rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: none;
+  position: relative;
+  outline: none;
+}
+
+.cancelButton:hover {
+  background: #232529;
+  border-color: $light-purple;
+}
+
+.heroNameInput {
+  background: transparent;
+  border: 1.5px solid rgba($light-purple, 0.5);
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 700;
+  padding: 0.2em 0.7em;
+  margin-right: 0.7rem;
+  outline: none;
+  min-width: 120px;
+  max-width: 220px;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: none;
+  text-align: left;
+}
+.heroNameInput:last-child {
+  margin-right: 0;
+}
+.heroNameInput:focus {
+  border-color: $light-purple;
+  box-shadow: 0 0 0 2px rgba($light-purple, 0.25);
+  background: rgba($light-purple, 0.08);
+}
+
+.sectionEditBtn {
+  background: transparent;
+  border: none;
+  color: $light-purple;
+  opacity: 0.85;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 1.2em;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s, background 0.2s, opacity 0.2s;
+  padding: 0.1em 0.2em;
+}
+.sectionEditBtn:hover {
+  background: rgba($light-purple, 0.08);
+  color: $dark-purple;
+  opacity: 1;
+}
+
+.editActionRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.editActionRowLeft {
+  justify-content: flex-start;
+}
+
+// Responsive
+@media (max-width: 900px) {
+  .heroContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .heroEditButton {
+    align-self: center;
+  }
+  
+  .infoGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .profileContent {
+    padding: 1.5rem 0;
+  }
+  
+  .profileHero {
+    padding: 2rem 1rem 1.5rem 1rem;
+  }
+  
+  .dashboard {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .heroName {
+    font-size: 2.2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .heroUsername {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .avatarHero {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .avatarHeroUploadOverlay {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .profileContent {
+    padding: 1rem 0;
+  }
+  
+  .profileHero {
+    padding: 1.5rem 0.5rem 1rem 0.5rem;
+  }
+  
+  .dashboard {
+    padding: 1.5rem;
+  }
+} 
