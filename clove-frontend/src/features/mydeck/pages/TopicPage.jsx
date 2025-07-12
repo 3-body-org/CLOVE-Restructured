@@ -31,14 +31,16 @@ export default function TopicPage() {
   const { getTopicsWithProgress, getTopicById, updateRecentTopic } = useMyDeckApi();
   const { topics, setTopics } = useContext(MyDeckContext);
   const [loading, setLoading] = useState(true);
+  const [minTimePassed, setMinTimePassed] = useState(false);
   const [error, setError] = useState("");
 
-  // Add a short guaranteed loading effect
+  // Ensure loading screen is visible for at least 400ms every time topics change
   useEffect(() => {
+    setMinTimePassed(false);
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 400);
+    const timer = setTimeout(() => setMinTimePassed(true), 200);
     return () => clearTimeout(timer);
-  }, []);
+  }, [topics]);
 
   // Load topics with user progress only if not already in context
   useEffect(() => {
@@ -100,7 +102,7 @@ export default function TopicPage() {
     [navigate, getTopicById, updateRecentTopic]
   );
 
-  if (loading) return <LoadingScreen message="Loading topics..." />;
+  if (loading || !minTimePassed) return <LoadingScreen message="Loading topics..." />;
   if (error) return <ErrorScreen message={error} />;
 
   return (
