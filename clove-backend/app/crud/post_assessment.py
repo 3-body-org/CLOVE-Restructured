@@ -42,7 +42,8 @@ async def create(db: AsyncSession, post_in: PostAssessmentCreate) -> PostAssessm
         is_unlocked=post_in.is_unlocked,
         subtopic_scores=post_in.subtopic_scores,
         questions_answers_iscorrect=post_in.questions_answers_iscorrect,
-        attempt_count=post_in.attempt_count
+        attempt_count=post_in.attempt_count,
+        is_completed=getattr(post_in, 'is_completed', False)
     )
     db.add(new_post)
     await db.commit()
@@ -60,7 +61,8 @@ async def update(db: AsyncSession, post_db: PostAssessment, post_in: PostAssessm
             is_unlocked=post_in.is_unlocked,
             subtopic_scores=post_in.subtopic_scores,
             questions_answers_iscorrect=post_in.questions_answers_iscorrect,
-            attempt_count=post_in.attempt_count
+            attempt_count=post_in.attempt_count,
+            is_completed=getattr(post_in, 'is_completed', post_db.is_completed)
         )
     )
     await db.commit()
@@ -78,6 +80,7 @@ async def reset_assessment(db: AsyncSession, post_db: PostAssessment) -> PostAss
     post_db.subtopic_scores = {}
     post_db.questions_answers_iscorrect = {}
     post_db.attempt_count = 0
+    post_db.is_completed = False  # Reset is_completed
     db.add(post_db)
     await db.commit()
     await db.refresh(post_db)
@@ -232,6 +235,7 @@ async def _update_existing_assessment(
             existing.attempt_count += 1
         # Lock the post-assessment
         existing.is_unlocked = False
+        existing.is_completed = True # Set is_completed to True when attempt is finished
     else:
         # The attempt is still in progress, score based on answered questions
         final_score = (total_correct / total_items) * 100 if total_items > 0 else 0
@@ -340,6 +344,7 @@ async def submit_multiple_answers(
     existing.subtopic_scores = subtopic_scores
     existing.total_score = round(final_score, 2)
     existing.total_items = total_items
+    existing.is_completed = True # Set is_completed to True when attempt is finished
     
     await db.commit()
     await db.refresh(existing)

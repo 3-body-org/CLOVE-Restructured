@@ -113,6 +113,10 @@ async def update_user_subtopic_progress(db, user_id, subtopic_id):
         await update_user_topic_progress(db, user_id, subtopic.topic_id)
 
 async def update_user_topic_progress(db, user_id, topic_id):
+    from app.db.models.pre_assessments import PreAssessment
+    from app.db.models.post_assessments import PostAssessment
+
+    # Get all subtopics for this topic
     subtopics = await db.execute(select(Subtopic).where(Subtopic.topic_id == topic_id))
     subtopics = subtopics.scalars().all()
     total_subtopics = len(subtopics)
@@ -129,8 +133,7 @@ async def update_user_topic_progress(db, user_id, topic_id):
         if user_subtopic:
             progress_sum += user_subtopic.progress_percent or 0.0
 
-    progress_percent = progress_sum / total_subtopics if total_subtopics > 0 else 0.0
-
+    # Fetch user_topic
     user_topic = await db.execute(
         select(UserTopic).where(
             UserTopic.user_id == user_id,
@@ -138,14 +141,34 @@ async def update_user_topic_progress(db, user_id, topic_id):
         )
     )
     user_topic = user_topic.scalars().first()
+
+    # Fetch pre- and post-assessment for this user/topic
+    pre_assessment = await db.execute(
+        select(PreAssessment).where(PreAssessment.user_topic_id == user_topic.id)
+    )
+    pre_assessment = pre_assessment.scalars().first()
+
+    post_assessment = await db.execute(
+        select(PostAssessment).where(PostAssessment.user_topic_id == user_topic.id)
+    )
+    post_assessment = post_assessment.scalars().first()
+
+    # Add pre- and post-assessment completion to progress
+    pre_complete = 1.0 if pre_assessment and pre_assessment.is_completed else 0.0
+    post_complete = 1.0 if post_assessment and post_assessment.is_completed else 0.0
+
+    progress_sum += pre_complete + post_complete
+    total_units = total_subtopics + 2  # +2 for pre and post
+
+    progress_percent = progress_sum / total_units if total_units > 0 else 0.0
+
     if user_topic:
         user_topic.progress_percent = progress_percent
         await db.commit()
         await db.refresh(user_topic)
 
-        # Unlock next topic if progress >= 0.75
+        # Unlock next topic if progress_percent >= 0.75
         if progress_percent >= 0.75:
-            # Find the next topic by topic_id
             next_topic = await db.execute(
                 select(Topic)
                 .where(Topic.topic_id > topic_id)
@@ -153,7 +176,6 @@ async def update_user_topic_progress(db, user_id, topic_id):
             )
             next_topic = next_topic.scalars().first()
             if next_topic:
-                # Find or create UserTopic for the next topic
                 next_user_topic = await db.execute(
                     select(UserTopic).where(
                         UserTopic.user_id == user_id,

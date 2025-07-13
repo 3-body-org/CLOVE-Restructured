@@ -43,7 +43,8 @@ async def create(db: AsyncSession, pre_in: PreAssessmentCreate) -> PreAssessment
         is_unlocked=pre_in.is_unlocked,
         subtopic_scores=pre_in.subtopic_scores,
         questions_answers_iscorrect=pre_in.questions_answers_iscorrect,
-        attempt_count=pre_in.attempt_count
+        attempt_count=pre_in.attempt_count,
+        is_completed=pre_in.is_completed
     )
     db.add(new_pre)
     await db.commit()
@@ -61,7 +62,8 @@ async def update(db: AsyncSession, pre_db: PreAssessment, pre_in: PreAssessmentU
             is_unlocked=pre_in.is_unlocked,
             subtopic_scores=pre_in.subtopic_scores,
             questions_answers_iscorrect=pre_in.questions_answers_iscorrect,
-            attempt_count=pre_in.attempt_count
+            attempt_count=pre_in.attempt_count,
+            is_completed=pre_in.is_completed
         )
     )
     await db.commit()
@@ -79,6 +81,7 @@ async def reset_assessment(db: AsyncSession, pre_db: PreAssessment) -> PreAssess
     pre_db.subtopic_scores = {}
     pre_db.questions_answers_iscorrect = {}
     pre_db.attempt_count = 0
+    pre_db.is_completed = False # Reset is_completed
     db.add(pre_db)
     await db.commit()
     await db.refresh(pre_db)
@@ -235,6 +238,7 @@ async def _update_existing_assessment(
         existing.is_unlocked = False
         # Unlock the first subtopic for this user/topic
         await unlock_first_subtopic_for_user(db, user_topic.user_id, user_topic.topic_id)
+        existing.is_completed = True # Mark as completed
     else:
         # The attempt is still in progress, score based on answered questions
         final_score = (total_correct / total_items) * 100 if total_items > 0 else 0
@@ -343,6 +347,7 @@ async def submit_multiple_answers(
     existing.subtopic_scores = subtopic_scores
     existing.total_score = round(final_score, 2)
     existing.total_items = total_items
+    existing.is_completed = True # Mark as completed
     
     await db.commit()
     await db.refresh(existing)

@@ -8,6 +8,7 @@ class PostAssessmentBase(BaseModel):
     total_score: float = 0.0
     total_items: int = 0
     is_unlocked: bool = False
+    is_completed: bool = False
     subtopic_scores: Dict = {}
     questions_answers_iscorrect: Dict = {}
     attempt_count: int = 0

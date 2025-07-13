@@ -11,6 +11,7 @@ class PreAssessment(Base):
     total_score            = Column(Float, nullable=False, default=0.0)
     total_items            = Column(Integer, default=0)
     is_unlocked            = Column(Boolean, default=False)
+    is_completed            = Column(Boolean, default=False)
     subtopic_scores        = Column(JSON, nullable=False, default=dict)
     questions_answers_iscorrect = Column(JSON, nullable=False, default=dict)
     attempt_count          = Column(Integer, default=0)

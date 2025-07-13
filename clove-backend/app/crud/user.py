@@ -202,7 +202,8 @@ async def init_user_data(db: AsyncSession, user_id: int, login_days_this_week=No
             is_unlocked=True,  # Pre-assessment always unlocked
             subtopic_scores={},
             questions_answers_iscorrect={},
-            attempt_count=0
+            attempt_count=0,
+            is_completed=False
         )
         pre_assessments.append(pre_assessment)
 
@@ -213,7 +214,8 @@ async def init_user_data(db: AsyncSession, user_id: int, login_days_this_week=No
             is_unlocked=False,  # Post-assessment always locked at creation
             subtopic_scores={},
             questions_answers_iscorrect={},
-            attempt_count=0
+            attempt_count=0,
+            is_completed=False
         )
         post_assessments.append(post_assessment)
     
