@@ -11,7 +11,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/progress/styles/ProgressPage.module.scss";
 import TitleAndProfile from "components/layout/Navbar/TitleAndProfile";
-import ProgressAnalytics from "features/progress/components/ProgressAnalytics";
+import {
+  ProgressAnalytics,
+  SubtopicCard,
+  ModeCard,
+  getMasteryLevel,
+  getStrengthsWeaknesses,
+  getCategory,
+  getAccuracyClass
+} from "features/progress/components/ProgressAnalytics";
 import { useApi } from "../../../hooks/useApi";
 import { useAuth } from "contexts/AuthContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
@@ -35,99 +43,6 @@ const MODE_CONFIG = [
     name: "Output Tracing Mode",
   },
 ];
-
-// Category label based on accuracy
-const getCategory = (accuracy) => {
-  if (accuracy >= 90) return "Excellent";
-  if (accuracy >= 75) return "Good";
-  if (accuracy >= 50) return "Fair";
-  if (accuracy > 0) return "Needs Improvement";
-  return "Needs Improvement";
-};
-
-// Color class for accuracy
-const getAccuracyClass = (accuracy) => {
-  if (accuracy >= 75) return styles.accuracyHigh;
-  if (accuracy >= 50) return styles.accuracyMedium;
-  return styles.accuracyLow;
-};
-
-// Card for each learning mode
-const ModeCard = ({ icon, name, category, stats = [] }) => (
-  <div className={styles.modeCard}>
-    <div className={styles.modeHeader}>
-      <div className={styles.modeIcon}>
-        <FontAwesomeIcon icon={icon} />
-      </div>
-      <div className={styles.modeInfo}>
-        <div className={styles.modeName}>{name}</div>
-        <div className={styles.modeCategory}>{category}</div>
-      </div>
-    </div>
-    <div className={styles.modeStats}>
-      {stats.map((stat, index) => (
-        <div key={index} className={styles.statItem}>
-          <span className={`${styles.statValue} ${stat.className || ""}`}>
-            {stat.value}
-          </span>
-          <span className={styles.statLabel}>{stat.label}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-// Card for each subtopic
-const SubtopicCard = ({
-  name = "Untitled Subtopic",
-  masteryLevel = "Beginner",
-  progress = 0,
-  knowledge = 0,
-}) => {
-  const [expanded, setExpanded] = useState(false);
-  return (
-    <div
-      className={`${styles.subtopicCard} ${expanded ? styles.expanded : ""}`}
-    >
-      <div
-        className={styles.subtopicHeader}
-        onClick={() => setExpanded((prev) => !prev)}
-        tabIndex={0}
-        role="button"
-        aria-expanded={expanded}
-        aria-label={`Toggle details for ${name}`}
-      >
-        <h3 className={styles.subtopicName}>{name}</h3>
-        <div className={styles.headerRight}>
-          {!expanded && (
-            <span
-              className={`${styles.masteryLevel} ${
-                styles[`status${masteryLevel}`]
-              }`}
-            >
-              {masteryLevel}
-            </span>
-          )}
-          <FontAwesomeIcon
-            icon={expanded ? faChevronUp : faChevronDown}
-            className={styles.chevronIcon}
-          />
-        </div>
-      </div>
-      {expanded && (
-        <div className={styles.subtopicContent}>
-          <ProgressAnalytics progress={progress} knowledge={knowledge} />
-        </div>
-      )}
-    </div>
-  );
-};
-
-const getMasteryLevel = (knowledge) => {
-  if (knowledge > 0.66) return "Advanced";
-  if (knowledge > 0.33) return "Intermediate";
-  return "Beginner";
-};
 
 const ProgressPage = () => {
   const [expandedTopics, setExpandedTopics] = useState({});
@@ -219,20 +134,6 @@ const ProgressPage = () => {
       }),
     [statData]
   );
-
-  // Helper to get strengths/weaknesses for a topic
-  const getStrengthsWeaknesses = (subtopics = []) => {
-    const isDefault = (k) => k === 0 || k === 0.1;
-    const strengths = subtopics.filter(
-      (st) => st.knowledge_level >= 0.7 && !isDefault(st.knowledge_level)
-    );
-    const weaknesses = subtopics.filter(
-      (st) => st.knowledge_level < 0.5 && !isDefault(st.knowledge_level)
-    );
-    strengths.sort((a, b) => b.knowledge_level - a.knowledge_level);
-    weaknesses.sort((a, b) => a.knowledge_level - b.knowledge_level);
-    return { strengths, weaknesses };
-  };
 
   if (loading) return <LoadingScreen message="Loading progress..." />;
   if (error) return <ErrorScreen message={error} />;
@@ -376,11 +277,16 @@ const ProgressPage = () => {
                             </div>
                             <div className={styles.swList}>
                               {strengths.length > 0 ? (
-                                strengths.map((st, idx) => (
-                                  <span key={idx} className={styles.swChip}>
-                                    <span className={styles.dotGreen}></span> {st.name}
-                                  </span>
-                                ))
+                                strengths.map((st, idx) => {
+                                  const subtopicName = st.subtopic?.title || "Untitled Subtopic";
+                                  // Debug log for strengths
+                                  console.log("Strength chip:", subtopicName, st);
+                                  return (
+                                    <span key={idx} className={styles.swChip}>
+                                      <span className={styles.dotGreen}></span> {subtopicName}
+                                    </span>
+                                  );
+                                })
                               ) : (
                                 <div className={styles.swItem}>No strengths identified yet</div>
                               )}
@@ -396,11 +302,16 @@ const ProgressPage = () => {
                             </div>
                             <div className={styles.swList}>
                               {weaknesses.length > 0 ? (
-                                weaknesses.map((st, idx) => (
-                                  <span key={idx} className={styles.swChip}>
-                                    <span className={styles.dotRed}></span> {st.name}
-                                  </span>
-                                ))
+                                weaknesses.map((st, idx) => {
+                                  const subtopicName = st.subtopic?.title || "Untitled Subtopic";
+                                  // Debug log for weaknesses
+                                  console.log("Weakness chip:", subtopicName, st);
+                                  return (
+                                    <span key={idx} className={styles.swChip}>
+                                      <span className={styles.dotRed}></span> {subtopicName}
+                                    </span>
+                                  );
+                                })
                               ) : (
                                 <div className={styles.swItem}>No weaknesses identified yet</div>
                               )}
@@ -415,7 +326,7 @@ const ProgressPage = () => {
                         <SubtopicCard
                           key={subtopic.id}
                           name={subtopic.name || subtopic.title || subtopic.subtopic?.title || "Untitled Subtopic"}
-                          masteryLevel={getMasteryLevel((subtopic.knowledge_level || 0) / 100)}
+                          masteryLevel={getMasteryLevel(subtopic.knowledge_level || 0)}
                           progress={Math.round((subtopic.progress_percent || 0) * 100)}
                           knowledge={Math.round((subtopic.knowledge_level || 0) * 100)}
                         />

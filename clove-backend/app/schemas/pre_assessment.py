@@ -8,6 +8,7 @@ class PreAssessmentBase(BaseModel):
     total_score: float
     total_items: int | None = None
     is_unlocked: bool = False
+    is_completed: bool = False
     subtopic_scores: Dict
     questions_answers_iscorrect: Dict
     attempt_count: int = 0
