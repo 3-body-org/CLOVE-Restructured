@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// CLOVE Backend Startup Script
+// Refactored for clarity and maintainability.
+
 const { spawn } = require('child_process');
 const path = require('path');
 const os = require('os');
@@ -7,7 +10,6 @@ const fs = require('fs');
 
 const backendDir = path.join(__dirname, 'clove-backend');
 const isWin = os.platform() === 'win32';
-
 const unixUvicorn = path.join(backendDir, 'venv', 'bin', 'uvicorn');
 const winUvicorn = path.join(backendDir, 'venv', 'Scripts', 'uvicorn.exe');
 

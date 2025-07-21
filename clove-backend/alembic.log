@@ -472,3 +472,27 @@
 2025-07-20 17:31:51,241 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
 2025-07-20 17:31:51,242 - alembic.runtime.migration - INFO - Will assume transactional DDL.
 2025-07-20 17:31:51,242 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-21 16:10:37,833 - alembic - INFO - Running online migrations
+2025-07-21 16:10:37,833 - alembic - INFO - Running online migrations
+2025-07-21 16:10:37,922 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-21 16:10:37,922 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-21 16:10:37,923 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-21 16:10:37,923 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-21 16:10:42,679 - alembic - INFO - Running online migrations
+2025-07-21 16:10:42,679 - alembic - INFO - Running online migrations
+2025-07-21 16:10:42,752 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-21 16:10:42,752 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-21 16:10:42,753 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-21 16:10:42,753 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-22 01:27:22,146 - alembic - INFO - Running online migrations
+2025-07-22 01:27:22,146 - alembic - INFO - Running online migrations
+2025-07-22 01:27:22,215 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-22 01:27:22,215 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-22 01:27:22,215 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-22 01:27:22,215 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-22 01:27:25,600 - alembic - INFO - Running online migrations
+2025-07-22 01:27:25,600 - alembic - INFO - Running online migrations
+2025-07-22 01:27:25,644 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-22 01:27:25,644 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-07-22 01:27:25,645 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-07-22 01:27:25,645 - alembic.runtime.migration - INFO - Will assume transactional DDL.

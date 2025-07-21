@@ -1,4 +1,4 @@
-@use "/variables" as *; /* Import global variables */
+@use "/variables" as *;
 @use "sass:color";
 
 $font-family: "Open Sauce One", "Roboto", sans-serif;
@@ -12,11 +12,7 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   background-color: $light-black;
   color: $white;
   font-family: $font-family;
-
-  @media (max-width: 768px) {
-    padding: 1.5rem;
-    gap: 1.5rem;
-  }
+  @media (max-width: 768px) { padding: 1.5rem; gap: 1.5rem; }
 }
 
 .floatContainer {
@@ -27,21 +23,12 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 0;
-  }
+  @media (max-width: 480px) { grid-template-columns: 1fr; gap: 1rem; padding: 0; }
 }
 
 @keyframes subtleShine {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .floatCard {
@@ -49,7 +36,7 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   border-radius: 1rem;
   border: 1px solid var(--primary-color, $light-purple);
   color: var(--text-color, $white);
-  box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1.25rem 3.125rem rgba(0,0,0,0.5);
   position: relative;
   overflow: hidden;
   animation: float 6s ease-in-out infinite, subtleShine 8s ease-in-out infinite;
@@ -59,32 +46,19 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   flex-direction: column;
   justify-content: space-between;
   margin: 0.5rem;
-  background-image: linear-gradient(
-    90deg,
-    rgba($light-purple, 0) 0%,
-    rgba(color.adjust($light-purple, $lightness: 10%), 0.15) 20%,
-    rgba(color.adjust($light-purple, $lightness: 15%), 0.25) 50%,
-    rgba(color.adjust($light-purple, $lightness: 10%), 0.15) 80%,
-    rgba($light-purple, 0) 100%
-  );
+  background-image: linear-gradient(90deg, rgba($light-purple,0) 0%, rgba(color.adjust($light-purple, $lightness: 10%),0.15) 20%, rgba(color.adjust($light-purple, $lightness: 15%),0.25) 50%, rgba(color.adjust($light-purple, $lightness: 10%),0.15) 80%, rgba($light-purple,0) 100%);
   background-size: 200% auto;
   background-repeat: no-repeat;
-
   &:not(.lockedCard):hover {
     transform: translateY(-0.5rem);
-    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3);
     border-color: var(--secondary-color, $dark-purple);
     box-shadow: 0 0 15px var(--primary-color, $light-purple);
   }
-
   @media (max-width: 768px) {
     min-height: 180px;
     animation: none;
-
-    &:hover {
-      transform: none;
-      box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.5);
-    }
+    &:hover { transform: none; box-shadow: 0 1.25rem 3.125rem rgba(0,0,0,0.5); }
   }
 }
 
@@ -95,20 +69,14 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   flex-direction: column;
   justify-content: space-between;
   z-index: 2;
-
-  @media (max-width: 480px) {
-    padding: 1rem;
-  }
+  @media (max-width: 480px) { padding: 1rem; }
 }
 
 .cardTitle {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 0.5rem;
-
-  @media (max-width: 480px) {
-    font-size: 22px;
-  }
+  @media (max-width: 480px) { font-size: 22px; }
 }
 
 .cardDesc {
@@ -116,15 +84,12 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   opacity: 0.8;
   line-height: 1.5;
   margin-bottom: 1rem;
-
-  @media (max-width: 480px) {
-    font-size: 13px;
-  }
+  @media (max-width: 480px) { font-size: 13px; }
 }
 
 .startButton {
   background-color: $light-purple;
-  color: white;
+  color: #fff;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -137,39 +102,24 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   position: relative;
   overflow: hidden;
   transform: translateY(0);
-
   &:not(:disabled):hover {
     background-color: color.adjust($dark-purple, $lightness: -10%);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba($dark-purple, 0.4);
   }
-
   &:not(:disabled):active {
     transform: translateY(0);
     box-shadow: 0 2px 10px rgba($light-purple, 0.3);
   }
-
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      120deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
     transform: translateX(-100%);
     transition: 0.5s;
   }
-
-  &:hover::after {
-    transform: translateX(100%);
-  }
-
+  &:hover::after { transform: translateX(100%); }
   @media (max-width: 480px) {
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
@@ -182,109 +132,63 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   right: 0.75rem;
   font-size: 1.3rem;
   color: $danger;
-  transition: all 0.3s ease;
-
-  @media (max-width: 480px) {
-    font-size: 1.1rem;
-  }
+  transition: all 0.3s;
+  @media (max-width: 480px) { font-size: 1.1rem; }
 }
 
 .holographicEffect {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0; width: 100%; height: 100%;
   background: var(--holographic-effect);
   background-size: 200% 200%;
   animation: hologram 6s linear infinite;
   mix-blend-mode: overlay;
   pointer-events: none;
   z-index: 0;
-
-  @media (max-width: 768px) {
-    animation: none;
-  }
+  @media (max-width: 768px) { animation: none; }
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-1rem);
-  }
-}
-
-@keyframes hologram {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 200% 200%;
-  }
-}
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1rem); } }
+@keyframes hologram { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
 
 .lockedCard {
   filter: grayscale(100%) brightness(0.7);
   border-color: var(--progress-bg, #4a4a5a) !important;
-  background: var(--locked-bg, rgba(45, 55, 72, 0.5)) !important;
+  background: var(--locked-bg, rgba(45,55,72,0.5)) !important;
   cursor: not-allowed;
-
-  &:hover {
-    transform: none !important;
-    box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.5) !important;
-  }
+  &:hover { transform: none !important; box-shadow: 0 1.25rem 3.125rem rgba(0,0,0,0.5) !important; }
 }
 
-.lockedEffect {
-  opacity: 0.2;
-  animation: none;
-}
+.lockedEffect { opacity: 0.2; animation: none; }
 
 .lockedButton {
   background: $lighter-black !important;
   cursor: not-allowed !important;
   box-shadow: none !important;
   color: $dark-white !important;
-
-  &:hover {
-    transform: none !important;
-  }
+  &:hover { transform: none !important; }
 }
 
-.lockedIcon {
-  filter: grayscale(100%);
-  opacity: 0.7;
-}
+.lockedIcon { filter: grayscale(100%); opacity: 0.7; }
 
 .cardProgress {
   width: 100%;
   height: 6px;
-  // background-color: var(--progress-bg, $light-black);
   background-color: $lighter-black;
   border-radius: 3px;
   margin: 1rem 0;
   overflow: hidden;
-
   .progressFill {
     height: 100%;
     background-color: $dark-purple;
-    transition: width 0.5s ease;
+    transition: width 0.5s;
   }
 }
 
 .progressFill {
   height: 100%;
-  background: var(
-    --progress-fill,
-    linear-gradient(90deg, var(--primary-color), var(--secondary-color))
-  );
+  background: var(--progress-fill, linear-gradient(90deg, var(--primary-color), var(--secondary-color)));
   border-radius: 3px;
-  transition: width 0.5s ease;
-
-  .lockedCard & {
-    background: $light-black;
-  }
+  transition: width 0.5s;
+  .lockedCard & { background: $light-black; }
 }

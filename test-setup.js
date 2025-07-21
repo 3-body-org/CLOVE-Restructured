@@ -26,7 +26,6 @@ if (fs.existsSync(packageJsonPath)) {
     console.log('❌ setup script not found in root package.json');
     process.exit(1);
   }
-  
   if (packageJson.scripts && packageJson.scripts.postinstall) {
     console.log('✅ postinstall script found in root package.json');
   } else {
@@ -78,7 +77,7 @@ if (fs.existsSync(requirementsPath)) {
 try {
   execSync('node --version', { stdio: 'pipe' });
   console.log('✅ Node.js is available');
-} catch (error) {
+} catch {
   console.log('❌ Node.js not found');
   process.exit(1);
 }
@@ -87,7 +86,7 @@ try {
 try {
   execSync('npm --version', { stdio: 'pipe' });
   console.log('✅ npm is available');
-} catch (error) {
+} catch {
   console.log('❌ npm not found');
   process.exit(1);
 }
@@ -96,11 +95,11 @@ try {
 try {
   execSync('python3 --version', { stdio: 'pipe' });
   console.log('✅ Python 3 is available');
-} catch (error) {
+} catch {
   try {
     execSync('python --version', { stdio: 'pipe' });
     console.log('✅ Python is available');
-  } catch (error) {
+  } catch {
     console.log('⚠️  Python not found - backend installation will be skipped');
   }
 }

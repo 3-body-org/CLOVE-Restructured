@@ -1,22 +1,21 @@
+/**
+ * @file useTheme.js
+ * @description Custom hook to manage theme switching and application state for MyDeck.
+ */
+
 import { useContext } from "react";
 import ThemeContext from "contexts/ThemeContext";
 
 /**
- * Custom hook to manage theme switching and application state
- *
- * @example
- * // Basic usage
- * const { currentTheme, setTheme, isSpaceTheme } = useTheme();
- *
- * // In your component
- * <div className={`container ${isSpaceTheme ? 'space-theme' : ''}`}>
- *   <button onClick={() => setTheme('wizard')}>Switch to Wizard Theme</button>
- * </div>
- *
- * @returns {Object} Theme state and methods
+ * @typedef {Object} ThemeContextValue
  * @property {string} currentTheme - The currently active theme name ('space', 'wizard', or 'detective')
  * @property {Function} setTheme - Function to change the current theme
  * @property {boolean} isSpaceTheme - Helper boolean indicating if current theme is 'space'
+ */
+
+/**
+ * Custom hook to access theme state and methods.
+ * @returns {ThemeContextValue}
  */
 const useTheme = () => {
   const context = useContext(ThemeContext);

@@ -1,4 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+/**
+ * @file ThemeProvider.jsx
+ * @description Provides theme context and manages theme switching for MyDeck.
+ */
+
+import React, { useState, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 import ThemeContext from "contexts/ThemeContext";
 import { THEMES, DEFAULT_THEME } from "features/mydeck/styles";
 import "features/mydeck/themes/spaceTheme.module.scss";
@@ -11,34 +17,46 @@ const THEME_STORAGE_KEY = "clove_theme";
 // List of valid theme names
 const VALID_THEMES = Object.values(THEMES);
 
-// Helper function to validate theme name
+/**
+ * Validate a theme name, falling back to default if invalid.
+ * @param {string} theme
+ * @returns {string}
+ */
 const validateTheme = (theme) => {
   return VALID_THEMES.includes(theme) ? theme : DEFAULT_THEME;
 };
 
 /**
- * Theme Provider component to wrap your application with
+ * ThemeProvider
+ * Provides theme context and manages theme switching for MyDeck.
+ * @param {Object} props
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
  */
 const ThemeProvider = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState(() =>
     validateTheme(localStorage.getItem(THEME_STORAGE_KEY) || DEFAULT_THEME)
   );
 
+  /**
+   * Apply the theme to the document body and persist in localStorage.
+   * @param {string} themeName
+   */
   const applyTheme = useCallback((themeName) => {
     if (!themeName) return;
-
-    // Remove any existing theme classes
     document.body.classList.forEach((className) => {
       if (className.startsWith(THEME_PREFIX)) {
         document.body.classList.remove(className);
       }
     });
-
-    // Add the new theme class
     document.body.classList.add(`${THEME_PREFIX}${themeName}`);
     localStorage.setItem(THEME_STORAGE_KEY, themeName);
   }, []);
 
+  /**
+   * Set the current theme, validating and applying it.
+   * @param {string} themeName
+   */
   const setTheme = useCallback(
     (themeName) => {
       const validatedTheme = validateTheme(themeName);
@@ -50,7 +68,7 @@ const ThemeProvider = ({ children }) => {
     [currentTheme, applyTheme]
   );
 
-  // Initialize theme on mount
+  // Initialize theme on mount and when currentTheme changes
   useEffect(() => {
     applyTheme(currentTheme);
   }, [currentTheme, applyTheme]);
@@ -62,6 +80,10 @@ const ThemeProvider = ({ children }) => {
       {children}
     </ThemeContext.Provider>
   );
+};
+
+ThemeProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default ThemeProvider;

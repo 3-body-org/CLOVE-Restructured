@@ -1,39 +1,23 @@
 #!/usr/bin/env node
 
+// CLOVE Learning Platform Root Setup Script
+// Refactored for clarity, maintainability, and cross-platform compatibility
+
 const { execSync, spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const crypto = require('crypto');
 
-// Colors for console output
+// Console color helpers
 const colors = {
-  reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
+  reset: '\x1b[0m', bright: '\x1b[1m', red: '\x1b[31m', green: '\x1b[32m', yellow: '\x1b[33m', blue: '\x1b[34m', magenta: '\x1b[35m', cyan: '\x1b[36m'
 };
+function log(msg, color = 'reset') { console.log(`${colors[color]}${msg}${colors.reset}`); }
 
-function log(message, color = 'reset') {
-  console.log(`${colors[color]}${message}${colors.reset}`);
-}
-
-function createInterface() {
-  return readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-}
-
-function question(rl, query) {
-  return new Promise((resolve) => {
-    rl.question(query, resolve);
-  });
-}
+// User input helpers
+function createInterface() { return readline.createInterface({ input: process.stdin, output: process.stdout }); }
+function question(rl, query) { return new Promise(resolve => rl.question(query, resolve)); }
 
 // Frontend dependencies from package.json
 const frontendDependencies = {

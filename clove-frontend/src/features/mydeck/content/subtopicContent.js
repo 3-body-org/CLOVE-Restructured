@@ -1,17 +1,56 @@
-// Modular, maintainable subtopic content for all themes
-// To add a new theme or subtopic, copy the structure below and fill in the details.
-// To add new fields, add them to the subtopic objects as needed.
+/**
+ * @file subtopicContent.js
+ * @description Modular, maintainable subtopic content for all themes in the MyDeck feature.
+ * Each topic contains theme, story, node order, subtopics, and styling.
+ */
 
+// --- Icon Imports ---
+// Common
 import placeholderIconPath from 'assets/icons/common/icon-placeholder.svg';
+// Noir (Detective)
 import noirPreAss from 'assets/icons/noir/icon-pre-ass.svg';
 import noirSubtopic1 from 'assets/icons/noir/icon-subtopic1.svg';
 import noirSubtopic2 from 'assets/icons/noir/icon-subtopic2.svg';
 import noirSubtopic3 from 'assets/icons/noir/icon-subtopic3.svg';
 import noirPostAss from 'assets/icons/noir/icon-post-ass.svg';
+// Wizard
+import wizardPreAss from 'assets/icons/wizard/icon-pre-ass.svg';
+import wizardSubtopic1 from 'assets/icons/wizard/icon-subtopic1.svg';
+import wizardSubtopic2 from 'assets/icons/wizard/icon-subtopic2.svg';
+import wizardSubtopic3 from 'assets/icons/wizard/icon-subtopic3.svg';
+import wizardPostAss from 'assets/icons/wizard/icon-post-ass.svg';
+// Space
+import spacePreAss from 'assets/icons/space/icon-pre-ass.svg';
+import spaceSubtopic1 from 'assets/icons/space/icon-subtopic1.svg';
+import spaceSubtopic2 from 'assets/icons/space/icon-subtopic2.svg';
+import spaceSubtopic3 from 'assets/icons/space/icon-subtopic3.svg';
+import spacePostAss from 'assets/icons/space/icon-post-ass.svg';
 
-// Topic-based subtopic content
+/**
+ * @typedef {Object} Subtopic
+ * @property {string} id
+ * @property {string} title
+ * @property {string} description
+ * @property {string} time
+ * @property {string} icon
+ * @property {string|null} requires
+ */
+
+/**
+ * @typedef {Object} TopicContent
+ * @property {string} theme
+ * @property {Object} story
+ * @property {string[]} nodeOrder
+ * @property {Object.<string, Subtopic>} subtopics
+ * @property {Object} styling
+ */
+
+/**
+ * All subtopic content, keyed by topic number.
+ * @type {Object.<number, TopicContent>}
+ */
 export const subtopicContent = {
-  1: { // Topic 1: Data Types and Variables (wizard)
+  1: {
     theme: 'wizard',
     story: {
       title: 'The Arcane Academy',
@@ -28,41 +67,41 @@ export const subtopicContent = {
       'pre-assessment': {
         id: 'preassessment',
         title: 'Pre-Assessment',
-        description: 'Test your knowledge before starting the course.',
+        description: 'Gauge your magical intuition before you begin your wizarding journey.',
         time: '5 min',
-        icon: placeholderIconPath,
+        icon: wizardPreAss,
         requires: null,
       },
       'declaring-variables': {
         id: 'declaringvariables',
         title: 'Declaring Variables',
-        description: 'Learn to declare your magical intentions with precise incantations.',
+        description: 'Cast your first spell by declaring variables—your magical conduits for storing power and information.',
         time: '10 min',
-        icon: placeholderIconPath,
+        icon: wizardSubtopic1,
         requires: 'pre-assessment',
       },
       'primitive-data-types': {
         id: 'primitivedatatypes',
         title: 'Primitive Data Types',
-        description: 'Harness the basic building blocks of magic - numbers, strings, booleans.',
+        description: 'Master the elemental essences: numbers, strings, and booleans—the building blocks of all magic.',
         time: '8 min',
-        icon: placeholderIconPath,
+        icon: wizardSubtopic2,
         requires: 'declaring-variables',
       },
       'non-primitive-data-types': {
         id: 'nonprimitivedatatypes',
         title: 'Non-Primitive Data Types',
-        description: 'Master complex spells and magical constructs.',
+        description: 'Unlock advanced magical constructs—arrays, objects, and more—for complex spellwork.',
         time: '12 min',
-        icon: placeholderIconPath,
+        icon: wizardSubtopic3,
         requires: 'primitive-data-types',
       },
       'post-assessment': {
         id: 'postassessment',
         title: 'Post-Assessment',
-        description: 'Test your knowledge after completing the course.',
+        description: 'Test your mastery of wizarding fundamentals after completing your magical training.',
         time: '5 min',
-        icon: placeholderIconPath,
+        icon: wizardPostAss,
         requires: 'non-primitive-data-types',
       },
     },
@@ -78,7 +117,7 @@ export const subtopicContent = {
       },
     },
   },
-  2: { // Topic 2: Operators (detective)
+  2: {
     theme: 'detective',
     story: {
       title: 'Noir Investigation',
@@ -95,7 +134,7 @@ export const subtopicContent = {
       'pre-assessment': {
         id: 'preassessment',
         title: 'Pre-Assessment',
-        description: 'Test your knowledge before starting the course.',
+        description: 'Take a quick case review before you hit the streets as a code detective.',
         time: '5 min',
         icon: noirPreAss,
         requires: null,
@@ -103,7 +142,7 @@ export const subtopicContent = {
       'arithmetic': {
         id: 'arithmetic',
         title: 'Arithmetic',
-        description: 'Learn about arithmetic operators for calculations.',
+        description: 'Crunch the numbers and follow the money—learn to use arithmetic operators to solve numeric mysteries.',
         time: '8 min',
         icon: noirSubtopic1,
         requires: 'pre-assessment',
@@ -111,7 +150,7 @@ export const subtopicContent = {
       'comparison': {
         id: 'comparison',
         title: 'Comparison',
-        description: 'Understand comparison operators for making decisions.',
+        description: 'Spot the differences and similarities—comparison operators help you make the right call.',
         time: '8 min',
         icon: noirSubtopic2,
         requires: 'arithmetic',
@@ -119,7 +158,7 @@ export const subtopicContent = {
       'logical': {
         id: 'logical',
         title: 'Logical',
-        description: 'Use logical operators to combine conditions.',
+        description: 'Combine clues and connect the dots—logical operators let you solve the toughest cases.',
         time: '8 min',
         icon: noirSubtopic3,
         requires: 'comparison',
@@ -127,7 +166,7 @@ export const subtopicContent = {
       'post-assessment': {
         id: 'postassessment',
         title: 'Post-Assessment',
-        description: 'Test your knowledge after completing the course.',
+        description: 'Close the case and see if you’ve cracked the code after your investigation.',
         time: '5 min',
         icon: noirPostAss,
         requires: 'logical',
@@ -145,7 +184,7 @@ export const subtopicContent = {
       },
     },
   },
-  3: { // Topic 3: Conditional and Loops (space)
+  3: {
     theme: 'space',
     story: {
       title: 'Mission Briefing',
@@ -162,41 +201,41 @@ export const subtopicContent = {
       'pre-assessment': {
         id: 'preassessment',
         title: 'Pre-Assessment',
-        description: 'Test your knowledge before starting the course.',
+        description: 'Run a systems check before launching your mission into the unknown.',
         time: '5 min',
-        icon: placeholderIconPath,
+        icon: spacePreAss,
         requires: null,
       },
       'if-else': {
         id: 'ifelse',
         title: 'If-Else',
-        description: 'Understand conditional branching with if-else statements.',
+        description: 'Plot your course through the stars—use if-else statements to make critical decisions in deep space.',
         time: '10 min',
-        icon: placeholderIconPath,
+        icon: spaceSubtopic1,
         requires: 'pre-assessment',
       },
       'while-do-while-loop': {
         id: 'whiledowhileloop',
         title: 'While and Do While Loop',
-        description: 'Master while and do-while loops for repeated execution.',
+        description: 'Keep your ship running smoothly—master while and do-while loops for repeated operations.',
         time: '10 min',
-        icon: placeholderIconPath,
+        icon: spaceSubtopic2,
         requires: 'if-else',
       },
       'for-loop': {
         id: 'forloop',
         title: 'For Loop',
-        description: 'Use for loops to iterate efficiently.',
+        description: 'Navigate the cosmos efficiently—use for loops to iterate through star systems and data.',
         time: '10 min',
-        icon: placeholderIconPath,
+        icon: spaceSubtopic3,
         requires: 'while-do-while-loop',
       },
       'post-assessment': {
         id: 'postassessment',
         title: 'Post-Assessment',
-        description: 'Test your knowledge after completing the course.',
+        description: 'Complete your mission debrief and review your performance after the journey.',
         time: '5 min',
-        icon: placeholderIconPath,
+        icon: spacePostAss,
         requires: 'for-loop',
       },
     },
@@ -214,22 +253,22 @@ export const subtopicContent = {
   },
 };
 
-// Helper function to get content for a specific topic (by id or slug)
+/**
+ * Get content for a specific topic (by id or slug).
+ * @param {number|string} topicKey
+ * @returns {TopicContent}
+ */
 export const getSubtopicContent = (topicKey) => {
-  console.log('getSubtopicContent called with:', topicKey, 'Type:', typeof topicKey);
-  
   // Try numeric id first
   if (subtopicContent[topicKey]) {
-    console.log('Found topic content for key:', topicKey);
     return subtopicContent[topicKey];
   }
-  
-  console.log('Topic not found for key:', topicKey, 'Available topics:', Object.keys(subtopicContent));
-  
   // Try slug mapping if needed (add if you want slug support)
   return subtopicContent[1]; // fallback to topic 1
 };
 
-export const getAvailableTopics = () => {
-  return Object.keys(subtopicContent);
-}; 
+/**
+ * Get all available topic keys.
+ * @returns {string[]}
+ */
+export const getAvailableTopics = () => Object.keys(subtopicContent); 
