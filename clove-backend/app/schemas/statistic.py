@@ -1,5 +1,6 @@
 from datetime import date, datetime
-from typing import Literal, TypedDict
+from typing import Literal
+from typing_extensions import TypedDict
 from pydantic import BaseModel, Field
 from app.schemas.topic import TopicRead
 

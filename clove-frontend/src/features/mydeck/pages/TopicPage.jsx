@@ -10,7 +10,7 @@ import TopicCard from "../components/TopicCard";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 // services
-import { useMyDeckApi } from "../hooks/useMyDeckApi";
+import { useMyDeckService } from "../hooks/useMydeckService";
 // styles
 import styles from "../styles/TopicPage.module.scss";
 import spaceTheme from "../themes/spaceTheme.module.scss";
@@ -28,19 +28,10 @@ const THEMES = {
 
 export default function TopicPage() {
   const navigate = useNavigate();
-  const { getTopicsWithProgress, getTopicById, updateRecentTopic } = useMyDeckApi();
+  const { getTopicsWithProgress, getTopicById } = useMyDeckService();
   const { topics, setTopics } = useContext(MyDeckContext);
   const [loading, setLoading] = useState(true);
-  const [minTimePassed, setMinTimePassed] = useState(false);
   const [error, setError] = useState("");
-
-  // Ensure loading screen is visible for at least 400ms every time topics change
-  useEffect(() => {
-    setMinTimePassed(false);
-    setLoading(true);
-    const timer = setTimeout(() => setMinTimePassed(true), 200);
-    return () => clearTimeout(timer);
-  }, [topics]);
 
   // Load topics with user progress only if not already in context
   useEffect(() => {
@@ -81,28 +72,18 @@ export default function TopicPage() {
 
   const handleTopicClick = useCallback(
     async (topic) => {
-      try {
-        // Update recent topic and fetch the latest topic state from backend
-        await Promise.all([
-          updateRecentTopic(topic.id),
-          getTopicById(topic.id)
-        ]).then(([_, res]) => {
-          if (res.introduction_seen) {
-            navigate(`/my-deck/${topic.id}-${topic.slug}`);
-          } else {
-            navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
-          }
-        });
-      } catch (error) {
-        console.error("Failed to handle topic click:", error);
-        // Fallback navigation if update fails
+      // Fetch the latest topic state from backend
+      const res = await getTopicById(topic.id);
+      if (res.introduction_seen) {
+        navigate(`/my-deck/${topic.id}-${topic.slug}`);
+      } else {
         navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
       }
     },
-    [navigate, getTopicById, updateRecentTopic]
+    [navigate, getTopicById]
   );
 
-  if (loading || !minTimePassed) return <LoadingScreen message="Loading topics..." />;
+  if (loading) return <LoadingScreen message="Loading topics..." />;
   if (error) return <ErrorScreen message={error} />;
 
   return (

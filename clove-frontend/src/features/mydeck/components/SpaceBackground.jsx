@@ -1,0 +1,130 @@
+/**
+ * @file SpaceBackground.jsx
+ * @description A React component that renders a full-page animated background
+ * of a starfield for the 'space' theme.
+ */
+
+import React, { useRef, useEffect } from 'react';
+
+const STAR_LAYERS = [
+  { count: 400, size: 1, speed: 0.25 }, // small, fast
+  { count: 200, size: 2, speed: 0.12 }, // medium
+  { count: 100, size: 3, speed: 0.06 }, // big, slow
+];
+
+function randomStar(width, height) {
+  return {
+    x: Math.random() * width,
+    y: Math.random() * height,
+  };
+}
+
+const SpaceBackground = () => {
+  const canvasRef = useRef(null);
+  const starsRef = useRef([]);
+  const animationRef = useRef();
+
+  // Debug logging
+  useEffect(() => {
+    console.log('SpaceBackground: Component mounted');
+    return () => {
+      console.log('SpaceBackground: Component unmounted');
+    };
+  }, []);
+
+  // Initialize stars
+  const initStars = (width, height) => {
+    console.log('SpaceBackground: Initializing stars with dimensions:', width, height);
+    let stars = [];
+    STAR_LAYERS.forEach(layer => {
+      for (let i = 0; i < layer.count; i++) {
+        stars.push({
+          ...randomStar(width, height),
+          size: layer.size,
+          speed: layer.speed,
+        });
+      }
+    });
+    starsRef.current = stars;
+  };
+
+  // Resize canvas and re-init stars
+  const resizeCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const width = window.innerWidth * dpr;
+    // Use the full scrollable height of the document
+    const height = Math.max(
+      document.documentElement.scrollHeight,
+      document.body.scrollHeight,
+      window.innerHeight
+    ) * dpr;
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = Math.max(
+      document.documentElement.scrollHeight,
+      document.body.scrollHeight,
+      window.innerHeight
+    ) + 'px';
+    initStars(width, height);
+  };
+
+  // Animation loop
+  const animate = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const height = canvas.height;
+    // Animate stars
+    for (let star of starsRef.current) {
+      star.y -= star.speed * dpr;
+      if (star.y < 0) {
+        star.y = height;
+        star.x = Math.random() * canvas.width;
+      }
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size * dpr, 0, 2 * Math.PI);
+      ctx.fillStyle = '#FFF';
+      ctx.globalAlpha = 0.7;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    animationRef.current = requestAnimationFrame(animate);
+  };
+
+  useEffect(() => {
+    resizeCanvas();
+    animationRef.current = requestAnimationFrame(animate);
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('scroll', resizeCanvas);
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('scroll', resizeCanvas);
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+        zIndex: 0,
+        background: 'transparent',
+      }}
+      aria-hidden="true"
+    />
+  );
+};
+
+export default SpaceBackground;

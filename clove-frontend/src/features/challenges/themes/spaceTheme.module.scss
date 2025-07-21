@@ -1,0 +1,61 @@
+// Space Theme Variables for Challenges
+$space-theme: (
+  // 1. Page & Global Styles
+  // Defines the overall look: fonts, text colors, backgrounds, and transitions.
+  // ----------------------------------------------------------------
+  "font-primary": '"Space Grotesk", sans-serif',
+  "font-heading": '"Orbitron", sans-serif',
+  "font-mono": '"Courier New", monospace',
+  "text-primary": rgba(255, 255, 255, 0.95),
+  "text-secondary": #a8a5e6,
+  "bg-primary": #0a0a1a,
+  "bg-secondary": #1a1a2e,
+  "theme-bg": #0a0a1a,
+  "theme-text": rgba(255, 255, 255, 0.95),
+  "accent-color": #6c5ce7,
+  "glow-color": "rgba(108, 92, 231, 0.5)",
+  "transition-speed": "0.3s",
+  "transition-easing": "ease",
+
+  // 2. Header & Title Styles
+  // Colors for main headings (h1, h2) and icons.
+  // ----------------------------------------------------------------
+  "accent-primary": #6c5ce7,
+  "accent-secondary": #ff7675,
+
+  // 3. Card & Section Styles
+  // Used for the Challenge Area and Sidebar components.
+  // ----------------------------------------------------------------
+  "card-bg": rgba(45, 55, 72, 0.8),
+  "card-hover": rgba(74, 85, 104, 0.8),
+  "card-border": "1px solid #6c5ce7",
+  "card-shadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+
+  // 4. Challenge-Specific Colors
+  // ----------------------------------------------------------------
+  "code-bg": #252540,
+  "correct": #64ff96,
+  "wrong": #ff6464,
+  "pending": #ffd700,
+  "timer": #ff7675,
+  "hint": #a8a5e6,
+  "bug": #ff6464,
+  "primary": #6c5ce7,
+  "secondary": #a8a5e6,
+  "accent": #ff7675,
+  "bg": #0a0a1a,
+  "text": #ffffff
+);
+
+// Export the theme map
+:export {
+  @each $key, $value in $space-theme {
+    #{$key}: $value;
+  }
+}
+
+:global(body.theme-space) {
+  @each $var, $value in $space-theme {
+    --#{$var}: #{$value};
+  }
+} 

@@ -6,16 +6,19 @@ import { useAuth } from "contexts/AuthContext";
 
 // import profile from "../assets/images/DashboardPage/profile.svg";
 
-export default function TitleAndProfile({ nonColored, colored, description, showProfileButton = true }) {
+export default function TitleAndProfile({ nonColored, colored, description, showProfileButton = true, theme }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const profilePhoto = user?.profile_photo_url;
+
+  // Theme-based color for detective
+  const usernameStyle = theme === 'detective' ? { color: '#f4e04d' } : {};
 
   return (
     <header>
       <div className={styles.headerLeft}>
         <h2>
-          {nonColored} <span className={styles.username}>{colored}</span>
+          {nonColored} <span className={styles.username} style={usernameStyle}>{colored}</span>
         </h2>
         <p>{description}</p>
       </div>

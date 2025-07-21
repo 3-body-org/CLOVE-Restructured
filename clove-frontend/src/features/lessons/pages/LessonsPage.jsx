@@ -59,6 +59,45 @@ const LessonsPage = () => {
 
   return (
     <div className={styles.lessonWrapper}>
+      {/* --- Cascade's Debug Box --- */}
+      <div
+        style={{
+          position: "fixed",
+          top: "10px",
+          left: "10px",
+          background: "rgba(0, 0, 0, 0.8)",
+          color: "white",
+          padding: "15px",
+          borderRadius: "8px",
+          border: "1px solid white",
+          zIndex: 9999,
+          fontSize: "14px",
+          fontFamily: "monospace",
+        }}
+      >
+        <h4 style={{ marginTop: 0, color: "#00ffdd" }}>Debug Info</h4>
+        <p>
+          Topic ID from URL:{" "}
+          <strong style={{ color: "yellow" }}>{topicId}</strong>
+        </p>
+        <p>
+          Subtopic ID from URL:{" "}
+          <strong style={{ color: "yellow" }}>{subtopicId}</strong>
+        </p>
+        <p>
+          Looking for data in:{" "}
+          <strong style={{ color: "cyan" }}>lessons['{topicId}']</strong>
+        </p>
+        <p>
+          Data Found:{" "}
+          {lessons[topicId] ? (
+            <strong style={{ color: "lime" }}>Yes</strong>
+          ) : (
+            <strong style={{ color: "red" }}>No</strong>
+          )}
+        </p>
+      </div>
+      {/* --- End Debug Box --- */}
       <div className={styles.stars} id="stars"></div>
 
       <div className={styles.lessonContainer}>
