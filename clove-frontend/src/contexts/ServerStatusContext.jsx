@@ -13,6 +13,7 @@ export function ServerStatusProvider({ children }) {
   const timeoutRef = useRef(null);
   const retryCountRef = useRef(0);
   const isCheckingRef = useRef(false);
+  const serverDownRef = useRef(false); // Track current serverDown state
 
   const clearRetryTimeout = () => {
     if (timeoutRef.current) {
@@ -57,6 +58,7 @@ export function ServerStatusProvider({ children }) {
       }
       // Server is healthy
       setServerDown(false);
+      serverDownRef.current = false;
       setLastError(null);
       setRetryCount(0);
       retryCountRef.current = 0;
@@ -76,6 +78,7 @@ export function ServerStatusProvider({ children }) {
         errorMessage = 'No internet connection';
       }
       setServerDown(true);
+      serverDownRef.current = true;
       retryCountRef.current += 1;
       setRetryCount(retryCountRef.current);
       setLastError({
@@ -99,12 +102,13 @@ export function ServerStatusProvider({ children }) {
   useEffect(() => {
     checkServerHealth();
     const handleOnline = () => {
-      if (serverDown) {
+      if (serverDownRef.current) {
         checkServerHealth();
       }
     };
     const handleOffline = () => {
       setServerDown(true);
+      serverDownRef.current = true;
       retryCountRef.current += 1;
       setRetryCount(retryCountRef.current);
       setLastError({
@@ -122,7 +126,7 @@ export function ServerStatusProvider({ children }) {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [checkServerHealth, serverDown]);
+  }, [checkServerHealth]); // Only depend on checkServerHealth, not serverDown
 
   return (
     <ServerStatusContext.Provider value={{ 

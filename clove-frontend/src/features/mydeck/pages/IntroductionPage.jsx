@@ -11,11 +11,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
 import { MyDeckContext } from "contexts/MyDeckContext";
-import { useParticles } from "features/mydeck/hooks/useParticles";
+
 import useTheme from "features/mydeck/hooks/useTheme";
 import TypeCard from "features/mydeck/components/TypeCard";
-import ThemeBackground from "../components/ThemeBackground";
-import { useMyDeckApi } from "features/mydeck/hooks/useMyDeckApi";
+import RuneBackground from "features/mydeck/components/RuneBackground";
+import RainfallBackground from "features/mydeck/components/RainfallBackground";
+import SpaceBackground from "features/mydeck/components/SpaceBackground";
+import { topicsData } from "features/mydeck/data/topics";
+import { useMyDeckService } from "features/mydeck/hooks/useMydeckService";
 import { getThemeContent, iconMap } from "features/mydeck/content/themeContent";
 import styles from "features/mydeck/styles/IntroductionPage.module.scss";
 import { useApi } from "../../../hooks/useApi";
@@ -27,7 +30,8 @@ const Introduction = () => {
   const navigate = useNavigate();
   const { topicId } = useParams();
   const { setTopicId, topicCache, setTopicCache } = useContext(MyDeckContext);
-  const { getTopicById, updateRecentTopic } = useMyDeckApi();
+  const canvasRef = useRef(null);
+  const { getTopicById, updateRecentTopic } = useMyDeckService();
   const { patch } = useApi();
   const { user } = useAuth();
   const [topic, setTopic] = useState(null);
@@ -36,6 +40,9 @@ const Introduction = () => {
 
   // Initialize theme (defaults to 'space' theme)
   const { currentTheme, setTheme } = useTheme();
+  const isSpaceTheme = currentTheme === 'space';
+  const isWizardTheme = currentTheme === 'wizard';
+  const isDetectiveTheme = currentTheme === 'detective';
 
   // Load topic data and update recent topic
   useEffect(() => {
@@ -134,7 +141,8 @@ const Introduction = () => {
       try {
         // Update backend to mark introduction as seen
         await patch(`/user_topics/user/${user.id}/topic/${numericTopicId}`, {
-          introduction_seen: true
+          // introduction_seen: true
+           introduction_seen: false
         });
         // Update cache
         setTopicCache(prev => ({
@@ -154,6 +162,10 @@ const Introduction = () => {
     }
   }, [navigate, topicId, user, patch, setTopicCache]);
 
+  const handleBack = useCallback(() => {
+    navigate('/my-deck');
+  }, [navigate]);
+
   if (loading) {
     return <LoadingScreen message="Loading topic..." />;
   }
@@ -164,8 +176,7 @@ const Introduction = () => {
 
   if (!topic) {
     return (
-      <div className={styles.container}>
-        <ThemeBackground theme={currentTheme} />
+      <div className={`${styles.container} ${isSpaceTheme ? styles.spaceTheme : ""} ${isWizardTheme ? styles.wizardTheme : ""} ${isDetectiveTheme ? styles.detectiveTheme : ""}`}>
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
           <div className="text-center">
             <div className="mb-3">Topic not found.</div>
@@ -182,8 +193,13 @@ const Introduction = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <ThemeBackground theme={currentTheme} />
+    <div
+      className={`${styles.container} ${isSpaceTheme ? styles.spaceTheme : ""} ${isWizardTheme ? styles.wizardTheme : ""} ${isDetectiveTheme ? styles.detectiveTheme : ""}`}
+    >
+      {isSpaceTheme && <SpaceBackground />}
+      {isWizardTheme && <RuneBackground />}
+      {isDetectiveTheme && <RainfallBackground />}
+
       <div className={styles.content}>
         {/* Header Section */}
         <header className={styles.header}>
@@ -249,6 +265,9 @@ const Introduction = () => {
             />
             <span>{themeContent.cta.label}</span>
             <div className={styles.buttonGlow} aria-hidden="true" />
+          </button>
+          <button className={styles.backButton} onClick={handleBack}>
+            Back
           </button>
         </div>
       </div>

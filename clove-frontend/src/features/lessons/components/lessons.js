@@ -1,5 +1,5 @@
 export const lessons = {
-  topic1: {
+  'data-types-variables': {
     declaringvariables: {
       title: "Declaring Variables",
       intro:

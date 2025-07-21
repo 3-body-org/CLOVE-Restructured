@@ -54,3 +54,7 @@ $wizard-theme: (
   background-color: var(--theme-bg);
   transition: background-color 0.3s ease;
 }
+
+:global(body.theme-wizard.subtopic-page-active) {
+  background-color: transparent !important;
+}
