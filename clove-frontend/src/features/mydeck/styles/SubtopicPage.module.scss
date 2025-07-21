@@ -1,5 +1,5 @@
 
-@use "/variables" as *; /* import the global variable from _variables.scss */
+@use "/variables" as *;
 
 .myDeckWrapper {
   flex-grow: 1;
@@ -10,309 +10,54 @@
   background-color: var(--bg);
   color: var(--text);
   font-family: "Space Grotesk", sans-serif;
-  background-image: radial-gradient(
-      circle at 20% 30%,
-      rgba(108, 92, 231, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 70%,
-      rgba(255, 118, 117, 0.1) 0%,
-      transparent 50%
-    );
-
-  @media (max-width: 768px) {
-    padding: 1.5rem;
-  }
+  background-image: radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255, 118, 117, 0.1) 0%, transparent 50%);
+  @media (max-width: 768px) { padding: 1.5rem; }
 }
 
-// Add a modifier for wizard theme to force transparency
 .myDeckWrapper.wizardTheme,
-.myDeckWrapper.wizardThemeBg {
-  background-color: transparent !important;
-  background-image: none !important;
-}
+.myDeckWrapper.wizardThemeBg { background-color: transparent !important; background-image: none !important; }
+.wizardTheme { background-color: transparent !important; }
+.myDeckWrapper.spaceTheme { background-color: var(--theme-bg, #0a0a1a) !important; background-image: none !important; }
+.myDeckWrapper.spaceTheme { background-color: #0a0a1a !important; background-image: none !important; }
+.myDeckWrapper.spaceTheme { background: #0a0a1a !important; }
+.myDeckWrapper.detectiveTheme { background-color: transparent !important; background-image: none !important; }
 
-// Remove background-color from .wizardTheme if present
-.wizardTheme {
-  background-color: transparent !important;
-}
+.lessonWrapper { position: relative; }
 
-// Fix space theme background - ensure it overrides the default background
-.myDeckWrapper.spaceTheme {
-  background-color: var(--theme-bg, #0a0a1a) !important;
-  background-image: none !important;
-}
+.briefContainer { background: rgba(255,255,255,0.1); backdrop-filter: blur(3px); border-radius: 40px; border: 1px solid var(--primary); }
+.briefText { white-space: pre-wrap; text-align: justify; }
 
-/* Additional fallback for space theme */
-.myDeckWrapper.spaceTheme {
-  background-color: #0a0a1a !important;
-  background-image: none !important;
-}
+.subtopicRow { display: flex; justify-content: center; align-items: center; gap: 5rem; margin-bottom: 12rem; padding-bottom: 8rem; }
+@media (max-width: 600px) { .subtopicRow { gap: 2rem; } }
 
-/* Ensure space theme has proper background even if CSS variables fail */
-.myDeckWrapper.spaceTheme {
-  background: #0a0a1a !important;
-}
+.subtopicIconWrapper { display: flex; align-items: center; justify-content: center; width: 180px; height: 180px; margin: 0 auto 1.5rem auto; background: #222 !important; border-radius: 50%; box-shadow: 0 4px 24px rgba(0,0,0,0.10); transition: box-shadow 0.2s; }
+.subtopicIconWrapper::before, .subtopicIconWrapper::after { background: #222 !important; opacity: 1 !important; border-radius: 50%; box-shadow: none !important; border: none !important; content: none !important; }
+.subtopicIconWrapper img { width: 160px !important; height: 160px !important; object-fit: contain; }
+.lockedImage { filter: grayscale(1); cursor: not-allowed; opacity: 0.5; }
+.text-center.text-white h5 { font-size: 2rem; margin-bottom: 0.75rem; }
+.popover-body { font-size: 1.25rem; }
+.lockedHint { color: var(--wrong); margin-top: 0.5rem; font-size: 1.05rem; }
+.popover { background: var(--card-bg); border: 1px solid var(--primary); color: var(--text); .popover-body { padding: 1rem; } }
 
-/* Fix detective theme background - ensure it overrides the default background */
-.myDeckWrapper.detectiveTheme {
-  background-color: transparent !important;
-  background-image: none !important;
-}
+@keyframes twinkle { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+@keyframes floatRock { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
 
-.lessonWrapper {
-  position: relative;
-}
-
-.briefContainer {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(3px);
-  border-radius: 40px;
-  border: 1px solid var(--primary);
-}
-
-.briefText {
-  white-space: pre-wrap;
-  text-align: justify;
-}
-
-.subtopicRow {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5rem; // further increased gap for more space between subtopics
-  margin-bottom: 12rem; // much more space below last node
-  padding-bottom: 8rem; // much more extra space for all themes
-}
-
-@media (max-width: 600px) {
-  .subtopicRow {
-    gap: 2rem; // reduce gap on mobile for better fit
-  }
-}
-
-// Make subtopic node (icon wrapper) bigger
-.subtopicIconWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 180px;
-  height: 180px;
-  margin: 0 auto 1.5rem auto;
-  background: #222 !important;
-  border-radius: 50%;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-  transition: box-shadow 0.2s;
-}
-
-.subtopicIconWrapper::before,
-.subtopicIconWrapper::after {
-  background: #222 !important;
-  opacity: 1 !important;
-  border-radius: 50%;
-  box-shadow: none !important;
-  border: none !important;
-  content: none !important;
-}
-
-.subtopicIconWrapper img {
-  width: 160px !important; // was 96px, now larger
-  height: 160px !important;
-  object-fit: contain;
-}
-
-.lockedImage {
-  filter: grayscale(1);
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-// Make subtopic title and popover text bigger
-.text-center.text-white h5 {
-  font-size: 2rem; // was 1.5rem, now larger
-  margin-bottom: 0.75rem;
-}
-
-.popover-body {
-  font-size: 1.25rem; // slightly larger
-}
-
-.lockedHint {
-  color: var(--wrong);
-  margin-top: 0.5rem;
-  font-size: 1.05rem;
-}
-
-.popover {
-  background: var(--card-bg);
-  border: 1px solid var(--primary);
-  color: var(--text);
-
-  .popover-body {
-    padding: 1rem;
-  }
-}
-
-@keyframes twinkle {
-  0% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes floatRock {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-12px); }
-}
-
-.storyContainer {
-  background: rgba(24, 32, 72, 0.85); /* Deeper blue, less transparent */
-  border-radius: 18px;
-  border: 1.5px solid rgba(120,140,255,0.18);
-  box-shadow: 0 2px 24px 0 rgba(80,120,255,0.18);
-  padding: 1.5rem 2rem;
-  margin: 0 0 2rem 0;
-  max-width: 900px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #e6e6fa;
-  font-family: 'Space Grotesk', 'Roboto', sans-serif;
-  font-size: 1.08rem;
-  font-weight: 400;
-  line-height: 1.7;
-  letter-spacing: 0.01em;
-  transition: box-shadow 0.3s, background 0.3s;
-}
-
-.storyText {
-  margin: 0;
-  padding: 0;
-  color: #e6e6fa;
-  font-size: 1.08rem;
-  font-family: inherit;
-  font-weight: inherit;
-  line-height: 1.7;
-  text-align: center;
-}
-
-// Remove dashed border from .briefText and .briefContainer if present
-.briefText, .briefContainer {
-  border: none !important;
-  background: none !important;
-}
-
-.wizardTheme {
-  background-color: var(--theme-bg);
-}
-
-.spaceTheme {
-  background-color: var(--theme-bg);
-}
-
-.detectiveTheme {
-  background-color: var(--theme-bg);
-}
-
-// Remove background for space theme
-.spaceTheme .subtopicIconWrapper {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-// Remove background for detective theme
-.detectiveTheme .subtopicIconWrapper {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-// Make detective theme icons much bigger
-.detectiveTheme .subtopicIconWrapper img {
-  width: 200px !important;
-  height: 200px !important;
-  object-fit: contain;
-}
-
-.detectiveTheme .storyContainer {
-  animation: detectiveFlicker 2.2s infinite steps(1, end);
-  background: rgba(30, 32, 38, 0.92); // detective base
-  box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent;
-  color: #e0dfdb; // off-white for text
-}
-
-.detectiveTheme .storyContainer h1,
-.detectiveTheme .storyContainer h2 {
-  color: #f4e04d;
-}
-
-@keyframes detectiveFlicker {
-  0%, 100% {
-    background: rgba(30, 32, 38, 0.92);
-    box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent;
-  }
-  5% {
-    background: rgba(50, 54, 70, 0.98);
-    box-shadow: 0 0 48px 16px rgba(255,255,200,0.18), 0 0 0 0 transparent;
-  }
-  10% {
-    background: rgba(30, 32, 38, 0.92);
-    box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent;
-  }
-  15% {
-    background: rgba(50, 54, 70, 0.98);
-    box-shadow: 0 0 48px 16px rgba(255,255,200,0.18), 0 0 0 0 transparent;
-  }
-  20% {
-    background: rgba(30, 32, 38, 0.92);
-    box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent;
-  }
-}
-
-.gridLayout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(var(--node-count, 4), minmax(120px, auto));
-  column-gap: 25rem;
-  row-gap: 20rem;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-  margin-bottom: 12rem; // much more space below last node
-  padding-bottom: 8rem; // much more extra space for all themes
-}
-
-.detectiveTheme .lockedImage img {
-  filter: grayscale(1);
-  opacity: 1;
-  /* Optional: add a white outline for contrast */
-  /* box-shadow: 0 0 0 2px #fff, 0 0 8px #000; */
-}
-
-.wizardTheme .subtopicIconWrapper {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.wizardTheme .storyContainer {
-  background: rgba(30, 16, 43, 0.92);
-  color: #e8dbc3;
-  box-shadow: 0 0 32px 8px #f5d78244, 0 0 64px 16px #a99fcc33;
-  border: 1.5px solid #b78a5b;
-}
-
-.wizardTheme .storyContainer h1,
-.wizardTheme .storyContainer h2 {
-  color: #f5d782;
-  text-shadow: 0 0 8px #f5d782, 0 0 16px #a99fcc;
-  font-family: 'Cinzel', serif;
-  letter-spacing: 0.04em;
-}
+.storyContainer { background: rgba(24,32,72,0.85); border-radius: 18px; border: 1.5px solid rgba(120,140,255,0.18); box-shadow: 0 2px 24px 0 rgba(80,120,255,0.18); padding: 1.5rem 2rem; margin: 0 0 2rem 0; max-width: 900px; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: #e6e6fa; font-family: 'Space Grotesk', 'Roboto', sans-serif; font-size: 1.08rem; font-weight: 400; line-height: 1.7; letter-spacing: 0.01em; transition: box-shadow 0.3s, background 0.3s; }
+.storyText { margin: 0; padding: 0; color: #e6e6fa; font-size: 1.08rem; font-family: inherit; font-weight: inherit; line-height: 1.7; text-align: center; }
+.briefText, .briefContainer { border: none !important; background: none !important; }
+.wizardTheme { background-color: var(--theme-bg); }
+.spaceTheme { background-color: var(--theme-bg); }
+.detectiveTheme { background-color: var(--theme-bg); }
+.spaceTheme .subtopicIconWrapper { background: transparent !important; box-shadow: none !important; }
+.detectiveTheme .subtopicIconWrapper { background: transparent !important; box-shadow: none !important; }
+.detectiveTheme .subtopicIconWrapper img { width: 200px !important; height: 200px !important; object-fit: contain; }
+.detectiveTheme .storyContainer { animation: detectiveFlicker 2.2s infinite steps(1, end); background: rgba(30,32,38,0.92); box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent; color: #e0dfdb; }
+.detectiveTheme .storyContainer h1, .detectiveTheme .storyContainer h2 { color: #f4e04d; }
+@keyframes detectiveFlicker { 0%,100% { background: rgba(30,32,38,0.92); box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent; } 5% { background: rgba(50,54,70,0.98); box-shadow: 0 0 48px 16px rgba(255,255,200,0.18), 0 0 0 0 transparent; } 10% { background: rgba(30,32,38,0.92); box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent; } 15% { background: rgba(50,54,70,0.98); box-shadow: 0 0 48px 16px rgba(255,255,200,0.18), 0 0 0 0 transparent; } 20% { background: rgba(30,32,38,0.92); box-shadow: 0 0 32px 8px rgba(255,255,200,0.10), 0 0 0 0 transparent; } }
+.gridLayout { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(var(--node-count, 4), minmax(120px, auto)); column-gap: 25rem; row-gap: 20rem; justify-content: center; align-items: center; width: 100%; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; margin-bottom: 12rem; padding-bottom: 8rem; }
+.detectiveTheme .lockedImage img { filter: grayscale(1); opacity: 1; }
+.wizardTheme .subtopicIconWrapper { background: transparent !important; box-shadow: none !important; }
+.wizardTheme .storyContainer { background: rgba(30,16,43,0.92); color: #e8dbc3; box-shadow: 0 0 32px 8px #f5d78244, 0 0 64px 16px #a99fcc33; border: 1.5px solid #b78a5b; }
+.wizardTheme .storyContainer h1, .wizardTheme .storyContainer h2 { color: #f5d782; text-shadow: 0 0 8px #f5d782, 0 0 16px #a99fcc; font-family: 'Cinzel', serif; letter-spacing: 0.04em; }
+.backgroundImage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none; user-select: none; }
+.blur { filter: blur(4px); }

@@ -1,13 +1,17 @@
+/**
+ * @file useParticles.js
+ * @description Custom hook for initializing and managing a particle animation system on a canvas for the space theme.
+ */
+
 import { useEffect, useRef, useCallback } from "react";
 
 /**
- * A single particle in the particle system
- * @class
+ * @class Particle
+ * Represents a single particle in the particle system.
  */
 class Particle {
   /**
-   * Creates a new particle instance
-   * @param {HTMLCanvasElement} canvas - The canvas element to render the particle on
+   * @param {HTMLCanvasElement} canvas - The canvas element to render the particle on.
    */
   constructor(canvas) {
     this.canvas = canvas;
@@ -15,6 +19,9 @@ class Particle {
     this.reset();
   }
 
+  /**
+   * Reset particle to a random position and velocity.
+   */
   reset() {
     this.x = Math.random() * this.canvas.width;
     this.y = Math.random() * this.canvas.height;
@@ -24,10 +31,12 @@ class Particle {
     this.opacity = Math.random() * 0.5 + 0.1;
   }
 
+  /**
+   * Update particle position and reset if out of bounds.
+   */
   update() {
     this.x += this.speedX;
     this.y += this.speedY;
-
     if (
       this.x > this.canvas.width ||
       this.x < 0 ||
@@ -39,6 +48,9 @@ class Particle {
     }
   }
 
+  /**
+   * Draw the particle on the canvas.
+   */
   draw() {
     this.ctx.fillStyle = `rgba(168, 165, 230, ${this.opacity})`;
     this.ctx.beginPath();
@@ -48,29 +60,12 @@ class Particle {
 }
 
 /**
- * Custom hook that initializes and manages a particle animation system on a canvas
+ * Custom hook that initializes and manages a particle animation system on a canvas.
  *
- * @example
- * // Basic usage in a component
- * const canvasRef = useRef(null);
- * const { currentTheme } = useTheme();
- * useParticles(canvasRef, currentTheme);
- *
- * // In your component's JSX
- * <canvas ref={canvasRef} className="particle-canvas" />
- *
- * @param {React.RefObject<HTMLCanvasElement>} canvasRef - Ref object pointing to the canvas element
- * @param {string} [theme='space'] - Current theme name, only activates for 'space' theme
- * @param {number} [particleCount=100] - Number of particles to render
- * @returns {Object} Particle system controls (currently empty, but can be extended)
- *
- * @description
- * This hook creates an animated particle system that's specifically designed for the space theme.
- * It automatically handles:
- * - Canvas resizing
- * - Animation frame management
- * - Cleanup on unmount or theme change
- * - Performance optimization
+ * @param {React.RefObject<HTMLCanvasElement>} canvasRef - Ref object pointing to the canvas element.
+ * @param {string} [theme='space'] - Current theme name, only activates for 'space' theme.
+ * @param {number} [particleCount=100] - Number of particles to render.
+ * @returns {Object} Particle system controls (currently empty, but can be extended).
  */
 export const useParticles = (
   canvasRef,
@@ -89,41 +84,31 @@ export const useParticles = (
 
   const animate = useCallback(() => {
     if (!canvasRef.current || !particles.current.length) return;
-
     const ctx = canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-
     particles.current.forEach((particle) => {
       particle.update();
       particle.draw();
     });
-
     animationFrameId.current = requestAnimationFrame(animate);
   }, [canvasRef]);
 
   const handleResize = useCallback(() => {
     if (!canvasRef.current) return;
-
     const canvas = canvasRef.current;
     const { width, height } = canvas.getBoundingClientRect();
-
-    // Only update if size actually changed
     if (canvas.width !== width || canvas.height !== height) {
       const pixelRatio = window.devicePixelRatio || 1;
       canvas.width = width * pixelRatio;
       canvas.height = height * pixelRatio;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-
-      // Reset particles on resize
       particles.current = initParticles();
     }
   }, [canvasRef, initParticles]);
 
   useEffect(() => {
-    // Only initialize particles for space theme
     if (theme !== "space") {
-      // Clean up any existing canvas if theme changes
       if (canvasRef.current) {
         const ctx = canvasRef.current.getContext("2d");
         if (ctx) {
@@ -137,22 +122,11 @@ export const useParticles = (
       }
       return;
     }
-
     if (!canvasRef.current) return;
-
-    // Initialize particles
     particles.current = initParticles();
-
-    // Set up initial canvas size
     handleResize();
-
-    // Start animation
     animationFrameId.current = requestAnimationFrame(animate);
-
-    // Add resize listener
     window.addEventListener("resize", handleResize);
-
-    // Clean up
     return () => {
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);

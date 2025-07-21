@@ -4,38 +4,48 @@
  * of falling rain for the 'detective' theme.
  */
 
-import React, { useMemo } from 'react';
-import styles from 'features/mydeck/styles/RainfallBackground.module.scss';
-
-// The total number of raindrop elements to render for the effect.
-const NUM_DROPS = 100;
+import React, { useMemo, useEffect } from 'react';
+import styles from 'features/mydeck/themes/detectiveTheme.module.scss';
 
 /**
- * Renders a container with multiple randomly generated raindrop elements.
- * The drops are animated via CSS to create a continuous falling effect.
- * `useMemo` is used to ensure the drop properties are only calculated once.
+ * Generate a random style for a raindrop.
+ * @returns {Object} CSS style object for a raindrop.
  */
-const RainfallBackground = () => {
-  // Debug logging
-  React.useEffect(() => {
-    console.log('RainfallBackground: Component mounted');
+function getDropStyle() {
+  return {
+    left: `${Math.random() * 100}vw`,
+    animationDelay: `${Math.random() * -20}s`,
+    animationDuration: `${0.5 + Math.random() * 0.5}s`,
+  };
+}
+
+/**
+ * RainfallBackground
+ * Renders a full-page animated rain effect for the detective theme.
+ * @param {Object} props
+ * @param {number} [props.numDrops=100] - Number of raindrops to render.
+ */
+const RainfallBackground = ({ numDrops = 100 }) => {
+  useEffect(() => {
+    console.log('[RainfallBackground] Mounted');
     return () => {
-      console.log('RainfallBackground: Component unmounted');
+      console.log('[RainfallBackground] Unmounted');
     };
   }, []);
 
-  const drops = useMemo(() => {
-    return Array.from({ length: NUM_DROPS }).map((_, i) => {
-      const style = {
-        left: `${Math.random() * 100}vw`,
-        animationDelay: `${Math.random() * -20}s`,
-        animationDuration: `${0.5 + Math.random() * 0.5}s`,
-      };
-      return <div key={i} className={styles.drop} style={style}></div>;
-    });
-  }, []);
+  const drops = useMemo(
+    () =>
+      Array.from({ length: numDrops }).map((_, i) => (
+        <div key={i} className={styles.drop} style={getDropStyle()} />
+      )),
+    [numDrops]
+  );
 
-  return <div className={styles.rainContainer} aria-hidden="true">{drops}</div>;
+  return (
+    <div className={styles.rainContainer} aria-hidden="true">
+      {drops}
+    </div>
+  );
 };
 
 export default RainfallBackground;

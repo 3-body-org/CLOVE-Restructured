@@ -1,9 +1,26 @@
+/**
+ * @file SubtopicLayout.jsx
+ * @description Lays out subtopic nodes in a grid or custom arrangement, with support for refs and custom node rendering.
+ */
+
 import React from "react";
-import { Row, Col } from "react-bootstrap";
+import PropTypes from "prop-types";
 import SubtopicNode from "./SubtopicNode";
 import styles from "../styles/SubtopicPage.module.scss";
 
-// layoutConfig: { nodes: [{ key, style, className }], containerStyle, containerClassName }
+/**
+ * SubtopicLayout
+ * Lays out subtopic nodes in a grid or custom arrangement.
+ * @param {Object} props
+ * @param {Array} [props.subtopicKeys=[]] - Keys of subtopics to render.
+ * @param {Object} [props.subtopics={}] - Map of subtopic key to subtopic data.
+ * @param {Function} props.isSubtopicLocked - Function to determine if a subtopic is locked.
+ * @param {Function} props.onSubtopicClick - Click handler for subtopic nodes.
+ * @param {string} props.theme - Current theme name.
+ * @param {Object} [props.layoutConfig={}] - Optional layout config (nodes, containerStyle, containerClassName).
+ * @param {Object} [props.nodeRefs={}] - Optional refs for each node.
+ * @param {Function} [props.renderNode] - Optional custom node renderer.
+ */
 const SubtopicLayout = ({
   subtopicKeys = [],
   subtopics = {},
@@ -11,38 +28,51 @@ const SubtopicLayout = ({
   onSubtopicClick,
   theme,
   layoutConfig = {},
-  nodeRefs = {}, // <-- new prop
+  nodeRefs = {},
+  renderNode,
 }) => {
-  const nodes = layoutConfig.nodes || subtopicKeys.map((key, idx) => ({ key, style: {}, className: '' }));
+  const nodes = layoutConfig.nodes || subtopicKeys.map((key) => ({ key, style: {}, className: '' }));
   
   // Debug logging to help identify the issue
-  console.log('SubtopicLayout Debug:', {
+  React.useEffect(() => {
+    console.log('[SubtopicLayout] Render', {
     subtopicKeys,
     subtopicsKeys: Object.keys(subtopics),
     nodes: nodes.map(n => n.key),
     layoutConfig: layoutConfig.nodes?.map(n => n.key)
   });
+  }, [subtopicKeys, subtopics, nodes, layoutConfig]);
   
   return (
     <div
       className={layoutConfig.containerClassName || styles.subtopicRow}
       style={layoutConfig.containerStyle}
     >
-      {nodes.map((node, idx) => {
+      {nodes.map((node) => {
         const subtopic = subtopics[node.key];
-        
-        // Safety check - if subtopic is undefined, skip rendering or show error
         if (!subtopic) {
-          console.error(`Subtopic not found for key: ${node.key}`, {
+          console.error(`[SubtopicLayout] Subtopic not found for key: ${node.key}`, {
             availableKeys: Object.keys(subtopics),
             nodeKey: node.key
           });
-          return null; // Skip rendering this node
+          return null;
         }
-        
+        // Allow for a custom node renderer
+        if (typeof renderNode === 'function') {
+          return renderNode({
+            node,
+            subtopic,
+            isLocked: isSubtopicLocked(subtopic),
+            onSubtopicClick,
+            theme,
+            ref: nodeRefs[node.key] || null,
+            key: node.key + '-wrapper',
+          });
+        }
+        // Default rendering
         return (
           <div
-            ref={nodeRefs[node.key] || null} // Attach the correct ref for SVG path overlay
+            ref={nodeRefs[node.key] || null}
             style={node.style}
             className={node.className}
             key={node.key + "-wrapper"}
@@ -59,6 +89,17 @@ const SubtopicLayout = ({
       })}
     </div>
   );
+};
+
+SubtopicLayout.propTypes = {
+  subtopicKeys: PropTypes.array,
+  subtopics: PropTypes.object,
+  isSubtopicLocked: PropTypes.func.isRequired,
+  onSubtopicClick: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired,
+  layoutConfig: PropTypes.object,
+  nodeRefs: PropTypes.object,
+  renderNode: PropTypes.func,
 };
 
 export default SubtopicLayout; 

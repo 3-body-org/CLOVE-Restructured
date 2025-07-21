@@ -1,51 +1,44 @@
 import React, { useEffect, useState, useRef } from 'react';
+import styles from '../themes/detectiveTheme.module.scss';
 
-const LightningEffect = () => {
+const DEFAULT_FLASH_DURATION = 100;
+
+const LightningEffect = ({ flashDuration = DEFAULT_FLASH_DURATION }) => {
   const [isFlashing, setIsFlashing] = useState(false);
   const timeoutRef = useRef(null);
+  const flashTimeoutRef = useRef(null);
 
   useEffect(() => {
     const triggerLightning = () => {
       setIsFlashing(true);
-      // Flash duration: 100ms
-      setTimeout(() => setIsFlashing(false), 100);
+      console.log('[LightningEffect] Lightning triggered!');
+      flashTimeoutRef.current = setTimeout(() => setIsFlashing(false), flashDuration);
     };
 
     const scheduleLightning = () => {
       // Random interval between 2-4 minutes (120-240 seconds)
       const delay = Math.random() * 120000 + 120000;
-      
       timeoutRef.current = setTimeout(() => {
         triggerLightning();
-        scheduleLightning(); // Schedule next lightning
+        scheduleLightning();
       }, delay);
     };
 
-    // Start the lightning cycle
     scheduleLightning();
 
     return () => {
-      // Cleanup timeout to prevent multiple timers
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (flashTimeoutRef.current) clearTimeout(flashTimeoutRef.current);
     };
-  }, []);
+  }, [flashDuration]);
 
-  const lightningStyle = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: isFlashing ? 'rgba(255, 255, 255, 0.4)' : 'transparent',
-    pointerEvents: 'none',
-    zIndex: 9999,
-    transition: isFlashing ? 'none' : 'background-color 0.3s ease-out',
-    mixBlendMode: 'screen',
-  };
-
-  return <div style={lightningStyle} aria-hidden="true" />;
+  return (
+    <div
+      className={styles.lightningOverlay}
+      style={{ backgroundColor: isFlashing ? 'rgba(255, 255, 255, 0.4)' : 'transparent' }}
+      aria-hidden="true"
+    />
+  );
 };
 
 export default LightningEffect; 

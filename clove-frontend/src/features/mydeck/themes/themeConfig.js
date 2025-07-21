@@ -27,7 +27,7 @@ export const spaceThemeConfig = {
 // Wizard theme configuration
 export const wizardThemeConfig = {
   floatingElements: {
-    images: [], // Add wizard-specific images when available
+    images: [],
     numElements: 8,
     safeZone: 80,
     waveAmplitude: 15,
@@ -46,10 +46,10 @@ export const wizardThemeConfig = {
   }
 };
 
-// Detective theme configuration (placeholder for future implementation)
+// Detective theme configuration
 export const detectiveThemeConfig = {
   floatingElements: {
-    images: [], // Add detective-specific images when available
+    images: [],
     numElements: 6,
     safeZone: 80,
     waveAmplitude: 12,

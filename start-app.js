@@ -3,6 +3,7 @@
 /**
  * CLOVE Application Startup Script
  * Starts both frontend and backend servers with confirmation
+ * Refactored for clarity and maintainability.
  */
 
 const { execSync, spawn } = require('child_process');
@@ -10,53 +11,19 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
-// Colors for console output
+// Console color helpers
 const colors = {
-  reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
+  reset: '\x1b[0m', bright: '\x1b[1m', red: '\x1b[31m', green: '\x1b[32m', yellow: '\x1b[33m', blue: '\x1b[34m', magenta: '\x1b[35m', cyan: '\x1b[36m'
 };
+function log(msg, color = 'reset') { console.log(`${colors[color]}${msg}${colors.reset}`); }
+function logSuccess(msg) { log(`✅ ${msg}`, 'green'); }
+function logWarning(msg) { log(`⚠️  ${msg}`, 'yellow'); }
+function logError(msg) { log(`❌ ${msg}`, 'red'); }
+function logInfo(msg) { log(`ℹ️  ${msg}`, 'blue'); }
+function logHeader(msg) { log(`\n${colors.bright}${colors.cyan}${msg}${colors.reset}\n`); }
 
-function log(message, color = 'reset') {
-  console.log(`${colors[color]}${message}${colors.reset}`);
-}
-
-function logSuccess(message) {
-  log(`✅ ${message}`, 'green');
-}
-
-function logWarning(message) {
-  log(`⚠️  ${message}`, 'yellow');
-}
-
-function logError(message) {
-  log(`❌ ${message}`, 'red');
-}
-
-function logInfo(message) {
-  log(`ℹ️  ${message}`, 'blue');
-}
-
-function logHeader(message) {
-  log(`\n${colors.bright}${colors.cyan}${message}${colors.reset}\n`);
-}
-
-// Create readline interface for user input
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-function question(prompt) {
-  return new Promise((resolve) => {
-    rl.question(prompt, resolve);
-  });
-}
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+function question(prompt) { return new Promise(resolve => rl.question(prompt, resolve)); }
 
 // Check if a service is running
 async function checkService(url, serviceName) {

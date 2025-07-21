@@ -1,98 +1,48 @@
-/* 
-  Theme Variables are automatically applied from the active theme
-  The layout remains consistent while colors and fonts are controlled by the theme
+/*
+  IntroductionPage.module.scss
+  Styles for the Introduction Page in MyDeck.
+  Cleaned up for clarity and maintainability.
 */
 
-/* ==========================================================================
-   Animations
-   ========================================================================== */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes scanline {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 @keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 @keyframes glowPulse {
-  0% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  100% {
-    opacity: 0.3;
-  }
+  0% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+  100% { opacity: 0.3; }
 }
 
-@keyframes buttonFlow {
-  to {
-    left: 100%;
-  }
-}
+@keyframes buttonFlow { to { left: 100%; } }
 
-@keyframes particleFloat {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-20px);
-  }
-}
-
-
-
-/* ==========================================================================
-   Introduction Page Styles
-   Organized top-down to match the component structure in IntroductionPage.jsx
-   ========================================================================== */
 .container {
-  /* --------------------------------------------------------------------------
-     1. Main Container & Layout
-     -------------------------------------------------------------------------- */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--theme-bg, red); /* Debug: bright red fallback */
-  color: var(--theme-text, white); /* Debug: white text for contrast */
+  background-color: var(--theme-bg, #121212);
+  color: var(--theme-text, #fff);
   position: relative;
   overflow: hidden;
   font-family: var(--font-primary, "Roboto", sans-serif);
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s, color 0.3s;
 
   .content {
     position: relative;
@@ -107,504 +57,225 @@
     animation: fadeIn 0.8s ease-out;
   }
 
-  /* --------------------------------------------------------------------------
-     2. Space Theme Specifics & Particle Canvas
-     -------------------------------------------------------------------------- */
   &.spaceTheme {
-    background-color: var(--theme-bg, red); /* Debug: bright red fallback */
-    color: var(--theme-text, white); /* Debug: white text for contrast */
-
-    // Add any space-specific overrides here
+    background-color: var(--theme-bg, #0a0a1a);
+    color: var(--theme-text, #fff);
     .hologramTitle {
       background: rgba(16, 18, 37, 0.7);
       border: 1px solid rgba(138, 127, 255, 0.2);
       box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
     }
-
     .backButton {
       color: var(--accent-secondary);
-      &:hover {
-        color: var(--text-primary);
-      }
+      &:hover { color: var(--text-primary); }
     }
   }
 
-  /* --------------------------------------------------------------------------
-     2a. Wizard Theme Specifics
-     -------------------------------------------------------------------------- */
   &.wizardTheme {
-    /* This is the key fix: by making the container transparent, we can see
-       the RuneBackground component rendered behind it. */
     background-color: transparent;
-
     .backButton {
-      color: #b78a5b; // Ancient Copper
-      &:hover {
-        color: #f5d782; // Arcane Gold
-      }
+      color: #b78a5b;
+      &:hover { color: #f5d782; }
     }
   }
 
   &.detectiveTheme {
     background-color: transparent;
-  }
-
     .backButton {
-      color: #00bcd4; // Cyber Neon Blue
-      &:hover {
-        color: #f4e04d; // Crime Yellow
-      }
-    }
-  }
-
-
-
-  /* --------------------------------------------------------------------------
-     3. Header Section
-     -------------------------------------------------------------------------- */
-  .header {
-    text-align: center;
-    margin: 2rem 0 3rem;
-    position: relative;
-    z-index: 1;
-
-    .hologramTitle {
-      position: relative;
-      display: inline-block;
-      padding: 1.5rem 2.5rem;
-      background: var(--card-bg, red);
-      border: 1px solid var(--card-border, red);
-      border-radius: 12px;
-      box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
-      backdrop-filter: blur(8px);
-      transform: perspective(1000px) rotateX(3deg);
-      transform-style: preserve-3d;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      overflow: hidden;
-      max-width: 90%;
-      margin: 0 auto;
-
-      &:hover {
-        transform: perspective(1000px) rotateX(1deg) translateY(-5px);
-        box-shadow: 0 10px 30px var(--glow-color, red);
-      }
-
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          var(--accent-color, white),
-          transparent
-        );
-        animation: scanline 3s linear infinite;
-        opacity: 0.8;
-      }
-    }
-
-    .mainTitle {
-      font-family: var(--font-heading, "Orbitron", sans-serif);
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      color: var(--accent-primary, #f5d782); /* Use Arcane Gold */
-      text-shadow: 0 0 15px var(--glow-color, rgba(245, 215, 130, 0.5)); /* Use matching gold glow */
-      margin: 1rem 0;
-      font-weight: 700;
-      letter-spacing: 1px;
-      line-height: 1.2;
-      transition: all 0.3s ease;
-    }
-
-    .subtitle {
-      color: var(--text-secondary, white);
-      font-size: 1.2rem;
-      letter-spacing: 1px;
-      font-weight: 300;
-      max-width: 800px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-  }
-
-  /* --------------------------------------------------------------------------
-     4. Story Section
-     -------------------------------------------------------------------------- */
-  .storySection {
-    background: var(--card-bg, red);
-    border: 1px solid var(--card-border, red);
-    border-radius: 12px;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    margin: 2rem 0;
-
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .storyGlow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100%;
-      background: radial-gradient(
-        circle at 50% 50%,
-        var(--card-hover, red) 0%,
-        transparent 70%
-      );
-      pointer-events: none;
-      opacity: 0.8;
-      transition: opacity 0.3s ease;
-    }
-
-    h2 {
-      color: var(--accent-secondary, white);
-      margin-bottom: 1.5rem;
-      font-family: "Orbitron", sans-serif;
-
-      svg {
-        margin-right: 0.8rem;
-      }
-    }
-
-    .storyText {
-      color: var(--text-primary, white);
-      line-height: 1.7;
-      font-size: 1.1rem;
-      position: relative;
-      z-index: 1;
-    }
-  }
-
-  /* --------------------------------------------------------------------------
-     5. Visualization Grid Section (for TypeCard)
-     -------------------------------------------------------------------------- */
-  .visualizationGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin: 3rem 0;
-    perspective: 1000px;
-  }
-
-  .visCard {
-    background: var(--card-bg, red);
-    border-radius: 12px;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--card-border, red);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    animation: fadeIn 0.6s ease-out forwards;
-
-    @for $i from 1 through 3 {
-      &:nth-child(#{$i}) {
-        animation-delay: 0.1s * $i;
-      }
-    }
-
-    &:hover {
-      transform: translateY(-5px);
-
-      .particleEffect {
-        opacity: 0.3;
-      }
-    }
-
-    h3 {
-      color: var(--accent-secondary, white);
-      margin: 1.5rem 0;
-    }
-
-    p {
-      color: var(--text-secondary, white);
-      margin-bottom: 1.5rem;
-    }
-  }
-
-  .visIcon {
-    font-size: 2.5rem;
-    color: var(--accent-primary, white);
-    position: relative;
-    margin: 0 auto;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .particleEffect {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(
-        circle,
-        rgba(108, 92, 231, 0.2) 0%,
-        transparent 70%
-      );
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-  }
-
-  .codeVisual {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 1rem;
-    border-radius: 8px;
-    font-family: "Courier New", monospace;
-
-    span {
-      display: block;
-      color: var(--text-secondary, white);
-      text-align: left;
-      margin: 0.5rem 0;
-    }
-  }
-
-  .typeVisual {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .typeBadge {
-    background: rgba(108, 92, 231, 0.2);
-    color: var(--text-secondary, white);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    border: 1px solid var(--accent-primary, white);
-    font-size: 0.9rem;
-  }
-
-  /* --------------------------------------------------------------------------
-     6. Call to Action (CTA) Section
-     -------------------------------------------------------------------------- */
-  .ctaContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    text-align: center;
-    margin: 2rem 0;
-
-    .backButton {
-      background: none;
-      border: none;
-      padding: 0.5rem;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 500;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      transition: color 0.3s ease;
-    }
-
-    opacity: 0;
-    animation: fadeIn 0.6s ease-out 0.5s forwards;
-
-    .ctaButton {
-      background: linear-gradient(
-        135deg,
-        var(--accent-color, red),
-        var(--accent-secondary, red)
-      );
-      border: none;
-      padding: 1.2rem 3rem;
-      border-radius: 30px;
-      color: white;
-      font-family: var(--font-heading, "Orbitron", sans-serif);
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
-      overflow: hidden;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 15px rgba(74, 54, 215, 0.3);
-
-      .ctaIcon {
-        margin-right: 0.75rem;
-      }
-
-      &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(74, 54, 215, 0.4);
-
-        &::after {
-          opacity: 1;
-        }
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.2),
-          transparent
-        );
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-    }
-
-    .buttonGlow {
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 200%;
-      height: 100%;
-      background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-      );
-      animation: buttonFlow 2s infinite;
-    }
-  }
-
-/* ==========================================================================
-   7. Utility Styles (Responsive, Dark Mode, Print)
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   Responsive Breakpoints
-   -------------------------------------------------------------------------- */
-@media (max-width: 1024px) {
-  .container {
-    .content {
-      padding: 1.5rem;
-    }
-
-    .header {
-      .hologramTitle {
-        padding: 1.2rem 2rem;
-      }
-
-      .mainTitle {
-        font-size: 2rem !important;
-      }
-
-      .subtitle {
-        font-size: 1rem !important;
-      }
-    }
-
-    .storySection {
-      padding: 1.5rem !important;
-
-      h2 {
-        font-size: 1.5rem !important;
-      }
-
-      .storyText {
-        font-size: 1rem !important;
-      }
-    }
-
-    .visualizationGrid {
-      grid-template-columns: 1fr !important;
-      max-width: 600px;
-      margin: 2rem auto !important;
-    }
-
-    .visCard {
-      padding: 1.5rem !important;
-    }
-
-    .ctaContainer {
-      margin: 2rem 0 !important;
-
-      .ctaButton {
-        width: 100%;
-        max-width: 300px;
-        padding: 1rem 2rem !important;
-      }
+      color: #00bcd4;
+      &:hover { color: #f4e04d; }
     }
   }
 }
 
-/* --------------------------------------------------------------------------
-   Dark Mode Adjustments
-   -------------------------------------------------------------------------- */
+.header {
+  text-align: center;
+  margin: 2rem 0 3rem;
+  position: relative;
+  z-index: 1;
+  .hologramTitle {
+    position: relative;
+    display: inline-block;
+    padding: 1.5rem 2.5rem;
+    background: var(--card-bg, #23233a);
+    border: 1px solid var(--card-border, #7c3aed);
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transform: perspective(1000px) rotateX(3deg);
+    transform-style: preserve-3d;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    max-width: 90%;
+    margin: 0 auto;
+    &:hover {
+      transform: perspective(1000px) rotateX(1deg) translateY(-5px);
+      box-shadow: 0 10px 30px var(--glow-color, #7c3aed);
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-color, #fff), transparent);
+      animation: scanline 3s linear infinite;
+      opacity: 0.8;
+    }
+  }
+  .mainTitle {
+    font-family: var(--font-heading, "Orbitron", sans-serif);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--accent-primary, #f5d782);
+    text-shadow: 0 0 15px var(--glow-color, rgba(245, 215, 130, 0.5));
+    margin: 1rem 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    transition: all 0.3s;
+  }
+  .subtitle {
+    color: var(--text-secondary, #fff);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    font-weight: 300;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+.storySection {
+  background: var(--card-bg, #23233a);
+  border: 1px solid var(--card-border, #7c3aed);
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  margin: 2rem 0;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+  .storyGlow {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, var(--card-hover, #7c3aed) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+  }
+  h2 {
+    color: var(--accent-secondary, #fff);
+    margin-bottom: 1.5rem;
+    font-family: "Orbitron", sans-serif;
+    svg { margin-right: 0.8rem; }
+  }
+  .storyText {
+    color: var(--text-primary, #fff);
+    line-height: 1.7;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.visualizationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+  perspective: 1000px;
+}
+
+.ctaContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  margin: 2rem 0;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out 0.5s forwards;
+  .ctaButton {
+    background: linear-gradient(135deg, var(--accent-color, #7c3aed), var(--accent-secondary, #f5d782));
+    border: none;
+    padding: 1.2rem 3rem;
+    border-radius: 30px;
+    color: #fff;
+    font-family: var(--font-heading, "Orbitron", sans-serif);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+    .ctaIcon { margin-right: 0.75rem; }
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+      &::after { opacity: 1; }
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+  }
+  .buttonGlow {
+    position: absolute;
+    top: 0; left: -100%;
+    width: 200%; height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: buttonFlow 2s infinite;
+  }
+  .backButton {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.3s;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    .content { padding: 1.5rem; }
+    .header {
+      .hologramTitle { padding: 1.2rem 2rem; }
+      .mainTitle { font-size: 2rem !important; }
+      .subtitle { font-size: 1rem !important; }
+    }
+    .storySection { padding: 1.5rem !important; h2 { font-size: 1.5rem !important; } .storyText { font-size: 1rem !important; } }
+    .visualizationGrid { grid-template-columns: 1fr !important; max-width: 600px; margin: 2rem auto !important; }
+    .ctaContainer { margin: 2rem 0 !important; .ctaButton { width: 100%; max-width: 300px; padding: 1rem 2rem !important; } }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .container {
     --card-bg: rgba(16, 18, 37, 0.8);
     --card-border: rgba(138, 127, 255, 0.1);
-
-    .visCard {
-      &:hover {
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
-      }
-    }
+    .visualizationGrid .visCard:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.3) !important; }
   }
 }
 
-/* --------------------------------------------------------------------------
-   Print Styles
-   -------------------------------------------------------------------------- */
 @media print {
-  .particleCanvas,
-  .buttonGlow,
-  .particleEffect,
-  .storyGlow {
-    display: none !important;
-  }
-
-  .container {
-    background: white !important;
-    color: #333 !important;
-
-    .hologramTitle {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      transform: none !important;
-      padding: 0 !important;
-    }
-
-    .mainTitle {
-      color: #333 !important;
-      text-shadow: none !important;
-    }
-
-    .visCard {
-      break-inside: avoid;
-      border: 1px solid #eee !important;
-      box-shadow: none !important;
-      background: white !important;
-      color: #333 !important;
-    }
-
-    .storySection {
-      background: white !important;
-      border: 1px solid #eee !important;
-      color: #333 !important;
-    }
-  }
+  .container { background: #fff !important; color: #333 !important; }
+  .hologramTitle, .storySection, .visualizationGrid .visCard { background: #fff !important; border: 1px solid #eee !important; box-shadow: none !important; }
+  .mainTitle { color: #333 !important; text-shadow: none !important; }
+  .visualizationGrid .visCard { break-inside: avoid; }
 }

@@ -21,8 +21,7 @@ const navItems = [
   { to: "/my-deck", icon: faLayerGroup, label: "My Deck" },
 ];
 
-export default function Sidebar() {
-  const [expanded, setExpanded] = useState(true);
+export default function Sidebar({ expanded, setExpanded }) {
   const location = useLocation();
   const { logout } = useAuth();
 

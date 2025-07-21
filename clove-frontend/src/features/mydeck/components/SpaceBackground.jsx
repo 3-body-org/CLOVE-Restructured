@@ -6,12 +6,21 @@
 
 import React, { useRef, useEffect } from 'react';
 
-const STAR_LAYERS = [
+/**
+ * Default star layers for the space theme.
+ */
+const DEFAULT_STAR_LAYERS = [
   { count: 400, size: 1, speed: 0.25 }, // small, fast
   { count: 200, size: 2, speed: 0.12 }, // medium
   { count: 100, size: 3, speed: 0.06 }, // big, slow
 ];
 
+/**
+ * Generate a random star position within the given width and height.
+ * @param {number} width
+ * @param {number} height
+ * @returns {{x: number, y: number}}
+ */
 function randomStar(width, height) {
   return {
     x: Math.random() * width,
@@ -19,24 +28,35 @@ function randomStar(width, height) {
   };
 }
 
-const SpaceBackground = () => {
+/**
+ * SpaceBackground
+ * Renders a full-page animated starfield for the space theme.
+ * @param {Object} props
+ * @param {Array} [props.starLayers] - Array of star layer configs (count, size, speed).
+ * @param {string} [props.starColor='#FFF'] - Color of the stars.
+ * @param {number} [props.starOpacity=0.7] - Opacity of the stars.
+ */
+const SpaceBackground = ({
+  starLayers = DEFAULT_STAR_LAYERS,
+  starColor = '#FFF',
+  starOpacity = 0.7,
+}) => {
   const canvasRef = useRef(null);
   const starsRef = useRef([]);
   const animationRef = useRef();
 
-  // Debug logging
   useEffect(() => {
-    console.log('SpaceBackground: Component mounted');
+    console.log('[SpaceBackground] Mounted');
     return () => {
-      console.log('SpaceBackground: Component unmounted');
+      console.log('[SpaceBackground] Unmounted');
     };
   }, []);
 
   // Initialize stars
   const initStars = (width, height) => {
-    console.log('SpaceBackground: Initializing stars with dimensions:', width, height);
+    console.log('[SpaceBackground] Initializing stars with dimensions:', width, height);
     let stars = [];
-    STAR_LAYERS.forEach(layer => {
+    starLayers.forEach(layer => {
       for (let i = 0; i < layer.count; i++) {
         stars.push({
           ...randomStar(width, height),
@@ -88,8 +108,8 @@ const SpaceBackground = () => {
       }
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.size * dpr, 0, 2 * Math.PI);
-      ctx.fillStyle = '#FFF';
-      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = starColor;
+      ctx.globalAlpha = starOpacity;
       ctx.fill();
     }
     ctx.globalAlpha = 1;
@@ -107,7 +127,7 @@ const SpaceBackground = () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
     // eslint-disable-next-line
-  }, []);
+  }, [starLayers, starColor, starOpacity]);
 
   return (
     <canvas

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import pinSvg from 'assets/icons/noir/icon-pin.svg'; // Pin SVG for detective theme
 
 // Helper to get the center of a node
 function getCenter(ref, containerRef) {
@@ -175,19 +176,27 @@ const DetectiveThreadPath = ({ nodeRefs, svgContainerRef, nodeOrder }) => {
           strokeLinejoin="round"
         />
       )}
-      {/* Draw red pins at each node center */}
-      {centers.map((pt, i) => (
-        <circle
-          key={i}
-          cx={pt.x}
-          cy={pt.y}
-          r={PIN_RADIUS}
-          fill={PIN_COLOR}
-          stroke="#fff"
-          strokeWidth={3}
-          style={{ zIndex: 21 }}
-        />
-      ))}
+      {/* Draw pin SVGs at each node center, aligning the pin tip to the node center */}
+      {centers.map((pt, i) => {
+        // Pin SVG original size: 402x484, so aspect ratio is ~0.83
+        const pinWidth = 32; // px
+        const pinHeight = 38; // px (slightly taller for visual effect)
+        // Align the bottom center of the pin to the node center
+        const x = pt.x - pinWidth / 2;
+        const y = pt.y - pinHeight + 4; // +4px fudge so the tip is at the center
+        return (
+          <image
+            key={i}
+            href={pinSvg}
+            x={x}
+            y={y}
+            width={pinWidth}
+            height={pinHeight}
+            style={{ zIndex: 21 }}
+            aria-label="Pin"
+          />
+        );
+      })}
     </svg>
   );
 };

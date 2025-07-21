@@ -1,24 +1,26 @@
-// react
+/**
+ * @file TopicPage.jsx
+ * @description Topic selection page for MyDeck. Shows all topics as cards with progress and theme-aware styles.
+ */
+
 import React, { useCallback, useState, useEffect, useContext } from "react";
-// react router
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-// bootstrap
-import { Container, Row } from "react-bootstrap";
-// components
+import { Container } from "react-bootstrap";
 import TitleAndProfile from "../../../components/layout/Navbar/TitleAndProfile";
 import TopicCard from "../components/TopicCard";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
-// services
 import { useMyDeckService } from "../hooks/useMydeckService";
-// styles
 import styles from "../styles/TopicPage.module.scss";
 import spaceTheme from "../themes/spaceTheme.module.scss";
 import wizardTheme from "../themes/wizardTheme.module.scss";
 import detectiveTheme from "../themes/detectiveTheme.module.scss";
 import { MyDeckContext } from "../../../contexts/MyDeckContext";
 
-// Theme mapping
+/**
+ * Theme mapping for topic cards.
+ */
 const THEMES = {
   space: { ...styles, ...spaceTheme },
   wizard: { ...styles, ...wizardTheme },
@@ -26,7 +28,12 @@ const THEMES = {
   default: styles,
 };
 
-export default function TopicPage() {
+/**
+ * TopicPage
+ * Shows all topics as cards with progress and theme-aware styles.
+ * @component
+ */
+const TopicPage = () => {
   const navigate = useNavigate();
   const { getTopicsWithProgress, getTopicById } = useMyDeckService();
   const { topics, setTopics } = useContext(MyDeckContext);
@@ -64,15 +71,21 @@ export default function TopicPage() {
     };
   }, [topics, setTopics, getTopicsWithProgress]);
 
-  // Get theme styles based on topic
+  /**
+   * Get theme styles based on topic theme name.
+   * @param {string} themeName
+   * @returns {Object}
+   */
   const getThemeStyles = (themeName = "default") => {
-    const themeStyles = THEMES[themeName] || THEMES.default;
-    return themeStyles;
+    return THEMES[themeName] || THEMES.default;
   };
 
+  /**
+   * Handle topic card click: fetch latest topic state and navigate accordingly.
+   * @param {Object} topic
+   */
   const handleTopicClick = useCallback(
     async (topic) => {
-      // Fetch the latest topic state from backend
       const res = await getTopicById(topic.id);
       if (res.introduction_seen) {
         navigate(`/my-deck/${topic.id}-${topic.slug}`);
@@ -98,7 +111,6 @@ export default function TopicPage() {
           "Master concepts one card at a time with built-in practice ✨"
         }
       />
-
       <div
         className={`${styles.floatContainer} mt-3 p-0 d-flex flex-wrap justify-content-center`}
       >
@@ -115,7 +127,7 @@ export default function TopicPage() {
             { type: "comingSoon" }
           ].map((card, idx) =>
             card.type === "topic" ? (
-            <TopicCard
+              <TopicCard
                 key={card.topic.id}
                 topic={card.topic}
                 onClick={handleTopicClick}
@@ -126,11 +138,15 @@ export default function TopicPage() {
                 key="coming-soon"
                 comingSoon={true}
                 themeStyles={THEMES.default}
-            />
+              />
             )
           )
         )}
       </div>
     </Container>
   );
-}
+};
+
+TopicPage.propTypes = {};
+
+export default TopicPage;

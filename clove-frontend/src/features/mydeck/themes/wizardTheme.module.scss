@@ -1,43 +1,23 @@
 // Arcane Academy Theme Variables
 $wizard-theme: (
-  // 1. Page & Global Styles
-  // Defines the overall look: fonts, text colors, backgrounds, and transitions.
-  // ----------------------------------------------------------------
   "font-primary": '"Crimson Text", serif',
   "font-heading": '"Cinzel", serif',
-  "theme-bg": #1e102b, // Deep Violet
-  "theme-text": #e8dbc3, // Soft Parchment
-  "text-primary": #e8dbc3, // Soft Parchment
-  "text-secondary": #a99fcc, // Pale Violet
-  "glow-color": "rgba(245, 215, 130, 0.4)", // Arcane Gold glow
-
-  // 2. Header & Title Styles
-  // Colors for main headings (h1, h2) and icons.
-  // ----------------------------------------------------------------
-  "accent-primary": #f5d782, // Arcane Gold
-  "accent-secondary": #3fbabf, // Enchanted Teal
-
-  // 3. Card & Section Styles
-  // Used for the Story Section and individual TypeCards.
-  // ----------------------------------------------------------------
-  "card-bg": rgba(30, 16, 43, 0.8), // Deep Violet with transparency
-  "card-hover": rgba(42, 15, 61, 0.9), // Darkened Deep Violet
-  "card-border": "1px solid #b78a5b", // Ancient Copper
-
-  // 4. Button Styles
-  // For primary call-to-action buttons.
-  // ----------------------------------------------------------------
-  "button-bg": #3fbabf, // Enchanted Teal
-  "button-text": #ffffff, // White text for contrast
-
-  // 5. Additional Colors
-  // For specific UI elements like alerts or dividers.
-  // ----------------------------------------------------------------
-  "error-color": #b74141, // Curse Red
-  "divider-color": #b78a5b // Ancient Copper
+  "theme-bg": #1e102b,
+  "theme-text": #e8dbc3,
+  "text-primary": #e8dbc3,
+  "text-secondary": #a99fcc,
+  "glow-color": "rgba(245, 215, 130, 0.4)",
+  "accent-primary": #f5d782,
+  "accent-secondary": #3fbabf,
+  "card-bg": rgba(30, 16, 43, 0.8),
+  "card-hover": rgba(42, 15, 61, 0.9),
+  "card-border": "1px solid #b78a5b",
+  "button-bg": #3fbabf,
+  "button-text": #fff,
+  "error-color": #b74141,
+  "divider-color": #b78a5b
 );
 
-// Export the theme map
 :export {
   @each $key, $value in $wizard-theme {
     #{$key}: $value;
@@ -45,16 +25,41 @@ $wizard-theme: (
 }
 
 :global(body.theme-wizard) {
-  // Apply all theme variables
   @each $var, $value in $wizard-theme {
     --#{$var}: #{$value};
   }
-
-  // Explicitly set the page background
   background-color: var(--theme-bg);
   transition: background-color 0.3s ease;
 }
 
 :global(body.theme-wizard.subtopic-page-active) {
   background-color: transparent !important;
+}
+
+/* Rune effect styles */
+.runeContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.rune {
+  position: absolute;
+  color: var(--accent-primary, #f5d782);
+  font-size: 2rem;
+  opacity: 0;
+  text-shadow: 0 0 8px var(--glow-color, rgba(245, 215, 130, 0.7));
+  animation: driftAndFade 20s linear infinite;
+  user-select: none;
+}
+
+@keyframes driftAndFade {
+  0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+  15%, 85% { opacity: 0.7; }
+  100% { transform: translateY(-10vh) rotate(60deg); opacity: 0; }
 }
