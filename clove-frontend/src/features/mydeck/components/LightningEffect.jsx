@@ -11,7 +11,6 @@ const LightningEffect = ({ flashDuration = DEFAULT_FLASH_DURATION }) => {
   useEffect(() => {
     const triggerLightning = () => {
       setIsFlashing(true);
-      console.log('[LightningEffect] Lightning triggered!');
       flashTimeoutRef.current = setTimeout(() => setIsFlashing(false), flashDuration);
     };
 

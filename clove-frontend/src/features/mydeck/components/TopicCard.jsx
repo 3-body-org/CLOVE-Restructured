@@ -39,11 +39,14 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
 
   const isLocked = !topic.is_unlocked;
   const progress = typeof topic.progress === 'number' ? topic.progress : 0;
+  
+  // Convert decimal progress (0.0-1.0) to percentage (0-100)
+  const progressPercentage = Math.round(progress * 100);
 
   let buttonLabel = "Start Learning";
   if (isLocked) buttonLabel = "Locked";
-  else if (progress === 100) buttonLabel = "Review Topic";
-  else if (progress > 0) buttonLabel = "Continue Learning";
+  else if (progressPercentage === 100) buttonLabel = "Review Topic";
+  else if (progressPercentage > 0) buttonLabel = "Continue Learning";
 
   return (
     <Col
@@ -62,7 +65,7 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
         <div className={styles.cardProgress}>
           <div
             className={styles.progressFill}
-            style={{ width: `${progress}%` }}
+            style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
         <button

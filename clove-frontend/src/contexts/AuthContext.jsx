@@ -224,11 +224,7 @@ export function AuthProvider({ children }) {
     resetCallbacks.forEach(fn => {
       try { fn(); } catch (e) { console.error("Reset callback error", e); }
     });
-    // Clear local/session storage for progress, topics, etc.
-    localStorage.removeItem("preAssessmentTaken");
-    localStorage.removeItem("completedSubtopics");
-    localStorage.removeItem("completedChallenges");
-    localStorage.removeItem("challengeScores");
+    // Clear session storage
     sessionStorage.clear();
     navigate("/login-signup", { replace: true });
   }

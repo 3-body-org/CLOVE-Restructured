@@ -55,6 +55,9 @@ async def update_knowledge_levels_from_assessment(
     subtopic_scores: dict
 ):
     """Update knowledge_level for multiple subtopics based on assessment scores"""
+    MIN_KNOWLEDGE_LEVEL = 0.1  # Minimum 10% knowledge level
+    DEFAULT_KNOWLEDGE_LEVEL = 0.1  # Default 10% knowledge level
+    
     for subtopic_id, score_data in subtopic_scores.items():
         # Calculate percentage from correct and total
         correct = score_data.get('correct', 0)
@@ -68,6 +71,15 @@ async def update_knowledge_levels_from_assessment(
         
         # Convert percentage to 0-1 scale (divide by 100)
         knowledge_level = score_percentage / 100.0
+        
+        # Apply minimum knowledge level constraint
+        # If calculated level is below minimum, use minimum
+        # If calculated level is 0 (no correct answers), use default
+        if knowledge_level < MIN_KNOWLEDGE_LEVEL:
+            if knowledge_level == 0.0:
+                knowledge_level = DEFAULT_KNOWLEDGE_LEVEL
+            else:
+                knowledge_level = MIN_KNOWLEDGE_LEVEL
         
         # Get or create user_subtopic record
         user_subtopic = await get_by_user_and_subtopic(db, user_id, int(subtopic_id))
@@ -216,6 +228,9 @@ async def unlock_first_subtopic_for_user(db: AsyncSession, user_id: int, topic_i
         db.add(new_user_subtopic)
         await db.commit()
         await db.refresh(new_user_subtopic)
+
+    # Update topic progress after unlocking first subtopic
+    await update_user_topic_progress(db, user_id, topic_id)
 
 async def unlock_next_subtopic_or_post_assessment(db: AsyncSession, user_id: int, subtopic_id: int):
     """Unlock the next subtopic for a user, or unlock post-assessment if last subtopic."""

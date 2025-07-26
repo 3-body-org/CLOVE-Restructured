@@ -17,6 +17,7 @@ import spaceTheme from "../themes/spaceTheme.module.scss";
 import wizardTheme from "../themes/wizardTheme.module.scss";
 import detectiveTheme from "../themes/detectiveTheme.module.scss";
 import { MyDeckContext } from "../../../contexts/MyDeckContext";
+import { useSidebar } from "../../../components/layout/Sidebar/Layout";
 
 /**
  * Theme mapping for topic cards.
@@ -35,14 +36,16 @@ const THEMES = {
  */
 const TopicPage = () => {
   const navigate = useNavigate();
-  const { getTopicsWithProgress, getTopicById } = useMyDeckService();
+  const { getTopicsWithProgress, getTopicById, updateRecentTopic } = useMyDeckService();
   const { topics, setTopics } = useContext(MyDeckContext);
+  const { closeSidebar } = useSidebar();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   // Load topics with user progress only if not already in context
   useEffect(() => {
     let mounted = true;
+    
     if (!topics || topics.length === 0) {
       setLoading(true);
       setError("");
@@ -66,10 +69,14 @@ const TopicPage = () => {
     } else {
       setLoading(false);
     }
+    
     return () => {
       mounted = false;
     };
-  }, [topics, setTopics, getTopicsWithProgress]);
+  }, [setTopics, getTopicsWithProgress]); // Removed 'topics' from dependency array
+
+  // Remove automatic refresh triggers to prevent resource-intensive behavior
+  // Topics will only be refreshed when explicitly requested (e.g., after assessment completion)
 
   /**
    * Get theme styles based on topic theme name.
@@ -86,16 +93,34 @@ const TopicPage = () => {
    */
   const handleTopicClick = useCallback(
     async (topic) => {
+      try {
+        // Update recent topic in statistics
+        await updateRecentTopic(topic.id);
+        
+        // Fetch latest topic state and navigate
+        const res = await getTopicById(topic.id);
+        if (res.introduction_seen) {
+          navigate(`/my-deck/${topic.id}-${topic.slug}`);
+        } else {
+          navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
+        }
+        closeSidebar(); // Close sidebar after navigation
+      } catch (error) {
+        console.error('Error updating recent topic:', error);
+        // Continue with navigation even if recent topic update fails
       const res = await getTopicById(topic.id);
       if (res.introduction_seen) {
         navigate(`/my-deck/${topic.id}-${topic.slug}`);
       } else {
         navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
+        }
+        closeSidebar();
       }
     },
-    [navigate, getTopicById]
+    [navigate, getTopicById, updateRecentTopic, closeSidebar]
   );
 
+  // Simple loading state management - AFTER all hooks
   if (loading) return <LoadingScreen message="Loading topics..." />;
   if (error) return <ErrorScreen message={error} />;
 
@@ -125,8 +150,10 @@ const TopicPage = () => {
           [
             ...topics.map(topic => ({ type: "topic", topic, theme: topic.theme })),
             { type: "comingSoon" }
-          ].map((card, idx) =>
-            card.type === "topic" ? (
+          ].map((card, idx) => {
+            if (card.type === "topic") {
+            }
+            return card.type === "topic" ? (
               <TopicCard
                 key={card.topic.id}
                 topic={card.topic}
@@ -139,8 +166,8 @@ const TopicPage = () => {
                 comingSoon={true}
                 themeStyles={THEMES.default}
               />
-            )
-          )
+            );
+          })
         )}
       </div>
     </Container>

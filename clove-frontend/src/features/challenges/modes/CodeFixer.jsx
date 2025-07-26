@@ -1,87 +1,49 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import styles from "features/challenges/styles/CodeFixer.module.scss";
-import Editor from "@monaco-editor/react";
-import ChallengeSidebar from '../components/ChallengeSidebar';
-import MonacoCodeBlock from '../components/MonacoCodeBlock';
-import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
-const INSTRUCTION_MAP = {
-  CodeCompletion: {
-    title: "🧩 CODE COMPLETION",
-    description: "Fill in the missing code blocks to complete the program logic as described in the scenario.",
-  },
-  CodeFixer: {
-    title: "🛠️ CODE FIXER",
-    description: "Identify and fix all errors in the code to restore correct functionality.",
-  },
-  OutputTracing: {
-    title: "🔍 OUTPUT TRACING",
-    description: "Analyze the code and predict the output that will be produced when it runs.",
-  },
-};
-
-const CodeFixer = ({ challenge, onComplete, isLastChallenge, topicId }) => {
+const CosmicJava = ({
+  onComplete,
+  challengeType,
+  isLastChallenge,
+  topicId,
+}) => {
   const navigate = useNavigate();
-  const editorWrapperRef = useRef(null);
-  const { getThemeStyles } = useChallengeTheme();
 
   const [timeLeft, setTimeLeft] = useState(480);
-  const [attemptsLeft, setAttemptsLeft] = useState(2);
-  const [hintsLeft, setHintsLeft] = useState(3);
-  const [hintsRevealed, setHintsRevealed] = useState(0);
+  const [score, setScore] = useState(0);
+  const [bugsFixed, setBugsFixed] = useState(0);
+  const [hintsLeft, setHintsLeft] = useState(2);
+  const [showHint, setShowHint] = useState(false);
+  const [userFixes, setUserFixes] = useState({
+    fix1: "String",
+    fix2: "||",
+    fix3: "power.length()",
+    fix4: "Double",
+    fix5: "thrusterPower[i].toUpperCase()",
+  });
+  const [verifiedFixes, setVerifiedFixes] = useState(new Set());
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const {
-    question,
-    code: codeString,
-    answers: correctAnswers,
-    hints: HINTS,
-    scenarioTitle,
-    scenarioDescription,
-  } = challenge;
+  const correctAnswers = {
+    fix1: "int",
+    fix2: "&&",
+    fix3: "power",
+    fix4: "int",
+    fix5: "thrusterPower[i]",
+  };
 
-  const initialCode = codeString.replace(/\/\*__INPUT_(\d+)__\*\//g, "FIX_$1");
-  const [code, setCode] = useState(initialCode);
-  const editorRef = useRef(null);
-
-  const handleCompletion = useCallback(
-    (success) => {
-      if (isCompleted) return;
-      setIsCompleted(true);
-
-      const result = {
-        success,
-        score: success
-          ? 100 - (3 - hintsLeft) * 10 - (2 - attemptsLeft) * 5
-          : 0,
-      };
-
-      onComplete(result);
-
-      if (success && isLastChallenge) {
-        setTimeout(() => navigate(`/my-deck/${topicId}`), 1000);
-      }
-    },
-    [
-      isCompleted,
-      onComplete,
-      hintsLeft,
-      attemptsLeft,
-      isLastChallenge,
-      navigate,
-      topicId,
-    ]
-  );
+  const expectedOutput = "All thrusters fired successfully at 85% power";
 
   useEffect(() => {
-    if (isCompleted) return;
-
     const timerInterval = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev <= 1) {
+        if (prev <= 0) {
           clearInterval(timerInterval);
-          handleCompletion(false);
+          if (!isCompleted) {
+            handleCompletion(false);
+          }
           return 0;
         }
         return prev - 1;
@@ -89,7 +51,7 @@ const CodeFixer = ({ challenge, onComplete, isLastChallenge, topicId }) => {
     }, 1000);
 
     return () => clearInterval(timerInterval);
-  }, [isCompleted, handleCompletion]);
+  }, [isCompleted]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -103,116 +65,212 @@ const CodeFixer = ({ challenge, onComplete, isLastChallenge, topicId }) => {
 
   const handleHintClick = () => {
     if (hintsLeft > 0) {
-      setHintsRevealed((prev) => prev + 1);
-      setHintsLeft((prev) => prev - 1);
+      setShowHint(true);
+      setHintsLeft(hintsLeft - 1);
+      updateScore(-15);
     } else {
       alert("Engineering manual unavailable!");
     }
   };
 
-  const checkSolution = () => {
-    // Build the expected final code by replacing placeholders with correct answers.
-    // This approach avoids complex regex and the associated escaping issues.
-    let expectedCode = initialCode;
-    for (const fixId in correctAnswers) {
-      const bugNum = fixId.replace("fix", "");
-      const placeholder = `FIX_${bugNum}`;
-      expectedCode = expectedCode.replace(placeholder, correctAnswers[fixId]);
+  const updateScore = (points) => {
+    setScore((prev) => Math.max(0, prev + points));
+  };
+
+  const handleFixChange = (fixId, value) => {
+    setUserFixes((prev) => ({
+      ...prev,
+      [fixId]: value,
+    }));
+  };
+
+  const validateFix = (fixId) => {
+    return userFixes[fixId] === correctAnswers[fixId];
+  };
+
+  const handleCompletion = (success) => {
+    if (isCompleted) return;
+
+    setIsCompleted(true);
+    if (onComplete) {
+      onComplete({
+        success,
+        score,
+        type: challengeType,
+        timestamp: new Date().toISOString(),
+      });
     }
 
-    // Compare the user's code with the expected code, ignoring whitespace.
-    const isSolutionCorrect =
-      code.replace(/\s/g, "") === expectedCode.replace(/\s/g, "");
+    if (success && isLastChallenge) {
+      setTimeout(() => navigate(`/my-deck/${topicId}`), 1000);
+    }
+  };
 
-    if (isSolutionCorrect) {
-      alert("SYSTEM RESTORED! Thrusters operational!");
-      handleCompletion(true);
-    } else {
-      const newAttemptsLeft = attemptsLeft - 1;
-      setAttemptsLeft(newAttemptsLeft);
+  const checkSolution = () => {
+    let newVerified = new Set(verifiedFixes);
+    let newBugsFixed = 0;
 
-      if (newAttemptsLeft > 0) {
-        alert(
-          `Warning: System still unstable! ${newAttemptsLeft} attempts remaining.`
-        );
-      } else {
-        alert("SYSTEM FAILURE! Too many incorrect attempts.");
-        handleCompletion(false);
+    Object.keys(correctAnswers).forEach((fixId) => {
+      if (validateFix(fixId) && !verifiedFixes.has(fixId)) {
+        newVerified.add(fixId);
+        newBugsFixed++;
       }
+    });
+
+    setVerifiedFixes(newVerified);
+    setBugsFixed(newVerified.size);
+    updateScore(newBugsFixed * 20);
+
+    if (newVerified.size === 5) {
+      setTimeout(() => {
+        alert(
+          "SYSTEM RESTORED! Thrusters operational!\n+50pt bonus for perfect repair!"
+        );
+        updateScore(50);
+        handleCompletion(true);
+      }, 500);
+    } else if (newBugsFixed > 0) {
+      alert(`Partial repair complete! ${newBugsFixed} bugs fixed!`);
+    } else {
+      alert("Warning: System still unstable! Keep debugging!");
     }
   };
 
   const handleBugClick = (bugNum) => {
-    const textarea = editorWrapperRef.current?.querySelector("textarea");
-    if (!textarea) return;
-
-    const placeholder = `FIX_${bugNum}`;
-    const index = code.indexOf(placeholder);
-
-    if (index !== -1) {
-      textarea.focus();
-      textarea.setSelectionRange(index, index + placeholder.length);
-    }
+    const input = document.getElementById(`fix${bugNum}`);
+    if (input) input.focus();
   };
 
-  const instruction = INSTRUCTION_MAP["CodeFixer"];
+  const getInputClass = (fixId) => {
+    if (verifiedFixes.has(fixId)) return styles.verified;
+    return validateFix(fixId) ? styles.correct : styles.wrong;
+  };
 
   return (
-    <div className={styles.missionContainer} style={getThemeStyles()}>
-      <ChallengeSidebar
-        missionTitle={scenarioTitle || "MISSION: BETA-9"}
-        missionDescription={scenarioDescription || question}
-        timerLabel="EMERGENCY TIMER"
-        timerValue={formatTime(timeLeft)}
-        timerPercent={systemIntegrity}
-        hintTitle="ENGINEERING MANUAL"
-        hintBtnText={`REQUEST HELP (${hintsLeft} LEFT)`}
-        hintBtnDisabled={hintsLeft === 0}
-        onHintClick={handleHintClick}
-        hintsRevealed={hintsRevealed}
-        hints={HINTS}
-        scenarioTitle={challenge.scenarioTitle || "🛠️ System Malfunction:"}
-        scenarioDescription={challenge.scenarioDescription}
-      >
-        {/* General Instruction Box */}
-        <div className={styles.generalInstructionBox}>
-          <h3 className={styles.generalInstructionTitle}>{instruction.title}</h3>
-          <p className={styles.generalInstructionDescription}>{instruction.description}</p>
+    <div className={styles.missionContainer}>
+      <div className={styles.gamePanel}>
+        <div className={styles.missionInfo}>
+          <h2 className={styles.missionTitle}>MISSION: BETA-9</h2>
+          <p className={styles.missionDescription}>
+            Debug the spacecraft's thruster control system before it's too late!
+            Find and fix all syntax errors to prevent catastrophic failure.
+          </p>
         </div>
-      </ChallengeSidebar>
+
+        <div className={styles.timerContainer}>
+          <div>EMERGENCY TIMER</div>
+          <div className={styles.timer}>{formatTime(timeLeft)}</div>
+        </div>
+
+        <div className={styles.hintSystem}>
+          <div className={styles.hintTitle}>ENGINEERING MANUAL</div>
+          <button
+            className={styles.hintBtn}
+            onClick={handleHintClick}
+            disabled={hintsLeft === 0}
+          >
+            REQUEST HELP ({hintsLeft} LEFT) -15pts
+          </button>
+          {showHint && (
+            <div className={styles.hintContent}>
+              <p>Common Issues:</p>
+              <ul>
+                <li>Check variable types</li>
+                <li>Verify logical operators</li>
+                <li>Array index boundaries</li>
+                <li>Method return types</li>
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.scoring}>
+          <div className={styles.scoreDisplay}>
+            CREDITS: <span>{score}</span>
+          </div>
+          <div>
+            BUGS FIXED: <span>{bugsFixed}</span>/5
+          </div>
+          <div>
+            SYSTEM INTEGRITY: <span>{systemIntegrity}%</span>
+          </div>
+        </div>
+      </div>
+
       <div className={styles.challengeArea}>
         <h2 className={styles.challengeTitle}>CODE FIXER CHALLENGE</h2>
 
-        <div className={styles.codeEditor} ref={editorWrapperRef}>
-          <MonacoCodeBlock
-            value={code}
-            onChange={(newCode) => newCode !== undefined && setCode(newCode)}
-            language="java"
-            fixTagClass="bug-placeholder"
-            fixTagRegex={/FIX_\d+/g}
-            fixTagHoverMessage="Fix this bug"
-            height="400px"
-          />
+        <div className={styles.bugRadar}>
+          {[1, 2, 3, 4, 5].map((num) => (
+            <div
+              key={num}
+              className={`${styles.bugIndicator} ${
+                verifiedFixes.has(`fix${num}`) ? styles.fixed : ""
+              }`}
+              onClick={() => handleBugClick(num)}
+            >
+              {num}
+            </div>
+          ))}
         </div>
 
-        <div className={styles.terminalWindow}>
-          <div className={styles.terminalHeader}>
-            <div className={styles.terminalButtons}>
-              <span className={styles.closeBtn}></span>
-              <span className={styles.minimizeBtn}></span>
-              <span className={styles.expandBtn}></span>
-            </div>
-            <div className={styles.terminalTitle}>console</div>
-          </div>
-          <div className={styles.terminalContent}>
-            <div className={styles.terminalLine}>
-              <span className={styles.prompt}>{'>'}</span>
-              <span>{'System ready. Waiting for code execution...'}</span>
-            </div>
-            <div className={`${styles.terminalLine} ${styles.comment}`}>
-              {'// Type your code above and click "RUN CODE" to see the output here'}
-            </div>
-          </div>
+        <div className={styles.codeEditor}>
+          <pre>
+            <code>
+              {`public class ThrusterController { private int[] thrusterPower = {0, 0, 0, 0}; public void setPower(int thruster, `}
+              <input
+                id="fix1"
+                className={`${styles.codeInput} ${getInputClass("fix1")}`}
+                value={userFixes.fix1}
+                onChange={(e) => handleFixChange("fix1", e.target.value)}
+              />
+              {` power) {
+    if (thruster >= 0 `}
+              <input
+                id="fix2"
+                className={`${styles.codeInput} ${getInputClass("fix2")}`}
+                value={userFixes.fix2}
+                onChange={(e) => handleFixChange("fix2", e.target.value)}
+              />
+              {` thruster < thrusterPower.length) {
+      thrusterPower[thruster] = `}
+              <input
+                id="fix3"
+                className={`${styles.codeInput} ${getInputClass("fix3")}`}
+                value={userFixes.fix3}
+                onChange={(e) => handleFixChange("fix3", e.target.value)}
+              />
+              {`;
+    }
+  }
+
+  public void fireThrusters(`}
+              <input
+                id="fix4"
+                className={`${styles.codeInput} ${getInputClass("fix4")}`}
+                value={userFixes.fix4}
+                onChange={(e) => handleFixChange("fix4", e.target.value)}
+              />
+              {` duration) {
+    for (int i = 0; i < thrusterPower.length; i++) {
+      System.out.println("Thruster " + i + " firing at " + `}
+              <input
+                id="fix5"
+                className={`${styles.codeInput} ${getInputClass("fix5")}`}
+                value={userFixes.fix5}
+                onChange={(e) => handleFixChange("fix5", e.target.value)}
+              />
+              {` + "% power");
+    }
+  }
+}`}
+            </code>
+          </pre>
+        </div>
+
+        <div className={styles.expectedOutput}>
+          <h3>EXPECTED OUTPUT</h3>
+          <div className={styles.outputWindow}>{expectedOutput}</div>
         </div>
 
         <button
@@ -227,4 +285,4 @@ const CodeFixer = ({ challenge, onComplete, isLastChallenge, topicId }) => {
   );
 };
 
-export default CodeFixer;
+export default CosmicJava;

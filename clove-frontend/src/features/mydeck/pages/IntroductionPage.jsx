@@ -11,7 +11,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
@@ -21,15 +20,13 @@ import TypeCard from "features/mydeck/components/TypeCard";
 import RuneBackground from "features/mydeck/components/RuneBackground";
 import RainfallBackground from "features/mydeck/components/RainfallBackground";
 import SpaceBackground from "features/mydeck/components/SpaceBackground";
-import { topicsData } from "features/mydeck/data/topics";
 import { useMyDeckService } from "features/mydeck/hooks/useMydeckService";
-import { getThemeContent, iconMap } from "features/mydeck/content/themeContent";
+import { getIntroductionContent, iconMap } from "features/mydeck/content/introductionContent";
 import styles from "features/mydeck/styles/IntroductionPage.module.scss";
 import { useApi } from "../../../hooks/useApi";
 import { useAuth } from "contexts/AuthContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
-import { useSidebar } from 'components/layout/Sidebar/Layout';
 
 /**
  * IntroductionPage
@@ -47,18 +44,11 @@ const IntroductionPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { currentTheme, setTheme } = useTheme();
-  const { setExpanded } = useSidebar();
 
   // Theme booleans
   const isSpaceTheme = currentTheme === 'space';
   const isWizardTheme = currentTheme === 'wizard';
   const isDetectiveTheme = currentTheme === 'detective';
-
-  // Minimize sidebar on mount
-  useEffect(() => {
-    setExpanded(false);
-    // eslint-disable-next-line
-  }, []);
 
   // Load topic data and update recent topic
   useEffect(() => {
@@ -69,8 +59,8 @@ const IntroductionPage = () => {
     let mounted = true;
     setLoading(true);
     setError("");
-    const numericTopicId = topicId ? topicId.split('-')[0] : null;
-    const cachedTopic = topicCache[numericTopicId];
+    const numericTopicId = topicId ? parseInt(topicId.split('-')[0]) : 1;
+    const cachedTopic = topicCache && topicCache[numericTopicId];
     if (cachedTopic) {
       setTopic(cachedTopic);
       setTheme(cachedTopic.theme);
@@ -89,7 +79,7 @@ const IntroductionPage = () => {
         if (mounted) {
           setTopic(topicData);
           setTheme(topicData.theme);
-          setTopicCache(prev => ({ ...prev, [numericTopicId]: topicData }));
+          setTopicCache(prev => ({ ...(prev || {}), [numericTopicId]: topicData }));
           if (topicData.introduction_seen) {
             navigate(`/my-deck/${topicId}`);
           }
@@ -122,8 +112,8 @@ const IntroductionPage = () => {
   }, [currentTheme]);
 
   // Get theme-specific content
-  const themeContent = useMemo(
-    () => getThemeContent(currentTheme),
+  const introductionContent = useMemo(
+    () => getIntroductionContent(currentTheme),
     [currentTheme]
   );
 
@@ -151,7 +141,7 @@ const IntroductionPage = () => {
         setTopicCache(prev => ({
           ...prev,
           [numericTopicId]: {
-            ...prev[numericTopicId],
+            ...(prev[numericTopicId] || {}),
             introduction_seen: true
           }
         }));
@@ -204,12 +194,12 @@ const IntroductionPage = () => {
         <header className={styles.header}>
           <div className={styles.hologramTitle}>
             <FontAwesomeIcon
-              icon={getIcon(themeContent.mainIcon)}
+              icon={getIcon(introductionContent.mainIcon)}
               className={styles.titleIcon}
               aria-hidden="true"
             />
-            <h1 className={styles.mainTitle}>{themeContent.heading}</h1>
-            <p className={styles.subtitle}>{themeContent.subtitle}</p>
+            <h1 className={styles.mainTitle}>{introductionContent.heading}</h1>
+            <p className={styles.subtitle}>{introductionContent.subtitle}</p>
           </div>
         </header>
 
@@ -219,14 +209,14 @@ const IntroductionPage = () => {
           <div className={styles.storyContent}>
             <h2>
               <FontAwesomeIcon
-                icon={getIcon(themeContent.storyIcon)}
+                icon={getIcon(introductionContent.storyIcon)}
                 className={styles.storyIcon}
                 aria-hidden="true"
               />
-              <span>{themeContent.story.title}</span>
+              <span>{introductionContent.story.title}</span>
             </h2>
             <div className={styles.storyText}>
-              {themeContent.story.paragraphs.map((paragraph, index) => (
+              {introductionContent.story.paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
                   dangerouslySetInnerHTML={{ __html: paragraph }}
@@ -238,7 +228,7 @@ const IntroductionPage = () => {
 
         {/* Visualized Content Section */}
         <section className={styles.visualizationGrid}>
-          {themeContent.cards.map((card, index) => (
+          {introductionContent.cards.map((card, index) => (
             <TypeCard
               key={index}
               icon={getIcon(card.icon)}
@@ -255,14 +245,14 @@ const IntroductionPage = () => {
           <button
             className={styles.ctaButton}
             onClick={handleStartTraining}
-            aria-label={themeContent.cta.ariaLabel}
+            aria-label={introductionContent.cta.ariaLabel}
           >
             <FontAwesomeIcon
-              icon={getIcon(themeContent.cta.icon)}
+              icon={getIcon(introductionContent.cta.icon)}
               className={styles.ctaIcon}
               aria-hidden="true"
             />
-            <span>{themeContent.cta.label}</span>
+            <span>{introductionContent.cta.label}</span>
             <div className={styles.buttonGlow} aria-hidden="true" />
           </button>
           <button className={styles.backButton} onClick={handleBack}>

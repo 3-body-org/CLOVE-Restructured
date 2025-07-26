@@ -189,7 +189,7 @@ async def get_randomized_questions_summary(
                 "id": q.id,
                 "difficulty": q.difficulty,
                 "subtopic_id": q.subtopic_id,
-                "subtopic_name": q.subtopic.subtopic_name if q.subtopic else None,
+                "subtopic_name": q.subtopic.title if q.subtopic else None,
                 "question_number": i + 1
             }
             for i, q in enumerate(questions)

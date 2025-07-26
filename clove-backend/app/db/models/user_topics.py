@@ -11,7 +11,7 @@ class UserTopic(Base):
     topic_id                    = Column(Integer, ForeignKey("topics.topic_id"), nullable=False)
     pre_assessment_completed    = Column(Boolean, default=False)
     post_assessment_completed   = Column(Boolean, default=False)
-    is_unlocked                 = Column(Boolean, default=False)
+    is_unlocked                 = Column(Boolean, default=True)
     is_completed                = Column(Boolean, default=False)
     introduction_seen           = Column(Boolean, default=False)
     completed_subtopics_count   = Column(Integer, default=0)

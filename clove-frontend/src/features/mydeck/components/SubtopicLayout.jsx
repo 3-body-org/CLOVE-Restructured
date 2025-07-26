@@ -33,16 +33,6 @@ const SubtopicLayout = ({
 }) => {
   const nodes = layoutConfig.nodes || subtopicKeys.map((key) => ({ key, style: {}, className: '' }));
   
-  // Debug logging to help identify the issue
-  React.useEffect(() => {
-    console.log('[SubtopicLayout] Render', {
-    subtopicKeys,
-    subtopicsKeys: Object.keys(subtopics),
-    nodes: nodes.map(n => n.key),
-    layoutConfig: layoutConfig.nodes?.map(n => n.key)
-  });
-  }, [subtopicKeys, subtopics, nodes, layoutConfig]);
-  
   return (
     <div
       className={layoutConfig.containerClassName || styles.subtopicRow}

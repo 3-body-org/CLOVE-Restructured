@@ -7,7 +7,7 @@ from app.db.models.post_assessments import PostAssessment
 from app.db.models.assessment_questions import AssessmentQuestion
 from app.db.models.user_topics import UserTopic
 from app.schemas.post_assessment import PostAssessmentCreate, PostAssessmentUpdate
-from app.crud.user_subtopic import update_knowledge_levels_from_assessment
+from app.crud.user_subtopic import update_knowledge_levels_from_assessment, update_user_topic_progress
 
 async def get_by_id(db: AsyncSession, post_id: int) -> PostAssessment | None:
     result = await db.execute(select(PostAssessment).where(PostAssessment.post_assessment_id == post_id))
@@ -233,9 +233,9 @@ async def _update_existing_assessment(
         final_score = (total_correct / denominator) * 100
         if existing.attempt_count < 2:
             existing.attempt_count += 1
-        # Lock the post-assessment
-        existing.is_unlocked = False
+
         existing.is_completed = True # Set is_completed to True when attempt is finished
+        await update_user_topic_progress(db, user_topic.user_id, user_topic.topic_id)
     else:
         # The attempt is still in progress, score based on answered questions
         final_score = (total_correct / total_items) * 100 if total_items > 0 else 0

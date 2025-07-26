@@ -30,13 +30,6 @@ function getRuneStyle() {
  * @param {number} [props.numRunes=40] - Number of runes to render.
  */
 const RuneBackground = ({ numRunes = 40 }) => {
-  useEffect(() => {
-    console.log('[RuneBackground] Mounted');
-    return () => {
-      console.log('[RuneBackground] Unmounted');
-    };
-  }, []);
-
   const runes = useMemo(
     () =>
       Array.from({ length: numRunes }).map((_, i) => {

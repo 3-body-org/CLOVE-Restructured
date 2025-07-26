@@ -13,7 +13,6 @@ export function ServerStatusProvider({ children }) {
   const timeoutRef = useRef(null);
   const retryCountRef = useRef(0);
   const isCheckingRef = useRef(false);
-  const serverDownRef = useRef(false); // Track current serverDown state
 
   const clearRetryTimeout = () => {
     if (timeoutRef.current) {
@@ -24,9 +23,9 @@ export function ServerStatusProvider({ children }) {
 
   const scheduleRetry = () => {
     clearRetryTimeout();
-    // Start with 10s, then 20s, 30s, 30s...
-    const baseDelay = 10000; // 10 seconds
-    const backoffDelay = Math.min(baseDelay * Math.pow(2, Math.max(retryCountRef.current - 1, 0)), 30000);
+    // Start with 30s, then 60s, 90s, 90s... (less frequent)
+    const baseDelay = 30000; // 30 seconds
+    const backoffDelay = Math.min(baseDelay * Math.pow(2, Math.max(retryCountRef.current - 1, 0)), 90000);
     timeoutRef.current = setTimeout(() => {
       if (!isCheckingRef.current) {
         checkServerHealth();
@@ -58,7 +57,6 @@ export function ServerStatusProvider({ children }) {
       }
       // Server is healthy
       setServerDown(false);
-      serverDownRef.current = false;
       setLastError(null);
       setRetryCount(0);
       retryCountRef.current = 0;
@@ -78,7 +76,6 @@ export function ServerStatusProvider({ children }) {
         errorMessage = 'No internet connection';
       }
       setServerDown(true);
-      serverDownRef.current = true;
       retryCountRef.current += 1;
       setRetryCount(retryCountRef.current);
       setLastError({
@@ -102,13 +99,12 @@ export function ServerStatusProvider({ children }) {
   useEffect(() => {
     checkServerHealth();
     const handleOnline = () => {
-      if (serverDownRef.current) {
+      if (serverDown) {
         checkServerHealth();
       }
     };
     const handleOffline = () => {
       setServerDown(true);
-      serverDownRef.current = true;
       retryCountRef.current += 1;
       setRetryCount(retryCountRef.current);
       setLastError({
@@ -126,7 +122,7 @@ export function ServerStatusProvider({ children }) {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [checkServerHealth]); // Only depend on checkServerHealth, not serverDown
+  }, [checkServerHealth, serverDown]);
 
   return (
     <ServerStatusContext.Provider value={{ 

@@ -16,8 +16,24 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.rate_limit = rate_limit
         self.requests = {}
         self.lock = asyncio.Lock()
+        
+        # Industry standard: Different limits for different endpoints
+        self.endpoint_limits = {
+            "/health": 1000,  # Health checks: high limit
+            "/pre_assessments": 500,  # Assessments: medium limit
+            "/post_assessments": 500,
+            "/assessment_questions": 300,  # Question fetching: medium limit
+            "/user_subtopics": 200,  # Progress updates: lower limit
+        }
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        # Get appropriate rate limit for this endpoint
+        endpoint_limit = self.rate_limit
+        for endpoint, limit in self.endpoint_limits.items():
+            if request.url.path.startswith(endpoint):
+                endpoint_limit = limit
+                break
+        
         client_ip = request.client.host
         
         async with self.lock:
@@ -25,10 +41,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             if client_ip in self.requests:
                 last_request_time, count = self.requests[client_ip]
                 if current_time - last_request_time < 60:  # Within 1 minute
-                    if count >= self.rate_limit:
+                    if count >= endpoint_limit:
                         return JSONResponse(
                             status_code=429,
-                            content={"detail": "Too many requests"}
+                            content={"detail": f"Too many requests. Please try again later."}
                         )
                     self.requests[client_ip] = (last_request_time, count + 1)
                 else:
