@@ -1,5 +1,5 @@
 /**
- * @file themeContent.js
+ * @file introductionContent.js
  * @description Theme-specific content configurations for the MyDeck feature.
  */
 
@@ -13,7 +13,7 @@
  */
 
 /**
- * @typedef {Object} ThemeContent
+ * @typedef {Object} IntroductionContent
  * @property {string} heading
  * @property {string} subtitle
  * @property {string} mainIcon
@@ -53,10 +53,10 @@ export const iconMap = {
 /**
  * Get content for a specific theme.
  * @param {string} [theme="default"]
- * @returns {ThemeContent}
+ * @returns {IntroductionContent}
  */
-export const getThemeContent = (theme = 'default') => {
-  const content = themeContent[theme] || themeContent.default;
+export const getIntroductionContent = (theme = 'default') => {
+  const content = introductionContent[theme] || introductionContent.default;
   return {
     ...content,
     cards: content.cards || [],
@@ -64,7 +64,7 @@ export const getThemeContent = (theme = 'default') => {
 };
 
 // --- Theme Content ---
-export const themeContent = {
+export const introductionContent = {
   wizard: {
     heading: 'Wizard Academy',
     subtitle: 'Mastering Magical Data Types',

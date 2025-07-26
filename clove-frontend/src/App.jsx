@@ -167,9 +167,9 @@ function AppContent() {
         pauseOnFocusLoss={false} 
         pauseOnHover={false} 
       />
-      <MyDeckProvider>
         <Router>
           <AuthProvider>
+          <MyDeckProvider>
             <ThemeProvider>
               <Container fluid className="app-container p-0 m-0">
                 <Routes>
@@ -204,9 +204,9 @@ function AppContent() {
                 </Routes>
               </Container>
             </ThemeProvider>
+          </MyDeckProvider>
           </AuthProvider>
         </Router>
-      </MyDeckProvider>
     </>
   );
 }

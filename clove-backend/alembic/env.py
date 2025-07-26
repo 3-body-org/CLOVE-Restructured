@@ -11,14 +11,14 @@ import logging
 # Import all models to ensure they are registered with Base.metadata
 import app.db.models
 
-# Configure logging
+# Configure logging*
 logger = logging.getLogger("alembic")
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-# Override sqlalchemy.url with environment variable
+# Override sqlalchemy.url with environment variable*
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 # Interpret the config file for Python logging.

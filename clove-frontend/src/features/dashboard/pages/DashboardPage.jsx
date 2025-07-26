@@ -15,6 +15,7 @@ import { useApi } from "../../../hooks/useApi";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
+import { useSidebar } from "../../../components/layout/Sidebar/Layout";
 
 // Reusable components
 const CompletedTopicItem = ({ topicNumber, date, badgeText }) => (
@@ -43,6 +44,7 @@ const Dashboard = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
+  const { closeSidebar } = useSidebar();
 
   // Update streak on dashboard load, then fetch stats
   React.useEffect(() => {
@@ -167,6 +169,7 @@ const Dashboard = () => {
                     } else {
                       navigate(`/my-deck/${recentTopicId}-${recentTopicSlug}/introduction`);
                     }
+                    closeSidebar(); // Close sidebar after navigation
                   }}
                 >
                   Resume Topic <FontAwesomeIcon icon={faArrowRight} />

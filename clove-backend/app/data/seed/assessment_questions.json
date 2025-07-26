@@ -884,7 +884,7 @@
     "subtopic_id": 6,
     "question_choices_correctanswer": {
       "question": "What is the result of: !(false || true && false)?",
-      "choices": ["true", "false", "true", "false"],
+      "choices": ["true", "false", "null", "error"],
       "correct_answer": "true",
       "explanation": "false || (true && false) → false || false → false → !false → true."
     },
