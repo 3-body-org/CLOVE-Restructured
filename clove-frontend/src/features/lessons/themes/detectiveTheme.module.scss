@@ -1,0 +1,62 @@
+$detective-theme: (
+  "theme-bg": #0a0a0a, // Deeper noir black
+  "card-bg": rgba(26, 26, 26, 0.95), // Darker gunmetal
+  "code-bg": #1a1a1a, // Darker code background
+  "theme-text": #e0e0e0, // Brighter light grey for better readability
+  "heading-primary": #d1b773, // Gold for main titles
+  "heading-secondary": #7a9e7e, // Olive green for secondary headings
+  "heading-tertiary": #b4a287, // Sepia for tertiary headings
+  "text-secondary": #b4a287, // Sepia brown instead of yellow
+  "text-muted": #8a8a8a, // Muted grey
+  "accent-primary": #d1b773, // Gold for primary accent (noir detective style)
+  "accent-secondary": #7a9e7e, // Olive green for secondary accent
+  "accent-tertiary": #b4a287, // Sepia for tertiary accent
+  "accent-quaternary": #8a8a8a, // Muted grey for subtle accents
+  "accent-danger": #d32f2f, // Dark red for danger/important elements
+  "accent-warning": #f57c00, // Orange-red for warnings
+  "accent-active": #2a2a2a, // Darker active items
+  "accent-primary-rgb": "209, 183, 115", // RGB version for rgba()
+  "accent-secondary-rgb": "122, 158, 126", // RGB version for rgba()
+  "accent-tertiary-rgb": "180, 162, 135", // RGB version for rgba()
+  "accent-quaternary-rgb": "138, 138, 138", // RGB version for rgba()
+  "accent-danger-rgb": "211, 47, 47", // RGB version for rgba()
+  "accent-warning-rgb": "245, 124, 0", // RGB version for rgba()
+  "hover-accent": #7a9e7e, // Olive green for hover effects (more noir)
+  "hover-border": #8a8a8a, // Muted grey for hover borders
+  "hover-accent-rgb": "122, 158, 126", // RGB version for rgba()
+  "hover-border-rgb": "138, 138, 138", // RGB version for rgba()
+  "code-keyword": #d1b773, // Gold for keywords
+  "code-variable": #7a9e7e, // Olive for variables
+  "code-string": #cdaa7d, // Brass for strings
+  "code-number": #cdaa7d, // Brass for numbers
+  "code-comment": #8a8a8a, // Muted grey for comments
+  "code-inline": #7a9e7e, // Olive green for inline code highlighting
+  "bullet-icon": #d32f2f, // Dark red for bullet icons (detective theme)
+  "font-primary": '"Lora", serif',
+  "font-heading": '"Playfair Display", serif',
+  "font-mono": '"IBM Plex Mono", monospace',
+  // Summary section colors - matching wizard theme
+  "summary-bg": rgba(110, 231, 183, 0.1), // Faerie Green with opacity
+  "summary-title": #6EE7B7, // Flickering Faerie Green
+  "summary-border": #6EE7B7, // Flickering Faerie Green
+  "success-color": #6EE7B7, // Flickering Faerie Green
+  "footer-border": #d1b773, // Gold border for footer line
+
+  "button-primary-bg": #d1b773, // Gold for primary button instead of red
+  "button-primary-text": #0a0a0a, // Dark text for better contrast on gold
+  "button-secondary-bg": #2a2a2a, // Dark grey background
+  "button-secondary-text": #e0e0e0, // Light grey text
+  "button-secondary-border": #d1b773, // Gold border
+);
+// Export the theme map
+:export {
+  @each $key, $value in $detective-theme {
+    #{$key}: $value;
+  }
+}
+
+:global(body.theme-detective) {
+  @each $var, $value in $detective-theme {
+    --#{$var}: #{$value};
+  }
+} 

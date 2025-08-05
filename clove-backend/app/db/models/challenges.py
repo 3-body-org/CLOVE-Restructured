@@ -1,5 +1,5 @@
 # app/db/models/challenge.py
-from sqlalchemy import Column, Integer, Enum, JSON, ForeignKey
+from sqlalchemy import Column, Integer, Enum, JSON, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -12,11 +12,13 @@ class Challenge(Base):
     id              = Column(Integer, primary_key=True, index=True)
     subtopic_id     = Column(Integer, ForeignKey("subtopics.subtopic_id"), nullable=False)
     type            = Column(ChallengeTypeEnum, nullable=False)
-    snippet_choices = Column(JSON, nullable=False)
     difficulty      = Column(DifficultyEnum, nullable=False)
-    hints           = Column(JSON, default=None)
-    timer           = Column(Integer, default=60, comment="Time limit in seconds")
-    points          = Column(Integer, default=100)
+    timer           = Column(Integer, nullable=False, comment="Time limit in seconds")
+    points          = Column(Integer, nullable=False)
+    scenario        = Column(Text, nullable=False)
+    story_context   = Column(Text, nullable=False)
+    challenge_data  = Column(JSON, nullable=False)
+    hints           = Column(JSON, nullable=False)
 
     # Relationships
     subtopic        = relationship(

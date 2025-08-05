@@ -1,31 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Space+Grotesk:wght@400;500;600&display=swap");
 
-:root {
-  --primary: #6c5ce7; /* Cosmic purple */
-  --secondary: #a8a5e6; /* Nebula blue */
-  --accent: #ff7675; /* Supernova red */
-  --bg: #0a0a1a; /* Deep space */
-  --card-bg: #1a1a2e; /* Space void */
-  --text: #ffffff;
-  --code-bg: #252540;
-  --star: rgba(255, 255, 255, 0.8);
-}
-
 .lessonWrapper {
-  background: var(--bg);
-  font-family: "Space Grotesk", sans-serif;
-  color: var(--text);
+  background: var(--theme-bg);
+  font-family: var(--font-primary);
+  color: var(--theme-text);
   min-height: 100vh;
   padding: 20px;
   position: relative;
   background-image: radial-gradient(
       circle at 20% 30%,
-      rgba(108, 92, 231, 0.1) 0%,
+      rgba(var(--accent-primary-rgb, 14, 165, 233), 0.1) 0%,
       transparent 50%
     ),
     radial-gradient(
       circle at 80% 70%,
-      rgba(255, 118, 117, 0.1) 0%,
+      rgba(var(--accent-secondary-rgb, 251, 191, 36), 0.1) 0%,
       transparent 50%
     );
 }
@@ -54,9 +43,9 @@
 }
 
 .courseTitle {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-heading);
   font-size: 2.2rem;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -70,7 +59,7 @@
   height: 80px;
   background: var(--card-bg);
   border-radius: 50%;
-  border: 2px solid var(--primary);
+  border: 2px solid var(--accent-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,11 +71,12 @@
   background: var(--card-bg);
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 0 30px rgba(108, 92, 231, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(var(--accent-secondary-rgb, 251, 191, 36), 0.2);
   margin-bottom: 30px;
-  border: 1px solid rgba(108, 92, 231, 0.3);
+  border: 1px solid var(--card-border);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(8px);
 }
 
 .lessonContent::before {
@@ -99,13 +89,13 @@
   background: linear-gradient(
     135deg,
     transparent 45%,
-    rgba(168, 165, 230, 0.05) 50%,
+    rgba(var(--accent-primary-rgb, 14, 165, 233), 0.05) 50%,
     transparent 55%
   );
   background-size: 200% 200%;
   animation: hologram 8s linear infinite;
   mix-blend-mode: overlay;
-  pointer-events: none; // <-- ADD THIS
+  pointer-events: none;
 }
 
 .introSection {
@@ -114,10 +104,11 @@
 }
 
 .introTitle {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-heading);
   font-size: 1.8rem;
   margin-bottom: 20px;
-  color: var(--primary);
+  color: var(--heading-primary);
+  text-shadow: 0 0 10px rgba(var(--accent-secondary-rgb, 251, 191, 36), 0.3);
 }
 
 .introDescription {
@@ -125,10 +116,11 @@
   line-height: 1.6;
   max-width: 700px;
   margin: 0 auto;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--card-bg);
   padding: 20px;
   border-radius: 15px;
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--accent-primary);
+  color: var(--intro-text);
 
   ul {
     text-align: left;
@@ -150,11 +142,11 @@
   align-items: center;
   margin-bottom: 25px;
   padding-bottom: 15px;
-  border-bottom: 1px dashed rgba(108, 92, 231, 0.5);
+  border-bottom: 1px dashed var(--accent-primary);
 }
 
 .subtopicNumber {
-  background: var(--primary);
+  background: var(--accent-primary);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -163,22 +155,25 @@
   justify-content: center;
   margin-right: 15px;
   font-weight: bold;
+  color: var(--theme-text);
 }
 
 .subtopicTitle {
-  font-family: "Orbitron", sans-serif;
-  font-size: 1.5rem;
-  color: var(--secondary);
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  color: var(--heading-primary);
+  text-shadow: 0 0 8px rgba(var(--accent-secondary-rgb, 251, 191, 36), 0.2);
 }
 
 .conceptCard {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--card-bg);
   border-radius: 15px;
   padding: 25px;
   margin-bottom: 30px;
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid var(--accent-primary);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(var(--accent-secondary-rgb, 251, 191, 36), 0.2);
 }
 
 .conceptCard::before {
@@ -188,30 +183,31 @@
   right: 0;
   width: 30px;
   height: 30px;
-  background: radial-gradient(circle, var(--accent), transparent 70%);
+  background: radial-gradient(circle, var(--accent-primary), transparent 70%);
   opacity: 0.3;
 }
 
 .conceptTitle {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   margin-bottom: 15px;
-  color: var(--secondary);
+  color: var(--heading-primary);
   display: flex;
   align-items: center;
 
   .icon {
     margin-right: 10px;
-    color: var(--accent);
+    color: var(--accent-primary);
   }
 }
 
 .thematicIntro {
   font-style: italic;
-  background: rgba(108, 92, 231, 0.1);
+  background: rgba(var(--accent-primary-rgb, 14, 165, 233), 0.2);
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--accent-primary);
+  color: var(--intro-text);
 }
 
 .technicalContent {
@@ -227,10 +223,10 @@
   background: var(--code-bg);
   border-radius: 10px;
   padding: 20px;
-  font-family: "Courier New", monospace;
+  font-family: var(--font-mono);
   margin: 20px 0;
   overflow-x: auto;
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--code-border);
   position: relative;
 
   &::before {
@@ -239,28 +235,28 @@
     top: 5px;
     right: 10px;
     font-size: 0.8rem;
-    color: var(--secondary);
+    color: var(--text-secondary);
   }
 }
 
 .codeKeyword {
-  color: #569cd6;
+  color: var(--code-keyword);
 }
 
 .codeType {
-  color: #4ec9b0;
+  color: var(--code-variable);
 }
 
 .codeString {
-  color: #ce9178;
+  color: var(--code-string);
 }
 
 .codeComment {
-  color: #6a9955;
+  color: var(--code-comment);
 }
 
 .codeNumber {
-  color: #b5cea8;
+  color: var(--code-number);
 }
 
 .navButtons {
@@ -270,24 +266,23 @@
 }
 
 .navBtn {
-  background: rgba(108, 92, 231, 0.2);
-  color: white;
+  background: rgba(var(--accent-primary-rgb, 14, 165, 233), 0.2);
+  color: var(--theme-text);
   border: none;
   padding: 12px 25px;
   border-radius: 10px;
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-heading);
   font-weight: 500;
-  cursor: pointer; /* Changes the cursor to a hand on hover */
+  cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   letter-spacing: 1px;
 
-  /* Hover effect: makes the button pop up */
   &:hover {
-    background: var(--primary);
-    transform: translateY(-5px) scale(1.05); /* Lift and scale */
-    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+    background: var(--accent-primary);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(var(--accent-primary-rgb, 14, 165, 233), 0.4);
   }
 
   .icon {
@@ -296,8 +291,8 @@
 }
 
 .nextBtn {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  box-shadow: 0 4px 20px rgba(var(--accent-primary-rgb, 14, 165, 233), 0.3);
 }
 
 @keyframes hologram {
@@ -318,25 +313,1611 @@
   }
 }
 
-@media (max-width: 768px) {
-  .courseTitle {
-    font-size: 1.8rem;
+// Lesson Card Container
+.lessonCard {
+  background: var(--card-bg);
+  border: 1px solid var(--accent-secondary);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  grid-column: 1;
+  grid-row: 1 / -1;
+  margin-left: 1rem;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.25);
+    border-color: var(--accent-primary);
+    
+    .documentTitle .titleAccent {
+      width: 450px;
+      background: linear-gradient(to right, var(--accent-secondary) 0%, var(--accent-primary) 85%, transparent 100%);
+    }
+  }
+}
+
+// Theme-specific hover colors
+:global(body.theme-detective) .lessonCard:hover {
+  border-color: var(--hover-accent, #7a9e7e);
+  
+  .documentTitle .titleAccent {
+    background: linear-gradient(to right, var(--accent-secondary) 0%, var(--hover-accent, #7a9e7e) 85%, transparent 100%);
+  }
+}
+
+.titleWrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.titleWrapper h1 {
+  display: block;
+}
+
+.titleWrapper .titleAccent {
+  height: 3px;
+  background: linear-gradient(to right, var(--accent-secondary) 0%, var(--accent-primary) 75%, transparent 100%);
+  border-radius: 2px;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.lessonCard:hover .titleWrapper .titleAccent {
+  background: linear-gradient(to right, var(--accent-secondary) 0%, var(--accent-primary) 25%, transparent 100%);
+}
+
+// Document Container
+.documentContainer {
+  width: 100%;
+  padding: 1.25rem 2rem 3rem 3rem;
+  min-height: 100vh;
+  font-family: var(--font-primary);
+  line-height: 1.6;
+  color: var(--theme-text);
+}
+
+// Document Header
+.documentHeader {
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.documentTitle {
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--heading-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+    text-shadow: 0 0 10px rgba(253, 216, 53, 0.3);
+  }
+  
+  .titleAccent {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, var(--accent-secondary) 0%, var(--accent-primary) 15%, transparent 100%);
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
+  }
+}
+
+.documentSubtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  
+  .topicLabel {
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  .introTitle {
+  .topicName {
+    font-weight: 500;
+    color: var(--accent-secondary);
+    font-size: 1rem;
+  }
+}
+
+.documentMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-bg);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-secondary);
+  
+  .lessonNumber {
+    font-weight: 600;
+    color: var(--theme-text);
+    font-size: 1.1rem;
+  }
+  
+  .estimatedTime {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+}
+
+// Document Content
+.documentContent {
+  .contentSection {
+    margin-bottom: 3rem;
+    
+    &:last-of-type {
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--heading-primary);
+  margin: 2.5rem 0 1.5rem 0;
+  padding-left: 1rem;
+  position: relative;
+  text-shadow: 0 0 8px rgba(253, 216, 53, 0.2);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--accent-secondary), var(--accent-primary));
+    border-radius: 2px;
+  }
+}
+
+.sectionContent {
+  p {
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    color: var(--theme-text);
+  }
+}
+
+.introText {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 2rem;
+  padding-left: 1rem;
+}
+
+// Objectives Box
+.objectivesBox {
+  margin: 3.5rem 0;
+  position: relative;
+  
+  .objectivesTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--objectives-title);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--objective-icon);
+      border-radius: 50%;
+    }
+  }
+  
+  .objectivesList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    .objectiveItem {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: var(--card-bg);
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      border: 1px solid var(--accent-secondary);
+      
+      &:hover {
+        background: var(--theme-bg);
+        transform: translateX(5px);
+        border-color: var(--accent-primary);
+      }
+      
+      // Theme-specific hover colors for detective theme
+      :global(body.theme-detective) &:hover {
+        border-color: var(--hover-accent, #7a9e7e);
+      }
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .objectiveIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: var(--objective-icon);
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+// Thematic Intro
+.thematicIntro {
+  background: var(--card-bg);
+  border: 1px solid var(--accent-secondary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  
+  .thematicText {
+    margin: 0;
+    color: var(--heading-primary);
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+}
+
+// Concept Block
+.conceptBlock {
+  margin: 1.5rem 0;
+  
+  .conceptTitle {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--heading-primary);
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    .conceptIcon {
+      font-size: 1.3rem;
+    }
+  }
+  
+  .conceptContent {
+    .conceptText {
+      font-size: 1.1rem;
+      color: var(--theme-text);
+      margin-bottom: 1.5rem;
+      
+      p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        padding-left: 1rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        code {
+          background: rgba(129, 212, 250, 0.2);
+          padding: 0.1rem 0.3rem;
+          border-radius: 3px;
+          font-family: var(--font-mono);
+          font-size: 0.9rem;
+          color: var(--accent-secondary);
+        }
+      }
+    }
+  }
+}
+
+// Code Block
+.codeBlock {
+  background: var(--code-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  border: 1px solid var(--accent-secondary);
+  
+  .codeHeader {
+    background: var(--card-bg);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--text-muted);
+    
+    .codeLabel {
+      color: var(--theme-text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  .codeContent {
+    padding: 1.5rem;
+    margin: 0;
+    overflow-x: auto;
+    
+    code {
+      color: var(--theme-text);
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre;
+    }
+  }
+}
+
+// Summary Section
+.summaryBox {
+  background: var(--summary-bg);
+  border: 1px solid var(--summary-border);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  
+  .summaryTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--summary-title);
+    margin: 0 0 1rem 0;
+  }
+
+  .summaryList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--theme-text);
+      font-size: 1.25rem;
+      
+      &::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--success-color);
+        font-weight: bold;
+      }
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Document Footer
+.documentFooter {
+  border-top: 2px solid var(--footer-border);
+  padding-top: 2rem;
+  margin-top: 3rem;
+  }
+
+// Theme-specific button styling with custom classes
+:global(body.theme-wizard) .navButton.startButton {
+  background-color: var(--button-primary-bg, #0EA5E9) !important;
+  border-color: var(--button-primary-bg, #0EA5E9) !important;
+  color: var(--button-primary-text, #E8DBC3) !important;
+}
+
+:global(body.theme-wizard) .navButton.backButton {
+  background-color: var(--button-secondary-bg, #1A2B3C) !important;
+  border-color: var(--button-secondary-border, #0EA5E9) !important;
+  color: var(--button-secondary-text, #E8DBC3) !important;
+}
+
+:global(body.theme-detective) .navButton.startButton {
+  background-color: var(--button-primary-bg, #d32f2f) !important;
+  border-color: var(--button-primary-bg, #d32f2f) !important;
+  color: var(--button-primary-text, #e0e0e0) !important;
+}
+
+:global(body.theme-detective) .navButton.backButton {
+  background-color: var(--button-secondary-bg, #2a2a2a) !important;
+  border-color: var(--button-secondary-border, #d1b773) !important;
+  color: var(--button-secondary-text, #e0e0e0) !important;
+}
+
+:global(body.theme-space) .navButton.startButton {
+  background-color: var(--button-primary-bg, #ff7675) !important;
+  border-color: var(--button-primary-bg, #ff7675) !important;
+  color: var(--button-primary-text, #ffffff) !important;
+}
+
+:global(body.theme-space) .navButton.backButton {
+  background-color: var(--button-secondary-bg, #252540) !important;
+  border-color: var(--button-secondary-border, #a6aafb) !important;
+  color: var(--button-secondary-text, #ffffff) !important;
+}
+
+// Skip button styles for all themes
+:global(body.theme-wizard) .navButton.skipButton {
+  background-color: var(--button-tertiary-bg, #8B5CF6) !important;
+  border-color: var(--button-tertiary-bg, #8B5CF6) !important;
+  color: var(--button-tertiary-text, #E8DBC3) !important;
+}
+
+:global(body.theme-detective) .navButton.skipButton {
+  background-color: var(--button-tertiary-bg, #FF6B35) !important;
+  border-color: var(--button-tertiary-bg, #FF6B35) !important;
+  color: var(--button-tertiary-text, #e0e0e0) !important;
+}
+
+:global(body.theme-space) .navButton.skipButton {
+  background-color: var(--button-tertiary-bg, #74B9FF) !important;
+  border-color: var(--button-tertiary-bg, #74B9FF) !important;
+  color: var(--button-tertiary-text, #ffffff) !important;
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  
+  .navButton {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .lessonLayout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+  
+  .lessonCard {
+    grid-column: 1;
+    grid-row: 2 / -1;
+  }
+  
+  .contentsSidebar {
+    position: static;
+    grid-column: 1;
+    grid-row: 1;
+    max-height: none;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .lessonCard {
+    margin: 1rem;
+  }
+  
+  .documentContainer {
+    padding: 1rem;
+  }
+  
+  .documentTitle h1 {
+    font-size: 2rem;
+  }
+  
+  .documentMeta {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  
+  .navigationButtons {
+    flex-direction: column;
+    gap: 1rem;
+    
+    .navButton {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .lessonCard {
+    margin: 1.5rem 1.5rem;
+  }
+  
+  .documentContainer {
+    padding: 0.5rem;
+  }
+  
+  .documentTitle h1 {
+    font-size: 1.75rem;
+  }
+  
+  .sectionTitle {
     font-size: 1.5rem;
   }
+  
+  .objectivesBox,
+  .conceptBlock,
+  .summaryBox {
+    padding: 1.5rem;
+  }
+}
 
-  .subtopicTitle {
-    font-size: 1.3rem;
+// Reusable bullet list styles
+.bulletContainer {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 1px solid var(--accent-secondary);
+}
+
+.bulletList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bulletItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  color: var(--theme-text);
+  line-height: 1.5;
+  font-size: 1.2rem;
+
+  &:last-child {
+    margin-bottom: 0;
   }
 
-  .conceptCard {
-    padding: 20px;
+  code {
+    background: rgba(var(--accent-primary-rgb, 14, 165, 233), 0.2);
+    color: var(--code-inline);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+  }
+}
+
+.bulletIcon {
+  width: 6px;
+  height: 6px;
+  background: var(--bullet-icon);
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+// Real-world Application specific styles
+.realWorldBulletList {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  padding-left: 1rem;
+}
+
+.realWorldBulletItem {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid var(--accent-secondary);
+
+  &:hover {
+    background: var(--code-bg);
+    transform: translateX(4px);
+    border-color: var(--accent-secondary);
   }
 
-  .navBtn {
-    padding: 10px 15px;
+  code {
+    background: rgba(var(--accent-primary-rgb, 14, 165, 233), 0.2);
+    color: var(--code-inline);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+  }
+}
+
+.realWorldBulletIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--accent-secondary);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.realWorldContent {
+  margin-top: 1rem;
+  padding-left: 1rem;
+
+  p {
+    margin: 0;
+    color: var(--theme-text);
+    line-height: 1.6;
+  }
+}
+
+// How it Works section specific styles
+.howItWorksList {
+  list-style: decimal;
+  padding: 0;
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.howItWorksItem {
+  margin-bottom: 1rem;
+  color: var(--theme-text);
+  line-height: 1.6;
+
+  code {
+    background: rgba(var(--accent-primary-rgb, 14, 165, 233), 0.2);
+    color: var(--code-inline);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+  }
+
+  strong {
+    color: var(--strong-text);
+    font-weight: 600;
+  }
+}
+
+// Code Example Container (for Monaco Editor)
+.codeExampleContainer {
+  margin: 2rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--code-bg);
+  border: 1px solid var(--accent-secondary);
+  
+  .codeEditorWrapper {
+    border-bottom: 1px solid var(--text-muted);
+  }
+}
+
+// Output Container
+.outputContainer {
+  background: var(--output-bg);
+  
+  .outputHeader {
+    background: var(--output-header-bg);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--output-header-bg);
+    
+    .outputLabel {
+      color: var(--output-text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  .outputContent {
+    padding: 1.5rem;
+    margin: 0;
+    color: var(--output-text);
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    white-space: pre;
+    background: var(--output-bg);
+    
+    code {
+      color: var(--output-text);
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+    }
+  }
+}
+
+// Lesson Layout
+.lessonLayout {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  grid-template-rows: auto 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 30px 20px 15px 20px;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+// Contents Sidebar
+.contentsSidebar {
+  position: sticky;
+  top: 20px;
+  width: 100%;
+  height: fit-content;
+  background: var(--card-bg);
+  border: 1px solid var(--accent-secondary);
+  border-radius: 12px;
+  padding: 1.25rem;
+  grid-column: 2;
+  grid-row: 1;
+  overflow-y: auto;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.contentsTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--contents-title);
+  margin: 0 0 1.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(var(--accent-secondary-rgb, 251, 191, 36), 0.2);
+}
+
+.contentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.contentsItem {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: var(--theme-bg);
+    border-color: var(--accent-primary);
+    color: var(--theme-text);
+    transform: translateX(4px);
+  }
+  
+  // Theme-specific hover colors for detective theme
+  :global(body.theme-detective) &:hover {
+    border-color: var(--hover-accent, #7a9e7e);
+  }
+}
+
+.activeItem {
+  background: var(--accent-active);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(129, 212, 250, 0.2);
+}
+
+// Theme-specific active item colors for detective theme
+:global(body.theme-detective) .activeItem {
+  border-color: var(--hover-accent, #7a9e7e);
+  color: var(--hover-accent, #7a9e7e);
+  box-shadow: 0 2px 8px rgba(122, 158, 126, 0.2);
+}
+
+// Theme-specific detective colors for various elements
+:global(body.theme-detective) .lessonContent {
+  border: 1px solid var(--accent-primary, #d1b773); // Gold border for lesson content
+}
+
+:global(body.theme-detective) .lessonCard {
+  border: 1px solid var(--accent-primary, #d1b773); // Gold border for lesson cards
+}
+
+:global(body.theme-detective) .documentMeta {
+  border-left: 4px solid var(--accent-primary, #d1b773); // Gold border
+}
+
+:global(body.theme-detective) .documentMeta:hover {
+  border-left-color: var(--accent-secondary, #7a9e7e); // Green border on hover
+}
+
+:global(body.theme-detective) .lessonCard:hover {
+  border-color: var(--accent-secondary, #7a9e7e); // Green border on hover
+  .documentTitle .titleAccent {
+    background: linear-gradient(to right, var(--accent-secondary) 0%, var(--hover-accent, #7a9e7e) 85%, transparent 100%);
+  }
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(211, 47, 47, 0.1); // Subtle red glow
+}
+
+:global(body.theme-detective) .thematicIntro {
+  border: 1px solid var(--accent-tertiary, #b4a287); // Sepia border
+}
+
+:global(body.theme-detective) .conceptBlock .conceptTitle {
+  color: var(--heading-secondary, #7a9e7e); // Olive green for concept titles
+}
+
+:global(body.theme-detective) .codeBlock {
+  border: 1px solid var(--accent-tertiary, #b4a287); // Sepia border
+}
+
+:global(body.theme-detective) .contentsSidebar {
+  border: 1px solid var(--accent-tertiary, #b4a287); // Sepia border
+}
+
+:global(body.theme-detective) .contentsTitle {
+  color: var(--accent-quaternary, #8a8a8a); // Muted grey for contents title
+}
+
+// Theme-specific section heading colors for detective theme
+:global(body.theme-detective) .sectionHeading {
+  color: var(--heading-secondary, #7a9e7e); // Olive green for section headings
+}
+
+:global(body.theme-detective) .subsectionHeading {
+  color: var(--heading-tertiary, #b4a287); // Sepia for subsection headings
+}
+
+:global(body.theme-detective) .learningObjectives {
+  border: 1px solid var(--accent-primary, #d1b773); // Gold border for objectives box
+}
+
+:global(body.theme-detective) .learningObjectives:hover {
+  border-color: var(--accent-secondary, #7a9e7e); // Green border on hover
+}
+
+:global(body.theme-detective) .objectivesTitle {
+  color: var(--heading-secondary, #7a9e7e); // Olive green for objectives heading
+}
+
+// Add bullet to Learning Objectives title for detective theme
+:global(body.theme-detective) .objectivesTitle::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-danger, #d32f2f);
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+
+// Theme-specific red accents for detective theme
+:global(body.theme-detective) .documentSubtitle .topicName {
+  color: var(--accent-danger, #d32f2f); // Dark red for topic name
+}
+
+:global(body.theme-detective) .lessonNumber {
+  color: var(--accent-danger, #d32f2f); // Dark red for lesson number
+}
+
+:global(body.theme-detective) .objectiveIcon {
+  background: var(--accent-danger, #d32f2f); // Dark red background for objective icons
+}
+
+:global(body.theme-detective) .conceptIcon {
+  color: var(--accent-warning, #f57c00); // Orange-red for concept icons
+}
+
+:global(body.theme-detective) .codeBlock .codeHeader {
+  background: var(--accent-primary, #d1b773); // Gold background for code block headers
+  color: var(--theme-text, #e0e0e0);
+  border: 1px solid var(--accent-primary, #d1b773); // Gold border
+}
+
+:global(body.theme-detective) .codeBlock .codeHeader:hover {
+  background: var(--accent-secondary, #7a9e7e); // Green background on hover
+  border-color: var(--accent-secondary, #7a9e7e); // Green border on hover
+}
+
+:global(body.theme-detective) .summarySection {
+  border: 1px solid var(--accent-primary, #d1b773); // Gold border for summary
+}
+
+:global(body.theme-detective) .summarySection:hover {
+  border-color: var(--accent-secondary, #7a9e7e); // Green border on hover
+}
+
+// Theme-specific inline code highlighting for detective theme
+:global(body.theme-detective) code {
+  background: rgba(122, 158, 126, 0.2); // Olive green background with opacity
+  color: var(--code-inline, #7a9e7e); // Olive green text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+:global(body.theme-detective) .realWorldBulletItem code {
+  background: rgba(122, 158, 126, 0.2); // Olive green background with opacity
+  color: var(--code-inline, #7a9e7e); // Olive green text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+:global(body.theme-detective) .howItWorksItem code {
+  background: rgba(122, 158, 126, 0.2); // Olive green background with opacity
+  color: var(--code-inline, #7a9e7e); // Olive green text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+// Fix gradient for detective theme course title
+:global(body.theme-detective) .courseTitle {
+  background: linear-gradient(90deg, var(--accent-primary, #d1b773) 0%, var(--accent-secondary, #7a9e7e) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+// Add gradient line below course title for detective theme
+:global(body.theme-detective) .courseTitle::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent-primary, #d1b773) 0%, var(--accent-secondary, #7a9e7e) 100%);
+  margin-top: 0.5rem;
+  border-radius: 1px;
+}
+
+:global(body.theme-detective) .summarySection .summaryTitle {
+  color: var(--accent-warning, #f57c00); // Orange-red for summary title
+}
+
+// Remove highlighting from output values for both themes
+:global(body.theme-wizard) .outputContent code,
+:global(body.theme-detective) .outputContent code,
+:global(body.theme-space) .outputContent code {
+  background: transparent !important;
+  color: var(--output-text) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+// Remove highlighting from output values in Monaco editor output
+:global(body.theme-wizard) .monaco-editor .output-content code,
+:global(body.theme-detective) .monaco-editor .output-content code,
+:global(body.theme-space) .monaco-editor .output-content code {
+  background: transparent !important;
+  color: var(--output-text) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+// Additional overrides for Monaco editor output highlighting
+:global(body.theme-wizard) .monaco-editor .output-container code,
+:global(body.theme-detective) .monaco-editor .output-container code,
+:global(body.theme-space) .monaco-editor .output-container code {
+  background: transparent !important;
+  color: var(--output-text) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+// Override any Monaco syntax highlighting in output
+:global(body.theme-wizard) .monaco-editor .output-container .token,
+:global(body.theme-detective) .monaco-editor .output-container .token,
+:global(body.theme-space) .monaco-editor .output-container .token {
+  background: transparent !important;
+  color: var(--output-text) !important;
+}
+
+// Space theme specific styles - matching wizard and detective theme functionality
+:global(body.theme-space) .lessonContent {
+  border: 1px solid var(--accent-primary, #6c5ce7); // Purple border for lesson content
+}
+
+:global(body.theme-space) .lessonCard {
+  border: 1px solid var(--accent-primary, #6c5ce7); // Purple border for lesson cards
+}
+
+:global(body.theme-space) .lessonCard:hover {
+  border-color: var(--accent-tertiary, #a6aafb); // Light blue border on hover instead of pink
+  .documentTitle .titleAccent {
+    background: linear-gradient(to right, var(--accent-tertiary) 0%, var(--hover-accent, #a6aafb) 85%, transparent 100%);
+  }
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(108, 92, 231, 0.2); // Purple glow
+}
+
+:global(body.theme-space) .documentMeta {
+  border-left: 4px solid var(--accent-primary, #6c5ce7); // Purple border
+}
+
+:global(body.theme-space) .documentMeta:hover {
+  border-left-color: var(--accent-secondary, #ff7675); // Pink border on hover
+}
+
+:global(body.theme-space) .thematicIntro {
+  border: 1px solid var(--accent-tertiary, #a6aafb); // Light blue border instead of pink
+}
+
+:global(body.theme-space) .conceptBlock .conceptTitle {
+  color: var(--accent-tertiary, #a6aafb); // Light blue for concept titles instead of purple
+}
+
+:global(body.theme-space) .codeBlock {
+  border: 1px solid var(--accent-tertiary, #a6aafb); // Light blue border instead of pink
+}
+
+:global(body.theme-space) .contentsSidebar {
+  border: 1px solid var(--accent-tertiary, #a6aafb); // Light blue border instead of pink
+}
+
+:global(body.theme-space) .contentsTitle {
+  color: var(--accent-tertiary, #a6aafb); // Light blue for contents title instead of purple
+}
+
+// Theme-specific section heading colors for space theme
+:global(body.theme-space) .sectionHeading {
+  color: var(--accent-tertiary, #a6aafb); // Light blue for section headings instead of purple
+}
+
+:global(body.theme-space) .subsectionHeading {
+  color: var(--accent-secondary, #ff7675); // Pink for subsection headings
+}
+
+:global(body.theme-space) .learningObjectives {
+  border: 1px solid var(--accent-primary, #6c5ce7); // Purple border for objectives box
+}
+
+:global(body.theme-space) .learningObjectives:hover {
+  border-color: var(--accent-tertiary, #a6aafb); // Light blue border on hover instead of pink
+}
+
+:global(body.theme-space) .objectivesTitle {
+  color: var(--accent-tertiary, #a6aafb); // Light blue for objectives heading instead of purple
+}
+
+// Add bullet to Learning Objectives title for space theme
+:global(body.theme-space) .objectivesTitle::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-secondary, #ff7675);
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+
+// Theme-specific accents for space theme
+:global(body.theme-space) .documentSubtitle .topicName {
+  color: var(--accent-secondary, #ff7675); // Pink for topic name
+}
+
+:global(body.theme-space) .lessonNumber {
+  color: var(--accent-secondary, #ff7675); // Pink for lesson number
+}
+
+:global(body.theme-space) .objectiveIcon {
+  background: var(--accent-secondary, #ff7675); // Pink background for objective icons
+}
+
+:global(body.theme-space) .conceptIcon {
+  color: var(--accent-tertiary, #a6aafb); // Light blue for concept icons
+}
+
+:global(body.theme-space) .codeBlock .codeHeader {
+  background: var(--accent-primary, #6c5ce7); // Purple background for code block headers
+  color: var(--theme-text, #ffffff);
+  border: 1px solid var(--accent-primary, #6c5ce7); // Purple border
+}
+
+:global(body.theme-space) .codeBlock .codeHeader:hover {
+  background: var(--accent-tertiary, #a6aafb); // Light blue background on hover instead of pink
+  border-color: var(--accent-tertiary, #a6aafb); // Light blue border on hover instead of pink
+}
+
+:global(body.theme-space) .summarySection {
+  border: 1px solid var(--success-color, #6EE7B7); // Green border for summary
+}
+
+:global(body.theme-space) .summarySection:hover {
+  border-color: var(--accent-primary, #6c5ce7); // Purple border on hover
+}
+
+// Theme-specific inline code highlighting for space theme
+:global(body.theme-space) code {
+  background: rgba(166, 170, 251, 0.2); // Light blue background with opacity
+  color: var(--code-inline, #a6aafb); // Light blue text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+:global(body.theme-space) .realWorldBulletItem code {
+  background: rgba(166, 170, 251, 0.2); // Light blue background with opacity
+  color: var(--code-inline, #a6aafb); // Light blue text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+:global(body.theme-space) .howItWorksItem code {
+  background: rgba(166, 170, 251, 0.2); // Light blue background with opacity
+  color: var(--code-inline, #a6aafb); // Light blue text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+// Fix gradient for space theme course title
+:global(body.theme-space) .courseTitle {
+  background: linear-gradient(90deg, var(--accent-tertiary, #a6aafb) 0%, var(--accent-secondary, #ff7675) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+// Add gradient line below course title for space theme
+:global(body.theme-space) .courseTitle::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent-tertiary, #a6aafb) 0%, var(--accent-secondary, #ff7675) 100%);
+  margin-top: 0.5rem;
+  border-radius: 1px;
+}
+
+:global(body.theme-space) .summarySection .summaryTitle {
+  color: var(--success-color, #6EE7B7); // Green for summary title
+}
+
+// Enhanced hover effects with purple accents for space theme
+:global(body.theme-space) .lessonCard:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(108, 92, 231, 0.2); // Purple glow
+}
+
+:global(body.theme-space) .contentsItem:hover {
+  box-shadow: 0 2px 8px rgba(108, 92, 231, 0.15); // Purple shadow on hover
+}
+
+// Theme-specific contents number colors for space theme
+:global(body.theme-space) .contentsNumber {
+  background: rgba(108, 92, 231, 0.1);
+  color: var(--accent-primary);
+}
+
+:global(body.theme-space) .activeItem .contentsNumber {
+  background: rgba(108, 92, 231, 0.3);
+  color: var(--theme-text);
+}
+
+// Remove highlighting from output values for space theme
+:global(body.theme-space) .outputContent code {
+  background: transparent !important;
+  color: var(--output-text) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+:global(body.theme-space) .monaco-editor .output-content code {
+  background: transparent !important;
+  color: var(--output-text) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+:global(body.theme-space) .monaco-editor .output-container code {
+  background: transparent !important;
+  color: var(--output-text) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+:global(body.theme-space) .monaco-editor .output-container .token {
+  background: transparent !important;
+  color: var(--output-text) !important;
+}
+
+// Wizard theme specific styles - matching detective theme functionality
+:global(body.theme-wizard) .lessonContent {
+  border: 1px solid var(--accent-primary, #0EA5E9); // Turquoise border for lesson content
+}
+
+:global(body.theme-wizard) .lessonCard {
+  border: 1px solid var(--accent-primary, #0EA5E9); // Turquoise border for lesson cards
+}
+
+:global(body.theme-wizard) .lessonCard:hover {
+  border-color: var(--accent-secondary, #06B6D4); // Darker turquoise border on hover
+  .documentTitle .titleAccent {
+    background: linear-gradient(to right, var(--accent-secondary) 0%, var(--accent-primary, #0EA5E9) 85%, transparent 100%);
+  }
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(14, 165, 233, 0.2); // Turquoise glow
+}
+
+:global(body.theme-wizard) .documentMeta {
+  border-left: 4px solid var(--accent-primary, #0EA5E9); // Turquoise border
+}
+
+:global(body.theme-wizard) .documentMeta:hover {
+  border-left-color: var(--accent-secondary, #06B6D4); // Darker turquoise border on hover
+}
+
+:global(body.theme-wizard) .thematicIntro {
+  border: 1px solid var(--accent-secondary, #06B6D4); // Turquoise border
+}
+
+:global(body.theme-wizard) .conceptBlock .conceptTitle {
+  color: var(--accent-primary, #0EA5E9); // Turquoise for concept titles
+}
+
+:global(body.theme-wizard) .codeBlock {
+  border: 1px solid var(--accent-secondary, #06B6D4); // Turquoise border
+}
+
+:global(body.theme-wizard) .contentsSidebar {
+  border: 1px solid var(--accent-secondary, #06B6D4); // Turquoise border
+}
+
+:global(body.theme-wizard) .contentsTitle {
+  color: var(--accent-primary, #0EA5E9); // Turquoise for contents title
+}
+
+// Theme-specific section heading colors for wizard theme
+:global(body.theme-wizard) .sectionHeading {
+  color: var(--accent-primary, #0EA5E9); // Turquoise for section headings
+}
+
+:global(body.theme-wizard) .subsectionHeading {
+  color: var(--accent-secondary, #06B6D4); // Darker turquoise for subsection headings
+}
+
+:global(body.theme-wizard) .learningObjectives {
+  border: 1px solid var(--accent-primary, #0EA5E9); // Turquoise border for objectives box
+}
+
+:global(body.theme-wizard) .learningObjectives:hover {
+  border-color: var(--accent-secondary, #06B6D4); // Darker turquoise border on hover
+}
+
+:global(body.theme-wizard) .objectivesTitle {
+  color: var(--accent-primary, #0EA5E9); // Turquoise for objectives heading
+}
+
+// Add bullet to Learning Objectives title for wizard theme
+:global(body.theme-wizard) .objectivesTitle::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--gold-accent, #FBBF24);
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+
+// Theme-specific accents for wizard theme
+:global(body.theme-wizard) .documentSubtitle .topicName {
+  color: var(--gold-accent, #FBBF24); // Gold for topic name
+}
+
+:global(body.theme-wizard) .lessonNumber {
+  color: var(--gold-accent, #FBBF24); // Gold for lesson number
+}
+
+:global(body.theme-wizard) .objectiveIcon {
+  background: var(--gold-accent, #FBBF24); // Gold background for objective icons
+}
+
+:global(body.theme-wizard) .conceptIcon {
+  color: var(--accent-secondary, #06B6D4); // Turquoise for concept icons
+}
+
+:global(body.theme-wizard) .codeBlock .codeHeader {
+  background: var(--accent-primary, #0EA5E9); // Turquoise background for code block headers
+  color: var(--theme-text, #E8DBC3);
+  border: 1px solid var(--accent-primary, #0EA5E9); // Turquoise border
+}
+
+:global(body.theme-wizard) .codeBlock .codeHeader:hover {
+  background: var(--accent-secondary, #06B6D4); // Darker turquoise background on hover
+  border-color: var(--accent-secondary, #06B6D4); // Darker turquoise border on hover
+}
+
+:global(body.theme-wizard) .summarySection {
+  border: 1px solid var(--success-color, #6EE7B7); // Green border for summary
+}
+
+:global(body.theme-wizard) .summarySection:hover {
+  border-color: var(--accent-primary, #0EA5E9); // Turquoise border on hover
+}
+
+// Theme-specific inline code highlighting for wizard theme
+:global(body.theme-wizard) code {
+  background: rgba(14, 165, 233, 0.2); // Turquoise background with opacity
+  color: var(--code-inline, #0EA5E9); // Turquoise text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+:global(body.theme-wizard) .realWorldBulletItem code {
+  background: rgba(14, 165, 233, 0.2); // Turquoise background with opacity
+  color: var(--code-inline, #0EA5E9); // Turquoise text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+:global(body.theme-wizard) .howItWorksItem code {
+  background: rgba(14, 165, 233, 0.2); // Turquoise background with opacity
+  color: var(--code-inline, #0EA5E9); // Turquoise text
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+// Fix gradient for wizard theme course title
+:global(body.theme-wizard) .courseTitle {
+  background: linear-gradient(90deg, var(--title-gradient-start, #FBBF24) 0%, var(--title-gradient-end, #6EE7B7) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+// Add gradient line below course title for wizard theme
+:global(body.theme-wizard) .courseTitle::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--title-gradient-start, #FBBF24) 0%, var(--title-gradient-end, #6EE7B7) 100%);
+  margin-top: 0.5rem;
+  border-radius: 1px;
+}
+
+:global(body.theme-wizard) .summarySection .summaryTitle {
+  color: var(--success-color, #6EE7B7); // Green for summary title
+}
+
+// Enhanced hover effects with turquoise accents for wizard theme
+:global(body.theme-wizard) .lessonCard:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(14, 165, 233, 0.2); // Turquoise glow
+}
+
+:global(body.theme-wizard) .contentsItem:hover {
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.15); // Turquoise shadow on hover
+}
+
+// Theme-specific contents number colors for wizard theme
+:global(body.theme-wizard) .contentsNumber {
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--accent-primary);
+}
+
+:global(body.theme-wizard) .activeItem .contentsNumber {
+  background: rgba(14, 165, 233, 0.3);
+  color: var(--theme-text);
+}
+
+// Enhanced hover effects with red accents for detective theme
+:global(body.theme-detective) .lessonCard:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(211, 47, 47, 0.1); // Subtle red glow
+}
+
+:global(body.theme-detective) .contentsItem:hover {
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.15); // Red shadow on hover
+}
+
+.contentsNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(129, 212, 250, 0.1);
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.activeItem .contentsNumber {
+  background: rgba(129, 212, 250, 0.3);
+  color: var(--theme-text);
+  transform: scale(1.1);
+}
+
+// Theme-specific contents number colors for detective theme
+:global(body.theme-detective) .contentsNumber {
+  background: rgba(122, 158, 126, 0.1);
+  color: var(--accent-secondary);
+}
+
+:global(body.theme-detective) .activeItem .contentsNumber {
+  background: rgba(122, 158, 126, 0.3);
+  color: var(--theme-text);
+}
+
+.contentsText {
+  flex: 1;
+  font-weight: 400;
+}
+
+// Skip to Challenges Snackbar
+.skipSnackbar {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--theme-bg);
+  border: 2px solid var(--accent-primary);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  max-width: 350px;
+  animation: slideInUp 0.5s ease-out;
+  
+  @keyframes slideInUp {
+    from {
+      transform: translateY(100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+.snackbarCloseButton {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: var(--theme-text);
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background: var(--accent-secondary);
+    transform: scale(1.1);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.snackbarContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.snackbarContent span {
+  color: var(--theme-text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.snackbarButton {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: var(--theme-text);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-heading);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+    background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Responsive styles for snackbar
+@media (max-width: 768px) {
+  .skipSnackbar {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    max-width: none;
+    padding: 14px 18px;
+  }
+  
+  .snackbarContent {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .snackbarContent span {
     font-size: 0.9rem;
+  }
+  
+  .snackbarButton {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    white-space: nowrap;
   }
 }

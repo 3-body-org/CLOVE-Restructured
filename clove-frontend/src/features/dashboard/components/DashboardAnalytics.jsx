@@ -22,17 +22,27 @@ const ProgressBarChart = ({ data }) => (
   </div>
 );
 
-const DonutChart = ({ percentage, label, description }) => (
-  <div className={styles.chartWrapper}>
-    <div className={styles.donutChart}>
-      <div className={styles.donutCenter}>
-        <div className={styles.donutCenterText}>{percentage}%</div>
-        <div className={styles.donutCenterLabel}>{label}</div>
+const DonutChart = ({ percentage, label, description }) => {
+  // Convert percentage to degrees for conic gradient
+  const degrees = (percentage / 100) * 360;
+  
+  return (
+    <div className={styles.chartWrapper}>
+      <div 
+        className={styles.donutChart}
+        style={{
+          background: `conic-gradient(${styles.lightPurple || '#8b5cf6'} 0deg ${degrees}deg, ${styles.lighterBlack || '#1f2937'} ${degrees}deg 360deg)`
+        }}
+      >
+        <div className={styles.donutCenter}>
+          <div className={styles.donutCenterText}>{percentage}%</div>
+          <div className={styles.donutCenterLabel}>{label}</div>
+        </div>
       </div>
+      <div className={styles.chartLabel}>{description}</div>
     </div>
-    <div className={styles.chartLabel}>{description}</div>
-  </div>
-);
+  );
+};
 
 export const DashboardAnalytics = ({ progressData, challengesData }) => (
   <>

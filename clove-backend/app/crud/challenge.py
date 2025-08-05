@@ -1,6 +1,6 @@
 # app/crud/challenge.py
 from sqlalchemy.future import select
-from sqlalchemy import func, and_
+from sqlalchemy import func, and_, distinct
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.models.challenges import Challenge
 from app.db.models.user_challenges import UserChallenge
@@ -16,15 +16,37 @@ async def list_for_subtopic(db: AsyncSession, subtopic_id: int, skip: int = 0, l
     )
     return result.scalars().all()
 
+async def list_by_type_and_difficulty(db: AsyncSession, type: str, difficulty: str, skip: int = 0, limit: int = 100) -> list[Challenge]:
+    """List challenges filtered by type and difficulty."""
+    result = await db.execute(
+        select(Challenge)
+        .where(
+            Challenge.type == type,
+            Challenge.difficulty == difficulty
+        )
+        .offset(skip)
+        .limit(limit)
+    )
+    return result.scalars().all()
+
+async def get_available_types(db: AsyncSession) -> list[str]:
+    """Get all available challenge types."""
+    result = await db.execute(
+        select(distinct(Challenge.type))
+    )
+    return [row[0] for row in result.fetchall()]
+
 async def create(db: AsyncSession, challenge_in: ChallengeCreate) -> Challenge:
     new_chal = Challenge(
         subtopic_id=challenge_in.subtopic_id,
         type=challenge_in.type,
-        snippet_choices=challenge_in.snippet_choices,
         difficulty=challenge_in.difficulty,
-        hints=challenge_in.hints,
         timer=challenge_in.timer,
-        points=challenge_in.points if challenge_in.points is not None else 100,
+        points=challenge_in.points,
+        scenario=challenge_in.scenario,
+        story_context=challenge_in.story_context,
+        challenge_data=challenge_in.challenge_data.model_dump(),
+        hints=challenge_in.hints,
     )
     db.add(new_chal)
     await db.commit()
@@ -34,7 +56,11 @@ async def create(db: AsyncSession, challenge_in: ChallengeCreate) -> Challenge:
 
 async def update(db: AsyncSession, challenge_db: Challenge, challenge_in: ChallengeUpdate) -> Challenge:
     for field, value in challenge_in.model_dump(exclude_unset=True).items():
-        setattr(challenge_db, field, value)
+        if field == "challenge_data" and value is not None:
+            # Handle challenge_data as a nested model
+            setattr(challenge_db, field, value.model_dump())
+        else:
+            setattr(challenge_db, field, value)
     db.add(challenge_db)
     await db.commit()
     await db.refresh(challenge_db)

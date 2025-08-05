@@ -26,7 +26,7 @@ async def create_user_subtopic(
     created = await create(db, user_subtopic_in)
     return created
 
-@router.get("/user/{user_id}/subtopic/{subtopic_id}", response_model=UserSubtopicRead)
+@router.get("/user/{user_id}/subtopic/{subtopic_id}")
 async def read_user_subtopic(
     user_id: int,
     subtopic_id: int,
@@ -41,7 +41,21 @@ async def read_user_subtopic(
     if not user_subtopic:
         raise HTTPException(status_code=404, detail="User subtopic not found")
     
-    return user_subtopic
+    # Return a simple dict to avoid relationship serialization issues
+    return {
+        "id": user_subtopic.id,
+        "user_id": user_subtopic.user_id,
+        "subtopic_id": user_subtopic.subtopic_id,
+        "lessons_completed": user_subtopic.lessons_completed,
+        "practice_completed": user_subtopic.practice_completed,
+        "challenges_completed": user_subtopic.challenges_completed,
+        "is_unlocked": user_subtopic.is_unlocked,
+        "is_completed": user_subtopic.is_completed,
+        "progress_percent": user_subtopic.progress_percent,
+        "knowledge_level": user_subtopic.knowledge_level,
+        "unlocked_at": user_subtopic.unlocked_at,
+        "completed_at": user_subtopic.completed_at
+    }
 
 @router.get("/user/{user_id}", response_model=List[UserSubtopicRead])
 async def list_user_subtopics(
@@ -94,56 +108,136 @@ async def delete_user_subtopic(
     await delete(db, user_subtopic)
     return 
 
-@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-lesson", response_model=UserSubtopicRead)
+@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-lesson")
 async def complete_lesson(
     user_id: int,
     subtopic_id: int,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if not current_user.is_superuser and user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
-    user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
-    if not user_subtopic:
-        raise HTTPException(status_code=404, detail="User subtopic not found")
-    user_subtopic.lessons_completed = True
-    await db.commit()
-    await db.refresh(user_subtopic)
-    await update_user_subtopic_progress(db, user_id, subtopic_id)
-    return user_subtopic
+    try:
+        if not current_user.is_superuser and user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
+        
+        user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
+        if not user_subtopic:
+            raise HTTPException(status_code=404, detail="User subtopic not found")
+        
+        user_subtopic.lessons_completed = True
+        await db.commit()
+        await db.refresh(user_subtopic)
+        
+        # Update progress
+        await update_user_subtopic_progress(db, user_id, subtopic_id)
+        await db.refresh(user_subtopic)
+        
+        return {
+            "id": user_subtopic.id,
+            "user_id": user_subtopic.user_id,
+            "subtopic_id": user_subtopic.subtopic_id,
+            "lessons_completed": user_subtopic.lessons_completed,
+            "practice_completed": user_subtopic.practice_completed,
+            "challenges_completed": user_subtopic.challenges_completed,
+            "is_unlocked": user_subtopic.is_unlocked,
+            "is_completed": user_subtopic.is_completed,
+            "progress_percent": user_subtopic.progress_percent,
+            "knowledge_level": user_subtopic.knowledge_level,
+            "unlocked_at": user_subtopic.unlocked_at,
+            "completed_at": user_subtopic.completed_at
+        }
+        
+    except Exception as e:
+        print(f"Error in complete_lesson: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-practice", response_model=UserSubtopicRead)
+@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-practice")
 async def complete_practice(
     user_id: int,
     subtopic_id: int,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if not current_user.is_superuser and user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
-    user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
-    if not user_subtopic:
-        raise HTTPException(status_code=404, detail="User subtopic not found")
-    user_subtopic.practice_completed = True
-    await db.commit()
-    await db.refresh(user_subtopic)
-    await update_user_subtopic_progress(db, user_id, subtopic_id)
-    return user_subtopic
+    try:
+        if not current_user.is_superuser and user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
+        
+        user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
+        if not user_subtopic:
+            raise HTTPException(status_code=404, detail="User subtopic not found")
+        
+        # Use the proper update function instead of direct modification
+        user_subtopic.practice_completed = True
+        await db.commit()
+        await db.refresh(user_subtopic)
+        
+        # Update progress
+        await update_user_subtopic_progress(db, user_id, subtopic_id)
+        await db.refresh(user_subtopic)
+        
+        return {
+            "id": user_subtopic.id,
+            "user_id": user_subtopic.user_id,
+            "subtopic_id": user_subtopic.subtopic_id,
+            "lessons_completed": user_subtopic.lessons_completed,
+            "practice_completed": user_subtopic.practice_completed,
+            "challenges_completed": user_subtopic.challenges_completed,
+            "is_unlocked": user_subtopic.is_unlocked,
+            "is_completed": user_subtopic.is_completed,
+            "progress_percent": user_subtopic.progress_percent,
+            "knowledge_level": user_subtopic.knowledge_level,
+            "unlocked_at": user_subtopic.unlocked_at,
+            "completed_at": user_subtopic.completed_at
+        }
+        
+    except Exception as e:
+        print(f"Error in complete_practice: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-challenge", response_model=UserSubtopicRead)
+@router.post("/user/{user_id}/subtopic/{subtopic_id}/complete-challenge")
 async def complete_challenge(
     user_id: int,
     subtopic_id: int,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if not current_user.is_superuser and user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
-    user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
-    if not user_subtopic:
-        raise HTTPException(status_code=404, detail="User subtopic not found")
-    user_subtopic.challenges_completed = True
-    await db.commit()
-    await db.refresh(user_subtopic)
-    await update_user_subtopic_progress(db, user_id, subtopic_id)
-    return user_subtopic 
+    try:
+        if not current_user.is_superuser and user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Not authorized to update this user subtopic")
+        
+        user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic_id)
+        if not user_subtopic:
+            raise HTTPException(status_code=404, detail="User subtopic not found")
+        
+        user_subtopic.challenges_completed = True
+        await db.commit()
+        await db.refresh(user_subtopic)
+        
+        await update_user_subtopic_progress(db, user_id, subtopic_id)
+        
+        # Final refresh to ensure the object is in a valid state
+        await db.refresh(user_subtopic)
+        
+        return {
+            "id": user_subtopic.id,
+            "user_id": user_subtopic.user_id,
+            "subtopic_id": user_subtopic.subtopic_id,
+            "lessons_completed": user_subtopic.lessons_completed,
+            "practice_completed": user_subtopic.practice_completed,
+            "challenges_completed": user_subtopic.challenges_completed,
+            "is_unlocked": user_subtopic.is_unlocked,
+            "is_completed": user_subtopic.is_completed,
+            "progress_percent": user_subtopic.progress_percent,
+            "knowledge_level": user_subtopic.knowledge_level,
+            "unlocked_at": user_subtopic.unlocked_at,
+            "completed_at": user_subtopic.completed_at
+        }
+        
+    except Exception as e:
+        print(f"Error in complete_challenge: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}") 

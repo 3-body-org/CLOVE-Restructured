@@ -1,610 +1,677 @@
 // CodeCompletion.module.scss
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Space+Grotesk:wght@400;500;600&display=swap");
 
-/* Theme variables are now applied via CSS custom properties from the theme system */
+// Global styling for FIX tags (using [1], [2], [3] placeholders)
+:global(.bug-placeholder) {
+  background: rgba(255, 99, 71, 0.4) !important;    // More saturated red background
+  color: inherit !important;                           // Normal text color
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  border-bottom: 1px dashed #ff6347 !important;       // More saturated red dashed underline
+  transition: all 0.2s ease !important;
 
-.missionContainer {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 20px;
-  max-width: 100vw;
-  margin: 0 auto;
-  padding: 20px;
-  background: var(--bg);
+  
+  &:active {
+    background: rgba(255, 99, 71, 0.6) !important;   // Brighter red when clicked
+    transform: scale(0.98) !important;
+  }
+}
+
+// Enhanced styling for clickable choices (filled choices that can be removed)
+:global(.clickable-choice) {
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  background: rgba(255, 255, 224, 0.3) !important;  // Slightly pale yellow background
+  border-radius: 3px !important;
+  padding: 1px 3px !important;
+  position: relative !important;
+  color: inherit !important;  // Normal text color
+  
+  &:hover {
+    background: rgba(255, 255, 224, 0.5) !important;  // Brighter pale yellow on hover
+    box-shadow: 0 0 8px rgba(255, 255, 224, 0.4) !important;
+    transform: scale(1.02) !important;
+  }
+  
+  &:active {
+    background: rgba(255, 255, 224, 0.7) !important;  // Even brighter pale yellow when clicked
+    transform: scale(0.98) !important;
+  }
+  
+  // Add a subtle border on hover
+  &::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: -2px !important;
+    right: -2px !important;
+    bottom: -2px !important;
+    border: 1px solid transparent !important;
+    border-radius: 4px !important;
+    transition: border-color 0.2s ease !important;
+    pointer-events: none !important;
+  }
+  
+  &:hover::before {
+    border-color: rgba(255, 255, 224, 0.4) !important;
+  }
+}
+
+// Unified styling for clickable choices with same ID
+:global(.clickable-choice-unified) {
+  cursor: default !important;
+  transition: background 0.2s ease !important;
+  background: rgba(255, 255, 224, 0.4) !important;  // Slightly pale yellow background
+  border-radius: 3px !important;
+  padding: 1px 3px !important;
+  position: relative !important;
+  display: inline-block !important;
+  border: 1px solid rgba(255, 255, 224, 0.5) !important;  // Pale yellow border
+  margin: 0 !important;
+  white-space: nowrap !important;
+  font-weight: normal !important;
+  color: inherit !important;  // Normal text color
+  
+  &:hover {
+    background: rgba(255, 255, 224, 0.6) !important;  // Brighter pale yellow on hover
+    cursor: pointer !important;
+  }
+}
+
+// Highlighted placeholder for drop target
+:global(.bug-placeholder-highlight) {
+  background: rgba(255, 99, 71, 0.7) !important;    // Brighter more saturated red background
+  color: inherit !important;                           // Normal text color
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  border: 2px solid #ff6347 !important;               // More saturated red border
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 0 12px rgba(255, 99, 71, 0.8) !important; // More saturated red glow effect
+  animation: pulse 1s infinite !important;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 12px rgba(255, 99, 71, 0.8); }
+  50% { box-shadow: 0 0 20px rgba(255, 99, 71, 1); }
+  100% { box-shadow: 0 0 12px rgba(255, 99, 71, 0.8); }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.codeCompletionContainer {
+  display: flex;
+  width: 100%;
   min-height: 100vh;
-  font-family: "Space Grotesk", sans-serif;
-  color: var(--text);
-  background-image: radial-gradient(
-      circle at 20% 30%,
-      rgba(108, 92, 231, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 70%,
-      rgba(255, 118, 117, 0.1) 0%,
-      transparent 50%
-    );
-}
-
-.gamePanel {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 2rem;
-  border: 1px solid var(--primary);
-  box-shadow: 0 0 30px rgba(108, 92, 231, 0.2);
-  height: fit-content;
-}
-
-.missionInfo {
-  margin-bottom: 2rem;
-
-  .missionTitle {
-    font-family: "Orbitron", sans-serif;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    font-size: 2rem;
-    letter-spacing: 1px;
-  }
-
-  .missionDescription {
-    color: var(--secondary);
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-}
-
-.timerContainer {
-  background: rgba(255, 118, 117, 0.1);
-  border-radius: 10px;
-  padding: 1.5rem;
-  text-align: center;
-  margin-bottom: 2rem;
-  border: 1px solid var(--accent);
-
-  .timer {
-    font-family: "Orbitron", sans-serif;
-    color: var(--accent);
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-  }
-}
-
-.hintSystem {
-  background: rgba(168, 165, 230, 0.1);
-  border-radius: 10px;
-  padding: 1.5rem;
-  border: 1px solid var(--secondary);
-  margin-bottom: 2rem;
-
-  .hintTitle {
-    font-family: "Orbitron", sans-serif;
-    color: var(--secondary);
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-  }
-
-  .hintBtn {
-    background: var(--secondary);
-    color: var(--bg);
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-family: "Orbitron", sans-serif;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(168, 165, 230, 0.3);
-    }
-  }
-}
-
-.scoring {
-  background: rgba(100, 255, 150, 0.1);
-  border-radius: 10px;
-  padding: 1.5rem;
-  border: 1px solid var(--correct);
-
-  div {
-    margin: 0.5rem 0;
-    display: flex;
-    justify-content: space-between;
-
-    span {
-      color: var(--correct);
-      font-family: "Orbitron", sans-serif;
-    }
-  }
+  gap: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .challengeArea {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 2rem;
-  border: 1px solid var(--primary);
-  box-shadow: 0 0 30px rgba(108, 92, 231, 0.2);
-  position: relative;
-  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 15px;
+  border: 1px solid var(--primary, #6c5ce7);
+  box-shadow: 0 0 20px rgba(108, 92, 231, 0.2);
+  margin-left: 20px;
+  min-height: 100vh;
+  max-width: calc(100vw - 340px);
+  overflow-x: hidden;
+}
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      135deg,
-      transparent 45%,
-      rgba(168, 165, 230, 0.05) 50%,
-      transparent 55%
-    );
-    background-size: 200% 200%;
-    animation: hologram 8s linear infinite;
-    mix-blend-mode: overlay;
+.challengeTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 15px;
+  font-family: "Orbitron", sans-serif;
+  letter-spacing: 2px;
+  flex-shrink: 0;
+}
+
+.choicesBar {
+  margin-bottom: 15px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid var(--primary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  
+  &.disabled {
+    opacity: 0.6;
+    border-color: rgba(255, 100, 100, 0.4);
+    background: rgba(255, 100, 100, 0.05);
     pointer-events: none;
   }
 }
 
-.challengeTitle {
-  font-family: "Orbitron", sans-serif;
-  color: var(--accent);
-  margin-bottom: 20px;
-  text-align: start;
-  font-size: 2rem;
-}
-
-.codeEditor {
-  background: var(--code-bg);
+.choiceItem {
+  padding: 10px 15px;
+  background: rgba(108, 92, 231, 0.1);
+  border: 2px solid var(--primary);
   border-radius: 8px;
-  padding: 20px;
-  font-family: "Courier New", monospace;
-  position: relative;
-  margin: 20px 0;
-  border: 1px solid var(--primary);
-  line-height: 1.6;
-  font-size: 16px;
-
-  pre {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
-  textarea {
-    outline: 2px solid var(--primary);
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-    caret-color: var(--accent);
-    font-size: 16px;
-    line-height: 1.6;
-
-    &:focus {
-      outline: 2px solid var(--accent);
-    }
-  }
-
-  // Style for the bug placeholders (FIX_n)
-  :global(.bug-placeholder) {
-    background: rgba(255, 215, 0, 0.2);
-    color: #ffd700;
-    padding: 2px 4px;
-    border-radius: 3px;
-    border-bottom: 1px dashed #ffd700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: rgba(255, 215, 0, 0.4);
-      color: #fff;
-    }
-  }
-}
-
-.codeContent {
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.codeLine {
-  display: flex;
-  margin: 0.4rem 0;
-}
-
-.lineNumber {
-  color: var(--secondary);
-  min-width: 40px;
-  opacity: 0.6;
-  user-select: none;
-  font-size: 0.9rem;
-}
-
-.codeMissing {
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-  padding: 0.15rem 0.6rem;
-  border-bottom: 2px solid var(--accent);
-  margin: 0 0.2rem;
-  font-style: italic;
-  font-size: 0.95rem;
-
-  &::after {
-    content: "⌄";
-    margin-left: 0.5rem;
-    color: var(--secondary);
-    font-style: normal;
-  }
-
-  &:hover {
-    background: rgba(255, 118, 117, 0.1);
-  }
-
-  .placeholder {
-    font-size: 0.9rem;
-  }
-}
-
-.codeDropdown {
-  position: absolute;
-  background: var(--code-bg);
-  border: 1px solid var(--primary);
-  border-radius: 8px;
-  padding: 0.5rem;
-  z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  animation: dropdownAppear 0.2s ease-out;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -6px;
-    left: 20px;
-    width: 12px;
-    height: 12px;
-    background: var(--code-bg);
-    border-top: 1px solid var(--primary);
-    border-left: 1px solid var(--primary);
-    transform: rotate(45deg);
-  }
-}
-
-.codeOption {
-  padding: 0.6rem 1rem !important;
-  border-radius: 6px;
-  font-family: "Courier New", monospace;
-  font-size: 0.95rem !important;
-  transition: all 0.2s;
   color: var(--text);
-  cursor: pointer;
-
+  cursor: grab;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  user-select: none;
+  position: relative;
+  
   &:hover {
     background: rgba(108, 92, 231, 0.2);
-    transform: translateX(5px);
-  }
-
-  & + .codeOption {
-    margin-top: 0.3rem;
-  }
-}
-
-.submitBtn {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 10px;
-  font-family: "Orbitron", sans-serif;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 2rem;
-  width: 100%;
-  font-size: 1rem;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-  }
-}
-
-.choicesBar {
-  background: var(--code-bg);
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px 0;
-  border: 1px solid var(--primary);
-  font-family: "Courier New", monospace;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  min-height: 48px;
-}
-
-.choice {
-  background: var(--card-bg);
-  border: 1px solid var(--primary);
-  border-radius: 8px;
-  padding: 8px 16px;
-  color: var(--text);
-  font-family: 'Fira Code', monospace;
-  font-size: 1rem;
-  cursor: grab;
-  user-select: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(108, 92, 231, 0.08);
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--primary);
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.2s ease;
-  }
-  
-  &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
-    
-    &::before {
-      opacity: 0.1;
-    }
   }
   
   &:active {
     cursor: grabbing;
-    transform: translateY(1px);
-    box-shadow: 0 1px 4px rgba(108, 92, 231, 0.15);
-    
-    &::before {
-      opacity: 0.15;
-    }
   }
   
   &.dragging {
-    opacity: 0.8;
-    transform: scale(1.05);
-    z-index: 10;
-    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
-    
-    &::before {
-      opacity: 0.15;
-    }
-  }
-}
-
-:global(.placeholder) {
-  background: rgba(255, 215, 0, 0.15);
-  color: #ffd700;
-  border-bottom: 2px dashed #ffd700;
-  border-radius: 3px;
-  padding: 2px 4px;
-  font-weight: bold;
-  transition: background 0.2s, color 0.2s;
-}
-
-:global(.placeholder-hover) {
-  background: rgba(255, 215, 0, 0.35);
-  color: #fff;
-  border-bottom: 2px solid #ffd700;
-  border-radius: 3px;
-  padding: 2px 4px;
-  font-weight: bold;
-  box-shadow: 0 0 8px #ffd700;
-}
-
-.fix-tag {
-    background: rgba(255, 215, 0, 0.2);
-  color: #ffd700;
-  border-radius: 3px;
-  border-bottom: 1px dashed #ffd700;
-  font-weight: bold;
-  padding: 2px 8px;
-  margin: 0 2px;
-  font-family: 'Fira Code', monospace;
-  letter-spacing: 1px;
-  opacity: 1;
-  transition: background 0.2s, color 0.2s, border 0.2s, opacity 0.2s;
-  cursor: pointer;
-}
-
-.bug-placeholder {
-  background: rgba(255, 215, 0, 0.12);
-  color: #ffd700cc;
-  border-radius: 3px;
-  border-bottom: 1px dashed #ffd700;
-  font-weight: bold;
-  padding: 2px 8px;
-  margin: 0 2px;
-  font-family: 'Fira Code', monospace;
-  letter-spacing: 1px;
-  opacity: 1;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border: 2px solid transparent;
-    border-radius: 4px;
-    pointer-events: none;
+    opacity: 0.5;
+    transform: scale(0.95);
     transition: all 0.2s ease;
   }
   
-  &.drop-target {
-    background: rgba(100, 255, 150, 0.2);
-    border-color: #64ff96;
-    color: #64ff96;
-    box-shadow: 0 0 10px rgba(100, 255, 150, 0.5);
+  &.used {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background: rgba(108, 92, 231, 0.05);
+    border-color: rgba(108, 92, 231, 0.3);
+  }
+  
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: rgba(255, 100, 100, 0.1);
+    border-color: rgba(255, 100, 100, 0.4);
+    pointer-events: none;
     
-    &::after {
-      border-color: #64ff96;
-      box-shadow: 0 0 15px rgba(100, 255, 150, 0.8);
+    &:hover {
+      background: rgba(255, 100, 100, 0.1);
+      transform: none;
+    }
+    
+    &:active {
+      cursor: not-allowed;
     }
   }
 }
 
-.bug-placeholder:hover, .fix-tag-hover {
-  background: rgba(255, 215, 0, 0.28);
-  color: #fff;
-  border-bottom: 1.5px solid #ffd700;
+.usedIndicator {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+// Simple Monaco Editor decoration styles
+:global(.monaco-editor) {
+  .bug-placeholder {
+    background: rgba(255, 99, 71, 0.3) !important;  // More saturated red background
+    color: inherit !important;                         // Normal text color
+    border-radius: 3px !important;
+    border-bottom: 1px dashed #ff6347 !important;     // More saturated red dashed underline
+    font-weight: bold !important;
+    padding: 2px 8px !important;
+    margin: 0 2px !important;
+    font-family: 'Fira Code', monospace !important;
+    letter-spacing: 1px !important;
+    opacity: 1 !important;
+    transition: all 0.2s ease !important;
+    position: relative !important;
+    
+    // Drop target state - when valid choice can be dropped
+    &.drop-target {
+      background: rgba(100, 255, 150, 0.2) !important;  // Green background
+      border-color: #64ff96 !important;
+      color: #64ff96 !important;
+      box-shadow: 0 0 10px rgba(100, 255, 150, 0.5) !important;
+      
+      &::after {
+        border-color: #64ff96 !important;
+        box-shadow: 0 0 15px rgba(100, 255, 150, 0.8) !important;
+      }
+    }
+  }
+  
+  .filled-choice {
+    background: rgba(255, 255, 224, 0.3) !important;    // Slightly pale yellow background for filled choices
+    color: inherit !important;                          // Normal text color
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+    border-bottom: 1px dashed #f0e68c !important;      // Light yellow dashed underline
+    cursor: pointer !important;
+    display: inline-block !important;
+    font-weight: bold !important;
+    transition: all 0.2s ease !important;
+    
+    &:hover {
+      background: rgba(255, 255, 224, 0.5) !important;   // Brighter pale yellow on hover
+      color: inherit !important;
+      box-shadow: 0 0 8px #f0e68c !important;          // Light yellow glow effect
+    }
+  }
+}
+
+
+
+
+
+
+
+.expectedOutput {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  padding: 12px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid #4CAF50;
+  border-radius: 10px;
+  
+  h3 {
+    color: #4CAF50;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  .outputText {
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #4CAF50;
+  }
+}
+
+.codeEditorContainer {
+  position: relative;
+  margin-top: 20px;
+  border: 2px solid var(--primary, #6c5ce7);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 450px;
+  padding: 15px;
+  background: var(--code-bg, #1a1a2e);
+  display: flex;
+  flex-direction: column;
+  
+  h3 {
+    color: var(--accent, #ff7675);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0; // Prevent text from shrinking
+  }
+  
+  // Container for the Monaco editor to take remaining space
+  > div {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    min-height: 0; // Allow flex item to shrink below content size
+  }
+  
+  // Handle the extra wrapper div in CodeCompletion (drag-and-drop container)
+  > div > div {
+    height: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  
+  // Increase font size in Monaco editor
+  :global(.monaco-editor) {
+    font-size: 16px !important;
+    border: 1px solid var(--primary, #6c5ce7) !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    width: 100% !important; // Ensure editor doesn't exceed container width
+    height: 100% !important; // Take full height of its container
+    
+    .monaco-editor-background {
+      background-color: var(--code-bg, #1a1a2e) !important;
+    }
+    
+    .monaco-editor .margin {
+      background-color: var(--code-bg, #1a1a2e) !important;
+    }
+    
+    // Ensure editor container respects parent boundaries
+    .monaco-editor-container {
+      overflow: hidden !important;
+      border-radius: 6px !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+  
+  &.dragOver {
+    border-color: #ff7675;
+    box-shadow: 0 0 10px rgba(255, 118, 117, 0.3);
+  }
+  
+  &.hasFilledBlanks {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+  }
+  
+  // Style for filled blanks to make them more clickable
+  :global(.monaco-editor) {
+    .filled-blank {
+      background-color: rgba(255, 118, 117, 0.2) !important;
+      border-radius: 3px;
+      padding: 1px 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(255, 118, 117, 0.4) !important;
+        box-shadow: 0 0 5px rgba(255, 118, 117, 0.5);
+      }
+    }
+    
+    // Highlight placeholders [1], [2], etc. - SOLID BACKGROUND like the image
+    .placeholder-highlight {
+      background-color: #ffc107 !important;
+      color: #000 !important;
+      padding: 2px 4px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 2px;
+      
+      &:hover {
+        background-color: #ffd54f !important;
+      }
+    }
+    
+    // Highlight filled choices - SOLID BACKGROUND like the image
+    .filled-choice-highlight {
+      background-color: #4caf50 !important;
+      color: #fff !important;
+      padding: 2px 4px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 2px;
+      
+      &:hover {
+        background-color: #66bb6a !important;
+      }
+    }
+  }
+}
+
+.noCodeMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #888;
+  font-style: italic;
+}
+
+.loadingMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #a6aafb;
+  font-weight: 500;
+  
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+.dropZones {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.dropZone {
+  position: absolute;
+  border: 3px dashed #ff7675 !important;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 118, 117, 0.15) !important;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  min-width: 80px;
+  min-height: 20px;
+  
+  &:hover {
+    background-color: rgba(255, 118, 117, 0.3) !important;
+    border-color: #fd79a8 !important;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 118, 117, 0.5);
+  }
+  
+  &.dragOver {
+    background-color: rgba(255, 118, 117, 0.4) !important;
+    border-color: #fd79a8 !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 118, 117, 0.7);
+  }
+  
+  &.filled {
+    background-color: rgba(255, 118, 117, 0.4) !important;
+    border-color: #fd79a8 !important;
+    border-style: solid !important;
+  }
+}
+
+.placeholderText {
+  color: #ff7675;
+  font-size: 10px;
   font-weight: bold;
-  box-shadow: 0 0 8px #ffd700;
-  opacity: 1;
+  text-align: center;
+  opacity: 0.8;
 }
 
-@keyframes hologram {
-  0% {
-    background-position: 0% 0%;
+.placedChoice {
+  color: #fff;
+  font-size: 11px;
+    font-weight: bold;
+  padding: 2px 6px;
+  background-color: rgba(255, 118, 117, 0.9);
+  border-radius: 4px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.dropZoneContent {
+  padding: 5px 10px;
+  color: #4CAF50;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 3px;
+  margin: 2px;
+}
+
+.submitButton {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  
+  button {
+    padding: 18px 60px;
+    background: var(--accent-primary);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all var(--transition-speed) var(--transition-easing);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 200px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px var(--glow-color);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-3px);
+      background: var(--accent-secondary);
+      box-shadow: 0 8px 25px var(--glow-color);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px var(--glow-color);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      background: linear-gradient(135deg, #666, #888);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    // Special styling for submitting state
+    &.submitting {
+      background: linear-gradient(135deg, #ffa726, #ff9800);
+      color: #fff;
+      cursor: wait;
+      animation: submitting-pulse 1.5s ease-in-out infinite;
+      
+      &:hover {
+        transform: none;
+        box-shadow: 0 4px 15px var(--glow-color);
+      }
+    }
   }
-  100% {
-    background-position: 200% 200%;
+  
+  .submitHint {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #888);
+    text-align: center;
+    max-width: 400px;
+    line-height: 1.4;
+    font-style: italic;
+    opacity: 0.8;
   }
 }
 
-@keyframes dropdownAppear {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes submitting-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
 }
 
 .terminalWindow {
-  background: #1e1e2e;
+  margin-top: 20px;
+  padding: 15px;
+  background: #1a1a1a;
   border-radius: 8px;
-  overflow: hidden;
-  margin: 20px 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--primary);
-
-  .terminalHeader {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    background: #2a2a3a;
-    border-bottom: 1px solid var(--primary);
-  }
-
-  .terminalButtons {
-    display: flex;
-    gap: 6px;
-    margin-right: 10px;
-  }
-
-  .closeBtn, .minimizeBtn, .expandBtn {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-
-  .closeBtn {
-    background: #ff5f56;
-  }
-
-  .minimizeBtn {
-    background: #ffbd2e;
-  }
-
-  .expandBtn {
-    background: #27c93f;
-  }
-
-  .terminalTitle {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.8rem;
-    color: var(--secondary);
-  }
-
-  .terminalContent {
-    padding: 15px;
+  border: 1px solid #333;
     font-family: 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    min-height: 100px;
-    max-height: 200px;
+  font-size: 0.9rem;
+  color: #00ff00;
+  max-height: 150px;
     overflow-y: auto;
-    background: #1a1a2e;
-    color: #e0e0e0;
+  
+  &.success {
+    border-color: #4CAF50;
+    color: #4CAF50;
   }
-
-  .terminalLine {
-    margin: 5px 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-
-    &.comment {
-      color: #6a9955;
-      font-style: italic;
-    }
-  }
-
-  .prompt {
-    color: #4ec9b0;
-    font-weight: bold;
+  
+  &.error {
+    border-color: #f44336;
+    color: #f44336;
   }
 }
 
-@media (max-width: 768px) {
-  .missionContainer {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .gamePanel {
-    order: 2;
-  }
-
-  .codeMissing {
-    &::before {
-      font-size: 0.6em;
-    }
-  }
-
-  .codeDropdown {
-    width: 90%;
-    left: 5% !important;
-
-    &::before {
-      display: none;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .root {
-    padding: 1rem;
-  }
-
-  .codeEditor {
-    padding: 1rem;
+.progressInfo {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid #4CAF50;
+  border-radius: 6px;
+  text-align: center;
+  
+  span {
+    color: #4CAF50;
     font-size: 0.9rem;
+    font-weight: 600;
   }
+}
 
-  .lineNumber {
-    min-width: 30px;
+// Responsive Design
+@media (max-width: 768px) {
+  .codeCompletionContainer {
+    flex-direction: column;
+  }
+  
+  .challengeArea {
+    margin-left: 0;
+    margin-top: 10px;
+    max-width: 100%;
+    padding: 15px;
+  }
+  
+  .choicesBar {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .choiceItem {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .codeEditorContainer {
+    height: 350px;
+  }
+  
+  .submitButton button {
+    padding: 15px 40px;
+    font-size: 1rem;
+    width: 100%;
   }
 }

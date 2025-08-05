@@ -11,7 +11,45 @@
   color: var(--text);
   font-family: "Space Grotesk", sans-serif;
   background-image: radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255, 118, 117, 0.1) 0%, transparent 50%);
-  @media (max-width: 768px) { padding: 1.5rem; }
+  @media (max-width: 768px) { padding: 1.5rem;   }
+}
+
+// Loading Overlay Styles
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loadingContent {
+  background-color: #181926;
+  padding: 20px 40px;
+  border-radius: 8px;
+  color: #cbd5e1;
+  font-size: 16px;
+  text-align: center;
+}
+
+.loadingSpinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #23233a;
+  border-top: 3px solid #a6aafb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .myDeckWrapper.wizardTheme,
@@ -57,7 +95,90 @@
 .gridLayout { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(var(--node-count, 4), minmax(120px, auto)); column-gap: 25rem; row-gap: 20rem; justify-content: center; align-items: center; width: 100%; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; margin-bottom: 12rem; padding-bottom: 8rem; }
 .detectiveTheme .lockedImage img { filter: grayscale(1); opacity: 1; }
 .wizardTheme .subtopicIconWrapper { background: transparent !important; box-shadow: none !important; }
-.wizardTheme .storyContainer { background: rgba(30,16,43,0.92); color: #e8dbc3; box-shadow: 0 0 32px 8px #f5d78244, 0 0 64px 16px #a99fcc33; border: 1.5px solid #b78a5b; }
-.wizardTheme .storyContainer h1, .wizardTheme .storyContainer h2 { color: #f5d782; text-shadow: 0 0 8px #f5d782, 0 0 16px #a99fcc; font-family: 'Cinzel', serif; letter-spacing: 0.04em; }
+.wizardTheme .storyContainer { 
+  background: rgba(15, 23, 42, 0.92); 
+  color: #E8DBC3; 
+  box-shadow: 0 0 32px 8px rgba(14, 165, 233, 0.2), 0 0 64px 16px rgba(6, 182, 212, 0.15); 
+  border: 1.5px solid rgba(14, 165, 233, 0.3);
+  font-family: "Crimson Text", serif;
+}
+.wizardTheme .storyContainer h1, .wizardTheme .storyContainer h2 { 
+  color: #FBBF24; 
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5), 0 0 16px rgba(14, 165, 233, 0.3); 
+  font-family: 'Cinzel', serif; 
+  letter-spacing: 0.04em; 
+}
 .backgroundImage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none; user-select: none; }
 .blur { filter: blur(4px); }
+
+// Introduction Button Styles
+.introductionButtonContainer {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.introductionButton {
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: auto;
+  height: auto;
+  border: none;
+  outline: none;
+
+  // Wizard Theme
+  &.wizardTheme {
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    color: rgba(14, 165, 233, 0.9);
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
+
+    &:hover {
+      background: rgba(14, 165, 233, 0.25);
+      border-color: rgba(14, 165, 233, 0.5);
+      color: rgba(14, 165, 233, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
+    }
+  }
+
+  // Detective Theme
+  &.detectiveTheme {
+    background: rgba(209, 183, 115, 0.15);
+    border: 1px solid rgba(209, 183, 115, 0.3);
+    color: rgba(209, 183, 115, 0.9);
+    box-shadow: 0 2px 8px rgba(209, 183, 115, 0.2);
+
+    &:hover {
+      background: rgba(209, 183, 115, 0.25);
+      border-color: rgba(209, 183, 115, 0.5);
+      color: rgba(209, 183, 115, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(209, 183, 115, 0.3);
+    }
+  }
+
+  // Space Theme
+  &.spaceTheme {
+    background: rgba(166, 170, 251, 0.15);
+    border: 1px solid rgba(166, 170, 251, 0.3);
+    color: rgba(166, 170, 251, 0.9);
+    box-shadow: 0 2px 8px rgba(166, 170, 251, 0.2);
+
+    &:hover {
+      background: rgba(166, 170, 251, 0.25);
+      border-color: rgba(166, 170, 251, 0.5);
+      color: rgba(166, 170, 251, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(166, 170, 251, 0.3);
+    }
+  }
+}

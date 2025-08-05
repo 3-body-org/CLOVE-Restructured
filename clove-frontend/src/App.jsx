@@ -15,7 +15,7 @@ import Authform from "features/auth/pages/AuthFormPage";
 
 //src/features/challenges/...
 import ChallengesPage from "features/challenges/pages/ChallengesPage";
-// import ResultsPage from "features/challenges/pages/ResultsPage";
+import ResultsPage from "features/challenges/pages/ResultsPage";
 
 //src/features/dashboard/...
 import DashboardPage from "features/dashboard/pages/DashboardPage";
@@ -142,6 +142,7 @@ const protectedRoutes = [
   { path: "/lesson/:topicId/:subtopicId", element: <LessonsPage /> },
   { path: "/lesson/:topicId/:subtopicId/practice", element: <PracticePage /> },
   { path: "/lesson/:topicId/:subtopicId/challenges", element: <ChallengesPage /> },
+  { path: "/lesson/:topicId/:subtopicId/challenges/results", element: <ResultsPage /> },
 ];
 
 const publicRoutes = [
@@ -167,9 +168,9 @@ function AppContent() {
         pauseOnFocusLoss={false} 
         pauseOnHover={false} 
       />
-      <MyDeckProvider>
         <Router>
           <AuthProvider>
+          <MyDeckProvider>
             <ThemeProvider>
               <Container fluid className="app-container p-0 m-0">
                 <Routes>
@@ -204,9 +205,9 @@ function AppContent() {
                 </Routes>
               </Container>
             </ThemeProvider>
+          </MyDeckProvider>
           </AuthProvider>
         </Router>
-      </MyDeckProvider>
     </>
   );
 }

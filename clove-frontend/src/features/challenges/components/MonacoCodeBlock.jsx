@@ -126,28 +126,52 @@ const MonacoCodeBlock = ({
   value,
   onChange,
   language = "java",
+  mode, // NEW: Add mode prop to determine read-only behavior
   fixTagClass = "bug-placeholder",
-  fixTagRegex = /FIX_\d+/g,
-  fixTagHoverMessage = "Fix this bug",
+  fixTagRegex = /\[\d+\]/g,
+  fixTagHoverMessage = "Drop a choice here",
   options = {},
   height = "400px",
   onMount: customOnMount,
+  userChoices = {}, // Add userChoices prop for visual indicators
+  placedChoicePositions = {}, // NEW: Add placedChoicePositions prop for accurate highlighting
+  timerState = 'active', // Add timerState prop to handle timer expiration
+  disabled = false, // Add disabled prop for additional control
+  isResumed = false, // Add isResumed prop for cancelled challenges
   ...rest
 }) => {
   const editorRef = useRef(null);
   const decoratorRef = useRef(null);
+  const clickableDecoratorRef = useRef(null); // New decorator for clickable choices
   const { currentTheme } = useChallengeTheme();
 
-  // Decoration logic for FIX tags
+  // Determine read-only behavior based on challenge mode and timer state
+  const shouldBeReadOnly = mode === 'output_tracing' || 
+                          mode === 'code_completion' || // Always read-only for code completion
+                          (mode === 'code_fixer' && (timerState === 'expired' || disabled || isResumed));
+
+  // Determine if the editor should be visually disabled (darkened, not-allowed cursor)
+  const shouldBeVisuallyDisabled = (mode === 'code_completion' && (timerState === 'expired' || disabled || isResumed)) ||
+                                  (mode === 'code_fixer' && (timerState === 'expired' || disabled || isResumed)) ||
+                                  (mode === 'output_tracing' && (timerState === 'expired' || disabled || isResumed));
+
+
+
+  // Decoration logic for placeholders [1], [2], etc. - follows guide's approach
   const updateDecorations = (editor, monaco) => {
     const model = editor.getModel();
-    if (!model) return;
+    if (!model) {
+      return;
+    }
     const text = model.getValue();
     const matches = [];
+    
+    // Find placeholders [1], [2], etc.
     let match;
     while ((match = fixTagRegex.exec(text)) !== null) {
       const startPos = model.getPositionAt(match.index);
       const endPos = model.getPositionAt(match.index + match[0].length);
+      
       matches.push({
         range: new monaco.Range(
           startPos.lineNumber,
@@ -157,33 +181,130 @@ const MonacoCodeBlock = ({
         ),
         options: {
           inlineClassName: fixTagClass,
-          hoverMessage: { value: fixTagHoverMessage },
           stickiness: 1
         }
       });
     }
+    
+    // Apply decorations to editor
     decoratorRef.current?.set(matches);
+  };
+
+  // NEW: Visual indicators for clickable choices with position-based highlighting
+  const updateClickableDecorations = (editor, monaco) => {
+    const model = editor.getModel();
+    if (!model) {
+      return;
+    }
+    const clickableMatches = [];
+    
+    // Use placedChoicePositions for accurate highlighting
+    Object.entries(placedChoicePositions).forEach(([slotId, position]) => {
+      const { line, column, length } = position;
+      
+
+      
+      // Create decoration for the exact final position
+      clickableMatches.push({
+        range: new monaco.Range(
+          line,
+          column,
+          line,
+          column + length
+        ),
+        options: {
+          inlineClassName: 'clickable-choice-unified',
+          stickiness: 1
+        }
+      });
+    });
+    
+    // Apply clickable decorations to editor
+    clickableDecoratorRef.current?.set(clickableMatches);
   };
 
   const handleMount = (editor, monaco) => {
     editorRef.current = editor;
     defineMonacoThemes(monaco);
     monaco.editor.setTheme(getMonacoThemeName(currentTheme));
-    // Decorations
-    decoratorRef.current = editor.createDecorationsCollection();
-    updateDecorations(editor, monaco);
-    // Update on content change
-    const disposable = editor.onDidChangeModelContent(() => {
+    
+    // Create CSS for simple highlight with cursor pointer on hover
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+      .monaco-editor .clickable-choice-unified,
+      .monaco-editor .clickable-choice-unified *,
+      .monaco-editor .clickable-choice-unified span,
+      .monaco-editor .clickable-choice-unified div {
+        background: rgba(255, 215, 0, 0.25) !important;
+        border: 1px solid rgba(255, 215, 0, 0.4) !important;
+        border-radius: 3px !important;
+        padding: 1px 3px !important;
+        margin: 0 !important;
+        cursor: ${shouldBeVisuallyDisabled ? 'not-allowed' : 'pointer'} !important;
+        transition: background 0.2s ease !important;
+        font-weight: normal !important;
+        color: inherit !important;
+        position: relative !important;
+        display: inline-block !important;
+        white-space: nowrap !important;
+        box-sizing: border-box !important;
+        text-decoration: none !important;
+        outline: none !important;
+        opacity: ${shouldBeVisuallyDisabled ? '0.6' : '1'} !important;
+        pointer-events: ${shouldBeVisuallyDisabled ? 'none' : 'auto'} !important;
+      }
+      
+      .monaco-editor .clickable-choice-unified:hover,
+      .monaco-editor .clickable-choice-unified:hover *,
+      .monaco-editor .clickable-choice-unified:hover span,
+      .monaco-editor .clickable-choice-unified:hover div {
+        background: ${shouldBeVisuallyDisabled ? 'rgba(255, 215, 0, 0.25)' : 'rgba(255, 215, 0, 0.35)'} !important;
+        cursor: ${shouldBeVisuallyDisabled ? 'not-allowed' : 'grabbing'} !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+    
+    // Only create decorations if fixTag props are provided
+    if (fixTagClass && fixTagRegex) {
+      // Decorations for placeholders
+      decoratorRef.current = editor.createDecorationsCollection();
       updateDecorations(editor, monaco);
-    });
-    // Custom onMount
-    if (customOnMount) customOnMount(editor, monaco);
-    // Cleanup
-    return () => {
-      disposable.dispose();
-      decoratorRef.current?.clear();
-    };
+      
+      // NEW: Decorations for clickable choices
+      clickableDecoratorRef.current = editor.createDecorationsCollection();
+      updateClickableDecorations(editor, monaco);
+      
+      // Update on content change
+      const disposable = editor.onDidChangeModelContent(() => {
+        updateDecorations(editor, monaco);
+        updateClickableDecorations(editor, monaco);
+      });
+      
+      // Custom onMount
+      if (customOnMount) customOnMount(editor, monaco);
+      
+      // Cleanup
+      return () => {
+        disposable.dispose();
+        decoratorRef.current?.clear();
+        clickableDecoratorRef.current?.clear();
+        document.head.removeChild(styleElement);
+      };
+    } else {
+      // No fixTag props, just call custom onMount
+      if (customOnMount) customOnMount(editor, monaco);
+      return () => {
+        document.head.removeChild(styleElement);
+      };
+    }
   };
+
+  // Update clickable decorations when placedChoicePositions changes
+  React.useEffect(() => {
+    if (editorRef.current && clickableDecoratorRef.current) {
+      updateClickableDecorations(editorRef.current, window.monaco);
+    }
+  }, [placedChoicePositions]);
 
   // Add noir border radius and shadow for detective theme
   const containerStyle = currentTheme === 'detective' ? {
@@ -200,7 +321,7 @@ const MonacoCodeBlock = ({
         height={height}
         defaultLanguage={language}
         value={value}
-        onChange={onChange}
+        onChange={shouldBeReadOnly ? undefined : onChange}
         theme={getMonacoThemeName(currentTheme)}
         options={{
           minimap: { enabled: false },
@@ -222,6 +343,24 @@ const MonacoCodeBlock = ({
           glyphMargin: false,
           lineNumbersMinChars: 3,
           renderLineHighlight: 'all',
+          readOnly: shouldBeReadOnly, // Set readOnly based on challenge mode
+          domReadOnly: shouldBeReadOnly, // Set domReadOnly to prevent DOM interactions when read-only
+          // Disable mouse interactions when timer expires or challenge is resumed
+          mouseWheelZoom: !shouldBeReadOnly,
+          contextmenu: !shouldBeReadOnly,
+          quickSuggestions: false,
+          suggestOnTriggerCharacters: false,
+          acceptSuggestionOnCommitCharacter: false,
+          acceptSuggestionOnEnter: 'off',
+          tabCompletion: 'off',
+          wordBasedSuggestions: 'off',
+          parameterHints: { enabled: false },
+          hover: { enabled: !shouldBeReadOnly, delay: 100 },
+          // Disable selection and cursor when read-only
+          selectOnLineNumbers: !shouldBeReadOnly,
+          roundedSelection: !shouldBeReadOnly,
+          cursorBlinking: shouldBeReadOnly ? 'hidden' : 'blink',
+          cursorStyle: shouldBeReadOnly ? 'hidden' : 'line',
           scrollbar: {
             vertical: 'hidden',
             horizontal: 'hidden',

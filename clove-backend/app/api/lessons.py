@@ -7,7 +7,9 @@ from app.crud.lesson import get_by_id, list_for_subtopic, create, update, delete
 from app.db.session import get_db
 from app.api.auth import get_current_superuser
 from app.db.models.users import User
+import logging
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/lessons", tags=["Lessons"])
 
 @router.post("/", response_model=LessonRead, status_code=status.HTTP_201_CREATED)
@@ -39,9 +41,16 @@ async def list_lessons(
     db: AsyncSession = Depends(get_db)
 ):
     """List lessons for a subtopic. Public endpoint for reading."""
+    logger.info(f"🔍 [LessonsAPI] Fetching lessons for subtopic_id: {subtopic_id}")
+    
     if subtopic_id is None:
+        logger.error("❌ [LessonsAPI] subtopic_id query parameter is required")
         raise HTTPException(status_code=400, detail="subtopic_id query parameter is required")
-    return await list_for_subtopic(db, subtopic_id=subtopic_id, skip=skip, limit=limit)
+    
+    lessons = await list_for_subtopic(db, subtopic_id=subtopic_id, skip=skip, limit=limit)
+    logger.info(f"✅ [LessonsAPI] Found {len(lessons)} lessons for subtopic_id: {subtopic_id}")
+    
+    return lessons
 
 @router.patch("/{lesson_id}", response_model=LessonRead)
 async def update_lesson(

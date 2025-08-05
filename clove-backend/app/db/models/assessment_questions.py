@@ -18,8 +18,3 @@ class AssessmentQuestion(Base):
         "Subtopic",
         back_populates="assessment_questions"
     )
-    lessons  = relationship(
-        "Lesson",
-        back_populates="question",
-        cascade="all, delete-orphan"
-    )

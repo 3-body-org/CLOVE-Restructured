@@ -1,230 +1,220 @@
-import React, { useContext, useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
+import React, { useContext, useEffect, useState, useRef, useCallback, useLayoutEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MyDeckContext } from "../../../contexts/MyDeckContext";
 import useTheme from "../hooks/useTheme";
 import { Container, Row, Col } from "react-bootstrap";
 import styles from "../styles/SubtopicPage.module.scss";
-import { getSubtopicContent, subtopicContent } from "../content/subtopicContent";
+import { getSubtopicContent, getSubtopicDescription } from "../content/subtopicContent";
+import { mergeBackendAndFrontendContent, isSubtopicLocked, getSubtopicProgress } from "../services/contentMerger";
 import SubtopicLayout from "../components/SubtopicLayout";
 import TitleAndProfile from "../../../components/layout/Navbar/TitleAndProfile";
+import LoadingScreen from '../../../components/layout/StatusScreen/LoadingScreen';
 import RainfallBackground from '../components/RainfallBackground';
-import RuneBackground from '../components/RuneBackground';
 import SpaceBackground from '../components/SpaceBackground';
 import WizardBackground from '../components/WizardBackground';
-import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import SubtopicNode from "../components/SubtopicNode";
 import FloatingRocks from '../components/FloatingRocks';
-import { topicsData } from "../data/topics";
 import DetectiveThreadPath from '../components/DetectiveThreadPath';
 import DetectiveBackground from '../components/DetectiveBackground';
 import FlashlightOverlay from '../components/FlashlightOverlay';
 import LightningEffect from '../components/LightningEffect';
 import WizardThreadPath from '../components/WizardThreadPath';
+import RuneBackground from '../components/RuneBackground';
+import ErrorScreen from '../../../components/layout/StatusScreen/ErrorScreen';
+import { useSidebar } from '../../../components/layout/Sidebar/Layout';
+import { useMyDeckService } from "../hooks/useMydeckService";
+import { showLockedNotification } from "../../../utils/notifications";
+import AssessmentInstructions from "../../../components/assessments/AssessmentInstructions";
 
 export default function SubtopicSelectionPage() {
   const navigate = useNavigate();
   const { topicId } = useParams();
   const { currentTheme, setTheme } = useTheme();
+  const { closeSidebar } = useSidebar();
+  const { updateRecentTopic } = useMyDeckService();
   const {
-    preAssessmentTaken,
-    setPreAssessmentTaken,
+    topicOverview,
+    unlockStatus,
+    overviewLoading,
+    loadTopicOverview,
     setTopicId,
     setSubtopicId,
-    completedSubtopics,
-    setCompletedSubtopics,
-    topics
+    setTopicOverview,
+    setUnlockStatus,
+    topicCache,
+    setTopicCache
   } = useContext(MyDeckContext);
 
   // Add svgContainerRef for measuring overlay positions
   const svgContainerRef = useRef();
-
-  // Find topic object by id or slug
-  let topic = null;
-  if (topics && topics.length > 0 && topicId) {
-    topic = topics.find(t => t.id === topicId || t.slug === topicId);
-    if (!topic && topicId.includes('-')) {
-      const numericId = topicId.split('-')[0];
-      topic = topics.find(t => String(t.id) === numericId);
-    }
-  }
-  // Fallback to static topicsData if not found in context
-  if (!topic && topicId) {
-    const numericId = topicId.split('-')[0];
-    topic = topicsData.find(t => String(t.id) === numericId);
-  }
+  // Add ref to track if data has been loaded for this topic
+  const loadedTopicRef = useRef(new Set());
+  // Add ref to track loading state to prevent infinite loops
+  const isLoadingRef = useRef(false);
+  // Add loading states
+  const [loading, setLoading] = useState(true);
+  const [minTimePassed, setMinTimePassed] = useState(false);
+  const [error, setError] = useState("");
+  const [contentReady, setContentReady] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
   
   // Get the numeric topic ID for content lookup
-  const numericTopicId = topic?.id || (topicId ? parseInt(topicId.split('-')[0]) : 1);
+  const numericTopicId = topicId ? parseInt(topicId.split('-')[0]) : 1;
   
   // Get topic-specific content and theme
-  const topicContent = getSubtopicContent(numericTopicId);
-  const theme = topicContent?.theme || topic?.theme || 'space';
+  const frontendContent = getSubtopicContent(numericTopicId);
+  const theme = frontendContent?.theme || 'space';
   
-  // Debug logging for topic content lookup
-  useEffect(() => {
-    console.log('Topic Content Lookup Debug:', {
-      topicId,
-      topic: topic?.id,
-      numericTopicId,
-      topicContent: topicContent ? 'found' : 'not found',
-      availableTopics: Object.keys(subtopicContent || {})
-    });
-  }, [topicId, topic, numericTopicId, topicContent]);
+  // Merge backend and frontend content
+  const mergedContent = topicOverview && 
+    topicOverview.topicId === parseInt(topicId) && 
+    frontendContent
+    ? mergeBackendAndFrontendContent(topicOverview, frontendContent)
+    : null;
   
-  // Safety check - if topicContent is undefined, use fallback
-  const safeTopicContent = topicContent || {
+  // Safety check - if mergedContent is undefined, use fallback
+  const safeContent = mergedContent || {
     story: { title: 'Loading...', description: 'Loading content...' },
-    subtopics: {},
+    subtopics: [],
     styling: { background: 'stars', effect: 'starfield' },
     layout: {},
-    nodeOrder: []
+    nodeOrder: frontendContent?.nodeOrder || [] // Use frontend nodeOrder as fallback
   };
   
-  // Set theme only after topic is loaded (context or static)
+  // Minimum loading time to prevent flickering
   useEffect(() => {
-    if (topicId && topic && theme) {
-      setTopicId(topicId);
-      setTheme(theme);
-    }
-  }, [topicId, setTopicId, setTheme, theme, topic]);
-  
-  // Set theme immediately on mount using static topicsData (for instant theming on reload)
+    setMinTimePassed(false);
+    setContentReady(false);
+    const timer = setTimeout(() => {
+      // Only set minTimePassed to true if we have the necessary content
+      if (frontendContent && safeContent.nodeOrder && safeContent.nodeOrder.length > 0) {
+        setMinTimePassed(true);
+        setContentReady(true);
+      }
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [topicId, frontendContent, safeContent.nodeOrder]);
+
+  // Set loading to false when we have data
   useEffect(() => {
-    if (topicId) {
-      // Extract numeric topic ID if needed
-      const numericId = topicId.split('-')[0];
-      const staticTopic = topicsData.find(t => String(t.id) === numericId);
-      const staticTheme = staticTopic?.theme || 'space';
-      console.log('Setting theme from static data:', { topicId, numericId, staticTopic, staticTheme });
-      setTheme(staticTheme);
-      
-      // Immediately apply theme class to body to fix navigation timing issue
-      document.body.classList.forEach((className) => {
-        if (className.startsWith('theme-')) {
-          document.body.classList.remove(className);
-        }
-      });
-      document.body.classList.add(`theme-${staticTheme}`);
-      console.log('Applied theme class to body:', `theme-${staticTheme}`, 'Current body classes:', Array.from(document.body.classList));
+    if (frontendContent && safeContent.nodeOrder && safeContent.nodeOrder.length > 0) {
+      setLoading(false);
     }
-  }, [topicId, setTheme]);
+  }, [frontendContent, safeContent.nodeOrder]);
   
-  // Add theme helpers (use theme, not currentTheme)
+  // Combined effect for theme and topic loading
+  useEffect(() => {
+    if (!topicId) return;
+    
+    const numericTopicId = parseInt(topicId);
+    if (isNaN(numericTopicId)) return;
+    
+    setTopicId(numericTopicId);
+    setLoading(true);
+    setError("");
+    
+    // Only load topic overview if we don't have data for this topic or if it's stale
+    const hasDataForThisTopic = topicOverview && topicOverview.topicId === numericTopicId;
+    if (!hasDataForThisTopic) {
+      console.log('🔍 Loading topic overview for topic:', numericTopicId);
+      loadTopicOverview(numericTopicId);
+    } else {
+      console.log('🔍 Topic overview already loaded for topic:', numericTopicId);
+      setLoading(false);
+    }
+  }, [topicId, topicOverview]);
+
+  // Reset loaded topic ref when topic changes
+  useEffect(() => {
+    // Clear the loaded topics when topic changes to force reload
+    if (loadedTopicRef.current) {
+      loadedTopicRef.current.clear();
+    }
+    
+    // Clear topic overview when switching topics to prevent stale data
+    if (topicOverview && topicOverview.topicId !== parseInt(topicId)) {
+      setTopicOverview(null);
+      setUnlockStatus(null);
+    }
+  }, [topicId, topicOverview]);
+  
+  // Cleanup effect when component unmounts or topic changes
+  useEffect(() => {
+    return () => {
+      // Clear loaded topics when component unmounts
+      if (loadedTopicRef.current) {
+        loadedTopicRef.current.clear();
+      }
+    };
+  }, [topicId]);
+  
+  // Add theme helpers
   const isSpaceTheme = theme === 'space';
   const isWizardTheme = theme === 'wizard';
   const isDetectiveTheme = theme === 'detective';
-
-  // Debug logging to help identify theme issues
-  useEffect(() => {
-    console.log('SubtopicPage Debug:', {
-      topicId,
-      topic: topic?.id,
-      numericTopicId,
-      theme,
-      isSpaceTheme,
-      isWizardTheme,
-      isDetectiveTheme,
-      currentTheme,
-      bodyClasses: Array.from(document.body.classList),
-      hasSpaceBackground: document.querySelector('canvas[aria-hidden="true"]') !== null
-    });
-  }, [topicId, topic, numericTopicId, theme, isSpaceTheme, isWizardTheme, isDetectiveTheme, currentTheme]);
 
   // Always scroll to top when topic changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [topicId]);
 
-  // Get topic-specific content and node order
-  const { story, subtopics, styling, layout, nodeOrder } = safeTopicContent;
+  // Remove the automatic refresh triggers that cause resource-intensive behavior
+  // The topic overview will only be loaded when the topic changes or when explicitly requested
 
-  // Debug logging for subtopic content
-  useEffect(() => {
-    console.log('SubtopicPage Content Debug:', {
-      topicId,
-      numericTopicId,
-      nodeOrder,
-      subtopicsKeys: Object.keys(subtopics || {}),
-      subtopics: subtopics
-    });
-  }, [topicId, numericTopicId, nodeOrder, subtopics]);
+  const { story, subtopics, styling, layout, nodeOrder } = safeContent;
 
-  // Add localStorage sync for pre-assessment status
-  useEffect(() => {
-    const savedPreAssessment = localStorage.getItem("preAssessmentTaken");
-    if (savedPreAssessment) {
-      setPreAssessmentTaken(JSON.parse(savedPreAssessment));
-    }
-  }, [setPreAssessmentTaken]);
-
-  const handleSubtopicClick = (subtopic) => {
-    const subtopicKey = Object.keys(subtopics).find(
-      key => subtopics[key].id === subtopic.id
-    );
-
-    if (subtopic.id === "preassessment") {
-      // Set pre-assessment as taken when starting it
-      setPreAssessmentTaken(true);
-      localStorage.setItem("preAssessmentTaken", JSON.stringify(true));
-      navigate(`/my-deck/${topicId}/assessment/pre`);
-      return;
-    }
-
-    if (subtopic.id === "postassessment") {
-      navigate(`/my-deck/${topicId}/assessment/post`);
-      return;
-    }
-
-    if (isSubtopicLocked(subtopic)) {
-      alert(`Complete "${subtopic.requires}" first!`);
-      return;
-    }
-
-    setSubtopicId(subtopic.id);
-
-    // Update completed subtopics
-    if (!completedSubtopics.includes(subtopicKey)) {
-      const updatedCompleted = [...completedSubtopics, subtopicKey];
-      setCompletedSubtopics(updatedCompleted);
-      localStorage.setItem(
-        "completedSubtopics",
-        JSON.stringify(updatedCompleted)
-      );
-    }
-
-    navigate(`/lesson/${topicId}/${subtopic.id}`);
-  };
-
-  const isSubtopicLocked = (subtopic) => {
-    const required = subtopic.requires;
-    if (!required) return false;
-
-    // Check for pre-assessment requirement
-    if (required === "pre-assessment") {
-      return !preAssessmentTaken;
-    }
-
-    // Check for other dependencies
-    const requiredKey = Object.keys(subtopics).find(
-      key => subtopics[key].id === required
-    );
-    return !completedSubtopics.includes(requiredKey);
-  };
-
-  // Refs for each node (dynamically from nodeOrder)
-  const nodeRefs = Object.fromEntries((nodeOrder || Object.keys(subtopics)).map(key => [key, useRef()]));
-
-  // Add state for dynamic title positions
   const [titlePositions, setTitlePositions] = useState([]);
 
-  // Helper to update title positions (uses nodeOrder and subtopics)
+  // Create refs for all possible subtopic keys (fixed number of hooks)
+  const preAssessmentRef = useRef();
+  const subtopic1Ref = useRef();
+  const subtopic2Ref = useRef();
+  const subtopic3Ref = useRef();
+  const postAssessmentRef = useRef();
+
+  // Map nodeOrder to refs dynamically based on current topic
+  const nodeRefs = useMemo(() => {
+    const refs = {};
+    if (nodeOrder) {
+      nodeOrder.forEach((key, index) => {
+        if (key === 'pre-assessment') {
+          refs[key] = preAssessmentRef;
+        } else if (key === 'post-assessment') {
+          refs[key] = postAssessmentRef;
+        } else {
+          // Map subtopics to refs based on their position
+          switch (index) {
+            case 1: // First subtopic
+              refs[key] = subtopic1Ref;
+              break;
+            case 2: // Second subtopic
+              refs[key] = subtopic2Ref;
+              break;
+            case 3: // Third subtopic
+              refs[key] = subtopic3Ref;
+              break;
+            default:
+              refs[key] = subtopic1Ref; // Fallback
+          }
+        }
+      });
+    }
+    return refs;
+  }, [nodeOrder]);
+
   const updateTitlePositions = useCallback(() => {
     if (!svgContainerRef.current) return;
+    
     const containerRect = svgContainerRef.current.getBoundingClientRect();
-    const positions = (nodeOrder || Object.keys(subtopics)).map((key) => {
+    const positions = (nodeOrder || []).map((key) => {
       const ref = nodeRefs[key];
-      const subtopic = subtopics[key];
-      if (!subtopic || !ref.current) return null;
+      const subtopic = subtopics?.find(s => s.key === key);
+      
+      // Skip if ref or subtopic doesn't exist
+      if (!ref || !ref.current || !subtopic) return null;
+      
+      try {
       const nodeRect = ref.current.getBoundingClientRect();
       const left = nodeRect.left - containerRect.left + nodeRect.width / 2;
       const top = nodeRect.top - containerRect.top;
@@ -234,7 +224,12 @@ export default function SubtopicSelectionPage() {
         top,
         title: subtopic.title,
       };
-    });
+      } catch (error) {
+        console.warn(`Error calculating position for ${key}:`, error);
+        return null;
+      }
+    }).filter(Boolean); // Remove null values
+    
     setTitlePositions(prev => {
       if (JSON.stringify(prev) !== JSON.stringify(positions)) {
         return positions;
@@ -243,11 +238,9 @@ export default function SubtopicSelectionPage() {
     });
   }, [svgContainerRef, subtopics, nodeRefs, nodeOrder]);
 
-  // Use useLayoutEffect for DOM measurements
   useLayoutEffect(() => {
     updateTitlePositions();
     window.addEventListener('resize', updateTitlePositions);
-    // Add ResizeObserver for container
     let observer;
     if (svgContainerRef.current && window.ResizeObserver) {
       observer = new window.ResizeObserver(() => {
@@ -261,24 +254,123 @@ export default function SubtopicSelectionPage() {
     };
   }, [updateTitlePositions]);
 
-  // Optionally, trigger after a short delay for late layout changes
   useEffect(() => {
     const timeout = setTimeout(updateTitlePositions, 200);
     return () => clearTimeout(timeout);
   }, [updateTitlePositions]);
 
-  // FloatingRocks component is now imported from '../components/FloatingRocks'
+  const handleSubtopicClick = async (subtopic) => {
+    console.log('🔍 Clicked subtopic:', subtopic);
+    
+    if (isSubtopicLocked(subtopic)) { // Uses imported helper
+      // Determine if it's an assessment or regular subtopic
+      const isAssessment = subtopic.key === 'pre-assessment' || 
+                          subtopic.key === 'post-assessment' || 
+                          subtopic.type === 'assessment' ||
+                          (subtopic.title && subtopic.title.toLowerCase().includes('assessment'));
+      
+      showLockedNotification(isAssessment ? 'assessment' : 'subtopic');
+      return;
+    }
+    
+    try {
+      // Update recent topic in statistics
+      await updateRecentTopic(numericTopicId);
+    } catch (error) {
+      console.error('Error updating recent topic:', error);
+      // Continue with navigation even if recent topic update fails
+    }
+    
+    // Check for assessment types and their completion status
+    if (subtopic.key === 'pre-assessment' || subtopic.type === 'assessment' && subtopic.title === 'Pre-Assessment') {
+      // Check if pre-assessment is completed
+      if (unlockStatus?.preAssessment?.isCompleted) {
+        console.log('🔍 Pre-assessment completed, navigating to results');
+        navigate(`/my-deck/${topicId}/assessment/pre/result`);
+      } else {
+        console.log('🔍 Showing pre-assessment instructions');
+        setSelectedAssessment({ type: 'pre', subtopic });
+        setShowInstructions(true);
+      }
+      closeSidebar(); // Close sidebar after navigation
+      return;
+    }
+    if (subtopic.key === 'post-assessment' || subtopic.type === 'assessment' && subtopic.title === 'Post-Assessment') {
+      // Check if post-assessment is completed
+      if (unlockStatus?.postAssessment?.isCompleted) {
+        console.log('🔍 Post-assessment completed, navigating to results');
+        navigate(`/my-deck/${topicId}/assessment/post/result`);
+      } else {
+        console.log('🔍 Showing post-assessment instructions');
+        setSelectedAssessment({ type: 'post', subtopic });
+        setShowInstructions(true);
+      }
+      closeSidebar(); // Close sidebar after navigation
+      return;
+    }
+    
+    // Fallback: check if it's an assessment by title
+    if (subtopic.title && subtopic.title.toLowerCase().includes('pre-assessment')) {
+      if (unlockStatus?.preAssessment?.isCompleted) {
+        console.log('🔍 Pre-assessment completed, navigating to results (fallback)');
+        navigate(`/my-deck/${topicId}/assessment/pre/result`);
+      } else {
+        console.log('🔍 Showing pre-assessment instructions (fallback)');
+        setSelectedAssessment({ type: 'pre', subtopic });
+        setShowInstructions(true);
+      }
+      closeSidebar();
+      return;
+    }
+    if (subtopic.title && subtopic.title.toLowerCase().includes('post-assessment')) {
+      if (unlockStatus?.postAssessment?.isCompleted) {
+        console.log('🔍 Post-assessment completed, navigating to results (fallback)');
+        navigate(`/my-deck/${topicId}/assessment/post/result`);
+      } else {
+        console.log('🔍 Showing post-assessment instructions (fallback)');
+        setSelectedAssessment({ type: 'post', subtopic });
+        setShowInstructions(true);
+      }
+      closeSidebar();
+      return;
+    }
+    console.log('🔍 Navigating to lesson:', subtopic.backendId);
+    setSubtopicId(subtopic.backendId); // Use backendId for lesson navigation
+    navigate(`/lesson/${topicId}/${subtopic.backendId}`); // Use backendId for lesson navigation
+    closeSidebar(); // Close sidebar after navigation
+  };
 
-  // Get layoutConfig from theme/content (preserve current layout for default theme)
+  const getProgress = (subtopic) => { // Uses imported helper
+    return getSubtopicProgress(subtopic);
+  };
+
+  // Show loading screen only when absolutely necessary (no frontend content available)
+  if (!frontendContent || !safeContent.nodeOrder || safeContent.nodeOrder.length === 0) {
+    return <LoadingScreen message="Loading topic content..." />;
+  }
+
+  // Show error screen if there's an error
+  if (error) return <ErrorScreen message={error} />;
+
+  // Show loading screen until minimum time passes AND content is ready
+  if (!minTimePassed || !contentReady) return <LoadingScreen message="Loading subtopics..." />;
+
+  // Show loading overlay when backend data is loading, but keep UI visible
+  const showLoadingOverlay = overviewLoading && (!safeContent.subtopics || safeContent.subtopics.length === 0);
+  
+  // Check if we have stale data (topic overview doesn't match current topic)
+  const hasStaleData = topicOverview && topicOverview.topicId !== parseInt(topicId);
+
+  // Get layoutConfig from theme/content
   const layoutConfig = layout?.blueprint || {
-    nodes: (nodeOrder || Object.keys(subtopics)).map((key, index) => {
+    nodes: (nodeOrder || []).map((key, index) => {
       // Create organic, flowing layout based on nodeOrder
       if (key === 'pre-assessment') {
         return { key, style: { gridColumn: '1 / span 2', gridRow: 1, justifySelf: 'center' } };
       } else if (key === 'post-assessment') {
-        return { key, style: { gridColumn: '1 / span 2', gridRow: 4, justifySelf: 'center' } }; // moved from row 5 to row 4
+        return { key, style: { gridColumn: '1 / span 2', gridRow: 4, justifySelf: 'center' } };
       } else {
-        // For regular subtopics (always 3): top-left, top-right, bottom-center
+        // For regular subtopics: top-left, top-right, bottom-center
         const subtopicIndex = index - 1; // Adjust for pre-assessment
         
         if (subtopicIndex === 0) {
@@ -291,36 +383,6 @@ export default function SubtopicSelectionPage() {
       }
     }),
     containerClassName: styles.gridLayout
-  };
-  // Map subtopic keys to refs for path rendering
-  // const nodeRefs = {
-  //   'pre-assessment': preRef,
-  //   'declaring-variables': declRef,
-  //   'primitive-data-types': primRef,
-  //   'non-primitive-data-types': nonprimRef,
-  //   'post-assessment': postRef,
-  // };
-
-  // Helper to get center of a node relative to the SVG container
-  const getCenter = (ref) => {
-    if (!ref.current || !svgContainerRef.current) return { x: 0, y: 0 };
-    const nodeRect = ref.current.getBoundingClientRect();
-    const containerRect = svgContainerRef.current.getBoundingClientRect();
-    return {
-      x: nodeRect.left - containerRect.left + nodeRect.width / 2,
-      y: nodeRect.top - containerRect.top + nodeRect.height / 2,
-    };
-  };
-
-  // Helper to get progress for a subtopic (0-1)
-  const getSubtopicProgress = (subtopicKey) => {
-    // Try to get progress_percent from subtopic if available, fallback to completedSubtopics
-    const sub = subtopics[subtopicKey];
-    if (sub && typeof sub.progress_percent === 'number') {
-      return sub.progress_percent;
-    }
-    // Fallback: if completed, return 1, else 0
-    return completedSubtopics.includes(subtopicKey) ? 1 : 0;
   };
 
   return (
@@ -341,26 +403,63 @@ export default function SubtopicSelectionPage() {
         ...(isWizardTheme || isDetectiveTheme ? { backgroundColor: 'transparent' } : {})
       }}
     >
-      {/* Render detective SVG background as an absolutely positioned image for detective theme */}
-      {isDetectiveTheme && <DetectiveBackground />}
-      {/* Render wizard SVG background as an absolutely positioned image for wizard theme */}
-      {isWizardTheme && <WizardBackground />}
-      {/* Stacking order: .wizardThemeBg (SVG) below, .wizardTheme (colors/text) above, content on top */}
-      <TitleAndProfile colored={story.title} theme={theme} />
-      {isSpaceTheme && <SpaceBackground />}
-      {isWizardTheme && <RuneBackground />}
-      {isDetectiveTheme && <RainfallBackground />}
-      {/* Lightning effect for detective theme */}
-      {isDetectiveTheme && <LightningEffect />}
       
-      {/* Debug: Log which background is being rendered */}
-      {console.log('Rendering backgrounds:', { isSpaceTheme, isWizardTheme, isDetectiveTheme })}
+      {/* Loading overlay - only show when backend data is loading or stale */}
+      {(showLoadingOverlay || hasStaleData) && (
+        <div className={styles.loadingOverlay}>
+          <div className={styles.loadingContent}>
+            <div className={styles.loadingSpinner}></div>
+            {hasStaleData ? 'Loading fresh data...' : 'Loading topic data...'}
+          </div>
+        </div>
+      )}
+      {/* Render theme backgrounds */}
+      <TitleAndProfile colored={story.title} theme={theme} />
+      
+
+      
+      {isDetectiveTheme && <DetectiveBackground />}
+      {isWizardTheme && <WizardBackground />}
+      {isWizardTheme && <RuneBackground />}
+      
+      {isSpaceTheme && <SpaceBackground />}
+      {isDetectiveTheme && <RainfallBackground />}
+      {isDetectiveTheme && <LightningEffect />}
 
       <Row>
         <Col
           xs={12}
-          className={`d-flex justify-content-center align-items-center`}
+          className={`d-flex justify-content-center align-items-center flex-column`}
         >
+          {/* Back to Introduction Icon Button */}
+          <div className={styles.introductionButtonContainer}>
+            <button
+              onClick={() => {
+                console.log('🔍 Introduction button clicked, navigating to:', `/my-deck/${topicId}/introduction`);
+                // Temporarily clear introduction_seen flag to allow revisiting
+                if (topicCache && topicCache[numericTopicId]) {
+                  console.log('🔍 Clearing introduction_seen flag for topic:', numericTopicId);
+                  setTopicCache(prev => ({
+                    ...prev,
+                    [numericTopicId]: {
+                      ...(prev[numericTopicId] || {}),
+                      introduction_seen: false
+                    }
+                  }));
+                }
+                navigate(`/my-deck/${topicId}/introduction`);
+              }}
+              className={`${styles.introductionButton} ${
+                isWizardTheme ? styles.wizardTheme : 
+                isDetectiveTheme ? styles.detectiveTheme : 
+                styles.spaceTheme
+              }`}
+              title="Introduction"
+            >
+              Introduction
+            </button>
+          </div>
+          
           <div className={styles.storyContainer}>
             <p className={styles.storyText}>
               {story.description}
@@ -369,7 +468,7 @@ export default function SubtopicSelectionPage() {
         </Col>
       </Row>
 
-      {/* Flashlight effect overlay for detective theme, now scoped to subtopic content only */}
+      {/* Flashlight effect overlay for detective theme */}
       {isDetectiveTheme && <FlashlightOverlay />}
 
       <div ref={svgContainerRef} style={{ position: 'relative', width: '100%', minHeight: '600px' }}>
@@ -378,23 +477,32 @@ export default function SubtopicSelectionPage() {
           <DetectiveThreadPath
             nodeRefs={nodeRefs}
             svgContainerRef={svgContainerRef}
-            nodeOrder={nodeOrder || Object.keys(subtopics)}
+             nodeOrder={nodeOrder || []}
           />
         )}
         {/* Render wizard thread path for wizard theme */}
         {isWizardTheme && (
           <WizardThreadPath
-            centers={(nodeOrder || Object.keys(subtopics)).map(key => {
+             centers={(nodeOrder || []).map(key => {
               const ref = nodeRefs[key];
               if (!ref?.current || !svgContainerRef?.current) return { x: 0, y: 0 };
+               
+               try {
               const nodeRect = ref.current.getBoundingClientRect();
               const containerRect = svgContainerRef.current.getBoundingClientRect();
               return {
                 x: nodeRect.left - containerRect.left + nodeRect.width / 2,
                 y: nodeRect.top - containerRect.top + nodeRect.height / 2,
               };
-            })}
-            lockedStates={(nodeOrder || Object.keys(subtopics)).map(key => isSubtopicLocked(subtopics[key]))}
+               } catch (error) {
+                 console.warn(`Error calculating center for ${key}:`, error);
+                 return { x: 0, y: 0 };
+               }
+             })}
+             lockedStates={(nodeOrder || []).map(key => {
+               const subtopic = subtopics?.find(s => s.key === key);
+               return subtopic ? isSubtopicLocked(subtopic) : true;
+             })}
           />
         )}
         {/* Render node titles absolutely above everything */}
@@ -423,8 +531,29 @@ export default function SubtopicSelectionPage() {
           )}
         </div>
         <SubtopicLayout
-          subtopicKeys={nodeOrder || Object.keys(subtopics)}
-          subtopics={subtopics}
+           subtopicKeys={nodeOrder || []}
+           subtopics={(() => {
+             const subtopicsObj = Object.fromEntries((subtopics || []).map(subtopic => {
+               // Add description from subtopicContent.js if not already present
+               const description = subtopic.description || getSubtopicDescription(numericTopicId, subtopic.key);
+               return [subtopic.key, { ...subtopic, description }];
+             }));
+             // If no backend data yet, create placeholder subtopics with descriptions
+             if (!subtopics || subtopics.length === 0) {
+               return Object.fromEntries((nodeOrder || []).map(key => {
+                 const description = getSubtopicDescription(numericTopicId, key);
+                 return [key, {
+                   key,
+                   title: key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                   description: description || 'Loading...',
+                   isLocked: key !== 'pre-assessment', // Only pre-assessment is unlocked by default
+                   progress: 0,
+                   type: key.includes('assessment') ? 'assessment' : 'subtopic'
+                 }];
+               }));
+             }
+             return subtopicsObj;
+           })()}
           isSubtopicLocked={isSubtopicLocked}
           onSubtopicClick={handleSubtopicClick}
           theme={theme}
@@ -439,16 +568,25 @@ export default function SubtopicSelectionPage() {
             style={{ position: 'absolute', top: 0, left: 0, zIndex: 2, pointerEvents: 'none' }}
           >
             {/* Render paths between nodes using refs and nodeOrder */}
-            {(nodeOrder || Object.keys(subtopics)).slice(0, -1).map((fromKey, idx, arr) => {
-              const toKey = (nodeOrder || Object.keys(subtopics))[idx + 1];
+             {(nodeOrder || []).slice(0, -1).map((fromKey, idx, arr) => {
+               const toKey = (nodeOrder || [])[idx + 1];
               if (!toKey) return null;
+               
+               const fromSubtopic = subtopics?.find(s => s.key === fromKey);
+               const toSubtopic = subtopics?.find(s => s.key === toKey);
+               const fromRef = nodeRefs[fromKey];
+               const toRef = nodeRefs[toKey];
+               
+               // Skip if refs are not available or if refs don't have current
+               if (!fromRef?.current || !toRef?.current) return null;
+               
               return (
                 <FloatingRocks
                   key={fromKey + '-' + toKey}
-                  fromRef={nodeRefs[fromKey]}
-                  toRef={nodeRefs[toKey]}
-                  filled={!isSubtopicLocked(subtopics[toKey])}
-                  progress={getSubtopicProgress(toKey)}
+                   fromRef={fromRef}
+                   toRef={toRef}
+                   filled={toSubtopic ? !isSubtopicLocked(toSubtopic) : false}
+                   progress={toSubtopic ? getProgress(toSubtopic) : 0}
                   theme={theme}
                   svgContainerRef={svgContainerRef}
                 />
@@ -456,6 +594,16 @@ export default function SubtopicSelectionPage() {
             })}
           </svg>
         )}
+        
+        {/* Assessment Instructions Modal */}
+        <AssessmentInstructions
+          isVisible={showInstructions}
+          onClose={() => setShowInstructions(false)}
+          onStart={() => setShowInstructions(false)}
+          assessmentType={selectedAssessment?.type}
+          topicId={topicId}
+          theme={theme}
+        />
       </div>
     </div>
   );

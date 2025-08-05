@@ -1,145 +1,305 @@
-// ChallengesPage.js
-import React, { useState, useMemo } from 'react';
+/**
+ * @file ChallengesPage.jsx
+ * @description Main challenges page with backend integration
+ */
+
+import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
-
-import { challenges as allChallenges } from 'features/challenges/components/challenges';
-import CodeFixer from 'features/challenges/modes/CodeFixer';
-import CodeCompletion from 'features/challenges/modes/CodeCompletion';
-import OutputTracing from 'features/challenges/modes/OutputTracing';
-import ChallengeThemeProvider from 'features/challenges/components/ChallengeThemeProvider';
-import styles from 'features/challenges/styles/ChallengesPage.module.scss';
-import { validateChallengeConfig, validateChallengeData, handleChallengeError } from 'features/challenges/utils/errorHandling';
-
-// Challenge object structure:
-// {
-//   id: number (unique identifier like 1, 2, 3...)
-//   type: 'CodeFixer' | 'CodeCompletion' | 'OutputTracing'
-//   difficulty: 'easy' | 'medium' | 'hard'
-//   index: number (position in the array)
-//   component: React component to render
-//   challengeData: {} (specific data for the challenge)
-//   status: 'pending' | 'completed' | 'failed'
-//   score: number (points earned)
-// }
-
-// Maps challenge types to their React components
-const CHALLENGE_COMPONENTS = {
-  CodeFixer,
-  CodeCompletion,
-  OutputTracing,
-};
-
-// Default values for new challenges
-const DEFAULT_CHALLENGE_CONFIG = {
-  status: 'pending',
-  score: 0,
-};
+import { useAuth } from '../../../contexts/AuthContext';
+import { MyDeckContext } from '../../../contexts/MyDeckContext';
+import { useChallengeService } from '../hooks/useChallengeService';
+import { useSidebar } from '../../../components/layout/Sidebar/Layout';
+import CodeFixer from '../modes/CodeFixer';
+import CodeCompletion from '../modes/CodeCompletion';
+import OutputTracing from '../modes/OutputTracing';
+import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
+import ChallengeFeedback from '../components/ChallengeFeedback';
+import LoadingScreen from '../../../components/layout/StatusScreen/LoadingScreen';
+import ErrorScreen from '../../../components/layout/StatusScreen/ErrorScreen';
+import CustomExitWarningModal from '../components/CustomExitWarningModal';
+import OtherSessionWarningModal from '../components/OtherSessionWarningModal';
+import styles from '../styles/ChallengesPage.module.scss';
 
 const ChallengesPage = () => {
   const navigate = useNavigate();
-  const { topicId } = useParams();
-  const [results, setResults] = useState([]);
-  const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
-
-  // List of all challenges with their configurations
-  const challengeConfigs = useMemo(() => [
-    { type: 'CodeFixer', difficulty: 'easy', index: 0 },
-    { type: 'CodeCompletion', difficulty: 'easy', index: 0 },
-    { type: 'OutputTracing', difficulty: 'easy', index: 0 },
-    // To add more challenges, uncomment and modify:
-    // { type: 'CodeCompletion', difficulty: 'easy', index: 0 },
-  ], []);
-
-  // Map challenge configurations to challenge objects with improved error handling
-  const challenges = challengeConfigs.map((config, index) => {
-    // Validate challenge configuration
-    if (!validateChallengeConfig(config)) {
-      console.error(`Invalid challenge config at index ${index}:`, config);
-      return null;
+  const { subtopicId } = useParams();
+  const { user: currentUser } = useAuth();
+  const { setSubtopicId } = useContext(MyDeckContext);
+  const { closeSidebar } = useSidebar();
+  
+  // Set subtopic ID in context for navigation
+  useEffect(() => {
+    if (subtopicId) {
+      setSubtopicId(parseInt(subtopicId));
     }
+  }, [subtopicId, setSubtopicId]);
 
-    const challengeData = allChallenges[config.type]?.[config.difficulty]?.[config.index];
+  // Use challenge service hook
+  const {
+    challengeState,
+    currentChallenge,
+    challengeIndex,
+    totalChallenges,
+    attemptCount,
+    getCurrentProgress,
+    loading,
+    error,
+    // Adaptive features
+    isTimerEnabled,
+    isHintsEnabled,
+    adaptiveLoading,
+    adaptiveError,
+    timerState,
+    timeRemaining,
+    initialTimerDuration,
+    hintsUsed,
+    hintsAvailable,
+    revealedHints,
+    useHint,
+    submitAnswer,
+    cancelCurrentChallenge,
+    isResumed,
+    resumeWarning,
+    setResumeWarning,
+    timerExpiredWarning,
+    setTimerExpiredWarning,
+    resetChallengeState,
+    isSubmitting,
+    userAnswer,
+    updateUserAnswer,
+    // Exit prevention - Option 1: Custom warning modal
+    showCustomExitWarning,
+    isProcessingExit,
+    handleContinueChallenge,
+    handleLeaveAnyway,
+    // Option 2: Other session warning modal
+    showOtherSessionWarning,
+    otherSessions,
+    forceDeactivateAllSessions,
+    // Feedback
+    showFeedback,
+    feedbackData,
+    handleContinueAfterFeedback
+  } = useChallengeService(currentUser?.id, parseInt(subtopicId));
+
+  // Handle challenge completion - Use useCallback to prevent unnecessary re-renders
+  const handleChallengeComplete = useCallback((result) => {
+    submitAnswer(result);
+  }, [submitAnswer]);
+
+  // Handle real-time answer updates (for saving partial progress)
+  const handleAnswerUpdate = useCallback((answer) => {
+    updateUserAnswer(answer);
+  }, [updateUserAnswer]);
+
+  // Handle resume after leaving
+  const handleResumeConfirm = useCallback(async () => {
+    await cancelCurrentChallenge();
+    setResumeWarning(false);
+  }, [cancelCurrentChallenge, setResumeWarning]);
+
+  // Handle resume cancel
+  const handleResumeCancel = useCallback(() => {
+    setResumeWarning(false);
+    navigate(`/my-deck/${subtopicId}`);
+    // Call closeSidebar without including it in dependencies
+    closeSidebar();
+  }, [setResumeWarning, navigate, subtopicId]); // Removed closeSidebar from dependencies
+
+  // Memoize the challenge component to prevent infinite re-renders
+  const challengeComponent = useMemo(() => {
+    if (!currentChallenge) return null;
     
-    // Validate challenge data
-    const validation = validateChallengeData(challengeData, config.type);
-    
-    if (!validation.isValid) {
-      console.error(`Challenge validation failed for ${config.type}:`, validation.errors);
-      const fallbackData = handleChallengeError(
-        new Error(validation.errors.join(', ')), 
-        config.type, 
-        validation.fallbackData
-      );
-      
-      return {
-        id: index + 1,
-        ...config,
-        component: CHALLENGE_COMPONENTS[config.type],
-        challengeData: fallbackData,
-        ...DEFAULT_CHALLENGE_CONFIG,
-        isFallback: true, // Flag to indicate this is fallback data
-      };
+    switch (currentChallenge.mode) {
+      case 'code_completion':
+        return (
+          <CodeCompletion
+            challengeData={currentChallenge}
+            onAnswerSubmit={handleChallengeComplete}
+            timeRemaining={timeRemaining}
+            initialTimerDuration={initialTimerDuration}
+            hintsUsed={hintsUsed}
+            hintsAvailable={hintsAvailable}
+            onHint={useHint}
+            disabled={challengeState !== 'active' || timerState === 'expired'}
+            challengeIndex={getCurrentProgress()}
+            totalChallenges={totalChallenges}
+            revealedHints={revealedHints}
+            resetChallengeState={resetChallengeState}
+            isSubmitting={isSubmitting}
+            isResumed={isResumed}
+            userAnswer={userAnswer}
+            onAnswerUpdate={handleAnswerUpdate}
+            timerState={timerState}
+            isTimerEnabled={isTimerEnabled}
+            isHintsEnabled={isHintsEnabled}
+          />
+        );
+      case 'code_fixer':
+        return (
+          <CodeFixer
+            challengeData={currentChallenge}
+            onAnswerSubmit={handleChallengeComplete}
+            timeRemaining={timeRemaining}
+            initialTimerDuration={initialTimerDuration}
+            hintsUsed={hintsUsed}
+            hintsAvailable={hintsAvailable}
+            onHint={useHint}
+            disabled={challengeState !== 'active' || timerState === 'expired'}
+            challengeIndex={getCurrentProgress()}
+            totalChallenges={totalChallenges}
+            revealedHints={revealedHints}
+            resetChallengeState={resetChallengeState}
+            isSubmitting={isSubmitting}
+            isResumed={isResumed}
+            userAnswer={userAnswer}
+            onAnswerUpdate={handleAnswerUpdate}
+            timerState={timerState}
+            isTimerEnabled={isTimerEnabled}
+            isHintsEnabled={isHintsEnabled}
+          />
+        );
+      case 'output_tracing':
+        return (
+          <OutputTracing
+            challengeData={currentChallenge}
+            onAnswerSubmit={handleChallengeComplete}
+            timeRemaining={timeRemaining}
+            initialTimerDuration={initialTimerDuration}
+            hintsUsed={hintsUsed}
+            hintsAvailable={hintsAvailable}
+            onHint={useHint}
+            disabled={challengeState !== 'active' || timerState === 'expired'}
+            challengeIndex={getCurrentProgress()}
+            totalChallenges={totalChallenges}
+            revealedHints={revealedHints}
+            resetChallengeState={resetChallengeState}
+            isSubmitting={isSubmitting}
+            isResumed={isResumed}
+            userAnswer={userAnswer}
+            onAnswerUpdate={handleAnswerUpdate}
+            timerState={timerState}
+            isTimerEnabled={isTimerEnabled}
+            isHintsEnabled={isHintsEnabled}
+          />
+        );
+      default:
+        return <div>Unknown challenge mode: {currentChallenge.mode}</div>;
     }
-    
-    return {
-      id: index + 1, // Auto-generated ID
-      ...config, // Spread the config
-      component: CHALLENGE_COMPONENTS[config.type], // Get component
-      challengeData: challengeData, // Use validated data
-      ...DEFAULT_CHALLENGE_CONFIG, // Add default status and score
-      isFallback: false,
-    };
-  }).filter(Boolean); // Remove any null entries
+  }, [
+    currentChallenge,
+    timeRemaining,
+    initialTimerDuration,
+    hintsUsed,
+    hintsAvailable,
+    useHint,
+    challengeState,
+    timerState,
+    challengeIndex,
+    totalChallenges,
+    revealedHints,
+    resetChallengeState,
+    isSubmitting,
+    getCurrentProgress,
+    isResumed,
+    userAnswer,
+    handleAnswerUpdate,
+    isTimerEnabled,
+    isHintsEnabled
+  ]);
 
-  /**
-   * Handles challenge completion
-   * @param {number} challengeId - ID of the completed challenge
-   * @param {Object} result - Challenge result
-   * @param {boolean} result.success - Whether challenge was completed successfully
-   * @param {number} result.score - Score achieved
-   */
-  const handleChallengeComplete = (challengeId, result) => {
-    setResults(prev => {
-      const updatedResults = [...prev];
-      const challengeIndex = challengeId - 1;
-      
-      updatedResults[challengeIndex] = {
-        type: challenges[challengeIndex].type,
-        score: result.score,
-        status: result.success ? 'completed' : 'failed',
-        timestamp: new Date().toISOString(),
-      };
-      
-      return updatedResults;
-    });
+  // Loading state
+  if ((loading || adaptiveLoading) && !currentChallenge) {
+    return <LoadingScreen message="Loading challenge..." />;
+  }
 
-    // Navigate to deck if last challenge
-    if (currentChallengeIndex === challenges.length - 1) {
-      navigate(`/my-deck/${topicId}`);
-      return;
-    }
+  // Loading state during challenge transitions
+  if (loading && currentChallenge) {
+    return <LoadingScreen message="Loading challenge..." />;
+  }
 
-    // Proceed to next challenge
-    setCurrentChallengeIndex(prev => prev + 1);
-  };
+  // Error state
+  if (error && !currentChallenge && !loading) {
+    return <ErrorScreen message={error} />;
+  }
 
-  // Current challenge being displayed
-  const currentChallenge = challenges[currentChallengeIndex];
-  const { id, component: ChallengeComponent, challengeData } = currentChallenge || {};
+  // No challenge available - only show if not loading
+  if (!currentChallenge && !loading) {
+    return <ErrorScreen message="No challenge available" />;
+  }
 
   return (
     <ChallengeThemeProvider>
       <div className={styles.challengesContainer}>
+        {/* Custom Exit Warning Modal - Option 1 */}
+        <CustomExitWarningModal
+          isVisible={showCustomExitWarning}
+          onContinueChallenge={handleContinueChallenge}
+          onLeaveAnyway={handleLeaveAnyway}
+          isLoading={isProcessingExit}
+          challengeState={challengeState}
+        />
+
+        {/* Other Session Warning Modal - Option 2 */}
+        <OtherSessionWarningModal
+          isVisible={showOtherSessionWarning}
+          otherSessions={otherSessions}
+          onCloseOtherTabs={forceDeactivateAllSessions}
+          onCancel={() => setShowOtherSessionWarning(false)}
+          isLoading={false}
+        />
+
+        {/* Resume Warning Modal */}
+        {resumeWarning && (
+          <div className={styles.resumeWarning}>
+            <div className={styles.warningContent}>
+              <h3>⚠️ Warning</h3>
+              <p>If you leave now, the current challenge will be counted as wrong.</p>
+              <div className={styles.warningActions}>
+                <button onClick={handleResumeConfirm}>Continue Challenge</button>
+                <button onClick={handleResumeCancel}>Leave Anyway</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Timer Expired Warning Modal - Only show when not on feedback page */}
+        {timerExpiredWarning && !showFeedback && (
+          <div className={styles.timerExpiredWarning}>
+            <div className={styles.warningContent}>
+              <h3>⏰ Time's Up!</h3>
+              <p>You ran out of time! Your answer will be counted as wrong regardless of what you submit.</p>
+              <div className={styles.warningActions}>
+                <button onClick={() => setTimerExpiredWarning(false)}>Continue</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Challenge Component */}
         <div className={styles.challengeWrapper}>
           <div className={styles.fullWidthChallenge}>
-            {currentChallenge && (
-              <ChallengeComponent
-                challenge={challengeData}
-                onComplete={(result) => handleChallengeComplete(id, result)}
-                isLastChallenge={currentChallengeIndex === challenges.length - 1}
-                topicId={topicId}
+            {showFeedback && feedbackData ? (
+              <ChallengeFeedback
+                isCorrect={feedbackData.isCorrect}
+                feedback={feedbackData.feedback}
+                userAnswer={feedbackData.userAnswer}
+                correctAnswer={feedbackData.correctAnswer}
+                challengeMode={feedbackData.challengeMode}
+                onContinue={handleContinueAfterFeedback}
+                points={feedbackData.points}
+                timeSpent={feedbackData.timeSpent}
+                hintsUsed={feedbackData.hintsUsed}
+                timerEnabled={feedbackData.timerEnabled}
+                hintsEnabled={feedbackData.hintsEnabled}
+                isCancelled={feedbackData.isCancelled}
+                isTimeExpired={feedbackData.isTimeExpired}
+                isCancelledChallenge={feedbackData.isCancelledChallenge}
+                challengeCode={feedbackData.challengeCode}
+                explanation={feedbackData.explanation}
               />
+            ) : (
+              challengeComponent
             )}
           </div>
         </div>
@@ -148,5 +308,4 @@ const ChallengesPage = () => {
   );
 };
 
-// No prop types needed for now
 export default ChallengesPage;

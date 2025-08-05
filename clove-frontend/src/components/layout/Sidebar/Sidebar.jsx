@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Nav } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import { Image } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -21,12 +20,18 @@ const navItems = [
   { to: "/my-deck", icon: faLayerGroup, label: "My Deck" },
 ];
 
-export default function Sidebar({ expanded, setExpanded }) {
+export default function Sidebar({ expanded = true, onToggle }) {
   const location = useLocation();
   const { logout } = useAuth();
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleToggle = () => {
+    if (onToggle) {
+      onToggle(!expanded);
+    }
   };
 
   return (
@@ -71,7 +76,7 @@ export default function Sidebar({ expanded, setExpanded }) {
         {/* Sidebar Toggle */}
         <div
           className={styles.toggleIcon}
-          onClick={() => setExpanded(!expanded)}
+          onClick={handleToggle}
         >
           <FontAwesomeIcon icon={faBars} />
         </div>

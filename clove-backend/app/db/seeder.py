@@ -36,7 +36,7 @@ class DatabaseSeeder:
             # Load each data file
             self.topics = self._load_json_file('topics.json')
             self.subtopics = self._load_json_file('subtopics.json')
-            self.challenges = self._load_json_file('challenges.json')
+            self.challenges = self._load_json_file('challenges.json')  # Updated to load merged challenges
             self.lessons = self._load_json_file('lessons.json')
             self.assessment_questions = self._load_json_file('assessment_questions.json')
             
@@ -191,16 +191,26 @@ class DatabaseSeeder:
         logger.info(f"Seeded {len(self.subtopics)} subtopics (inserted or updated)")
 
     async def _seed_lessons(self):
-        """Seed lessons table"""
+        """Seed lessons table with new structure"""
         for lesson_data in self.lessons:
+            # Ensure lessonSections is present
+            if 'lessonSections' not in lesson_data:
+                logger.warning(f"Lesson {lesson_data.get('id', 'unknown')} missing lessonSections field")
+                continue
+                
             lesson = Lesson(**lesson_data)
             await self.session.merge(lesson)  # Upsert
         await self.session.flush()
         logger.info(f"Seeded {len(self.lessons)} lessons (inserted or updated)")
 
     async def _seed_challenges(self):
-        """Seed challenges table"""
+        """Seed challenges table with new structure"""
         for challenge_data in self.challenges:
+            # Ensure all required fields are present
+            if 'challenge_data' not in challenge_data:
+                logger.warning(f"Challenge {challenge_data.get('id', 'unknown')} missing challenge_data field")
+                continue
+                
             challenge = Challenge(**challenge_data)
             await self.session.merge(challenge)  # Upsert
         await self.session.flush()

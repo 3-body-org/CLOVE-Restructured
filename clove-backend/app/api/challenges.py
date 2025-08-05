@@ -3,9 +3,9 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession 
 from app.schemas.challenge import ChallengeRead, ChallengeCreate, ChallengeUpdate
-from app.crud.challenge import get_by_id, list_for_subtopic, create, update, delete, count_all
+from app.crud.challenge import get_by_id, list_for_subtopic, create, update, delete, count_all, list_by_type_and_difficulty, get_available_types, get_challenges_by_difficulty
 from app.db.session import get_db
-from app.api.auth import get_current_superuser
+from app.api.auth import get_current_superuser, get_current_user
 from app.db.models.users import User
 
 router = APIRouter(prefix="/challenges", tags=["Challenges"])
@@ -34,14 +34,32 @@ async def read_challenge(
 @router.get("/", response_model=List[ChallengeRead])
 async def list_challenges(
     subtopic_id: Optional[int] = Query(None),
+    type: Optional[str] = Query(None),
+    difficulty: Optional[str] = Query(None),
     skip: int = 0,
     limit: int = 100,
     db: AsyncSession = Depends(get_db)
 ):
-    """List challenges for a subtopic. Public endpoint for reading."""
-    if subtopic_id is None:
-        raise HTTPException(status_code=400, detail="subtopic_id query parameter is required")
-    return await list_for_subtopic(db, subtopic_id=subtopic_id, skip=skip, limit=limit)
+    """List challenges with optional filtering. Public endpoint for reading."""
+    # If type and difficulty are provided, filter by those
+    if type and difficulty:
+        return await list_by_type_and_difficulty(db, type=type, difficulty=difficulty, skip=skip, limit=limit)
+    
+    # If subtopic_id and difficulty are provided, filter by both
+    if subtopic_id and difficulty:
+        return await get_challenges_by_difficulty(db, subtopic_id=subtopic_id, difficulty=difficulty)
+    
+    # If only subtopic_id is provided, filter by subtopic
+    if subtopic_id:
+        return await list_for_subtopic(db, subtopic_id=subtopic_id, skip=skip, limit=limit)
+    
+    # If no filters provided, return error
+    raise HTTPException(status_code=400, detail="Either subtopic_id or both type and difficulty query parameters are required")
+
+@router.get("/types", response_model=List[str])
+async def get_challenge_types(db: AsyncSession = Depends(get_db)):
+    """Get all available challenge types. Public endpoint for reading."""
+    return await get_available_types(db)
 
 @router.patch("/{challenge_id}", response_model=ChallengeRead)
 async def update_challenge(
@@ -71,6 +89,9 @@ async def delete_challenge(
     return
 
 @router.get("/count", response_model=int)
-async def get_challenge_count(db: AsyncSession = Depends(get_db)):
-    """Get total challenge count. Public endpoint for reading."""
+async def get_challenge_count(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Get total challenge count. Requires authentication."""
     return await count_all(db)

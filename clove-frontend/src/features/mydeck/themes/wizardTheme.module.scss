@@ -1,21 +1,21 @@
-// Arcane Academy Theme Variables
+// Arcane Academy Theme Variables - Updated with CLOVE lessons colors
 $wizard-theme: (
   "font-primary": '"Crimson Text", serif',
   "font-heading": '"Cinzel", serif',
-  "theme-bg": #1e102b,
-  "theme-text": #e8dbc3,
-  "text-primary": #e8dbc3,
-  "text-secondary": #a99fcc,
-  "glow-color": "rgba(245, 215, 130, 0.4)",
-  "accent-primary": #f5d782,
-  "accent-secondary": #3fbabf,
-  "card-bg": rgba(30, 16, 43, 0.8),
-  "card-hover": rgba(42, 15, 61, 0.9),
-  "card-border": "1px solid #b78a5b",
-  "button-bg": #3fbabf,
+  "theme-bg": #0F172A, /* Deep Twilight Blue */
+  "theme-text": #E8DBC3, /* Aged Parchment */
+  "text-primary": #E8DBC3, /* Aged Parchment */
+  "text-secondary": #6B7280, /* Ancient Stone Light */
+  "glow-color": "rgba(251, 191, 36, 0.4)", /* Enchanted Gold Bright */
+  "accent-primary": #FBBF24, /* Enchanted Gold Bright */
+  "accent-secondary": #0EA5E9, /* Arcane Turquoise Bright */
+  "card-bg": rgba(15, 23, 42, 0.8), /* Deep Twilight Blue */
+  "card-hover": rgba(26, 43, 60, 0.9), /* Deep Navy */
+  "card-border": "1px solid #0EA5E9", /* Arcane Turquoise Bright */
+  "button-bg": #0EA5E9, /* Arcane Turquoise Bright */
   "button-text": #fff,
   "error-color": #b74141,
-  "divider-color": #b78a5b
+  "divider-color": #0EA5E9 /* Arcane Turquoise Bright */
 );
 
 :export {
@@ -50,10 +50,12 @@ $wizard-theme: (
 
 .rune {
   position: absolute;
-  color: var(--accent-primary, #f5d782);
+  color: #FBBF24 !important; /* Enchanted Gold Bright from CLOVE lessons */
   font-size: 2rem;
   opacity: 0;
-  text-shadow: 0 0 8px var(--glow-color, rgba(245, 215, 130, 0.7));
+  text-shadow: 
+    0 0 8px rgba(251, 191, 36, 0.7),
+    0 0 16px rgba(251, 191, 36, 0.4);
   animation: driftAndFade 20s linear infinite;
   user-select: none;
 }

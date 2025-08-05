@@ -45,16 +45,8 @@ const SpaceBackground = ({
   const starsRef = useRef([]);
   const animationRef = useRef();
 
-  useEffect(() => {
-    console.log('[SpaceBackground] Mounted');
-    return () => {
-      console.log('[SpaceBackground] Unmounted');
-    };
-  }, []);
-
   // Initialize stars
   const initStars = (width, height) => {
-    console.log('[SpaceBackground] Initializing stars with dimensions:', width, height);
     let stars = [];
     starLayers.forEach(layer => {
       for (let i = 0; i < layer.count; i++) {

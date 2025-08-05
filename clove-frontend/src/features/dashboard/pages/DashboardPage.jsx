@@ -15,19 +15,32 @@ import { useApi } from "../../../hooks/useApi";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
+import { useSidebar } from "../../../components/layout/Sidebar/Layout";
 
 // Reusable components
-const CompletedTopicItem = ({ topicNumber, date, badgeText }) => (
-  <div className={styles.completedTopic}>
-    <div className={styles.topicInfo}>
-      <h5>
-        <FontAwesomeIcon icon={faCheck} /> Topic {topicNumber}: ...
-      </h5>
-      <small>Completed on {date}</small>
+const CompletedTopicItem = ({ topicNumber, date, badgeText }) => {
+  const getBadgeClass = (badgeText) => {
+    switch (badgeText) {
+      case 'Mastered': return styles.badgeMastered;
+      case 'Proficient': return styles.badgeProficient;
+      case 'Learned': return styles.badgeLearned;
+      case 'Completed': return styles.badgeCompleted;
+      default: return styles.badgeCompleted;
+    }
+  };
+
+  return (
+    <div className={styles.completedTopic}>
+      <div className={styles.topicInfo}>
+        <h5>
+          <FontAwesomeIcon icon={faCheck} /> Topic {topicNumber}: ...
+        </h5>
+        <small>Completed on {date}</small>
+      </div>
+      <div className={`${styles.topicBadge} ${getBadgeClass(badgeText)}`}>{badgeText}</div>
     </div>
-    <div className={styles.topicBadge}>{badgeText}</div>
-  </div>
-);
+  );
+};
 
 const StreakDay = ({ day, filled }) => (
   <div className={`${styles.day} ${filled ? styles.streakFilled : ""}`}>
@@ -43,6 +56,7 @@ const Dashboard = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
+  const { closeSidebar } = useSidebar();
 
   // Update streak on dashboard load, then fetch stats
   React.useEffect(() => {
@@ -93,14 +107,14 @@ const Dashboard = () => {
 
   // Challenges Solved Data
   const challengesSolved = stats?.total_challenges_solved || 0;
-  const totalChallenges = stats?.total_challenges || 0;
-  const challengePercent = totalChallenges ? Math.round((challengesSolved / totalChallenges) * 100) : 0;
+  const totalChallenges = 405; // Total available challenges in database
+  const challengePercent = totalChallenges ? ((challengesSolved / totalChallenges) * 100).toFixed(1) : 0;
   const challengesData = {
-    percentage: challengePercent,
-    label: "Completed",
+    percentage: challengePercent, 
+    label: "Solved",
     description:
       totalChallenges > 0
-        ? `You've solved ${challengesSolved} out of ${totalChallenges} challenges taken. Keep up answering the challenges!`
+        ? `You've solved ${challengesSolved} out of ${totalChallenges} challenges. Keep up answering the challenges!`
         : "You have not yet taken any challenges.",
   };
 
@@ -126,7 +140,7 @@ const Dashboard = () => {
       };
     });
 
-  if (loading) return <LoadingScreen message="Loading dashboard..." />;
+  if (loading || !stats) return <LoadingScreen message="Loading dashboard..." />;
   if (error) return <ErrorScreen message={error} />;
 
   return (
@@ -167,6 +181,7 @@ const Dashboard = () => {
                     } else {
                       navigate(`/my-deck/${recentTopicId}-${recentTopicSlug}/introduction`);
                     }
+                    closeSidebar(); // Close sidebar after navigation
                   }}
                 >
                   Resume Topic <FontAwesomeIcon icon={faArrowRight} />
