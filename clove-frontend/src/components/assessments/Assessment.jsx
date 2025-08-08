@@ -1,5 +1,5 @@
 // Assessment.js
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "components/assessments/styles/Assessment.module.scss";
@@ -7,6 +7,10 @@ import styles from "components/assessments/styles/Assessment.module.scss";
 import { MyDeckContext } from "contexts/MyDeckContext";
 import { useApi } from "../../hooks/useApi";
 import { useAuth } from "contexts/AuthContext";
+import { useMyDeckService } from "features/mydeck/hooks/useMydeckService";
+import LoadingScreen from "../../components/layout/StatusScreen/LoadingScreen";
+import { showErrorNotification, showSuccessNotification } from "../../utils/notifications";
+import { getSubtopicContent } from "features/mydeck/content/subtopicContent";
 // import Assessment from "./Assessment";
 
 const Assessment = () => {
@@ -18,67 +22,147 @@ const Assessment = () => {
   const [questionsToAsk, setQuestionsToAsk] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showError, setShowError] = useState(false);
-  const [assessmentLocked, setAssessmentLocked] = useState(false);
-  const [lockedMessage, setLockedMessage] = useState("");
+  const [assessmentCompleted, setAssessmentCompleted] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isCheckingCompletion, setIsCheckingCompletion] = useState(true);
+  const hasFetchedQuestionsRef = useRef(false);
 
   const { get, post } = useApi();
   const { user } = useAuth();
   const { topicId, assessmentType } = useParams(); // assessmentType: 'pre' or 'post'
-  const numericTopicId = topicId.split('-')[0];
+  const numericTopicId = topicId ? topicId.split('-')[0] : null;
   const navigate = useNavigate();
-  const { setPreAssessmentTaken } = useContext(MyDeckContext);
+  const { getTopicsWithProgress } = useMyDeckService();
+  const { setTopics, loadTopicOverview, refreshTopics, getAssessmentQuestionsSummary } = useContext(MyDeckContext);
+  
+  // Get theme for dynamic styling
+  const frontendContent = getSubtopicContent(numericTopicId);
+  const theme = frontendContent?.theme || 'space';
 
   useEffect(() => {
-    // Check if assessment is already completed/locked
-    const checkLocked = async () => {
-      if (assessmentType === 'pre' && user?.id && numericTopicId) {
+    // Check if assessment is already completed
+    const checkCompleted = async () => {
+      if (user?.id && numericTopicId) {
         try {
-          const res = await get(`/pre_assessments/user/${user.id}/topic/${numericTopicId}`);
+          const endpoint = assessmentType === 'post' 
+            ? `/post_assessments/user/${user.id}/topic/${numericTopicId}`
+            : `/pre_assessments/user/${user.id}/topic/${numericTopicId}`;
+          
+          const res = await get(endpoint);
           if (res.ok) {
             const data = await res.json();
-            if (data.total_items >= 15 || data.is_unlocked === false) {
-              setAssessmentLocked(true);
-              setLockedMessage("You have already completed this assessment. Retakes are not allowed.");
+            if (data.total_items >= 15) {
+              setAssessmentCompleted(true);
+              setIsRedirecting(true);
+              // Navigate to result page after a short delay
+              setTimeout(() => {
+                navigate(`/my-deck/${topicId}/assessment/${assessmentType}/result`);
+              }, 1500); // Increased delay to show loading screen
             }
           }
-        } catch {}
+        } catch (error) {
+          console.error('Error checking assessment completion:', error);
+        } finally {
+          // Increased minimum loading time
+          setTimeout(() => {
+            setIsCheckingCompletion(false);
+          }, 1500);
+        }
+      } else {
+        // Increased minimum loading time
+        setTimeout(() => {
+          setIsCheckingCompletion(false);
+        }, 1500);
       }
     };
-    checkLocked();
-  }, [assessmentType, user, numericTopicId, get]);
+    checkCompleted();
+  }, [assessmentType, user, numericTopicId, get, navigate, topicId]);
 
   useEffect(() => {
-    if (assessmentLocked) return;
-    // Fetch questions from backend
+    if (assessmentCompleted || isCheckingCompletion) return;
+    
+    // Prevent multiple fetches
+    if (hasFetchedQuestionsRef.current) {
+      return;
+    }
+    
+    hasFetchedQuestionsRef.current = true;
+    
+    // Fetch questions from backend and store in context
     setIsLoading(true);
     const fetchQuestions = async () => {
       try {
+        console.log(`🔍 Fetching questions for topic ${numericTopicId}, assessment type ${assessmentType}`);
+        
+        // Get questions summary and store in context
+        try {
+          await getAssessmentQuestionsSummary(numericTopicId, assessmentType);
+        } catch (summaryError) {
+          console.warn('🔍 Failed to fetch questions summary, continuing without it:', summaryError);
+          // Continue without the summary - it's not critical for the assessment to work
+        }
+        
         const response = await get(`/assessment_questions/topic/${numericTopicId}/randomized?assessment_type=${assessmentType}`);
-        if (!response.ok) throw new Error("Failed to fetch questions");
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('🔍 API Error Response:', response.status, errorText);
+          throw new Error(`Failed to fetch questions: ${response.status} ${errorText}`);
+        }
         const questions = await response.json();
+        console.log('🔍 Questions fetched successfully:', questions.length, 'questions');
         setQuestionsToAsk(questions);
+        
+
       } catch (err) {
+        console.error('Error fetching questions:', err);
         setQuestionsToAsk([]);
+        // Show error notification
+        if (err.message.includes('Failed to fetch')) {
+          console.error('🔍 Network error - backend might not be running or endpoint not found');
+          showErrorNotification('Unable to load assessment questions. Please check your connection and try again.');
+        } else {
+          showErrorNotification('Failed to load assessment questions. Please try again.');
+        }
       } finally {
-        setIsLoading(false);
+        // Increased minimum loading time
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
       }
     };
     fetchQuestions();
-  }, [numericTopicId, assessmentType, assessmentLocked]);
+  }, [numericTopicId, assessmentType, assessmentCompleted, isCheckingCompletion]);
 
-  if (assessmentLocked) {
-    return <div style={{ padding: 32, textAlign: 'center', color: 'red' }}>{lockedMessage}</div>;
+  useEffect(() => {
+    if (questionsToAsk.length > 0) {
+      setProgress(((questionIndex + 1) / questionsToAsk.length) * 100);
+    }
+  }, [questionIndex, questionsToAsk.length]);
+
+  // Reset fetch flag when component unmounts or assessment type changes
+  useEffect(() => {
+    return () => {
+      hasFetchedQuestionsRef.current = false;
+    };
+  }, [assessmentType]);
+
+  // Show loading screen while redirecting to results
+  if (assessmentCompleted && isRedirecting) {
+    return <LoadingScreen message="Loading results..." />;
   }
 
+  // Show loading screen while fetching questions
   if (isLoading) {
-    return <div>Loading questions...</div>;
+    return <LoadingScreen message="Loading questions..." />;
   }
+
+
 
   const currentQuestion = questionsToAsk[questionIndex];
 
   // Defensive check for backend structure
   if (!currentQuestion || !currentQuestion.question_choices_correctanswer) {
-    return <div>Loading question...</div>;
+    return <LoadingScreen message="Loading question..." />;
   }
 
   const handleOptionClick = async (option) => {
@@ -109,11 +193,11 @@ const Assessment = () => {
         user_answer: option,
       });
     } catch (e) {
-      // Optionally handle error
+      console.error('Error submitting answer:', e);
     }
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (!isAnswered) {
       setShowError(true);
       return;
@@ -122,22 +206,47 @@ const Assessment = () => {
     setShowError(false);
     if (questionIndex < questionsToAsk.length - 1) {
       setQuestionIndex(questionIndex + 1);
-      setProgress(((questionIndex + 1) / questionsToAsk.length) * 100);
+      setProgress(((questionIndex + 2) / questionsToAsk.length) * 100); // +2 because we're moving to next question
       setSelectedOption(null);
       setIsAnswered(false);
     } else {
-      navigate(`/my-deck/${topicId}/assessment/${assessmentType}/result`, {
-        state: {
-          userAnswers,
-          questionsToAsk,
-          topicId,
-        },
-      });
+      // Assessment completed - immediately refresh topics to unlock subtopics
+      try {
+        console.log('🔍 Assessment completed, refreshing topics to unlock subtopics');
+        console.log('🔍 Topic ID:', topicId, 'Numeric Topic ID:', numericTopicId);
+          
+          // Show success notification
+          showSuccessNotification('Assessment completed! Viewing your results...');
+        
+        // Reduced delay to ensure backend has processed the final answer
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // First refresh the topics list
+        await refreshTopics();
+        console.log('🔍 Topics list refreshed');
+        
+        // Then refresh the topic overview to update unlock status
+        if (loadTopicOverview) {
+          const parsedTopicId = parseInt(numericTopicId);
+          console.log('🔍 Refreshing topic overview for topic ID:', parsedTopicId);
+          await loadTopicOverview(parsedTopicId, true); // Force refresh
+          console.log('🔍 Topic overview refreshed');
+        } else {
+          console.warn('🔍 loadTopicOverview function not available');
+        }
+        
+        console.log('🔍 Topics refreshed successfully');
+      } catch (error) {
+        console.error('Failed to refresh topics:', error);
+      }
+      
+      // Navigate to result page after refreshing topics
+      navigate(`/my-deck/${topicId}/assessment/${assessmentType}/result`);
     }
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={styles.pageContainer} data-theme={theme}>
       <div className={styles.testContainer}>
         <div className={styles.progressBar}>
           <div

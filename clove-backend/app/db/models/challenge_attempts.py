@@ -1,5 +1,5 @@
 # app/db/models/challenge_attempt.py
-from sqlalchemy import Column, Integer, Boolean, Enum, ForeignKey, DateTime, func
+from sqlalchemy import Column, Integer, Boolean, Enum, ForeignKey, DateTime, func, Text
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 from datetime import datetime
@@ -12,6 +12,7 @@ class ChallengeAttempt(Base):
 
     id               = Column(Integer, primary_key=True, index=True)
     user_challenge_id = Column(Integer, ForeignKey("user_challenges.id"), nullable=False)
+    user_answer      = Column(Text, nullable=True)  # Add this field for user's answer
     is_successful    = Column(Boolean, nullable=False)
     time_spent       = Column(Integer, comment="Seconds")
     hints_used       = Column(Integer, default=0)

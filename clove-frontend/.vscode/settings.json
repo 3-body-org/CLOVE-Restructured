@@ -1,0 +1,72 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "clove Restructured\\src\\scsss modules\\",
+            "color": "foldercolorizer.color_cc6699"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\pages\\",
+            "color": "foldercolorizer.color_6666ff"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\context\\",
+            "color": "foldercolorizer.color_ffff66"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\components\\",
+            "color": "foldercolorizer.color_00ccff"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\assets\\",
+            "color": "foldercolorizer.color_00cc33"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\pages\\landing page\\",
+            "color": "foldercolorizer.color_6666ff"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\pages\\challenges page\\",
+            "color": "foldercolorizer.color_6666ff"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\pages\\login page\\",
+            "color": "foldercolorizer.color_6666ff"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\pages\\lessons page\\",
+            "color": "foldercolorizer.color_6666ff"
+        },
+        {
+            "folderPath": "clove Restructured\\src\\pages\\main page\\",
+            "color": "foldercolorizer.color_6666ff"
+        },
+        {
+            "folderPath": "frontend\\src\\scss modules\\",
+            "color": "foldercolorizer.color_ff9999"
+        },
+        {
+            "folderPath": "frontend\\src\\pages\\",
+            "color": "foldercolorizer.color_99ccff"
+        },
+        {
+            "folderPath": "frontend\\src\\context\\",
+            "color": "foldercolorizer.color_00cc33"
+        },
+        {
+            "folderPath": "frontend\\src\\components\\",
+            "color": "foldercolorizer.color_cc6600"
+        },
+        {
+            "folderPath": "frontend\\src\\assets\\images\\",
+            "color": "foldercolorizer.color_ccff00"
+        },
+        {
+            "folderPath": "clove-frontend\\src\\features\\mydeck\\",
+            "color": "foldercolorizer.color_66cc00"
+        },
+        {
+            "folderPath": "clove-frontend\\src\\features\\progress\\",
+            "color": "foldercolorizer.color_6666ff"
+        }
+    ]
+}

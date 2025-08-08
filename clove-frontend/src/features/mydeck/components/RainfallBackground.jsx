@@ -26,13 +26,6 @@ function getDropStyle() {
  * @param {number} [props.numDrops=100] - Number of raindrops to render.
  */
 const RainfallBackground = ({ numDrops = 100 }) => {
-  useEffect(() => {
-    console.log('[RainfallBackground] Mounted');
-    return () => {
-      console.log('[RainfallBackground] Unmounted');
-    };
-  }, []);
-
   const drops = useMemo(
     () =>
       Array.from({ length: numDrops }).map((_, i) => (

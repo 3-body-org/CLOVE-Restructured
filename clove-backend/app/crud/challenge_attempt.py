@@ -1,7 +1,7 @@
 # app/crud/challenge_attempt.py
 
 from typing import List, Optional
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, func
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.models.challenge_attempts import ChallengeAttempt
@@ -116,7 +116,9 @@ async def get_last_attempts_for_user_subtopic(
         select(ChallengeAttempt)
         .join(UserChallenge, ChallengeAttempt.user_challenge_id == UserChallenge.id)
         .join(Challenge, UserChallenge.challenge_id == Challenge.id)
-        .options(selectinload(ChallengeAttempt.user_challenge))
+        .options(
+            selectinload(ChallengeAttempt.user_challenge).selectinload(UserChallenge.challenge)
+        )
         .where(UserChallenge.user_id == user_id)
         .where(Challenge.subtopic_id == subtopic_id)
         .order_by(desc(ChallengeAttempt.attempted_at))
@@ -124,6 +126,53 @@ async def get_last_attempts_for_user_subtopic(
     )
     result = await db.execute(stmt)
     return result.scalars().all()
+
+async def get_last_attempts_minimal_for_user_subtopic(
+    db: AsyncSession,
+    user_id: int,
+    subtopic_id: int,
+    n: int
+):
+    """Get minimal challenge attempt data for results page"""
+    stmt = (
+        select(
+            ChallengeAttempt.id,
+            ChallengeAttempt.is_successful,
+            ChallengeAttempt.time_spent,
+            ChallengeAttempt.hints_used,
+            ChallengeAttempt.attempted_at,
+            Challenge.type.label('challenge_type'),
+            Challenge.difficulty.label('challenge_difficulty'),
+            UserChallenge.timer_enabled.label('timer_enabled'),
+            UserChallenge.hints_enabled.label('hints_enabled'),
+            UserChallenge.partial_answer.label('partial_answer'),
+            UserChallenge.was_cancelled.label('was_cancelled')
+        )
+        .join(UserChallenge, ChallengeAttempt.user_challenge_id == UserChallenge.id)
+        .join(Challenge, UserChallenge.challenge_id == Challenge.id)
+        .where(UserChallenge.user_id == user_id)
+        .where(Challenge.subtopic_id == subtopic_id)
+        .order_by(desc(ChallengeAttempt.attempted_at))
+        .limit(n)
+    )
+    result = await db.execute(stmt)
+    return result.mappings().all()
+
+async def get_attempt_count_by_user_and_subtopic(
+    db: AsyncSession,
+    user_id: int,
+    subtopic_id: int
+) -> int:
+    """Get the count of challenge attempts for a user and subtopic"""
+    stmt = (
+        select(func.count(ChallengeAttempt.id))
+        .join(UserChallenge, ChallengeAttempt.user_challenge_id == UserChallenge.id)
+        .join(Challenge, UserChallenge.challenge_id == Challenge.id)
+        .where(UserChallenge.user_id == user_id)
+        .where(Challenge.subtopic_id == subtopic_id)
+    )
+    result = await db.execute(stmt)
+    return result.scalar_one() or 0
 
 async def delete_last_take_if_full(
     db: AsyncSession,
@@ -152,4 +201,33 @@ async def delete_last_take_if_full(
         for attempt in completed_attempts:
             await db.delete(attempt)
         await db.commit()
+
+async def delete_by_user_and_subtopic(
+    db: AsyncSession,
+    user_id: int,
+    subtopic_id: int
+) -> int:
+    """Delete all challenge attempts for a user in a specific subtopic"""
+    # Get all challenge attempts for the user in the specified subtopic
+    stmt = (
+        select(ChallengeAttempt)
+        .join(UserChallenge, ChallengeAttempt.user_challenge_id == UserChallenge.id)
+        .join(Challenge, UserChallenge.challenge_id == Challenge.id)
+        .where(UserChallenge.user_id == user_id)
+        .where(Challenge.subtopic_id == subtopic_id)
+    )
+    result = await db.execute(stmt)
+    attempts_to_delete = result.scalars().all()
+    
+    # Count the attempts before deletion
+    deleted_count = len(attempts_to_delete)
+    
+    # Delete all attempts
+    for attempt in attempts_to_delete:
+        await db.delete(attempt)
+    
+    # Commit the changes
+    await db.commit()
+    
+    return deleted_count
 

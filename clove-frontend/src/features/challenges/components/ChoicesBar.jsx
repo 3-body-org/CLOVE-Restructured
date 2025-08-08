@@ -1,36 +1,34 @@
+/**
+ * @file ChoicesBar.jsx
+ * @description Choices bar component for Code Completion challenges
+ */
+
 import React from 'react';
 import styles from '../styles/CodeCompletion.module.scss';
 
-const ChoicesBar = ({
-  availableChoices,
-  currentDragItem,
-  isDragging,
-  onDragStart,
-  onDragEnd,
-  onDragOver,
-  onDragLeave,
-  onDrop
-}) => {
+const ChoicesBar = ({ choices = [], onDragStart, disabled = false }) => {
+  const handleDragStart = (e, choice) => {
+    if (disabled) return;
+    
+    if (onDragStart) {
+      onDragStart(e, choice);
+    } else {
+      // Default drag behavior
+      e.dataTransfer.setData('choice', choice);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  };
+
   return (
-    <div 
-      className={`${styles.choicesBar} ${isDragging ? styles.dragOver : ''}`}
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
-      onDrop={onDrop}
-    >
-      {availableChoices.map((choice, idx) => (
+    <div className={styles.choicesBar}>
+      {choices.map((choice, index) => (
         <div
-          key={idx}
-          className={`${styles.choice} ${
-            currentDragItem?.value === choice.value ? styles.dragging : ''
-          }`}
-          draggable
-          onDragStart={(e) => onDragStart(e, choice)}
-          onDragEnd={onDragEnd}
-          onDragOver={(e) => e.preventDefault()}
+          key={index}
+          className={`${styles.choiceItem} ${disabled ? styles.disabled : ''}`}
+          draggable={!disabled}
+          onDragStart={(e) => handleDragStart(e, choice)}
         >
-          {choice.value}
-          <span className={styles.dragHandle}>⋮⋮</span>
+          {choice}
         </div>
       ))}
     </div>

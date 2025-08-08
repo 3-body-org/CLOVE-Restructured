@@ -5,7 +5,7 @@ import styles from "features/profile/styles/ProfilePage.module.scss";
 import TitleAndProfile from "components/layout/Navbar/TitleAndProfile";
 import { useAuth } from "contexts/AuthContext";
 import { useApi } from "../../../hooks/useApi";
-import { toast } from "react-toastify";
+import { showSuccessNotification, showErrorNotification } from "../../../utils/notifications";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 
@@ -32,7 +32,7 @@ const ProfilePage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [editingSection, setEditingSection] = useState(null); // 'profile', 'about', 'info', 'account'
   const [minTimePassed, setMinTimePassed] = useState(false);
-
+  
   // Minimum loading time effect
   useEffect(() => {
     setMinTimePassed(false);
@@ -61,35 +61,35 @@ const ProfilePage = () => {
     setSaving(true);
     try {
       if (formData.username.length < 3) {
-        toast.error("Username must be at least 3 characters long");
+        showErrorNotification("Username must be at least 3 characters long");
         setSaving(false);
         return;
       }
       if (formData.username.length > 50) {
-        toast.error("Username must be less than 50 characters");
+        showErrorNotification("Username must be less than 50 characters");
         setSaving(false);
         return;
       }
       if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-        toast.error("Username can only contain letters, numbers, and underscores");
+        showErrorNotification("Username can only contain letters, numbers, and underscores");
         setSaving(false);
         return;
       }
       if (formData.password || formData.confirm_password) {
         if (formData.password.length < 8) {
-          toast.error("New password must be at least 8 characters long");
+          showErrorNotification("New password must be at least 8 characters long");
           setSaving(false);
           return;
         }
         if (formData.password !== formData.confirm_password) {
-          toast.error("New password and confirm password do not match");
+          showErrorNotification("New password and confirm password do not match");
           setSaving(false);
           return;
         }
       }
       const sensitiveChanges = formData.email !== user?.email || formData.password;
       if (sensitiveChanges && !formData.current_password) {
-        toast.error("Current password is required to change email or password");
+        showErrorNotification("Current password is required to change email or password");
         setSaving(false);
         return;
       }
@@ -103,13 +103,13 @@ const ProfilePage = () => {
       });
       delete changedFields.confirm_password;
       if (avatarFile) {
-        toast.error("Avatar upload logic not implemented.");
+        showErrorNotification("Avatar upload logic not implemented.");
         setSaving(false);
         return;
       }
       const userId = String(user.id).split(':')[0];
       if (!userId || isNaN(Number(userId))) {
-        toast.error("Invalid user ID. Please reload the page and try again.");
+        showErrorNotification("Invalid user ID. Please reload the page and try again.");
         setSaving(false);
         return;
       }
@@ -124,7 +124,7 @@ const ProfilePage = () => {
         }));
         await refreshUser();
         setEditingSection(null); 
-        toast.success("Profile updated successfully!");
+        showSuccessNotification("Profile updated successfully!");
       } else {
         let errorMsg = response.statusText;
         try {
@@ -134,10 +134,10 @@ const ProfilePage = () => {
             errorMsg = errorData.detail || errorData.message || errorMsg;
           }
         } catch (e) {}
-        toast.error(errorMsg);
+        showErrorNotification(errorMsg);
       }
     } catch (error) {
-      toast.error("Failed to update profile. Please try again.");
+      showErrorNotification("Failed to update profile. Please try again.");
       console.error("Error updating profile:", error);
     } finally {
       setSaving(false);
@@ -175,7 +175,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const msg = sessionStorage.getItem('profileSuccess');
     if (msg) {
-      toast.success(msg);
+      showSuccessNotification(msg);
       sessionStorage.removeItem('profileSuccess');
     }
   }, []);

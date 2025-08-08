@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import CustomExitWarningModal from "../features/challenges/components/CustomExitWarningModal";
 
 // AuthContext: Central place for authentication state and functions
 const AuthContext = createContext();
@@ -19,8 +20,123 @@ export function AuthProvider({ children }) {
   const [refreshToken, setRefreshToken] = useState(() => localStorage.getItem("refreshToken")); // Refresh token
   const [loading, setLoading] = useState(true); // Loading state for initial auth check
   const [isRefreshing, setIsRefreshing] = useState(false); // Is a token refresh in progress?
+  
+  // --- Exit prevention for logout ---
+  const [showLogoutWarning, setShowLogoutWarning] = useState(false);
+  const [isProcessingLogout, setIsProcessingLogout] = useState(false);
+  
   const navigate = useNavigate();
   const refreshPromiseRef = useRef(null); // Prevents multiple refreshes at once
+
+  // --- Check if user is in active challenge ---
+  const isInActiveChallenge = () => {
+    if (!user) return false;
+    
+    // Check for any active challenge session with the correct format
+    const challengeKeys = Object.keys(localStorage).filter(key => 
+      key.startsWith(`challenge_active_${user.id}_`)
+    );
+    
+    console.log('Logout prevention: Checking for active challenges...');
+    console.log('User ID:', user.id);
+    console.log('All localStorage keys:', Object.keys(localStorage));
+    console.log('Challenge-related keys:', Object.keys(localStorage).filter(key => key.includes('challenge')));
+    console.log('Found challenge keys:', challengeKeys);
+    console.log('Should show warning:', challengeKeys.length > 0);
+    
+    return challengeKeys.length > 0;
+  };
+
+  // --- Handle logout with exit prevention ---
+  const handleLogout = () => {
+    console.log('Logout prevention: handleLogout called');
+    console.log('User:', user);
+    console.log('Checking for active challenges...');
+    
+    if (isInActiveChallenge()) {
+      console.log('Logout prevention: User is in active challenge, showing warning');
+      setShowLogoutWarning(true);
+      return;
+    }
+    
+    console.log('Logout prevention: No active challenge, proceeding with logout');
+    // No active challenge, proceed with normal logout
+    performLogout();
+  };
+
+  // --- Perform actual logout ---
+  const performLogout = () => {
+    console.log('Performing logout...');
+    setUser(null);
+    setToken(null);
+    setRefreshToken(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    
+    // Call all registered reset callbacks (e.g., MyDeckContext)
+    resetCallbacks.forEach(fn => {
+      try { fn(); } catch (e) { console.error("Reset callback error", e); }
+    });
+    
+    // Clear session storage
+    sessionStorage.clear();
+    
+    // Clear any pending challenge cancellations
+    localStorage.removeItem('pending_challenge_cancellation');
+    
+    // Clear all challenge session keys
+    const challengeKeys = Object.keys(localStorage).filter(key => 
+      key.startsWith('challenge_active_')
+    );
+    challengeKeys.forEach(key => localStorage.removeItem(key));
+    
+    navigate("/login-signup", { replace: true });
+  };
+
+  // --- Handle logout warning modal actions ---
+  const handleContinueChallenge = () => {
+    console.log('Logout prevention: User chose to continue challenge');
+    setShowLogoutWarning(false);
+  };
+
+  const handleLogoutAnyway = async () => {
+    console.log('Logout prevention: User chose to logout anyway');
+    setIsProcessingLogout(true);
+    
+    try {
+      // Cancel any active challenge sessions
+      if (user) {
+        const challengeKeys = Object.keys(localStorage).filter(key => 
+          key.startsWith('challenge_active_') && key.includes(`_${user.id}_`)
+        );
+        
+        for (const key of challengeKeys) {
+          try {
+            const sessionData = JSON.parse(localStorage.getItem(key));
+            if (sessionData && sessionData.challengeId) {
+              // Try to cancel the challenge via API
+              const response = await fetch(`${API_BASE}/challenge_attempts/cancel/user/${user.id}/challenge/${sessionData.challengeId}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                }
+              });
+              console.log('Challenge cancellation response:', response.status);
+            }
+          } catch (error) {
+            console.error('Error cancelling challenge during logout:', error);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error during logout challenge cancellation:', error);
+    } finally {
+      setIsProcessingLogout(false);
+      setShowLogoutWarning(false);
+      performLogout();
+    }
+  };
 
   // --- Refresh the access token using the refresh token ---
   const refreshAccessToken = async () => {
@@ -84,7 +200,7 @@ export function AuthProvider({ children }) {
           return retryResponse;
         } catch (refreshError) {
           refreshPromiseRef.current = null;
-          logout();
+          performLogout(); // Use performLogout here
           throw new Error("Session expired. Please login again.");
         }
       }
@@ -213,26 +329,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // --- Logout: clear tokens and user info ---
-  function logout() {
-    setUser(null);
-    setToken(null);
-    setRefreshToken(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    // Call all registered reset callbacks (e.g., MyDeckContext)
-    resetCallbacks.forEach(fn => {
-      try { fn(); } catch (e) { console.error("Reset callback error", e); }
-    });
-    // Clear local/session storage for progress, topics, etc.
-    localStorage.removeItem("preAssessmentTaken");
-    localStorage.removeItem("completedSubtopics");
-    localStorage.removeItem("completedChallenges");
-    localStorage.removeItem("challengeScores");
-    sessionStorage.clear();
-    navigate("/login-signup", { replace: true });
-  }
-
   // --- Refresh user info from backend ---
   async function refreshUser() {
     if (token) {
@@ -280,12 +376,24 @@ export function AuthProvider({ children }) {
       isRefreshing, // Is a token refresh in progress?
       login, // Login function
       signup, // Signup function
-      logout, // Logout function
+      logout: handleLogout, // Logout function with exit prevention
       refreshUser, // Refresh user info from backend
       makeAuthenticatedRequest, // For advanced API calls
-      manualRefreshToken // For manual token refresh (rarely needed)
+      manualRefreshToken, // For manual token refresh (rarely needed)
+      showLogoutWarning, // State for logout warning modal
+      handleContinueChallenge, // Function to continue challenge
+      handleLogoutAnyway, // Function to logout anyway
+      isProcessingLogout // State for processing logout
     }}>
       {children}
+      
+      {/* Logout Warning Modal */}
+      <CustomExitWarningModal
+        isVisible={showLogoutWarning}
+        onContinueChallenge={handleContinueChallenge}
+        onLeaveAnyway={handleLogoutAnyway}
+        isLoading={isProcessingLogout}
+      />
     </AuthContext.Provider>
   );
 }

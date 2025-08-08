@@ -1,0 +1,241 @@
+CLOVE LESSONS FEATURE - COLOR PALETTE DOCUMENTATION
+====================================================
+
+This document contains all colors used in the CLOVE lessons feature, organized by theme.
+Each color includes its hex value, RGB equivalent, and where it's applied in the interface.
+
+================================================================================
+WIZARD THEME - Arcane Academy
+================================================================================
+
+BACKGROUND COLORS:
+- #0F172A (Deep Twilight Blue) - Main theme background
+- #1A2B3C (Deep Navy) - Card backgrounds, code backgrounds, sidebar
+- #4A5568 (Ancient Stone Grey) - Secondary code backgrounds, output headers
+- rgba(110, 231, 183, 0.1) (Faerie Green with opacity) - Summary section background
+
+TEXT COLORS:
+- #E8DBC3 (Aged Parchment) - Primary text, code text, output text, bullet text
+- #6B7280 (Ancient Stone Light) - Secondary text, intro text, sidebar text
+- #FBBF24 (Enchanted Gold Bright) - Main headings, lesson titles, section titles, contents title
+- #0EA5E9 (Arcane Turquoise Bright) - Objectives title
+- #6EE7B7 (Flickering Faerie Green) - Summary title
+
+ACCENT & HIGHLIGHT COLORS:
+- #0EA5E9 (Arcane Turquoise Bright) - Primary accent, card borders, code borders, bullet borders
+- #06B6D4 (Arcane Turquoise Deep) - Secondary accent, contents numbers, objective icons
+- #FBBF24 (Enchanted Gold Bright) - Gold accent, bullet icons, strong text
+- #6EE7B7 (Flickering Faerie Green) - Success color, summary border, footer border
+
+CODE SYNTAX COLORS:
+- #FBBF24 (Enchanted Gold Bright) - Keywords
+- #0EA5E9 (Arcane Turquoise Bright) - Variables, inline code
+- #E8DBC3 (Aged Parchment) - Strings, comments
+- #06B6D4 (Arcane Turquoise Deep) - Numbers
+
+BUTTON COLORS:
+- #0EA5E9 (Arcane Turquoise Bright) - Primary button background
+- #E8DBC3 (Aged Parchment) - Primary button text
+- #1A2B3C (Deep Navy) - Secondary button background
+- #0EA5E9 (Arcane Turquoise Bright) - Secondary button border
+
+MONACO EDITOR COLORS:
+- Background: #0F172A (Deep Twilight Blue)
+- Foreground: #E8DBC3 (Aged Parchment)
+- Line Highlight: #1A2B3C (Deep Navy)
+- Cursor: #FBBF24 (Enchanted Gold Bright)
+- Line Numbers: #6B7280 (Ancient Stone Light)
+- Selection: #0EA5E9 (Arcane Turquoise Bright)
+- Keywords: #FBBF24 (Enchanted Gold Bright)
+- Variables: #0EA5E9 (Arcane Turquoise Bright)
+- Strings: #E8DBC3 (Aged Parchment)
+- Numbers: #06B6D4 (Arcane Turquoise Deep)
+- Comments: #E8DBC3 (Aged Parchment)
+
+FONTS:
+- Primary: "Crimson Text", serif
+- Headings: "Cinzel", serif
+- Monospace: "JetBrains Mono", "Fira Code", monospace
+
+================================================================================
+DETECTIVE THEME - Noir Investigation
+================================================================================
+
+BACKGROUND COLORS:
+- #0a0a0a (Deeper noir black) - Main theme background
+- rgba(26, 26, 26, 0.95) (Darker gunmetal) - Card backgrounds
+- #1a1a1a (Darker code background) - Code backgrounds
+- rgba(110, 231, 183, 0.1) (Faerie Green with opacity) - Summary section background
+
+TEXT COLORS:
+- #e0e0e0 (Brighter light grey) - Primary text
+- #b4a287 (Sepia brown) - Secondary text, tertiary headings
+- #8a8a8a (Muted grey) - Muted text, comments
+- #d1b773 (Gold) - Main headings, primary accent
+- #7a9e7e (Olive green) - Secondary headings, secondary accent
+
+ACCENT & HIGHLIGHT COLORS:
+- #d1b773 (Gold) - Primary accent, bullet icons, footer border
+- #7a9e7e (Olive green) - Secondary accent, hover effects
+- #b4a287 (Sepia) - Tertiary accent
+- #8a8a8a (Muted grey) - Quaternary accent, hover borders
+- #d32f2f (Dark red) - Danger accent
+- #f57c00 (Orange-red) - Warning accent
+- #2a2a2a (Darker active items) - Active accent
+- #6EE7B7 (Flickering Faerie Green) - Success color, summary title, summary border
+
+CODE SYNTAX COLORS:
+- #d1b773 (Gold) - Keywords
+- #7a9e7e (Olive green) - Variables, inline code
+- #cdaa7d (Brass) - Strings, numbers
+- #8a8a8a (Muted grey) - Comments
+
+BUTTON COLORS:
+- #d1b773 (Gold) - Primary button background
+- #0a0a0a (Deeper noir black) - Primary button text
+- #2a2a2a (Dark grey) - Secondary button background
+- #e0e0e0 (Brighter light grey) - Secondary button text
+- #d1b773 (Gold) - Secondary button border
+
+MONACO EDITOR COLORS:
+- Background: #121212 (Theme background)
+- Foreground: #dcdcdc (Theme text)
+- Line Highlight: #2a2a3a (Code background)
+- Cursor: #d1b773 (Gold)
+- Line Numbers: #b4a287 (Sepia)
+- Selection: #3c4c5a (Accent active)
+- Keywords: #d1b773 (Gold)
+- Variables: #7a9e7e (Olive green)
+- Strings: #cdaa7d (Brass)
+- Numbers: #cdaa7d (Brass)
+- Comments: #b4a287 (Sepia)
+
+FONTS:
+- Primary: "Lora", serif
+- Headings: "Playfair Display", serif
+- Monospace: "IBM Plex Mono", monospace
+
+================================================================================
+SPACE THEME - Cosmic Variables Initiative
+================================================================================
+
+BACKGROUND COLORS:
+- #0a0a1a (Deep space blue) - Main theme background
+- rgba(26, 26, 46, 0.8) (Dark blue) - Card backgrounds
+- #252540 (Dark code background) - Code backgrounds
+- rgba(110, 231, 183, 0.1) (Faerie Green with opacity) - Summary section background
+
+TEXT COLORS:
+- #ffffff (White) - Primary text, output text
+- #a8a5e6 (Light purple) - Secondary text, muted text, comments
+- #a6aafb (Light blue) - Main headings, secondary headings, tertiary accent
+- #ff7675 (Pink) - Tertiary headings, secondary accent
+
+ACCENT & HIGHLIGHT COLORS:
+- #a6aafb (Light blue) - Primary accent, hover effects, footer border
+- #ff7675 (Pink) - Secondary accent, hover borders, bullet icons
+- #a8a5e6 (Light purple) - Quaternary accent
+- #ff6b6b (Red) - Danger accent, primary button background
+- #ffa726 (Orange) - Warning accent
+- #3e3e5e (Dark purple) - Active accent
+- #6EE7B7 (Flickering Faerie Green) - Success color, summary title, summary border
+
+CODE SYNTAX COLORS:
+- #6c5ce7 (Purple) - Keywords
+- #a6aafb (Light blue) - Variables, numbers, inline code
+- #ff7675 (Pink) - Strings
+- #a8a5e6 (Light purple) - Comments
+
+BUTTON COLORS:
+- #ff6b6b (Red) - Primary button background
+- #ffffff (White) - Primary button text
+- #252540 (Dark blue) - Secondary button background
+- #a6aafb (Light blue) - Secondary button border
+
+MONACO EDITOR COLORS:
+- Background: #0a0a1a (Deep space blue)
+- Foreground: #ffffff (White)
+- Line Highlight: #252540 (Dark code background)
+- Cursor: #6c5ce7 (Purple)
+- Line Numbers: #a8a5e6 (Light purple)
+- Selection: #3e3e5e (Dark purple)
+- Keywords: #6c5ce7 (Purple)
+- Variables: #a6aafb (Light blue)
+- Strings: #ff7675 (Pink)
+- Numbers: #a6aafb (Light blue)
+- Comments: #a8a5e6 (Light purple)
+
+FONTS:
+- Primary: "Space Grotesk", sans-serif
+- Headings: "Orbitron", sans-serif
+- Monospace: "Fira Code", monospace
+
+================================================================================
+COMMON ELEMENTS ACROSS ALL THEMES
+================================================================================
+
+SUMMARY SECTION (Consistent across all themes):
+- Background: rgba(110, 231, 183, 0.1) (Faerie Green with opacity)
+- Title: #6EE7B7 (Flickering Faerie Green)
+- Border: #6EE7B7 (Flickering Faerie Green)
+- Success Color: #6EE7B7 (Flickering Faerie Green)
+
+RGB VALUES FOR GRADIENTS AND OPACITY:
+- Wizard Accent Primary: 14, 165, 233
+- Wizard Accent Secondary: 6, 182, 212
+- Detective Accent Primary: 209, 183, 115
+- Detective Accent Secondary: 122, 158, 126
+- Detective Accent Tertiary: 180, 162, 135
+- Detective Accent Quaternary: 138, 138, 138
+- Detective Accent Danger: 211, 47, 47
+- Detective Accent Warning: 245, 124, 0
+- Space Accent Primary: 166, 170, 251
+- Space Accent Secondary: 255, 118, 117
+- Space Accent Tertiary: 166, 170, 251
+- Space Accent Quaternary: 168, 165, 230
+- Space Accent Danger: 255, 107, 107
+- Space Accent Warning: 255, 167, 38
+
+================================================================================
+APPLICATION AREAS
+================================================================================
+
+LESSON PAGES:
+- Background gradients using radial gradients with theme accent colors
+- Card backgrounds with backdrop blur effects
+- Holographic animations on lesson content
+- Interactive elements with hover states
+- Progress indicators and navigation elements
+
+PRACTICE PAGES:
+- Challenge containers with theme-specific styling
+- Code editor integration with Monaco themes
+- Interactive buttons and form elements
+- Feedback and validation states
+- Completion indicators and progress tracking
+
+MONACO EDITOR INTEGRATION:
+- Syntax highlighting for Java code
+- Theme-aware editor backgrounds and text colors
+- Custom cursor and selection colors
+- Line number and gutter styling
+- Error and warning indicators
+
+RESPONSIVE DESIGN:
+- Mobile-friendly color adaptations
+- Touch-friendly interactive elements
+- Accessible contrast ratios maintained across themes
+- Consistent visual hierarchy across screen sizes
+
+================================================================================
+NOTES
+================================================================================
+
+- All themes maintain consistent accessibility standards
+- Color contrast ratios meet WCAG guidelines
+- RGB values provided for gradient and opacity effects
+- Font families are theme-specific for immersive experience
+- Summary sections use consistent green across all themes for familiarity
+- Monaco editor themes are synchronized with overall theme colors
+- Hover states and interactive elements follow theme color schemes
+- Error and success states are clearly differentiated across themes 

@@ -16,6 +16,7 @@ from app.crud.user_challenge import (
     delete_all,
     delete_all_for_user
 )
+from app.crud.challenge import get_all_challenges_by_subtopic
 from app.db.session import get_db
 from app.db.models.user_challenges import UserChallenge
 from app.api.auth import get_current_user, get_current_superuser
@@ -134,3 +135,57 @@ async def delete_all_user_challenges(
     """
     deleted = await delete_all(db)
     return {"deleted_count": deleted}
+
+@router.post("/reset-challenge-fields/user/{user_id}/subtopic/{subtopic_id}", status_code=status.HTTP_200_OK)
+async def reset_challenge_fields_for_subtopic(
+    user_id: int,
+    subtopic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Reset challenge-specific fields (partial_answer, time_spent, hints_used, timer_enabled, hints_enabled, was_cancelled) 
+    for all challenges in a subtopic when user clicks 'Back to Practice' from results page.
+    """
+    # Users can only reset their own challenge fields
+    if user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to reset challenge fields for this user")
+    
+    try:
+        # Get all challenges for this subtopic
+        challenges = await get_all_challenges_by_subtopic(db, subtopic_id)
+        if not challenges:
+            raise HTTPException(status_code=404, detail="No challenges found for this subtopic")
+        
+        # Reset fields for all user_challenges in this subtopic
+        reset_count = 0
+        for challenge in challenges:
+            user_challenge = await get_by_user_and_challenge(db, user_id, challenge.id)
+            if user_challenge:
+                # Reset all challenge-specific fields to defaults
+                await db.execute(
+                    update(UserChallenge)
+                    .where(UserChallenge.id == user_challenge.id)
+                    .values(
+                        partial_answer=None,
+                        time_spent=0,
+                        hints_used=0,
+                        timer_enabled=None,
+                        hints_enabled=None,
+                        was_cancelled=False
+                    )
+                )
+                reset_count += 1
+        
+        await db.commit()
+        
+        return {
+            "message": f"Successfully reset challenge fields for {reset_count} challenges in subtopic {subtopic_id}",
+            "user_id": user_id,
+            "subtopic_id": subtopic_id,
+            "reset_count": reset_count
+        }
+        
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error resetting challenge fields: {str(e)}")

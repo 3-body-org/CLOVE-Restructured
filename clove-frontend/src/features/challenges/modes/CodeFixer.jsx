@@ -1,229 +1,179 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "features/challenges/styles/CodeFixer.module.scss";
-import Editor from "@monaco-editor/react";
-import ChallengeSidebar from '../components/ChallengeSidebar';
+/**
+ * @file CodeFixer.jsx
+ * @description Code Fixer challenge mode with backend integration
+ */
+
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import MonacoCodeBlock from '../components/MonacoCodeBlock';
-import { useChallengeTheme } from '../hooks/useChallengeTheme';
+import ChallengeSidebar from '../components/ChallengeSidebar';
+import ProgressIndicator from '../components/ProgressIndicator';
+import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
+import styles from '../styles/CodeFixer.module.scss';
 
-const INSTRUCTION_MAP = {
-  CodeCompletion: {
-    title: "🧩 CODE COMPLETION",
-    description: "Fill in the missing code blocks to complete the program logic as described in the scenario.",
-  },
-  CodeFixer: {
-    title: "🛠️ CODE FIXER",
-    description: "Identify and fix all errors in the code to restore correct functionality.",
-  },
-  OutputTracing: {
-    title: "🔍 OUTPUT TRACING",
-    description: "Analyze the code and predict the output that will be produced when it runs.",
-  },
-};
-
-const CodeFixer = ({ challenge, onComplete, isLastChallenge, topicId }) => {
-  const navigate = useNavigate();
-  const editorWrapperRef = useRef(null);
-  const { getThemeStyles } = useChallengeTheme();
-
-  const [timeLeft, setTimeLeft] = useState(480);
-  const [attemptsLeft, setAttemptsLeft] = useState(2);
-  const [hintsLeft, setHintsLeft] = useState(3);
-  const [hintsRevealed, setHintsRevealed] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
-
-  const {
-    question,
-    code: codeString,
-    answers: correctAnswers,
-    hints: HINTS,
-    scenarioTitle,
-    scenarioDescription,
-  } = challenge;
-
-  const initialCode = codeString.replace(/\/\*__INPUT_(\d+)__\*\//g, "FIX_$1");
-  const [code, setCode] = useState(initialCode);
+const CodeFixer = ({
+  challengeData,
+  onAnswerSubmit,
+  timeRemaining,
+  initialTimerDuration,
+  hintsUsed,
+  hintsAvailable,
+  onHint,
+  disabled = false,
+  challengeIndex = 0,
+  totalChallenges = 5,
+  revealedHints = [],
+  resetChallengeState,
+  isSubmitting = false,
+  isResumed = false,
+  userAnswer = null,
+  onAnswerUpdate = null,
+  timerState = 'active',
+  isTimerEnabled = true,
+  isHintsEnabled = true
+}) => {
+  const [userCode, setUserCode] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
   const editorRef = useRef(null);
 
-  const handleCompletion = useCallback(
-    (success) => {
-      if (isCompleted) return;
-      setIsCompleted(true);
-
-      const result = {
-        success,
-        score: success
-          ? 100 - (3 - hintsLeft) * 10 - (2 - attemptsLeft) * 5
-          : 0,
-      };
-
-      onComplete(result);
-
-      if (success && isLastChallenge) {
-        setTimeout(() => navigate(`/my-deck/${topicId}`), 1000);
-      }
-    },
-    [
-      isCompleted,
-      onComplete,
-      hintsLeft,
-      attemptsLeft,
-      isLastChallenge,
-      navigate,
-      topicId,
-    ]
-  );
+  const { initialCode, solutionCode, expectedOutput, scenario } = challengeData;
 
   useEffect(() => {
-    if (isCompleted) return;
-
-    const timerInterval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timerInterval);
-          handleCompletion(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timerInterval);
-  }, [isCompleted, handleCompletion]);
-
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
-  };
-
-  const systemIntegrity = Math.floor((timeLeft / 480) * 100);
-
-  const handleHintClick = () => {
-    if (hintsLeft > 0) {
-      setHintsRevealed((prev) => prev + 1);
-      setHintsLeft((prev) => prev - 1);
-    } else {
-      alert("Engineering manual unavailable!");
+    if (initialCode) {
+      setUserCode(initialCode);
     }
-  };
+  }, [initialCode]);
 
-  const checkSolution = () => {
-    // Build the expected final code by replacing placeholders with correct answers.
-    // This approach avoids complex regex and the associated escaping issues.
-    let expectedCode = initialCode;
-    for (const fixId in correctAnswers) {
-      const bugNum = fixId.replace("fix", "");
-      const placeholder = `FIX_${bugNum}`;
-      expectedCode = expectedCode.replace(placeholder, correctAnswers[fixId]);
-    }
-
-    // Compare the user's code with the expected code, ignoring whitespace.
-    const isSolutionCorrect =
-      code.replace(/\s/g, "") === expectedCode.replace(/\s/g, "");
-
-    if (isSolutionCorrect) {
-      alert("SYSTEM RESTORED! Thrusters operational!");
-      handleCompletion(true);
-    } else {
-      const newAttemptsLeft = attemptsLeft - 1;
-      setAttemptsLeft(newAttemptsLeft);
-
-      if (newAttemptsLeft > 0) {
-        alert(
-          `Warning: System still unstable! ${newAttemptsLeft} attempts remaining.`
-        );
+  // Restore user answer when resuming a cancelled challenge
+  useEffect(() => {
+    if (userAnswer && isResumed) {
+      console.log('🔄 CODEFIXER: userAnswer =', userAnswer, 'isResumed =', isResumed);
+      console.log('🔄 RESTORING: User code for cancelled challenge:', userAnswer);
+      // Only set userCode if userAnswer is not empty
+      if (userAnswer && typeof userAnswer === 'string' && userAnswer.trim() !== '') {
+        console.log('🔄 RESTORING: Setting userCode to:', userAnswer);
+        setUserCode(userAnswer);
       } else {
-        alert("SYSTEM FAILURE! Too many incorrect attempts.");
-        handleCompletion(false);
+        console.log('🔄 EMPTY USER ANSWER: Not setting empty userAnswer to editor');
       }
     }
-  };
+  }, [userAnswer, isResumed]);
 
-  const handleBugClick = (bugNum) => {
-    const textarea = editorWrapperRef.current?.querySelector("textarea");
-    if (!textarea) return;
+  // Reset state when challenge data changes (new challenge loaded)
+  useEffect(() => {
+    setIsSubmitted(false);
+  }, [challengeData]);
 
-    const placeholder = `FIX_${bugNum}`;
-    const index = code.indexOf(placeholder);
-
-    if (index !== -1) {
-      textarea.focus();
-      textarea.setSelectionRange(index, index + placeholder.length);
+  // Update parent component with current answer for partial progress saving
+  useEffect(() => {
+    console.log('🔄 CODEFIXER SAVE: userCode =', userCode, 'onAnswerUpdate =', !!onAnswerUpdate);
+    if (onAnswerUpdate) {
+      console.log('🔄 CODEFIXER SAVE: Calling onAnswerUpdate with:', userCode);
+      onAnswerUpdate(userCode);
     }
+  }, [userCode, onAnswerUpdate]);
+
+  const handleCodeChange = (value) => {
+    console.log('🔄 CODEFIXER CHANGE: New value =', value, 'disabled =', disabled, 'isResumed =', isResumed, 'timerState =', timerState);
+    if (disabled || isSubmitted || isResumed || timerState === 'expired') return;
+    console.log('🔄 CODEFIXER CHANGE: Setting userCode to:', value);
+    setUserCode(value);
   };
 
-  const instruction = INSTRUCTION_MAP["CodeFixer"];
+  const handleSubmit = () => {
+    if (isSubmitted || isSubmitting) return;
+    
+    // Set submitted state
+    setIsSubmitted(true);
+    
+    onAnswerSubmit(userCode);
+  };
 
   return (
-    <div className={styles.missionContainer} style={getThemeStyles()}>
-      <ChallengeSidebar
-        missionTitle={scenarioTitle || "MISSION: BETA-9"}
-        missionDescription={scenarioDescription || question}
-        timerLabel="EMERGENCY TIMER"
-        timerValue={formatTime(timeLeft)}
-        timerPercent={systemIntegrity}
-        hintTitle="ENGINEERING MANUAL"
-        hintBtnText={`REQUEST HELP (${hintsLeft} LEFT)`}
-        hintBtnDisabled={hintsLeft === 0}
-        onHintClick={handleHintClick}
-        hintsRevealed={hintsRevealed}
-        hints={HINTS}
-        scenarioTitle={challenge.scenarioTitle || "🛠️ System Malfunction:"}
-        scenarioDescription={challenge.scenarioDescription}
-      >
-        {/* General Instruction Box */}
-        <div className={styles.generalInstructionBox}>
-          <h3 className={styles.generalInstructionTitle}>{instruction.title}</h3>
-          <p className={styles.generalInstructionDescription}>{instruction.description}</p>
-        </div>
-      </ChallengeSidebar>
-      <div className={styles.challengeArea}>
-        <h2 className={styles.challengeTitle}>CODE FIXER CHALLENGE</h2>
+    <ChallengeThemeProvider>
+      <div className={styles.codeFixerContainer}>
+        {/* Left Sidebar */}
+        <ChallengeSidebar
+          mode="code_fixer"
+          scenario={scenario}
+          timeRemaining={timeRemaining}
+          hintsUsed={hintsUsed}
+          hintsAvailable={hintsAvailable}
+          onHint={onHint}
+          disabled={disabled}
+          challengeIndex={challengeIndex}
+          totalChallenges={totalChallenges}
+          revealedHints={revealedHints}
+          initialTimerDuration={initialTimerDuration}
+          showTimer={isTimerEnabled}
+          showHints={isHintsEnabled}
+          timerState={timerState}
+        />
 
-        <div className={styles.codeEditor} ref={editorWrapperRef}>
-          <MonacoCodeBlock
-            value={code}
-            onChange={(newCode) => newCode !== undefined && setCode(newCode)}
-            language="java"
-            fixTagClass="bug-placeholder"
-            fixTagRegex={/FIX_\d+/g}
-            fixTagHoverMessage="Fix this bug"
-            height="400px"
+        {/* Right Challenge Area */}
+        <div className={styles.challengeArea}>
+          {/* Progress Indicator at the very top */}
+          <ProgressIndicator
+            challengeIndex={challengeIndex}
+            totalChallenges={totalChallenges}
           />
-        </div>
 
-        <div className={styles.terminalWindow}>
-          <div className={styles.terminalHeader}>
-            <div className={styles.terminalButtons}>
-              <span className={styles.closeBtn}></span>
-              <span className={styles.minimizeBtn}></span>
-              <span className={styles.expandBtn}></span>
-            </div>
-            <div className={styles.terminalTitle}>console</div>
+          {/* Challenge Title */}
+          <h1 className={styles.challengeTitle}>CODE FIXER CHALLENGE</h1>
+          
+          <div className={styles.codeEditorContainer}>
+            <h3>EDIT THE CODE:</h3>
+            <MonacoCodeBlock
+              key={`${isResumed}-${disabled}-${timerState}`} // Force re-render when readOnly state changes
+              value={userCode}
+              language="java"
+              mode="code_fixer" // NEW: Pass mode to allow editing
+              height="100%"
+              timerState={timerState}
+              disabled={disabled}
+              isResumed={isResumed}
+              onMount={(editor, monaco) => {
+                editorRef.current = editor;
+              }}
+              onChange={handleCodeChange}
+            />
           </div>
-          <div className={styles.terminalContent}>
-            <div className={styles.terminalLine}>
-              <span className={styles.prompt}>{'>'}</span>
-              <span>{'System ready. Waiting for code execution...'}</span>
+
+          <div className={styles.expectedOutput}>
+            <h3>Expected Output:</h3>
+            <div className={styles.outputText}>
+              {Array.isArray(expectedOutput) 
+                ? expectedOutput.map((output, index) => (
+                    <div key={index}>{output}</div>
+                  ))
+                : expectedOutput
+              }
             </div>
-            <div className={`${styles.terminalLine} ${styles.comment}`}>
-              {'// Type your code above and click "RUN CODE" to see the output here'}
-            </div>
+          </div>
+
+          <div className={styles.submitButton}>
+            <button
+              onClick={handleSubmit}
+              disabled={isSubmitted || isSubmitting}
+              className={`${isSubmitted ? styles.submitted : ''} ${isSubmitting ? styles.submitting : ''}`}
+              title={isSubmitting ? "Submitting..." : "Submit your answer (empty submissions allowed)"}
+            >
+              {isSubmitting ? 'Submitting...' : isSubmitted ? 'Submitted' : 'Submit'}
+            </button>
+            {isResumed && (
+              <p className={styles.submitHint}>
+                This challenge was cancelled earlier. Your answers will be counted as wrong regardless of your progress.
+              </p>
+            )}
+            {timerState === 'expired' && (
+              <p className={styles.submitHint}>
+                Time's up! Your answers will be counted as wrong regardless of your progress.
+              </p>
+            )}
           </div>
         </div>
-
-        <button
-          className={styles.submitBtn}
-          onClick={checkSolution}
-          disabled={timeLeft <= 0 || isCompleted}
-        >
-          {timeLeft > 0 ? "VALIDATE REPAIRS" : "SYSTEM FAILURE"}
-        </button>
       </div>
-    </div>
+    </ChallengeThemeProvider>
   );
 };
 

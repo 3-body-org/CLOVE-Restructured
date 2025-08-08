@@ -1,37 +1,49 @@
 //react bootstrap
 import { Container, Row, Col } from "react-bootstrap";
-import React, { useState, useEffect, createContext, useContext } from "react";
+import { useState, createContext, useContext } from "react";
 //component
 import Sidebar from "components/layout/Sidebar/Sidebar";
 //scss
 import styles from "components/layout/Sidebar/Layout.module.scss";
 
-// Sidebar context for controlling sidebar state from any child
-export const SidebarContext = createContext({ expanded: true, setExpanded: () => {} });
+// Create context for sidebar state
+const SidebarContext = createContext();
 
-export function useSidebar() {
-  return useContext(SidebarContext);
-}
+export const useSidebar = () => {
+  const context = useContext(SidebarContext);
+  if (!context) {
+    throw new Error('useSidebar must be used within a SidebarProvider');
+  }
+  return context;
+};
 
 export default function Layout({ children }) {
-  // Persist sidebar state in localStorage
-  const getInitialSidebarState = () => {
-    const stored = localStorage.getItem("sidebar_expanded");
-    return stored === null ? true : stored === "true";
-  };
-  const [expanded, setExpanded] = useState(getInitialSidebarState);
+  // Initialize sidebar state from localStorage, default to true if not set
+  const [sidebarExpanded, setSidebarExpanded] = useState(() => {
+    const saved = localStorage.getItem('sidebarExpanded');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
 
-  useEffect(() => {
-    localStorage.setItem("sidebar_expanded", expanded);
-  }, [expanded]);
+  const toggleSidebar = (expanded) => {
+    setSidebarExpanded(expanded);
+    // Save to localStorage
+    localStorage.setItem('sidebarExpanded', JSON.stringify(expanded));
+  };
+
+  const closeSidebar = () => {
+    setSidebarExpanded(false);
+    // Save to localStorage
+    localStorage.setItem('sidebarExpanded', JSON.stringify(false));
+  };
 
   return (
-    <SidebarContext.Provider value={{ expanded, setExpanded }}>
+    <SidebarContext.Provider value={{ sidebarExpanded, toggleSidebar, closeSidebar }}>
       <div className={styles.layoutContainer}>
         {/* Sidebar */}
         <div className={styles.sidebarContainer}>
-          <Sidebar expanded={expanded} setExpanded={setExpanded} />
+          <Sidebar expanded={sidebarExpanded} onToggle={toggleSidebar} />
         </div>
+
         {/* Main Content */}
         <div className={styles.mainContent}>{children}</div>
       </div>

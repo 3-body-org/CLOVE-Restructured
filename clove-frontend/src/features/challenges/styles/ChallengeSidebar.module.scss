@@ -1,19 +1,52 @@
 .sidebarContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  /* Remove fixed height to allow dynamic sizing */
-  height: auto;
-  min-height: 0;
+  gap: 12px;
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
+  height: 100vh;
+  padding: 8px 20px 20px 20px;
+  background: var(--challenge-bg);
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+}
+
+.topNavigation {
+  margin-bottom: 0px;
+  
+  .backButton {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(108, 92, 231, 0.1);
+    border: 2px solid var(--primary, #6c5ce7);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    
+    &:hover:not(:disabled) {
+      background: rgba(108, 92, 231, 0.2);
+      transform: translateY(-1px);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
 }
 
 .missionDetails {
-  background: var(--card-bg, #1a1a2e);
-  border-radius: 20px;
-  padding: 20px;
-  border: 1px solid var(--primary, #6c5ce7);
-  box-shadow: 0 0 30px rgba(108, 92, 231, 0.2);
-  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .missionInfo {
@@ -38,17 +71,10 @@
 .controlsPanel {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  background: var(--card-bg, #1a1a2e);
-  border-radius: 20px;
-  padding: 20px;
-  border: 1px solid var(--primary, #6c5ce7);
-  box-shadow: 0 0 30px rgba(108, 92, 231, 0.2);
-  flex: 0 0 auto;
-  /* Remove min-height by default, add only if needed */
-  /* min-height: 420px; */
-  justify-content: space-between;
-  overflow-y: visible;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  justify-content: flex-start;
 }
 
 /* Utility class for compact panel (when timer and hints are hidden) */
@@ -57,136 +83,229 @@
   height: auto !important;
 }
 
-.timerIntegrityContainer {
-  background: rgba(26, 26, 46, 0.8);
-  border-radius: 15px;
-  padding: 1.2rem;
-  border: 1px solid var(--accent);
-  text-align: center;
-  box-shadow: 0 0 15px rgba(255, 118, 117, 0.2);
-  margin-bottom: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.timerLabel {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--secondary, #a8a5e6);
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.timer {
-  font-family: var(--font-heading, "Orbitron"), sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--accent, #ff7675);
-  letter-spacing: 3px;
-  text-shadow: 0 0 10px rgba(255, 118, 117, 0.5);
-  line-height: 1.2;
-}
-
-.integrityMeter {
-  position: relative;
-  width: 120px;
-  height: 32px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--accent);
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-  margin-left: 0.5rem;
-}
-
-.integrityFill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent, #ff7675), #ffa726);
-  transition: width 0.3s ease;
-}
-
-.integrityValue {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-weight: 700;
-  font-family: "Orbitron", sans-serif;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
-  z-index: 1;
-}
-
 .hintSystem {
-  background: rgba(26, 26, 46, 0.8);
-  border-radius: 15px;
-  padding: 1.2rem;
-  border: 1px solid var(--hint);
-  box-shadow: 0 0 15px rgba(168, 165, 230, 0.2);
-  transition: all 0.3s ease;
-  margin: 0;
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 15px;
+  border: 2px solid var(--timer, #ffd700);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  position: relative;
+  min-height: 220px;
+  max-height: 320px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  flex: 1;
+  overflow: hidden;
+  
+  // Theme-specific hint colors - matching timer glow pattern
+  &[data-theme="space"] {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  
+  &[data-theme="wizard"] {
+    border-color: #f5d782;
+    box-shadow: 0 0 20px rgba(245, 215, 130, 0.3);
+  }
+  
+  &[data-theme="detective"] {
+    border-color: #00bcd4;
+    box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+  }
+  
   .hintTitle {
     font-family: var(--font-heading, "Orbitron"), sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: var(--hint, #a8a5e6);
-    margin-bottom: 1rem;
+    color: var(--timer, #ffd700);
+    margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-align: center;
+    position: relative;
+    
+    &::after {
+      content: ' ↕';
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-left: 4px;
+    }
   }
-  .hintContent {
-    margin-top: 1rem;
-    padding: 1.2rem 1rem 1.2rem 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    border: 1px solid var(--hint, #a8a5e6);
-    min-height: 120px;
-    max-height: 320px;
-    width: 100%;
-    overflow-y: auto;
-    box-sizing: border-box;
+  
+  // Hint Dots in Top-Right Corner
+  .hintDotsCorner {
+    position: absolute;
+    top: 15px;
+    right: 15px;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    ul {
-      padding-left: 1.5rem;
-      margin: 0.5rem 0;
+    gap: 4px;
+    z-index: 10;
+  }
+  
+  .hintDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    
+    &.available {
+      background: var(--timer, #ffd700);
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+      animation: pulse 2s infinite;
     }
-    li {
-      margin: 0.5rem 0;
-      font-size: 0.95rem;
-      line-height: 1.4;
+    
+    &.used {
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: none;
     }
   }
+  
+  @keyframes pulse {
+    0%, 100% { 
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    }
+    50% { 
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+    }
+  }
+  
   .hintBtn {
-    background: linear-gradient(135deg, var(--hint, #a8a5e6), #7c7ac8);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: var(--font-primary, "Space Grotesk"), sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 4px 0 rgba(168, 165, 230, 0.3);
-    margin-bottom: 0;
     width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid var(--timer, #ffd700);
+    border-radius: 8px;
+    color: var(--timer, #ffd700);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    
+    // Theme-specific button colors - matching timer glow pattern
+    &[data-theme="space"] {
+      background: rgba(255, 215, 0, 0.1);
+      border-color: #ffd700;
+      color: #ffd700;
+      
+      &:hover:not(:disabled) {
+        background: rgba(255, 215, 0, 0.2);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        transform: translateY(-1px);
+      }
+    }
+    
+    &[data-theme="wizard"] {
+      background: rgba(245, 215, 130, 0.1);
+      border-color: #f5d782;
+      color: #f5d782;
+      
+      &:hover:not(:disabled) {
+        background: rgba(245, 215, 130, 0.2);
+        box-shadow: 0 0 15px rgba(245, 215, 130, 0.4);
+        transform: translateY(-1px);
+      }
+    }
+    
+    &[data-theme="detective"] {
+      background: rgba(0, 188, 212, 0.1);
+      border-color: #00bcd4;
+      color: #00bcd4;
+      
+      &:hover:not(:disabled) {
+        background: rgba(0, 188, 212, 0.2);
+        box-shadow: 0 0 15px rgba(0, 188, 212, 0.4);
+        transform: translateY(-1px);
+      }
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  
+  .hintDisplay {
+    margin-top: 10px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 120px;
+    max-height: 180px;
+    position: relative;
+    
+    // Always show scrollbar to indicate scrollability
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--timer, #ffd700);
+      border-radius: 4px;
+      
+      &:hover {
+        background: rgba(255, 215, 0, 0.8);
+      }
+    }
+    
+    // Firefox scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: var(--timer, #ffd700) rgba(255, 255, 255, 0.1);
+    
+    // Add fade effect to indicate more content
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 8px; // Account for scrollbar
+      height: 20px;
+      background: linear-gradient(transparent, var(--card-bg, #1a1a2e));
+      pointer-events: none;
+      opacity: 0.8;
+    }
+    
+          .hintContent {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--timer, #ffd700);
+        border-radius: 6px;
+        padding: 10px;
+        margin-bottom: 8px;
+        
+        h4 {
+          color: var(--timer, #ffd700);
+          font-size: 0.8rem;
+          font-weight: 600;
+          margin-bottom: 5px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        p {
+          color: var(--text, #ffffff);
+          font-size: 0.85rem;
+          line-height: 1.4;
+          margin: 0;
+        }
+      }
+      
+      // Empty state styling
+      &:empty::after {
+        content: 'No hints available';
+        color: rgba(255, 255, 255, 0.5);
+        font-style: italic;
+        text-align: center;
+        padding: 20px;
+        display: block;
+      }
   }
 }
 
@@ -201,36 +320,76 @@
 }
 
 .scenarioBox {
-  background: var(--card-bg, #232a3a);
-  border-radius: 16px;
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 15px;
   border: 1px solid var(--primary, #6c5ce7);
-  padding: 18px 16px 14px 16px;
-  margin-bottom: 18px;
-  box-shadow: 0 0 18px rgba(108, 92, 231, 0.08);
-  color: var(--text, #fff);
+  box-shadow: 0 0 15px rgba(108, 92, 231, 0.2);
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  
+  .scenarioTitle {
+    font-family: var(--font-heading, "Orbitron"), sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent, #ff7675);
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  
+  .scenarioDescription {
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+    
+    // Custom scrollbar styling
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary, #6c5ce7);
+      border-radius: 3px;
+      
+      &:hover {
+        background: rgba(108, 92, 231, 0.8);
+      }
+    }
+    
+    // Firefox scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary, #6c5ce7) rgba(255, 255, 255, 0.1);
+    
+    // Add fade effect to indicate more content
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 6px; // Account for scrollbar
+      height: 15px;
+      background: linear-gradient(transparent, var(--card-bg, #1a1a2e));
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  }
 }
 
 /* Remove margin-bottom if scenarioBox is the last child in controlsPanel */
 .controlsPanel > .scenarioBox:last-child {
   margin-bottom: 0;
-}
-
-.scenarioTitle {
-  font-family: var(--font-heading, "Orbitron"), sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent, #ff7675);
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.scenarioDescription {
-  font-size: 1rem;
-  color: var(--text, #e2e8f0);
-  font-family: var(--font-primary, "Space Grotesk"), sans-serif;
-  line-height: 1.5;
-  margin: 0;
 }
 
 .generalInstructionBox {
@@ -262,4 +421,174 @@
   font-family: var(--font-primary, "Space Grotesk"), sans-serif;
   line-height: 1.5;
   margin: 0;
+}
+
+.instructionBox {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid var(--primary, #6c5ce7);
+  box-shadow: 0 0 15px rgba(108, 92, 231, 0.2);
+  
+  .instructionTitle {
+    font-family: var(--font-heading, "Orbitron"), sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent, #ff7675);
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .instructionDescription {
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0 0 12px 0;
+  }
+  
+  .instructionList {
+    margin: 0;
+    padding-left: 20px;
+    
+    .instructionItem {
+      color: var(--text);
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .instructionIcon {
+        font-size: 1rem;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+    }
+  }
+}
+
+.timerIntegrityContainer {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 12px;
+  border: 2px solid var(--timer, #ffd700);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 8px;
+  height: 120px;
+  flex-shrink: 0;
+  
+  // Theme-specific timer colors
+  &[data-theme="space"] {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  
+  &[data-theme="wizard"] {
+    border-color: #f5d782;
+    box-shadow: 0 0 20px rgba(245, 215, 130, 0.3);
+  }
+  
+  &[data-theme="detective"] {
+    border-color: #00bcd4;
+    box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+  }
+  
+  .timerTitle {
+    font-family: var(--font-heading, "Orbitron"), sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--timer, #ffd700);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+  
+  .timerDisplay {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .timerValue {
+    font-family: var(--font-heading, "Orbitron"), sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--timer, #ffd700);
+    text-align: center;
+    display: block;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+  
+  .timerStatus {
+    font-family: var(--font-heading, "Orbitron"), sans-serif;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .timerPaused {
+    color: #f39c12;
+    text-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
+  }
+  
+  .timerExpired {
+    color: #e74c3c;
+    text-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+  }
+  
+  .timerBar {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .timerFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--timer, #ffd700), var(--accent, #ff7675));
+    transition: width 0.3s ease;
+    border-radius: 6px;
+    position: relative;
+    
+    // Theme-specific fill colors
+    &[data-theme="space"] {
+      background: linear-gradient(90deg, #ffd700, #ff7675);
+    }
+    
+    &[data-theme="wizard"] {
+      background: linear-gradient(90deg, #f5d782, #3fbabf);
+    }
+    
+    &[data-theme="detective"] {
+      background: linear-gradient(90deg, #00bcd4, #f4e04d);
+    }
+  }
+  
+  .timerPercentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-heading, "Orbitron"), sans-serif;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    z-index: 2;
+  }
 } 

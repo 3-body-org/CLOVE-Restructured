@@ -1,7 +1,6 @@
 import { useContext, useMemo, useEffect } from 'react';
 import ThemeContext from '../../../contexts/ThemeContext';
 import { useParams } from 'react-router-dom';
-import { topicsData } from '../../mydeck/data/topics';
 import spaceTheme from '../themes/spaceTheme.module.scss';
 import wizardTheme from '../themes/wizardTheme.module.scss';
 import detectiveTheme from '../themes/detectiveTheme.module.scss';
@@ -19,8 +18,17 @@ export const useChallengeTheme = () => {
     if (topicId) {
       // Extract numeric topic ID from the URL parameter (format: id-slug)
       const numericTopicId = topicId ? topicId.split('-')[0] : null;
-      const topic = topicsData.find(t => t.id === parseInt(numericTopicId));
-      return topic ? topic.theme : 'space';
+      
+      // Map topic ID to theme based on a simple pattern
+      // This is a fallback since we no longer have topicsData
+      if (numericTopicId) {
+        const topicIdNum = parseInt(numericTopicId);
+        // Simple mapping: 1=wizard, 2=detective, 3=space, default=space
+        if (topicIdNum === 1) return 'wizard';
+        if (topicIdNum === 2) return 'detective';
+        if (topicIdNum === 3) return 'space';
+      }
+      return 'space'; // Default fallback
     }
     return currentTheme;
   }, [topicId, currentTheme]);

@@ -2,28 +2,1073 @@
   {
     "id": 1,
     "subtopic_id": 1,
-    "title": "Understanding Variables",
-    "introduction": "Learn about variables and how they store data",
-    "content": "Variables are containers for storing data values...",
-    "question_id": 1,
-    "matching_game": "{\"pairs\": [{\"term\": \"int\", \"definition\": \"whole numbers\"}, {\"term\": \"str\", \"definition\": \"text data\"}]}"
+    "lessonSections": [
+      {
+        "lessonTitle": "Declaring Variables - Forging Magical Containers",
+        "heading": "Introduction",
+        "lessonIntro": "In the arcane arts of Java, declaring variables is akin to forging enchanted vessels or containers. Just as a wizard needs a specific chalice for a potent elixir or a dedicated pouch for rare spell components, a program needs defined spaces to hold different kinds of magical information. These 'variables' are named storage locations in the computer's memory, ready to hold specific types of data that your spells will manipulate. Declaring a variable tells the Java runtime: 'Prepare a space in memory, give it this name, and it will hold this type of magic.'",
+        "objectives": [
+          "Learn the incantation (syntax) for forging magical data containers in Java.",
+          "Understand how to choose the correct data type for different kinds of magical energy.",
+          "Master the art of giving variables clear, meaningful names using camelCase.",
+          "Recognize the importance of declaring and initializing variables to prevent magical chaos."
+        ]
+      },
+      {
+        "heading": "Real-world Application",
+        "content1": "Imagine you're preparing for a grand ritual. You wouldn't just throw all your components onto the floor; you'd carefully organize them.",
+        "bulletPoints": [
+          "You might have a `potionVolume` container for liquid measurements.",
+          "A `spellName` scroll to inscribe the incantation.",
+          "A `manaPoints` crystal to track your magical energy.",
+          "A `hasWandEquipped` charm to know if your magical conduit is ready."
+        ],
+        "content2": "Each of these represents a variable, a designated container for a specific piece of magical data. Without declaring them, your magical workshop (program) would be in chaos, unable to differentiate between a shimmering aether or a mundane pebble."
+      },
+      {
+        "heading": "Syntax",
+        "content1": "The incantation (syntax) for forging a magical container (declaring a variable) is precise:",
+        "content2": "`dataType variableName;`\n\nOr, if you wish to immediately fill it with initial magical essence (initialize it):\n\n`dataType variableName = initialValue;`",
+        "bulletPoints": [
+          "`dataType`: This is the **type of magic** the container can hold. Is it numerical energy (`int`, `double`), a sequence of mystic symbols (`String`), a single ancient rune (`char`), or a truth/false spell effect (`boolean`)?",
+          "`variableName`: This is the **unique name** you give to your magical container. Choose a name that clearly describes its purpose, like `fireballIntensity` or `portalDestination`.",
+          "`= initialValue`: This is the optional step where you immediately **imbue your container with its first magical essence** or data."
+        ]
+      },
+      {
+        "heading": "Example",
+        "bulletPoints": [
+          "`int manaPoints;` // Forges an empty integer container for mana.",
+          "`String spellName = \"Ignis Fatuus\";` // Creates a string scroll and inscribes \"Ignis Fatuus\" upon it."
+        ]
+      },
+      {
+        "heading": "How it Works",
+        "content1": "When you declare a variable, you're not just writing text; you're issuing a command to the Grand Magical Library (the computer's memory).",
+        "bulletPoints": [
+          "**dataType**: You specify the *kind* of data (e.g., `int` for whole numbers, `String` for text). This is like telling the Library, 'I need a shelf specifically for scrolls,' or 'I need a vial for liquids.' The Library then allocates a certain amount of space and marks it for that specific type of item.",
+          "**variableName**: You give this allocated space a unique label (e.g., `spellPower`, `potionColor`). This is so you can easily refer to and retrieve or modify its contents later, without disturbing other magical items.",
+          "**= initialValue (Initialization)**: If you provide an `initialValue`, the system immediately places that data into the newly prepared container. If you don't, the container is forged but remains empty (or holds a default, often meaningless, magical residue) until you explicitly put something into it."
+        ]
+      },
+      {
+        "heading": "Example Code",
+        "codeSnippet": [
+          "public class ArcaneLaboratory {",
+          "    public static void main(String[] args) {",
+          "        // Declaring a variable for the number of magical reagents",
+          "        int numberOfReagents;",
+          "",
+          "        // Initializing variables for spell components and their quantities",
+          "        String potionName = \"Elixir of Clarity\";",
+          "        double potionVolume = 150.75; // in ml",
+          "        boolean isEnchanted = true;",
+          "        char runeSymbol = 'A';",
+          "",
+          "        // Assigning a value to numberOfReagents after declaration",
+          "        numberOfReagents = 12;",
+          "",
+          "        // Displaying the contents of our magical containers",
+          "        System.out.println(\"Preparing: \" + potionName);",
+          "        System.out.println(\"Volume (ml): \" + potionVolume);",
+          "        System.out.println(\"Is Enchanted: \" + isEnchanted);",
+          "        System.out.println(\"Rune Symbol: \" + runeSymbol);",
+          "        System.out.println(\"Total Reagents: \" + numberOfReagents);",
+          "    }",
+          "}",
+          "Output:",
+          "Preparing: Elixir of Clarity",
+          "Volume (ml): 150.75",
+          "Is Enchanted: true",
+          "Rune Symbol: A",
+          "Total Reagents: 12"
+        ]
+      },
+      {
+        "heading": "Pros (Why Proper Declaration is Key for Wizards)",
+        "bulletPoints": [
+          "**Clarity of Intent:** Clearly defines what kind of magic (data) a variable will hold, making your spell scrolls (code) easier for other wizards (developers) to understand.",
+          "**Memory Efficiency:** Java allocates just the right amount of memory for the specified data type, preventing wasteful magical energy expenditure.",
+          "**Type Safety:** Prevents accidental mixing of incompatible magical elements (e.g., trying to put a String spell name into an int mana counter), catching errors early.",
+          "**Organization:** Provides named locations for data, making your magical operations structured and traceable, rather than a chaotic jumble."
+        ]
+      },
+      {
+        "heading": "Cons (Pitfalls for the Unwary Apprentice)",
+        "bulletPoints": [
+          "**Undeclared Variables:** Attempting to use a variable before it has been declared is like trying to pour a potion without a vial; it leads to an 'unknown symbol' error.",
+          "**Type Mismatch:** Trying to assign data of the wrong type (e.g., placing a string into an integer container) will result in a compilation error, as the container is forged but remains empty (or holds a default, often meaningless, magical residue) until you explicitly put something into it."
+        ]
+      },
+      {
+        "heading": "Use Cases (When to Forge New Containers)",
+        "bulletPoints": [
+          "**Tracking Spell Attributes:** Storing `spellDamage`, `castTime`, `elementalType`.",
+          "**Inventory Management:** Holding `goldCoins`, `potionCount`, `artifactNames`.",
+          "**Character Stats:** Recording `healthPoints`, `mana`, `experienceLevel`, `isImmortal`.",
+          "**Quest Progress:** Storing `questID`, `currentObjective`, `isQuestCompleted`.",
+          "**Potion Recipes:** Defining `ingredient1`, `quantity1`, `brewTemperature`."
+        ]
+      },
+      {
+        "heading": "Best Practices (Wisdom for Aspiring Arcane Engineers)",
+        "bulletPoints": [
+          "**Choose Meaningful Names:** Variables should be named like well-labeled magical artifacts. Instead of `a`, use `arcaneEnergyLevel`.",
+          "**CamelCase for Variable Names:** Follow the ancient Java tradition of camelCase (e.g., `spellCastingTime`, `numberOfDragons`).",
+          "**Declare Before Use:** Always forge your container before you try to put anything into it or take anything out.",
+          "**Initialize When Possible:** If you know the initial magical essence a variable should hold, assign it immediately. This prevents unforeseen magical residues (default values).",
+          "**Keep Scope in Mind:** Understand where your magical containers are valid (their 'scope'). A variable declared inside a specific ritual chamber (method) might not be visible outside it."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "Variables are magical containers that store data in your program",
+          "Java requires explicit type declaration for all variables",
+          "Variables have scope rules that determine where they can be accessed",
+          "Understanding variable types is crucial for writing correct Java code",
+          "Proper naming conventions make your code more readable and maintainable"
+        ]
+      }
+    ]
   },
   {
     "id": 2,
     "subtopic_id": 2,
-    "title": "Working with Operators",
-    "introduction": "Explore different types of operators",
-    "content": "Operators are special symbols that perform operations...",
-    "question_id": 2,
-    "matching_game": "{\"pairs\": [{\"term\": \"+\", \"definition\": \"addition\"}, {\"term\": \"*\", \"definition\": \"multiplication\"}]}"
+    "lessonSections": [
+      {
+        "lessonTitle": "Primitive Data Types - The Fundamental Building Blocks of Magic",
+        "heading": "Introduction",
+        "lessonIntro": "In the Grand Tapestry of Java, Primitive Data Types are the elemental forces, the raw, fundamental building blocks of all magic. Unlike grand, complex spells (non-primitive types), these are the basic, indivisible particles of magical information. Think of them as the purest forms of mana, the simplest elemental energies, or the most basic runes from which all other arcane constructs are formed. They hold single, atomic pieces of data directly within their containers.",
+        "objectives": [
+          "Identify Java's eight primitive data types as the fundamental building blocks of magic.",
+          "Understand the specific purpose of each elemental type, such as `int` for counts and `boolean` for truths.",
+          "Recognize the different sizes and capacities of numerical types, from `byte` to `long`.",
+          "Learn to declare and initialize primitive variables with their correct syntax."
+        ]
+      },
+      {
+        "heading": "Real-world Application (Magic Context)",
+        "content1": "Imagine a master wizard creating a new spell. They don't start with complex incantations; they begin with raw magical components:",
+        "bulletPoints": [
+          "`int` (Integer Mana): To store the exact number of `fireballCount` you can conjure, or the `levelOfEnchantment`.",
+          "`boolean` (Truth Wards): To indicate if a `shieldIsActive` (true or false), or if a `curseHasBeenBroken`.",
+          "`char` (Single Rune): To represent a specific `activationRune` (like 'A' or 'Z'), a single, distinct symbol of power.",
+          "`double` / `float` (Potion Potency/Mana Flow): To measure the precise `potionVolume` or the `manaRegenRate`.",
+          "`byte` / `short` / `long` (Mana Reserve Capacity): Different sizes of mana crystals for varying `manaReserve` capacities."
+        ],
+        "content2": "Each primitive type tells the Magical Library exactly how much space (memory) to allocate for that pure piece of magic."
+      },
+      {
+        "heading": "Syntax (Magic Context)",
+        "content1": "Declaring a variable with a primitive data type uses a straightforward incantation:",
+        "content2": "`dataType variableName = initialValue;`",
+        "bulletPoints": [
+          "`int` (Integer): Whole numbers, like count of spells. `int spellCount = 7;`",
+          "`boolean` (Boolean): True or False states. `boolean charmActive = true;`",
+          "`char` (Character): Single character (rune), in single quotes. `char masterRune = 'X';`",
+          "`double` (Double-Precision Floating-Point): Decimal numbers for high precision. `double arcaneConcentration = 1.618;`",
+          "`float` (Single-Precision Floating-Point): Decimal numbers, less precision, requires `f` suffix. `float potionViscosity = 9.8f;`",
+          "`byte` (Byte-Sized Integer): Small whole numbers (-128 to 127). `byte impStrength = 100;`",
+          "`short` (Short Integer): Medium-sized whole numbers. `short pixiePopulation = 20000;`",
+          "`long` (Long Integer): Very large whole numbers, requires `L` suffix. `long cosmicDustParticles = 9000000000L;`"
+        ]
+      },
+      {
+        "heading": "How it Works (Magic Context)",
+        "content1": "When you declare a primitive variable, you're telling the Java runtime (the Grand Magical Library's archivist) to:",
+        "bulletPoints": [
+          "**Allocate a Fixed-Size Slot**: Based on the `dataType`, the archivist reserves a precise amount of memory directly for the value.",
+          "**Store the Value Directly**: The actual magical essence (e.g., 7, true, 'X') is placed directly into this slot. Unlike non-primitive types which hold a map to the magic, primitives *are* the magic in that slot.",
+          "**Default Values**: If a primitive variable is part of a larger magical construct (an instance variable) and not initialized, it gets a default value (e.g., `int` becomes 0, `boolean` becomes `false`)."
+        ]
+      },
+      {
+        "heading": "Example Code (Magic Context)",
+        "codeSnippet": [
+          "public class ElementalCore {",
+          "    public static void main(String[] args) {",
+          "        // Elemental Mana Tracking",
+          "        int fireMana = 150;",
+          "        double waterManaConcentration = 0.75;",
+          "        boolean airManaStable = true;",
+          "        char earthRuneSignature = 'E';",
+          "",
+          "        // Cosmic Scale Tracking",
+          "        long ancientStarsObserved = 123456789012L;",
+          "        byte goblinEnergyLevel = 90;",
+          "        float celestialAlignmentDegree = 360.5f;",
+          "",
+          "        System.out.println(\"Fire Mana: \" + fireMana);",
+          "        System.out.println(\"Water Mana Concentration: \" + waterManaConcentration);",
+          "        System.out.println(\"Air Mana Stable: \" + airManaStable);",
+          "        System.out.println(\"Earth Rune Signature: \" + earthRuneSignature);",
+          "        System.out.println(\"Ancient Stars Observed: \" + ancientStarsObserved);",
+          "        System.out.println(\"Goblin Energy Level: \" + goblinEnergyLevel);",
+          "        System.out.println(\"Celestial Alignment: \" + celestialAlignmentDegree);",
+          "    }",
+          "}",
+          "Output:",
+          "Fire Mana: 150",
+          "Water Mana Concentration: 0.75",
+          "Air Mana Stable: true",
+          "Earth Rune Signature: E",
+          "Ancient Stars Observed: 123456789012",
+          "Goblin Energy Level: 90",
+          "Celestial Alignment: 360.5"
+        ]
+      },
+      {
+        "heading": "Pros (Why Primitive Types are Essential for Wizards)",
+        "bulletPoints": [
+          "**Efficiency of Essence:** They are highly optimized for performance and memory, requiring minimal magical overhead.",
+          "**Predictable Behavior:** Their fixed sizes and direct value storage make them reliable and predictable in magical calculations.",
+          "**Fundamental Building Blocks:** They form the basis for all more complex magical data structures.",
+          "**Simplicity:** Easy to declare and use for straightforward magical quantities and states."
+        ]
+      },
+      {
+        "heading": "Cons (Limitations for the Unwary Apprentice)",
+        "bulletPoints": [
+          "**Limited Functionality:** Primitive types don't have built-in spells (methods) to manipulate them.",
+          "**Fixed Size:** An `int` can't suddenly hold a `long` quantity of mana without risking overflow.",
+          "**No `null` state:** They always hold a value (like 0 or false); they cannot represent the absence of magic (`null`).",
+          "**No Generics:** You can't use them directly with advanced magical constructs like `ArrayList<int>`."
+        ]
+      },
+      {
+        "heading": "Use Cases (When to Employ Primitive Magic)",
+        "bulletPoints": [
+          "Health and Mana Points: `int health = 100;`",
+          "Spell Cooldown Timers: `int cooldownSeconds = 5;`",
+          "Tracking Charges: `byte potionCharges = 3;`",
+          "Player Coordinates: `double playerX = 50.5;`",
+          "Quest Completion Status: `boolean questCompleted = true;`",
+          "Large Scale Resource Counts: `long totalGoldInVault = 9999999999L;`"
+        ]
+      },
+      {
+        "heading": "Best Practices (Wisdom for Aspiring Arcane Engineers)",
+        "bulletPoints": [
+          "**Choose Wisely:** Select the smallest primitive type that can safely hold your value to conserve magical memory.",
+          "**`double` by Default for Decimals:** Unless memory is critically constrained, use `double` for its higher precision. Remember the `f` suffix for `float` literals.",
+          "**`L` for `long` Literals:** Always add `L` for `long` literals to avoid errors.",
+          "**Explicit Initialization for Locals:** Always initialize local primitive variables to prevent unexpected compilation errors.",
+          "**Understand Auto-Boxing:** Be aware of Java's automatic conversion between primitives and their wrapper classes (e.g., `int` to `Integer`)."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "Primitive types are Java's eight fundamental data types for storing simple values.",
+          "They include `byte`, `short`, `int`, `long`, `float`, `double`, `char`, and `boolean`.",
+          "Each primitive has a fixed memory size and is highly efficient.",
+          "They store values directly, have no built-in methods, and cannot be `null`.",
+          "Choosing the right primitive type is key to writing efficient and accurate magical code."
+        ]
+      }
+    ]
   },
   {
     "id": 3,
     "subtopic_id": 3,
-    "title": "Input/Output Operations",
-    "introduction": "Learn how to get input and display output",
-    "content": "Programs need to interact with users through input and output...",
-    "question_id": 3,
-    "matching_game": null
+    "lessonSections": [
+      {
+        "lessonTitle": "Non-Primitive Data Types - Complex Magical Tools",
+        "heading": "Introduction",
+        "lessonIntro": "In the big world of Java magic, beyond the simple building blocks (Primitive Data Types), we have Non-Primitive Data Types. Think of these not as raw magic dust, but as ready-made magical tools or complex spell-books. They don't hold actual values directly, but instead hold references (like a magic address or a map) to bigger, more complex items (called 'objects') that live in a large storage area called Heap Memory (the Academy's huge library storage).",
+        "objectives": [
+          "Distinguish between primitive types and non-primitive (reference) types.",
+          "Understand that non-primitive variables store references (magic addresses) to objects in memory.",
+          "Learn to declare and create instances of common non-primitive types like `String` and `Array`.",
+          "Recognize the `new` keyword's role in conjuring new objects and the importance of `.equals()` for comparing their content."
+        ]
+      },
+      {
+        "heading": "Real-world Application (Magic Context)",
+        "content1": "Imagine what a wise Arch-Mage (senior wizard) uses every day:",
+        "bulletPoints": [
+          "`String` (Spell Scrolls / Secret Texts): A `String` variable can hold the full words of a `TeleportationSpell` or an `AncientProphecy`.",
+          "`Arrays` (Potion Ingredients / Groups of Minions): An `Array` can be like a neat collection of `healingPotions` in your bag or a group of summoned `Golems`.",
+          "`Classes/Objects` (Enchanted Artifacts / Mythical Creatures): When you define your own `Artifact` or a `Dragon`, variables of these types are non-primitive, representing complex items with their own features."
+        ],
+        "content2": "These non-primitive types let wizards work with complicated, organized magic ideas."
+      },
+      {
+        "heading": "Syntax (Magic Context)",
+        "content1": "To declare and often initialize non-primitive variables, you typically use the `new` keyword to conjure (create) a new object (except for `String` literals, which are special):",
+        "content2": "`DataType variableName = new DataType();`",
+        "bulletPoints": [
+          "`String` (Text / Spell Words): A series of letters or words. `String spellName = \"Oblivion Gate\";`",
+          "`Arrays` (Groups of items): Fixed-size, ordered groups of the same kind. `int[] potionCounts = new int[5];`",
+          "`Custom Classes` (Your own magical creations): Based on your own blueprints (Classes) that you define. `Wizard grandWizard = new Wizard();`"
+        ]
+      },
+      {
+        "heading": "How it Works (Magic Context)",
+        "content1": "When you declare a non-primitive variable, you're telling the Java system to do two things:",
+        "bulletPoints": [
+          "**Set up a Reference (on the Stack):** A small space is set aside to hold a magic address or a pointer. This pointer is `null` if you don't give it a value right away.",
+          "**Create the Object (in the Heap):** When you use the `new` keyword, the actual complex magical item is built in a larger memory area called the Heap. This is where the actual information lives.",
+          "**Connect the Pointer:** The magic address of the new item in the Heap is then put into your variable. Now, your variable name correctly points to the actual magic item."
+        ]
+      },
+      {
+        "heading": "Example Code (Magic Context)",
+        "codeSnippet": [
+          "public class ArcaneCollection {",
+          "    public static void main(String[] args) {",
+          "        // Naming and making a String variable for a forbidden text",
+          "        String forbiddenText = \"Veridian Codex Entry 7\";",
+          "",
+          "        // Naming and making an Array variable for potion types",
+          "        String[] potionTypes = new String[3];",
+          "        potionTypes[0] = \"Healing Elixir\";",
+          "        potionTypes[1] = \"Mana Potion\";",
+          "        potionTypes[2] = \"Invisibility Brew\";",
+          "",
+          "        // Showing the non-primitive (complex) data",
+          "        System.out.println(\"Forbidden Text: \" + forbiddenText);",
+          "        System.out.println(\"First Potion Type: \" + potionTypes[0]);",
+          "        System.out.println(\"Total Potion Types: \" + potionTypes.length);",
+          "    }",
+          "}",
+          "Output:",
+          "Forbidden Text: Veridian Codex Entry 7",
+          "First Potion Type: Healing Elixir",
+          "Total Potion Types: 3"
+        ]
+      },
+      {
+        "heading": "Pros (Why Complex Tools are Great for Wizards)",
+        "bulletPoints": [
+          "**Handling Complex Ideas:** They allow wizards to represent complicated ideas like spell books, item lists, or creatures.",
+          "**Flexible Size:** Collections like `ArrayList` (an advanced tool) can grow or shrink as needed.",
+          "**Lots of Features:** Objects come with built-in actions (methods) that can manipulate their data, like `forbiddenText.length()`.",
+          "**Shared Magic:** Many variables can point to and change the same main magic item, useful for shared resources."
+        ]
+      },
+      {
+        "heading": "Cons (Problems for Young Apprentices)",
+        "bulletPoints": [
+          "**More Memory Used:** Objects in the Heap generally use more memory and are a bit slower than primitive types.",
+          "**NullPointerException (Magic Map Error):** If a variable points to `null` (nothing), and you try to use it, your spell will crash.",
+          "**Comparing Problems:** Using `==` compares memory addresses, not content. You must use the `.equals()` method to compare the actual content of two objects.",
+          "**Confusing Immutability:** A `String` itself cannot be changed, but a `String` variable can be made to point to a new `String`."
+        ]
+      },
+      {
+        "heading": "Use Cases (When to Use Complex Magic)",
+        "bulletPoints": [
+          "Storing Full Spell Incantations: `String fullIncantation = \"Incendio Maxima\";`",
+          "Managing Bag Inventories: `String[] items = {\"Sword\", \"Shield\", \"Potion\"};`",
+          "Showing Characters / Creatures: `Wizard player = new Wizard(\"Gandalf\");`",
+          "Handling Spell Commands: `String[] spellArguments = {\"fire\", \"large\", \"cone\"};`"
+        ]
+      },
+      {
+        "heading": "Best Practices (Smart Advice for Future Arch-Mages)",
+        "bulletPoints": [
+          "**Initialize Variables:** Always give non-primitive variables an initial value to avoid `null` pointers.",
+          "**Use `.equals()` for Content:** When comparing the content of two objects (especially Strings), always use the `.equals()` method, not `==`.",
+          "**Understand `new`:** Know that `new` always creates a brand new object in the Heap.",
+          "**Watch out for `null`:** Check if a variable is `null` before trying to use its methods to prevent crashes.",
+          "**Choose `String` for Text:** For simple text, `String` is usually easier to use than a `char[]` (array of characters)."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "Non-primitive types (like `String`, `Array`, and classes) are used for complex data.",
+          "They store references (memory addresses) to objects, not the actual values themselves.",
+          "The `new` keyword is used to create a new instance of an object in Heap memory.",
+          "Non-primitive variables can be `null`, meaning they do not point to any object.",
+          "Always use the `.equals()` method to compare the content of objects, as `==` only compares their memory references."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "subtopic_id": 4,
+    "lessonSections": [
+      {
+        "lessonTitle": "Arithmetic Operators - Cracking the Numbers Case",
+        "heading": "Introduction",
+        "lessonIntro": "In the gritty streets of Java City, a detective's work often comes down to cold, hard numbers. Arithmetic Operators are your basic tools of calculation, like a worn calculator in a trench coat, essential for solving financial crimes, tracing bullet trajectories, or figuring out how many suspects are in the hideout. They perform fundamental mathematical operations such as addition, subtraction, multiplication, division, and finding remainders. These aren't fancy deductions yet, just the raw calculations needed to piece together the truth.",
+        "objectives": [
+          "Learn to use the basic arithmetic operators (`+`, `-`, `*`, `/`) to calculate the facts of a case.",
+          "Master the modulo operator (`%`) to find hidden patterns and leftover clues.",
+          "Understand operator precedence to avoid misinterpreting the evidence in complex calculations.",
+          "Recognize the difference between integer division and floating-point division to ensure your calculations are precise."
+        ]
+      },
+      {
+        "heading": "Real-world Application (Noir Detective Context)",
+        "content1": "A seasoned detective always has to crunch numbers:",
+        "bulletPoints": [
+          "`+` (Adding Evidence): Figuring out the `totalCashStolen` from multiple heists.",
+          "`-` (Subtracting Suspects): Determining `remainingAlibis` after ruling out some suspects.",
+          "`*` (Multiplying Leads): Estimating `totalBribesPaid` if each dirty cop took the same amount.",
+          "`/` (Dividing the Spoils): Calculating each gang member's `shareOfLoot`.",
+          "`%` (Finding Leftovers/Patterns): Discovering if a `secretCode` has a repeating pattern by checking for remainders."
+        ],
+        "content2": "These operators turn raw data into actionable intelligence."
+      },
+      {
+        "heading": "Syntax (Noir Detective Context)",
+        "content1": "Using an arithmetic operator is like writing down your calculations on a notepad:",
+        "content2": "`result = operand1 operator operand2;`",
+        "bulletPoints": [
+          "`+` (Addition): `int totalClues = 5 + 3; // totalClues is 8`",
+          "`-` (Subtraction): `int suspectsRemaining = 10 - 2; // suspectsRemaining is 8`",
+          "`*` (Multiplication): `double estimatedProfit = 150.0 * 1.25; // estimatedProfit is 187.5`",
+          "`/` (Division): `int bulletsPerGun = 20 / 4; // bulletsPerGun is 5`",
+          "`%` (Modulo): `int hiddenPattern = 7 % 3; // hiddenPattern is 1`"
+        ]
+      },
+      {
+        "heading": "How it Works (Noir Detective Context)",
+        "content1": "When you use an arithmetic operator, Java performs the calculation just like a meticulous detective.",
+        "bulletPoints": [
+          "**Values are Retrieved:** The numbers (operands) on either side of the operator are taken from their variables or are numerical constants.",
+          "**Calculation is Performed:** Java's internal engine performs the requested mathematical operation.",
+          "**Type Promotion:** If operands are of different numeric types (e.g., an `int` and a `double`), Java promotes the smaller type to the larger type before the operation to retain precision.",
+          "**Integer Division:** When dividing two integers, any fractional part of the result is discarded (truncated), not rounded. For example, `7 / 3` results in `2`."
+        ]
+      },
+      {
+        "heading": "Example Code (Noir Detective Context)",
+        "codeSnippet": [
+          "public class CaseFileCalculations {",
+          "    public static void main(String[] args) {",
+          "        // Crime Scene Analysis",
+          "        int evidencePieces = 25;",
+          "        int brokenObjects = 7;",
+          "        double bloodSplatterArea = 15.5; // in sq ft",
+          "",
+          "        // Solving the Case",
+          "        int activeLeads = evidencePieces - brokenObjects; // Subtraction",
+          "        double averageBloodDensity = bloodSplatterArea / 3.0; // Division (float result)",
+          "        int hiddenMarker = evidencePieces % 4; // Modulo (remainder)",
+          "",
+          "        // Financial Investigation",
+          "        int counterfeitBills = 1000;",
+          "        int fakeBillStacks = 20;",
+          "        int billsPerStack = counterfeitBills / fakeBillStacks; // Integer division",
+          "",
+          "        System.out.println(\"Active Leads: \" + activeLeads);",
+          "        System.out.println(\"Average Blood Density: \" + averageBloodDensity);",
+          "        System.out.println(\"Hidden Marker (Pattern): \" + hiddenMarker);",
+          "        System.out.println(\"Bills Per Stack: \" + billsPerStack);",
+          "    }",
+          "}",
+          "Output:",
+          "Active Leads: 18",
+          "Average Blood Density: 5.166666666666667",
+          "Hidden Marker (Pattern): 1",
+          "Bills Per Stack: 50"
+        ]
+      },
+      {
+        "heading": "Pros (Why Arithmetic is Your Daily Bread as a Detective)",
+        "bulletPoints": [
+          "**Quantitative Analysis:** Essential for any number-based investigation, from budget tracking to ballistic calculations.",
+          "**Direct & Efficient:** These operations are fast and consume minimal resources, crucial for quick deductions.",
+          "**Foundation for Logic:** They form the basis for more complex conditions and algorithms used to solve tougher cases."
+        ]
+      },
+      {
+        "heading": "Cons (Pitfalls for the Careless Gumshoe)",
+        "bulletPoints": [
+          "**Integer Division Traps:** Forgetting that integer division truncates decimals can lead to inaccurate reports.",
+          "**Operator Precedence:** Not knowing which operation runs first (`*` before `+`) can lead to wrong conclusions. Use parentheses to be safe!",
+          "**Overflow/Underflow:** Results that exceed a primitive type's maximum capacity will 'wrap around', giving wildly incorrect numbers.",
+          "**Floating-Point Imprecision:** Decimal calculations can sometimes have tiny inaccuracies (e.g., `0.1 + 0.2` not being exactly `0.3`)."
+        ]
+      },
+      {
+        "heading": "Use Cases (When to Draw Your Numerical Pistol)",
+        "bulletPoints": [
+          "Calculating Damages: `damageTaken = enemyAttack - playerDefense;`",
+          "Resource Management: `currentAmmo = totalRounds % magazines;`",
+          "Scorekeeping: `playerScore = kills * 100 + bonuses;`",
+          "Time Tracking: `remainingTime = totalMinutes - minutesSpent;`"
+        ]
+      },
+      {
+        "heading": "Best Practices (Tips for the Smart Detective)",
+        "bulletPoints": [
+          "**Mind Your Types:** Be aware of data types, especially when mixing integers and floating-point numbers.",
+          "**Parenthesize for Clarity:** When in doubt, use parentheses `()` to explicitly define the order of calculations.",
+          "**Beware of Overflow:** For large sums or products, consider using a `long` to prevent unexpected results.",
+          "**Avoid Direct Float/Double Equality:** When comparing decimal results, check if their difference is very small rather than using `==`."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "Arithmetic operators are a detective's essential tools for performing calculations on numerical evidence.",
+          "The five main operators are addition (`+`), subtraction (`-`), multiplication (`*`), division (`/`), and modulo (`%`).",
+          "Be mindful of integer division, which discards decimals, and operator precedence (`*`, `/`, `%` are evaluated before `+`, `-`).",
+          "Using parentheses `()` is a key strategy to control the order of operations and ensure your deductions are correct."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "subtopic_id": 5,
+    "lessonSections": [
+      {
+        "lessonTitle": "Comparison Operators - Cross-Referencing Evidence",
+        "heading": "Introduction",
+        "lessonIntro": "In the shadowy world of investigations, rarely is anything exactly as it seems. You need to compare information: is this alibi reliable? Is this suspect's story consistent with another? Are these two pieces of evidence truly a match? Comparison Operators are your tools for evaluation, allowing you to check relationships between values and determine if a statement is true or false. They always result in a boolean value – either true (a solid lead) or false (a dead end).",
+        "objectives": [
+          "Learn to use comparison operators (`==`, `!=`, `>`, `<`, `>=`, `<=`) to evaluate evidence and get a straight `true` or `false` answer.",
+          "Understand the critical difference between using `==` for primitives and the `.equals()` method for objects like `String`.",
+          "Recognize how comparison operators form the basis of all conditional logic, helping you decide which lead to follow.",
+          "Avoid common investigative pitfalls like off-by-one errors when choosing between `>` and `>=`."
+        ]
+      },
+      {
+        "heading": "Real-world Application (Noir Detective Context)",
+        "content1": "A detective is constantly comparing:",
+        "bulletPoints": [
+          "`==` (Is Equal To): Checking if `suspectAge == 45`. Is this information an exact match?",
+          "`!=` (Is Not Equal To): Determining if `witnessStatement != \"conflicting\"`. Are these two things different?",
+          "`>` (Is Greater Than): Verifying if `bribeAmount > 10000`. Is one value larger than another?",
+          "`<` (Is Less Than): Confirming if `timeElapsed < 60`. Is one value smaller than another?",
+          "`>=` (Is Greater Than or Equal To): Checking if `minimumLeads >= 5`. Is it at least this value?",
+          "`<=` (Is Less Than or Equal To): Ensuring `allowedBudget <= 500`. Is it at most this value?"
+        ],
+        "content2": "These operators help you build logical arguments and narrow down the possibilities in your investigation."
+      },
+      {
+        "heading": "Syntax (Noir Detective Context)",
+        "content1": "Using a comparison operator is like asking a 'yes' or 'no' question about your evidence:",
+        "content2": "`boolean result = operand1 operator operand2;`",
+        "bulletPoints": [
+          "`==` (Equal To): `boolean isMatch = (suspectAge == 45);`",
+          "`!=` (Not Equal To): `boolean hasNoWitness = (witnessCount != 0);`",
+          "`>` (Greater Than): `boolean isSignificant = (bloodVolume > 5.0);`",
+          "`<` (Less Than): `boolean isFast = (escapeTime < 5);`",
+          "`>=` (Greater Than or Equal To): `boolean isStrong = (evidenceStrength >= 7);`",
+          "`<=` (Less Than or Equal To): `boolean isClose = (suspectDistance <= 20.0);`"
+        ]
+      },
+      {
+        "heading": "How it Works (Noir Detective Context)",
+        "content1": "When Java encounters a comparison operator, it:",
+        "bulletPoints": [
+          "**Evaluates Operands:** It gets the values of the expressions on both sides of the operator.",
+          "**Compares Values:** It then performs the specified comparison.",
+          "**Produces a Boolean Result:** The outcome is always a boolean value: `true` if the relationship holds, `false` if it doesn't.",
+          "**Type Compatibility:** For non-primitive types like `String`, `==` and `!=` compare memory references (the objects themselves), not their content. To compare the actual content of Strings, the `.equals()` method is almost always necessary."
+        ]
+      },
+      {
+        "heading": "Example Code (Noir Detective Context)",
+        "codeSnippet": [
+          "public class DeductionLogic {",
+          "    public static void main(String[] args) {",
+          "        // Crime Parameters",
+          "        int witnessAge = 40;",
+          "        double crimeSceneTemp = 72.5;",
+          "        String weaponFound = \"Revolver\";",
+          "        String suspectWeapon = new String(\"Revolver\");",
+          "",
+          "        // Applying Comparisons",
+          "        boolean isWitnessAdult = (witnessAge >= 18); // true",
+          "        boolean isSceneCold = (crimeSceneTemp < 98.6); // true",
+          "        boolean isWeaponMatchByContent = weaponFound.equals(suspectWeapon); // true",
+          "        boolean isWeaponMatchByReference = (weaponFound == suspectWeapon); // false",
+          "",
+          "        System.out.println(\"Witness is Adult: \" + isWitnessAdult);",
+          "        System.out.println(\"Scene is Cold: \" + isSceneCold);",
+          "        System.out.println(\"Weapon Match (Content): \" + isWeaponMatchByContent);",
+          "        System.out.println(\"Weapon Match (Reference): \" + isWeaponMatchByReference);",
+          "    }",
+          "}",
+          "Output:",
+          "Witness is Adult: true",
+          "Scene is Cold: true",
+          "Weapon Match (Content): true",
+          "Weapon Match (Reference): false"
+        ]
+      },
+      {
+        "heading": "Pros (Why Comparison Operators are the Core of Deduction)",
+        "bulletPoints": [
+          "**Decision Making:** Fundamental for creating conditional logic (`if` statements), allowing your program to make choices.",
+          "**Verification:** Enables you to check data validity, compare inputs, and confirm conditions.",
+          "**Filtering & Searching:** Essential for finding specific patterns or values in larger datasets."
+        ]
+      },
+      {
+        "heading": "Cons (Pitfalls for the Careless Gumshoe)",
+        "bulletPoints": [
+          "**`==` vs. `.equals()` for Objects:** The most common trap! Using `==` to compare the content of non-primitive objects (especially Strings) will often lead to false negatives.",
+          "**Floating-Point Imprecision:** Direct equality (`==`) with `float` or `double` numbers can be unreliable due to their binary representation. It's safer to check if their difference is extremely small.",
+          "**Type Mismatch:** Trying to compare incompatible types (e.g., a `boolean` with an `int`) will result in a compilation error.",
+          "**Off-by-One Errors:** Misusing `>=` instead of `>` can lead to subtle bugs, like including a boundary condition when it should be excluded."
+        ]
+      },
+      {
+        "heading": "Use Cases (When to Check Your Facts)",
+        "bulletPoints": [
+          "Validating Passcodes: `if (inputCode == correctCode)`",
+          "Checking Budget Limits: `if (currentExpenses <= maxBudget)`",
+          "Determining Case Status: `if (cluesFound >= requiredClues)`",
+          "Filtering Suspects: `if (suspectAge > 25 && suspectAge < 50)`"
+        ]
+      },
+      {
+        "heading": "Best Practices (Tips for the Smart Detective)",
+        "bulletPoints": [
+          "**String Content: Always `.equals()`:** Make it a habit: `string1.equals(string2)`. Never `string1 == string2` for content comparison.",
+          "**Floating-Point Comparisons: Use Epsilon:** For `float` or `double` equality, compare within a tiny margin: `if (Math.abs(a - b) < 0.000001)`.",
+          "**Be Precise with Operators:** Double-check whether you need `>` or `>=` and `<` or `<=` for boundary conditions.",
+          "**Parenthesize Complex Conditions:** Use parentheses `()` to clarify the order of evaluation in complex expressions."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "Comparison operators evaluate the relationship between two values, always returning a `boolean` (`true` or `false`).",
+          "They include `==`, `!=`, `>`, `<`, `>=`, and `<=`.",
+          "These operators are the foundation for decision-making in `if` statements and other control structures.",
+          "For non-primitive objects like `String`, you must use the `.equals()` method to compare their content, as `==` only compares their memory addresses."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "subtopic_id": 6,
+    "lessonSections": [
+      {
+        "lessonTitle": "Logical Operators - Weaving the Web of Deduction",
+        "heading": "Introduction",
+        "lessonIntro": "A lone clue is just a hunch, but multiple clues woven together build a case. As a detective in Java City, your greatest tool is your ability to connect disparate facts. Logical Operators (`&&`, `||`, `!`) are the threads you use to weave these connections. They allow you to combine multiple boolean conditions, creating complex deductions that can confirm an alibi, corner a suspect, or expose a conspiracy. Mastering them is the difference between seeing a collection of random facts and seeing the whole, unassailable truth.",
+        "objectives": [
+          "Learn to use the logical operators `&&` (AND), `||` (OR), and `!` (NOT) to connect multiple clues and deductions.",
+          "Understand how `&&` requires all conditions to be true, while `||` only requires one to be true.",
+          "Master the `!` operator to invert the truth of a condition, flipping a lead on its head.",
+          "Recognize the order of operations (`&&` before `||`) to build accurate logical chains."
+        ]
+      },
+      {
+        "heading": "Real-world Application (Noir Detective Context)",
+        "content1": "A detective's mind is always running logical checks:",
+        "bulletPoints": [
+          "`&&` (AND): To close a case, you need the `motiveIsClear` AND the `evidenceIsSolid`. Both must be true.",
+          "`||` (OR): A suspect is considered dangerous if they are `armed` OR they have a `historyOfViolence`. Only one needs to be true.",
+          "`!` (NOT): To check an alibi, you might verify if a suspect was `!atTheCrimeScene`. This inverts the boolean value."
+        ],
+        "content2": "These operators are the heart of your deductive reasoning, allowing you to build complex arguments from simple true/false statements."
+      },
+      {
+        "heading": "Syntax (Noir Detective Context)",
+        "content1": "Using logical operators is like building a case on your evidence board:",
+        "bulletPoints": [
+          "`&&` (AND): `boolean caseClosed = (hasMotive && hasEvidence);`",
+          "`||` (OR): `boolean isSuspect = (wasAtScene || hasNoAlibi);`",
+          "`!` (NOT): `boolean alibiHolds = !wasAtScene;`"
+        ]
+      },
+      {
+        "heading": "How it Works (Noir Detective Context)",
+        "content1": "When Java evaluates a logical expression, it acts like a seasoned interrogator:",
+        "bulletPoints": [
+          "**Order of Operations**: Java has a strict order. It evaluates `!` first, then `&&`, and finally `||`. Parentheses `()` can be used to override this order, just like focusing an investigation on a specific lead first.",
+          "**Short-Circuit Evaluation**: Java is efficient. For an `&&` (AND) expression, if the first part is `false`, it doesn't bother checking the second part because the whole thing must be false. For an `||` (OR) expression, if the first part is `true`, it stops and returns `true` because the outcome is already decided. This is like dropping a lead as soon as you find a single contradiction."
+        ]
+      },
+      {
+        "heading": "Example Code (Noir Detective Context)",
+        "codeSnippet": [
+          "public class CaseDeduction {",
+          "    public static void main(String[] args) {",
+          "        // Evidence from the case file",
+          "        boolean hasMotive = true;",
+          "        boolean hasAlibi = false;",
+          "        boolean evidenceFound = true;",
+          "",
+          "        // Simple AND deduction",
+          "        boolean canArrest = hasMotive && evidenceFound;",
+          "",
+          "        // OR deduction for suspicion",
+          "        boolean isSuspicious = evidenceFound || !hasAlibi;",
+          "",
+          "        // Complex deduction using precedence",
+          "        boolean proceedWithCase = hasMotive && evidenceFound || !hasAlibi;",
+          "",
+          "        System.out.println(\"Sufficient grounds for arrest? \" + canArrest);",
+          "        System.out.println(\"Is the person suspicious? \" + isSuspicious);",
+          "        System.out.println(\"Should the case proceed? \" + proceedWithCase);",
+          "    }",
+          "}",
+          "Output:",
+          "Sufficient grounds for arrest? true",
+          "Is the person suspicious? true",
+          "Should the case proceed? true"
+        ]
+      },
+      {
+        "heading": "Pros (Why Logical Operators Sharpen Your Instincts)",
+        "bulletPoints": [
+          "**Complex Decision-Making:** Allows for nuanced and multi-faceted conditions beyond simple comparisons.",
+          "**Control Flow:** Essential for creating sophisticated `if` statements and loop conditions that guide your program's logic.",
+          "**Code Readability:** Can make complex checks more expressive when used correctly (e.g., `if (isLoggedIn && isAdmin)`)."
+        ]
+      },
+      {
+        "heading": "Cons (Pitfalls for the Gumshoe in a Hurry)",
+        "bulletPoints": [
+          "**Operator Precedence Confusion:** Mixing `&&` and `||` without parentheses can lead to logic that doesn't behave as expected.",
+          "**Complex Expressions:** Overly long or nested logical expressions can become very difficult to read and debug.",
+          "**Boolean Logic Errors:** It's easy to make a mistake in your logic (e.g., using OR when you meant AND), leading to subtle but critical bugs."
+        ]
+      },
+      {
+        "heading": "Use Cases (When to Connect the Dots)",
+        "bulletPoints": [
+          "Validating User Input: `if (age >= 18 && age <= 65)`",
+          "Checking Permissions: `if (isUserAdmin || isDocumentOwner)`",
+          "Game Logic: `if (playerHasKey && isAtDoor)`",
+          "Setting State: `boolean canProceed = !isLoading && hasData;`"
+        ]
+      },
+      {
+        "heading": "Best Practices (Tips for a Master Sleuth)",
+        "bulletPoints": [
+          "**Parenthesize for Clarity:** Always use parentheses `()` when mixing `&&` and `||` in the same expression to make your intention clear and avoid precedence errors.",
+          "**Keep Expressions Simple:** If a logical condition becomes too complex, break it down into smaller parts using helper boolean variables.",
+          "**Use Descriptive Variable Names:** `if (userIsVerified && userIsActive)` is much clearer than `if (a && b)`."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "Logical operators (`&&`, `||`, `!`) are used to combine multiple boolean expressions into a single, complex deduction.",
+          "The `&&` (AND) operator returns `true` only if both sides of the expression are true.",
+          "The `||` (OR) operator returns `true` if at least one side of the expression is true.",
+          "The `!` (NOT) operator inverts a boolean value, changing `true` to `false` and vice versa.",
+          "Understanding operator precedence (`!` first, then `&&`, then `||`) and using parentheses are crucial for correctly evaluating complex conditions."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "subtopic_id": 7,
+    "lessonSections": [
+      {
+        "lessonTitle": "Repairing the Decision Core – Understanding If, Else, and If-Else",
+        "heading": "Introduction",
+        "lessonIntro": "You’ve arrived at the Decision Core chamber — the heart of the Pathfinder’s AI judgment system. [cite: 1494] [cite_start]Its glowing panels are flickering, caught mid-thought, unable to make even the simplest decisions. [cite: 1495] [cite_start]This module is responsible for helping the ship choose between different actions based on real-time conditions — like whether to activate shields or reroute power during emergencies. [cite: 1496] [cite_start]To repair it, you need to understand how Java uses if-else statements to make choices — just like the ship does when deciding its next move. [cite: 1498]",
+        "objectives": [
+          "Learn to use `if` statements to execute commands based on specific ship conditions.",
+          "Master `if-else` blocks to provide alternative actions when a condition is not met.",
+          "Utilize `if-else-if` ladders to handle multiple, mutually exclusive scenarios, like checking fuel levels.",
+          "Recognize the correct syntax for conditional logic to repair the Pathfinder's decision-making abilities."
+        ]
+      },
+      {
+        "heading": "The `if` Statement",
+        "content1": "An `if` statement is a simple test: 'If a condition is true, then execute a specific command.' [cite: 1503] [cite_start]Think of it as the Pathfinder's basic protocol: 'If oxygen level is low, activate the backup system.' [cite: 1504]",
+        "content2": "Syntax:\n`if (condition) {\n    // code to run if condition is true\n}`"
+      },
+      {
+        "heading": "Code Example: `if`",
+        "codeSnippet": [
+          "public class DecisionExample {",
+          "    public static void main(String[] args) {",
+          "        int oxygenLevel = 45;",
+          "",
+          "        if (oxygenLevel < 50) {",
+          "            System.out.println(\"Warning: Oxygen low. Activating backup system.\");",
+          "        }",
+          "    }",
+          "}",
+          "Explanation:",
+          "The `if` statement checks if `oxygenLevel` is less than 50. [cite: 1521]",
+          "Since 45 is less than 50, the condition is true, and the ship prints a warning. [cite: 1522]"
+        ]
+      },
+      {
+        "heading": "The `if-else` Statement",
+        "content1": "The `else` statement provides a fallback action. [cite_start]It says, 'If the condition wasn’t true, then do this other thing instead.' [cite: 1524]",
+        "content2": "Syntax:\n`if (condition) {\n    // code if true\n} else {\n    // code if false\n}`"
+      },
+      {
+        "heading": "Code Example: `if-else`",
+        "codeSnippet": [
+          "public class ShieldCheck {",
+          "    public static void main(String[] args) {",
+          "        int shieldLevel = 75;",
+          "",
+          "        if (shieldLevel < 50) {",
+          "            System.out.println(\"Shields critical! Entering defense mode.\");",
+          "        } else {",
+          "            System.out.println(\"Shields stable. All systems normal.\");",
+          "        }",
+          "    }",
+          "}",
+          "Explanation:",
+          "Since `shieldLevel` is 75, it is not less than 50. The `if` condition is false, so the `else` block runs and prints that systems are normal. [cite: 1544]"
+        ]
+      },
+      {
+        "heading": "The `if-else-if` Ladder",
+        "content1": "Sometimes you need to check more than one possibility. [cite_start]That’s where the `if-else-if` ladder comes in handy, allowing you to chain multiple conditions together. [cite: 1546]",
+        "content2": "Syntax:\n`if (condition1) {\n    // do this\n} else if (condition2) {\n    // do something else\n} else {\n    // do a final thing\n}`"
+      },
+      {
+        "heading": "Code Example: `if-else-if`",
+        "codeSnippet": [
+          "public class FuelStatus {",
+          "    public static void main(String[] args) {",
+          "        int fuelLevel = 30;",
+          "",
+          "        if (fuelLevel > 75) {",
+          "            System.out.println(\"Fuel full. Ready for hyperspeed travel.\");",
+          "        } else if (fuelLevel > 40) {",
+          "            System.out.println(\"Fuel sufficient. Maintaining current speed.\");",
+          "        } else {",
+          "            System.out.println(\"Fuel low. Initiating refueling protocol.\");",
+          "        }",
+          "    }",
+          "}",
+          "Explanation:",
+          "The code first checks if `fuelLevel > 75` (false). Then it checks if `fuelLevel > 40` (false). [cite_start]Since both fail, it executes the final `else` block, initiating the refueling protocol. [cite: 1571]"
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "The `if` statement allows the ship to execute code only when a specified condition is `true`.",
+          "The `else` statement provides a fallback action that runs only when the `if` condition is `false`.",
+          "The `if-else-if` ladder is used to check a series of conditions in order, executing only the first block that evaluates to `true`.",
+          "Proper use of these conditional statements is essential for creating responsive and logical control systems for the Pathfinder."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "subtopic_id": 8,
+    "lessonSections": [
+      {
+        "lessonTitle": "While and Do-While Loop - The Repetitive Patrol",
+        "heading": "Introduction",
+        "lessonIntro": "A space patrol often involves repetitive tasks: continuous scans, system checks every few minutes, or charging a battery until full. In Java, `while` and `do-while` loops are the tools for these repetitive actions. They allow your Pathfinder's AI to execute a block of code multiple times without rewriting it. They are like your ship's automated patrol routes: they keep executing as long as a certain condition holds true, ensuring persistence and efficiency in ongoing operations.",
+        "objectives": [
+          "Learn to use `while` loops to perform tasks as long as a condition, like `powerStable`, remains true.",
+          "Master `do-while` loops for actions that must execute at least once, such as initiating an emergency protocol test.",
+          "Understand the key difference: `while` checks the condition before running, and `do-while` checks after.",
+          "Recognize the importance of updating a variable within the loop to prevent an infinite loop that could trap the Pathfinder."
+        ]
+      },
+      {
+        "heading": "Real-world Application (SS Pathfinder Context)",
+        "content1": "The Pathfinder's automated systems constantly employ loops for ongoing processes:",
+        "bulletPoints": [
+          "**Continuous System Scans (while):** `while (powerStable)`: Keep scanning for anomalies. Only stop if power drops.",
+          "**Fuel Transfer (while):** `while (fuelTankA > 0 && fuelTankB < maxCapacity)`: Keep transferring fuel.",
+          "**Battery Charging (do-while):** `do { activateCharger(); } while (batteryLevel < 100)`: Always activate the charger at least once, then keep charging until the battery is full.",
+          "**Data Upload (do-while):** `do { sendPacket(); } while (dataQueueNotEmpty)`: Send at least one data packet, then continue sending as long as there's data left."
+        ]
+      },
+      {
+        "heading": "Syntax: `while` Loop (Check Before Patrol)",
+        "content1": "This loop is like a cautious sentry. It checks its condition **before** it begins its patrol (executes its code block). [cite_start]If the condition is false from the start, the patrol never even begins. [cite: 3299, 3300]",
+        "content2": "```java\nwhile (condition) {\n    // Code to execute repeatedly as long as the condition is TRUE\n}\n```"
+      },
+      {
+        "heading": "Syntax: `do-while` Loop (Patrol At Least Once)",
+        "content1": "This loop is like a determined scout. [cite_start]It **always** performs its patrol (executes its code block) **at least once**, and **then** checks the condition to see if it should continue. [cite: 3309]",
+        "content2": "```java\ndo {\n    // Code to execute repeatedly (at least once)\n} while (condition); // Semicolon is required here!\n```"
+      },
+      {
+        "heading": "Example Code (SS Pathfinder Context)",
+        "codeSnippet": [
+          "public class SystemDiagnostics {",
+          "    public static void main(String[] args) {",
+          "        int integrityScanProgress = 0;",
+          "        System.out.println(\"--- Initiating Standard Scan (While) ---\");",
+          "        while (integrityScanProgress < 3) {",
+          "            System.out.println(\"Scanning Sector: \" + integrityScanProgress);",
+          "            integrityScanProgress++; // Ensures the loop eventually terminates",
+          "        }",
+          "        System.out.println(\"Standard Scan Complete.\\n\");",
+          "",
+          "        int emergencyProtocolAttempts = 0;",
+          "        System.out.println(\"--- Activating Emergency Protocol (Do-While) ---\");",
+          "        do {",
+          "            System.out.println(\"Attempting protocol activation: \" + (emergencyProtocolAttempts + 1));",
+          "            emergencyProtocolAttempts++;",
+          "        } while (emergencyProtocolAttempts < 0); // Condition is false, but runs once",
+          "        System.out.println(\"Emergency Protocol Test Complete.\");",
+          "    }",
+          "}",
+          "Output:",
+          "--- Initiating Standard Scan (While) ---",
+          "Scanning Sector: 0",
+          "Scanning Sector: 1",
+          "Scanning Sector: 2",
+          "Standard Scan Complete.",
+          "",
+          "--- Activating Emergency Protocol (Do-While) ---",
+          "Attempting protocol activation: 1",
+          "Emergency Protocol Test Complete."
+        ]
+      },
+      {
+        "heading": "Pros (Why Loops Keep the Pathfinder Running)",
+        "bulletPoints": [
+          "**Automation:** Crucial for continuous monitoring and data processing without redundant code.",
+          "**Flexibility:** Loops continue as long as dynamic conditions are met, not just a fixed number of times.",
+          "**Guaranteed First Run:** The `do-while` loop is useful when a loop's body must execute at least once, regardless of the initial condition."
+        ]
+      },
+      {
+        "heading": "Cons (Pitfalls for the Green Engineer)",
+        "bulletPoints": [
+          "**Infinite Loops:** If the loop's condition never becomes false, the loop will run forever, freezing the program.",
+          "**Off-by-One Errors:** Incorrect logic can cause the loop to run one too many or one too few times.",
+          "**Semicolon Trap:** Forgetting the semicolon `;` after the condition in a `do-while` loop is a common syntax error."
+        ]
+      },
+      {
+        "heading": "Best Practices (Tips for the Lead Engineer)",
+        "bulletPoints": [
+          "**Always Ensure Termination:** For every loop, ensure there's a clear path for the condition to eventually become false.",
+          "**Initialize Loop Variables:** Set up all variables used in the loop's condition before the loop starts.",
+          "**Prefer `while`:** Use `while` for general repetition. Only use `do-while` when the loop body must execute at least one time."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "`while` and `do-while` loops are used for repetitive tasks that continue until a specific condition is met.",
+          "A `while` loop checks its condition **before** each iteration and may not run at all.",
+          "A `do-while` loop executes its body **at least once** and checks the condition **after** the iteration.",
+          "It is critical to ensure the loop's condition will eventually become false to avoid infinite loops that can freeze the ship's systems."
+        ]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "subtopic_id": 9,
+    "lessonSections": [
+      {
+        "lessonTitle": "For Loop - Automated Mission Sequences",
+        "heading": "Introduction",
+        "lessonIntro": "While `while` loops are great for indefinite repetitions, sometimes the Pathfinder's AI needs to execute a sequence a specific, known number of times. This is where the `for` loop comes in. It's like programming a precise, automated mission sequence: initialize a counter, set a clear target, and define exactly how each step progresses. The `for` loop condenses all these control elements into a single, compact line, making it ideal for iterating through arrays, repeating a launch countdown, or performing a set number of diagnostic checks.",
+        "objectives": [
+          "Learn to use the standard `for` loop to execute tasks a specific number of times, like a launch countdown.",
+          "Master the three components of a `for` loop header: initialization, termination, and increment.",
+          "Utilize the enhanced `for` loop (for-each) to easily process every item in a collection, such as an array of sensor readings.",
+          "Understand when to use a `for` loop (for a known number of iterations) versus a `while` loop (for an unknown number)."
+        ]
+      },
+      {
+        "heading": "Real-world Application (SS Pathfinder Context)",
+        "content1": "`for` loops are crucial for any fixed-iteration task:",
+        "bulletPoints": [
+          "**Launch Countdown:** Count down from 10 to 0.",
+          "**Array Processing:** Iterate through all sensor readings in a data array.",
+          "**Sequential System Checks:** Perform diagnostics on 5 specific modules one by one.",
+          "**Data Packet Bursts:** Send exactly 10 data packets.",
+          "**Repair Drone Cycles:** Perform 3 repair cycles on a damaged panel."
+        ]
+      },
+      {
+        "heading": "Syntax: Standard `for` Loop",
+        "content1": "The `for` loop's structure consolidates its three main control parts into one concise line:",
+        "content2": "```java\nfor (initialization; termination; increment) {\n    // Code to execute repeatedly\n}\n```",
+        "bulletPoints": [
+         "`initialization`: Runs once at the beginning. This is where you declare a loop control variable (e.g., `int i = 0;`).",
+         "`termination`: A boolean expression evaluated before each iteration. If it's false, the loop stops.",
+         "`increment`: Runs after each iteration. This updates the loop control variable (e.g., `i++`)."
+        ]
+      },
+      {
+        "heading": "Syntax: Enhanced `for` Loop (For-Each)",
+        "content1": "This shortcut is perfect when you simply need to process every item in a collection (like an array) without needing to know its index.",
+        "content2": "```java\nfor (DataType itemVariable : collection) {\n    // Code to execute for each item\n}\n```"
+      },
+      {
+        "heading": "Example Code (SS Pathfinder Context)",
+        "codeSnippet": [
+          "public class LaunchCountdown {",
+          "    public static void main(String[] args) {",
+          "        System.out.println(\"--- Initiating Launch Countdown (Standard For) ---\");",
+          "        for (int countdown = 5; countdown > 0; countdown--) {",
+          "            System.out.println(\"T-\" + countdown + \" seconds!\");",
+          "        }",
+          "        System.out.println(\"Launch!\");",
+          "",
+          "        System.out.println(\"\\n--- Performing Diagnostic Checks (Enhanced For) ---\");",
+          "        String[] modules = {\"Navigation\", \"Propulsion\", \"Life Support\"};",
+          "        for (String moduleName : modules) {",
+          "            System.out.println(\"Checking Module: \" + moduleName);",
+          "        }",
+          "        System.out.println(\"All modules checked.\");",
+          "    }",
+          "}",
+          "Output:",
+          "--- Initiating Launch Countdown (Standard For) ---",
+          "T-5 seconds!",
+          "T-4 seconds!",
+          "T-3 seconds!",
+          "T-2 seconds!",
+          "T-1 seconds!",
+          "Launch!",
+          "",
+          "--- Performing Diagnostic Checks (Enhanced For) ---",
+          "Checking Module: Navigation",
+          "Checking Module: Propulsion",
+          "Checking Module: Life Support",
+          "All modules checked."
+        ]
+      },
+      {
+        "heading": "Pros (Why For Loops are Mission-Critical)",
+        "bulletPoints": [
+          "**Concise Control:** All loop control logic (initialization, condition, update) is in one line, making it very readable.",
+          "**Ideal for Collections:** Perfectly suited for traversing arrays. The enhanced for-loop simplifies this even further by removing index management.",
+          "**Reduced Errors:** By putting all control elements together, it helps prevent common errors like forgetting to increment the loop variable."
+        ]
+      },
+      {
+        "heading": "Cons (Pitfalls for the Green Engineer)",
+        "bulletPoints": [
+          "**Less Flexible for Indefinite Loops:** Not ideal when the number of repetitions is unknown, where `while` is better suited.",
+          "**No Index (Enhanced For):** The enhanced for loop doesn't provide direct access to an element's index.",
+          "**Cannot Modify Collection (Enhanced For):** You cannot add or remove elements from a collection while iterating over it with an enhanced for loop."
+        ]
+      },
+      {
+        "heading": "Best Practices (Tips for the Lead Engineer)",
+        "bulletPoints": [
+          "**Keep Header Clean:** Strive for simple initialization, termination, and increment expressions.",
+          "**Correct Boundaries:** Pay careful attention to whether you need `<` or `<=` in the termination condition.",
+          "**Prefer Enhanced For-Loop:** If you just need to process every element in a collection and don't need its index, use the enhanced for loop for cleaner code."
+        ]
+      },
+      {
+        "heading": "Summary",
+        "summary": [
+          "The `for` loop is ideal for repeating a task when the number of iterations is known beforehand.",
+          "It combines initialization, a termination condition, and an increment step into a single, concise line.",
+          "The enhanced `for` loop (or for-each loop) provides a simpler syntax for iterating over every element in a collection or array.",
+          "Because their structure is so explicit, `for` loops are less prone to accidental infinite loops than `while` loops and are perfect for managing sequences."
+        ]
+      }
+    ]
   }
-] 
+]

@@ -1,0 +1,92 @@
+$wizard-theme: (
+  // Background Colors - EXACT from working lesson page
+  "theme-bg": #0F172A, // Deep Twilight Blue
+  "card-bg": #1A2B3C, // Deep Navy
+  "code-bg": #0F172A, // Deep Twilight Blue
+  "code-bg-secondary": #1A2B3C, // Deep Navy
+  "code-bg-tertiary": #4A5568, // Ancient Stone Grey
+  "output-bg": #1A2B3C, // Deep Navy
+  "output-header-bg": #4A5568, // Ancient Stone Grey
+  "sidebar-bg": #1A2B3C, // Deep Navy
+  "bullet-container-bg": #1A2B3C, // Deep Navy
+  "objectives-bg": #1A2B3C, // Deep Navy
+  "summary-bg": rgba(110, 231, 183, 0.1), // Faerie Green with opacity
+  
+  // Text Colors - EXACT from working lesson page
+  "theme-text": #E8DBC3, // Aged Parchment
+  "text-secondary": #6B7280, // Ancient Stone Light
+  "intro-text": #6B7280, // Ancient Stone Light
+  "bullet-text": #E8DBC3, // Aged Parchment
+  "code-text": #E8DBC3, // Aged Parchment
+  "output-text": #E8DBC3, // Aged Parchment
+  "sidebar-text": #6B7280, // Ancient Stone Light
+  "sidebar-active-text": #E8DBC3, // Aged Parchment
+  
+  // Header & Title Colors - EXACT from working lesson page
+  "heading-primary": #FBBF24, // Enchanted Gold Bright
+  "lesson-title": #FBBF24, // Enchanted Gold Bright
+  "section-title": #FBBF24, // Enchanted Gold Bright
+  "objectives-title": #0EA5E9, // Arcane Turquoise Bright
+  "contents-title": #FBBF24, // Enchanted Gold Bright
+  "summary-title": #6EE7B7, // Flickering Faerie Green
+  
+  // Title gradient colors for wizard theme
+  "title-gradient-start": #FBBF24, // Enchanted Gold Bright
+  "title-gradient-end": #6EE7B7, // Flickering Faerie Green
+  
+  // Accent & Highlight Colors - EXACT from working lesson page
+  "accent-primary": #0EA5E9, // Arcane Turquoise Bright
+  "accent-secondary": #06B6D4, // Arcane Turquoise Deep
+  "accent-primary-rgb": "14, 165, 233", // RGB version for rgba()
+  "accent-secondary-rgb": "6, 182, 212", // RGB version for rgba()
+  "gold-accent": #FBBF24, // Enchanted Gold Bright
+  "success-color": #6EE7B7, // Flickering Faerie Green
+  "warning-color": #FBBF24, // Enchanted Gold Bright
+  
+  // Button colors for wizard theme
+  "button-primary-bg": #0EA5E9, // Arcane Turquoise Bright
+  "button-primary-text": #E8DBC3, // Aged Parchment
+  "button-secondary-bg": #1A2B3C, // Deep Navy
+  "button-secondary-text": #E8DBC3, // Aged Parchment
+  "button-secondary-border": #0EA5E9, // Arcane Turquoise Bright
+  
+  // Border Colors - EXACT from working lesson page
+  "card-border": #0EA5E9, // Arcane Turquoise Bright
+  "code-border": #0EA5E9, // Arcane Turquoise Bright
+  "bullet-border": #0EA5E9, // Arcane Turquoise Bright
+  "summary-border": #6EE7B7, // Flickering Faerie Green
+  "footer-border": #0EA5E9, // Arcane Turquoise Bright
+  
+  // Interactive Elements - EXACT from working lesson page
+  "bullet-icon": #FBBF24, // Enchanted Gold Bright
+  "contents-number": #06B6D4, // Arcane Turquoise Deep
+  "contents-number-active": #E8DBC3, // Aged Parchment
+  "objective-icon": #06B6D4, // Arcane Turquoise Deep
+  "code-inline": #0EA5E9, // Arcane Turquoise Bright
+  "strong-text": #FBBF24, // Enchanted Gold Bright
+  
+  // Code Syntax Colors - EXACT from working lesson page
+  "code-keyword": #FBBF24, // Enchanted Gold Bright
+  "code-variable": #0EA5E9, // Arcane Turquoise Bright
+  "code-string": #E8DBC3, // Aged Parchment
+  "code-number": #06B6D4, // Arcane Turquoise Deep
+  "code-comment": #E8DBC3, // Aged Parchment
+  
+  // Fonts
+  "font-primary": '"Crimson Text", serif',
+  "font-heading": '"Cinzel", serif',
+  "font-mono": '"JetBrains Mono", "Fira Code", monospace'
+);
+
+// Export the theme map
+:export {
+  @each $key, $value in $wizard-theme {
+    #{$key}: $value;
+  }
+}
+
+:global(body.theme-wizard) {
+  @each $var, $value in $wizard-theme {
+    --#{$var}: #{$value};
+  }
+} 

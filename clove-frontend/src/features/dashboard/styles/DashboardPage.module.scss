@@ -210,12 +210,12 @@
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: conic-gradient($light-purple 0% 0%, $lighter-black 1% 100%);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+  transition: background 0.5s ease;
 }
 
 .donutCenter {
@@ -285,12 +285,31 @@
 }
 
 .topicBadge {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: $success;
   padding: 0.35rem 0.75rem;
   border-radius: 50px;
   font-size: 13px;
   font-weight: bold;
+  
+  // Different colors for different mastery levels
+  &.badgeMastered {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: $danger;
+  }
+  
+  &.badgeProficient {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: $warning;
+  }
+  
+  &.badgeLearned {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: $success;
+  }
+  
+  &.badgeCompleted {
+    background-color: rgba(139, 92, 246, 0.1);
+    color: $light-purple;
+  }
 }
 
 .resumeButton {
