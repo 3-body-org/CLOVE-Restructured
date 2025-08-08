@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './CustomExitWarningModal.module.scss';
+import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 /**
  * Custom Exit Warning Modal Component
@@ -12,6 +13,23 @@ const CustomExitWarningModal = ({
   isLoading = false,
   challengeState = 'active'
 }) => {
+  // Safely get theme with fallback
+  let themeData;
+  try {
+    themeData = useChallengeTheme();
+  } catch (error) {
+    console.warn('Failed to get theme data, using fallback:', error);
+    themeData = {
+      getThemeStyles: () => ({}),
+      currentTheme: 'space'
+    };
+  }
+  
+  const { getThemeStyles, currentTheme } = themeData;
+  
+  // Get theme-specific styles with fallback
+  const themeStyles = getThemeStyles ? getThemeStyles() : {};
+  
   if (!isVisible) return null;
 
   // Determine the appropriate message based on challenge state
@@ -55,7 +73,7 @@ const CustomExitWarningModal = ({
   const content = getModalContent();
 
   return (
-    <div className={styles.modalOverlay}>
+    <div className={`${styles.modalOverlay} theme-${currentTheme || 'space'}`} style={themeStyles}>
       <div className={styles.modalContent}>
         <div className={styles.warningIcon}>
           {content.icon}

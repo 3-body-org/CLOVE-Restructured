@@ -113,7 +113,6 @@
 }
 
 .challengeArea {
-  flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -122,13 +121,13 @@
   border: 1px solid var(--primary, #6c5ce7);
   box-shadow: 0 0 20px rgba(108, 92, 231, 0.2);
   margin-left: 20px;
-  min-height: 100vh;
-  max-width: calc(100vw - 340px);
+  min-width: 0; /* Allow flex item to shrink below content size */
   overflow-x: hidden;
+  height: fit-content; /* Make container wrap its content exactly */
 }
 
 .challengeTitle {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: var(--text);
   text-align: center;
@@ -138,72 +137,68 @@
   flex-shrink: 0;
 }
 
+// Theme-specific styling
 .choicesBar {
-  margin-bottom: 15px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  border: 1px solid var(--primary);
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
+  padding: 16px;
+  background: var(--card-bg, rgba(45, 55, 72, 0.8));
+  border: 1px solid var(--accent-primary, #6c5ce7);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-family: var(--font-primary, 'Space Grotesk', sans-serif);
+  color: var(--text, #ffffff);
   
-  &.disabled {
-    opacity: 0.6;
-    border-color: rgba(255, 100, 100, 0.4);
-    background: rgba(255, 100, 100, 0.05);
-    pointer-events: none;
+  &.theme-wizard {
+    background: var(--card-bg, rgba(26, 43, 60, 0.8));
+    color: var(--text, #E8DBC3);
+    font-family: var(--font-primary, 'Crimson Text', serif);
+  }
+  
+  &.theme-detective {
+    background: var(--card-bg, rgba(26, 26, 26, 0.95));
+    color: var(--text, #e0e0e0);
+    font-family: var(--font-primary, 'Lora', serif);
+  }
+  
+  &.theme-space {
+    background: var(--card-bg, rgba(26, 26, 46, 0.8));
+    color: var(--text, #ffffff);
+    font-family: var(--font-primary, 'Space Grotesk', sans-serif);
   }
 }
 
 .choiceItem {
-  padding: 10px 15px;
-  background: rgba(108, 92, 231, 0.1);
-  border: 2px solid var(--primary);
-  border-radius: 8px;
-  color: var(--text);
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--accent-primary, #6c5ce7);
+  border-radius: 6px;
   cursor: grab;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  user-select: none;
-  position: relative;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+  color: var(--text, #ffffff);
   
   &:hover {
-    background: rgba(108, 92, 231, 0.2);
+    background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
   
   &:active {
     cursor: grabbing;
-  }
-  
-  &.dragging {
-    opacity: 0.5;
-    transform: scale(0.95);
-    transition: all 0.2s ease;
-  }
-  
-  &.used {
-    opacity: 0.3;
-    cursor: not-allowed;
-    background: rgba(108, 92, 231, 0.05);
-    border-color: rgba(108, 92, 231, 0.3);
+    transform: translateY(0);
   }
   
   &.disabled {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: not-allowed;
-    background: rgba(255, 100, 100, 0.1);
-    border-color: rgba(255, 100, 100, 0.4);
-    pointer-events: none;
+    transform: none;
     
     &:hover {
-      background: rgba(255, 100, 100, 0.1);
+      background: rgba(255, 255, 255, 0.1);
       transform: none;
-    }
-    
-    &:active {
-      cursor: not-allowed;
+      box-shadow: none;
     }
   }
 }
@@ -296,7 +291,7 @@
   .outputText {
     color: var(--text);
     font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     background: rgba(0, 0, 0, 0.3);
     padding: 8px 12px;
     border-radius: 5px;
@@ -310,7 +305,7 @@
   border: 2px solid var(--primary, #6c5ce7);
   border-radius: 8px;
   overflow: hidden;
-  height: 450px;
+  height: 410px;
   padding: 15px;
   background: var(--code-bg, #1a1a2e);
   display: flex;
@@ -343,7 +338,7 @@
   
   // Increase font size in Monaco editor
   :global(.monaco-editor) {
-    font-size: 16px !important;
+    font-size: 17px !important;
     border: 1px solid var(--primary, #6c5ce7) !important;
     border-radius: 6px !important;
     overflow: hidden !important;
@@ -604,26 +599,31 @@
   100% { opacity: 1; }
 }
 
+// Theme-specific styling
 .terminalWindow {
-  margin-top: 20px;
-  padding: 15px;
-  background: #1a1a1a;
+  background: var(--code-bg, #252540);
+  border: 1px solid var(--accent-primary, #6c5ce7);
   border-radius: 8px;
-  border: 1px solid #333;
-    font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  color: #00ff00;
-  max-height: 150px;
-    overflow-y: auto;
+  overflow: hidden;
+  font-family: var(--font-mono, 'Courier New', monospace);
+  color: var(--text, #ffffff);
   
-  &.success {
-    border-color: #4CAF50;
-    color: #4CAF50;
+  &.theme-wizard {
+    background: var(--code-bg, #1A2B3C);
+    color: var(--text, #E8DBC3);
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
   }
   
-  &.error {
-    border-color: #f44336;
-    color: #f44336;
+  &.theme-detective {
+    background: var(--code-bg, #1a1a1a);
+    color: var(--text, #e0e0e0);
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  }
+  
+  &.theme-space {
+    background: var(--code-bg, #252540);
+    color: var(--text, #ffffff);
+    font-family: var(--font-mono, 'Fira Code', monospace);
   }
 }
 

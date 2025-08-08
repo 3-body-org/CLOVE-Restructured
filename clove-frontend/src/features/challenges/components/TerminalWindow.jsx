@@ -5,10 +5,28 @@
 
 import React from 'react';
 import styles from '../styles/CodeCompletion.module.scss';
+import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const TerminalWindow = ({ output = '', validationResult = null }) => {
+  // Safely get theme with fallback
+  let themeData;
+  try {
+    themeData = useChallengeTheme();
+  } catch (error) {
+    console.warn('Failed to get theme data, using fallback:', error);
+    themeData = {
+      getThemeStyles: () => ({}),
+      currentTheme: 'space'
+    };
+  }
+  
+  const { getThemeStyles, currentTheme } = themeData;
+  
+  // Get theme-specific styles with fallback
+  const themeStyles = getThemeStyles ? getThemeStyles() : {};
+
   return (
-    <div className={styles.terminalWindow}>
+    <div className={`${styles.terminalWindow} theme-${currentTheme || 'space'}`} style={themeStyles}>
       <div className={styles.terminalHeader}>
         <div className={styles.terminalButtons}>
           <span className={styles.closeBtn}></span>

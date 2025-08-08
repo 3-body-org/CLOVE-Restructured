@@ -11,7 +11,13 @@ const getMonacoThemeName = (appTheme) => {
 };
 
 const defineMonacoThemes = (monaco) => {
+  // Clear existing theme cache to force refresh
+  if (monaco.__cloveThemesDefined) {
+    monaco.__cloveThemesDefined = false;
+  }
+  
   if (monaco.__cloveThemesDefined) return;
+  
   // Space Theme (unchanged)
   monaco.editor.defineTheme('space-theme', {
     base: 'vs-dark',
@@ -34,26 +40,67 @@ const defineMonacoThemes = (monaco) => {
       'editor.inactiveSelectionBackground': '#3E3E5E70',
     }
   });
-  // Wizard Theme (unchanged)
+  // Wizard Theme (updated to match new color palette)
   monaco.editor.defineTheme('wizard-theme', {
     base: 'vs-dark',
     inherit: true,
     rules: [
-      { token: '', foreground: 'e8dbc3', background: '1e102b' },
-      { token: 'keyword', foreground: 'f5d782' },
-      { token: 'string', foreground: '3fbabf' },
-      { token: 'number', foreground: 'b78a5b' },
-      { token: 'comment', foreground: 'a99fcc' },
-      { token: 'type.identifier.java', foreground: 'f5d782' },
+      { token: '', foreground: 'E8DBC3', background: '0F172A' }, // Aged Parchment text, Deep Twilight Blue bg
+      { token: 'keyword', foreground: 'FBBF24', fontStyle: 'bold' }, // Enchanted Gold Bright
+      { token: 'string', foreground: 'E8DBC3' }, // Aged Parchment
+      { token: 'number', foreground: '06B6D4' }, // Arcane Turquoise Deep
+      { token: 'comment', foreground: 'E8DBC3' }, // Aged Parchment
+      { token: 'type.identifier.java', foreground: '0EA5E9' }, // Arcane Turquoise Bright
+      { token: 'variable', foreground: '0EA5E9' }, // Arcane Turquoise Bright
+      { token: 'invalid', foreground: 'ff6464', background: '1A2B3C' }, // Error red
+      { token: 'delimiter', foreground: '6B7280' }, // Ancient Stone Light
+      { token: 'operator', foreground: 'FBBF24' }, // Enchanted Gold Bright
+      { token: 'constant', foreground: '06B6D4' }, // Arcane Turquoise Deep
+      { token: 'function', foreground: '0EA5E9' }, // Arcane Turquoise Bright
+      { token: 'regexp', foreground: '6B7280' }, // Ancient Stone Light
+      { token: 'meta', foreground: '4A5568' }, // Ancient Stone Grey
     ],
     colors: {
-      'editor.background': '#1e102b',
-      'editor.foreground': '#e8dbc3',
-      'editor.lineHighlightBackground': '#2b1a3a',
-      'editorCursor.foreground': '#f5d782',
-      'editorLineNumber.foreground': '#a99fcc',
-      'editor.selectionBackground': '#3E3E5E',
-      'editor.inactiveSelectionBackground': '#3E3E5E70',
+      'editor.background': '#0F172A', // Deep Twilight Blue
+      'editor.foreground': '#E8DBC3', // Aged Parchment
+      'editor.lineHighlightBackground': '#1A2B3C', // Deep Navy
+      'editor.selectionBackground': '#0EA5E9', // Arcane Turquoise Bright
+      'editor.inactiveSelectionBackground': '#0EA5E970', // Arcane Turquoise Bright with opacity
+      'editorCursor.foreground': '#FBBF24', // Enchanted Gold Bright
+      'editorLineNumber.foreground': '#6B7280', // Ancient Stone Light
+      'editorLineNumber.activeForeground': '#FBBF24', // Enchanted Gold Bright
+      'editorWhitespace.foreground': '#6B7280', // Ancient Stone Light
+      'editorIndentGuide.background': '#6B7280', // Ancient Stone Light
+      'editorIndentGuide.activeBackground': '#0EA5E9', // Arcane Turquoise Bright
+      'editor.selectionHighlightBackground': '#0EA5E933', // Arcane Turquoise Bright with opacity
+      'editor.wordHighlightBackground': '#0EA5E933', // Arcane Turquoise Bright with opacity
+      'editor.wordHighlightStrongBackground': '#FBBF2433', // Enchanted Gold Bright with opacity
+      'editorBracketMatch.background': '#0EA5E955', // Arcane Turquoise Bright with opacity
+      'editorBracketMatch.border': '#6B7280', // Ancient Stone Light
+      'editorError.foreground': '#ff6464', // Error red
+      'editorWarning.foreground': '#FBBF24', // Enchanted Gold Bright
+      'editorInfo.foreground': '#0EA5E9', // Arcane Turquoise Bright
+      'editorGutter.background': '#0F172A', // Deep Twilight Blue
+      'editorGutter.modifiedBackground': '#FBBF24', // Enchanted Gold Bright
+      'editorGutter.addedBackground': '#0EA5E9', // Arcane Turquoise Bright
+      'editorGutter.deletedBackground': '#ff6464', // Error red
+      'editorWidget.background': '#1A2B3C', // Deep Navy
+      'editorWidget.border': 'rgba(14, 165, 233, 0.2)', // Arcane Turquoise Bright with opacity
+      'editorSuggestWidget.background': '#1A2B3C', // Deep Navy
+      'editorSuggestWidget.border': 'rgba(14, 165, 233, 0.2)', // Arcane Turquoise Bright with opacity
+      'editorSuggestWidget.foreground': '#E8DBC3', // Aged Parchment
+      'editorSuggestWidget.selectedBackground': '#0EA5E9', // Arcane Turquoise Bright
+      'editorHoverWidget.background': '#1A2B3C', // Deep Navy
+      'editorHoverWidget.border': 'rgba(14, 165, 233, 0.2)', // Arcane Turquoise Bright with opacity
+      'editorMarkerNavigation.background': '#0F172A', // Deep Twilight Blue
+      'editorMarkerNavigationError.background': '#ff6464', // Error red
+      'editorMarkerNavigationWarning.background': '#FBBF24', // Enchanted Gold Bright
+      'editorMarkerNavigationInfo.background': '#0EA5E9', // Arcane Turquoise Bright
+      'editorOverviewRuler.border': 'rgba(14, 165, 233, 0.2)', // Arcane Turquoise Bright with opacity
+      'editorOverviewRuler.errorForeground': '#ff6464', // Error red
+      'editorOverviewRuler.warningForeground': '#FBBF24', // Enchanted Gold Bright
+      'editorOverviewRuler.infoForeground': '#0EA5E9', // Arcane Turquoise Bright
+      'editorWidget.shadow': '0 2px 8px rgba(14, 165, 233, 0.3)', // Arcane Turquoise Bright shadow
     }
   });
   // Detective/Noir Theme (revamped)
@@ -225,8 +272,15 @@ const MonacoCodeBlock = ({
 
   const handleMount = (editor, monaco) => {
     editorRef.current = editor;
+    
+    // Force theme refresh by clearing cache and redefining themes
+    monaco.__cloveThemesDefined = false;
     defineMonacoThemes(monaco);
-    monaco.editor.setTheme(getMonacoThemeName(currentTheme));
+    
+    // Set the theme with a slight delay to ensure it's applied
+    setTimeout(() => {
+      monaco.editor.setTheme(getMonacoThemeName(currentTheme));
+    }, 10);
     
     // Create CSS for simple highlight with cursor pointer on hover
     const styleElement = document.createElement('style');
@@ -298,6 +352,20 @@ const MonacoCodeBlock = ({
       };
     }
   };
+
+  // Update theme when currentTheme changes
+  React.useEffect(() => {
+    if (editorRef.current && window.monaco) {
+      // Force theme refresh
+      window.monaco.__cloveThemesDefined = false;
+      defineMonacoThemes(window.monaco);
+      
+      // Set the new theme
+      setTimeout(() => {
+        window.monaco.editor.setTheme(getMonacoThemeName(currentTheme));
+      }, 10);
+    }
+  }, [currentTheme]);
 
   // Update clickable decorations when placedChoicePositions changes
   React.useEffect(() => {

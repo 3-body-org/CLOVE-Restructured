@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "features/landing/styles/Team.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 
 // Replace these with actual images
@@ -42,7 +42,7 @@ export default function Team() {
                 href="https://linkedin.com/in/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.linkedinIcon}`}
               >
                 <FontAwesomeIcon icon={faLinkedinIn} />
               </a>
@@ -50,15 +50,15 @@ export default function Team() {
                 href="https://x.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.xIcon}`}
               >
-                <FontAwesomeIcon icon={faTwitter} />
+                <FontAwesomeIcon icon={faXTwitter} />
               </a>
               <a
                 href="https://www.facebook.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.facebookIcon}`}
               >
                 <FontAwesomeIcon icon={faFacebookF} />
               </a>
@@ -83,7 +83,7 @@ export default function Team() {
                 href="https://linkedin.com/in/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.linkedinIcon}`}
               >
                 <FontAwesomeIcon icon={faLinkedinIn} />
               </a>
@@ -91,15 +91,15 @@ export default function Team() {
                 href="https://x.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.xIcon}`}
               >
-                <FontAwesomeIcon icon={faTwitter} />
+                <FontAwesomeIcon icon={faXTwitter} />
               </a>
               <a
                 href="https://www.facebook.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.facebookIcon}`}
               >
                 <FontAwesomeIcon icon={faFacebookF} />
               </a>
@@ -123,7 +123,7 @@ export default function Team() {
                 href="https://linkedin.com/in/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.linkedinIcon}`}
               >
                 <FontAwesomeIcon icon={faLinkedinIn} />
               </a>
@@ -131,15 +131,15 @@ export default function Team() {
                 href="https://x.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.xIcon}`}
               >
-                <FontAwesomeIcon icon={faTwitter} />
+                <FontAwesomeIcon icon={faXTwitter} />
               </a>
               <a
                 href="https://www.facebook.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.iconLink}
+                className={`${styles.iconLink} ${styles.facebookIcon}`}
               >
                 <FontAwesomeIcon icon={faFacebookF} />
               </a>

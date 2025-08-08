@@ -48,13 +48,12 @@ export default function Heading() {
             {/* Left side text */}
             <div className="col-md-6">
               <h1 className={styles.heroTitle}>
-                Transform Learning with Interactive Educational Games
+                Learn Java Through Immersive, Game-Inspired Challenges
               </h1>
               <p className={styles.heroParagraph}>
-                Discover how educational games can revolutionize learning by
-                making it engaging and personalized. Our innovative approach
-                combines advanced technologies to adapt to each learner's unique
-                needs.
+              Dive into a coding experience shaped by your performance. 
+              Clove adapts each challenge to your learning patterns — 
+              all within immersive, theme-inspired environments
               </p>
               <div className={styles.heroButtons}>
                 <button className={styles.learnMoreBtn}>Learn More</button>

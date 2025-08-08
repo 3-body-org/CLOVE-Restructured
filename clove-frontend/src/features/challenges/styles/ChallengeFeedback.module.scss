@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 2rem;
+  padding: 2rem 1rem; /* Add small left/right padding */
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   max-width: 900px;
@@ -13,13 +13,14 @@
   transition: all var(--transition-speed, 0.3s) var(--transition-easing, ease);
   font-family: var(--font-primary, 'Space Grotesk', sans-serif);
   color: var(--text, #ffffff);
-  max-height: 90vh;
+  min-height: 600px;
+  max-height: 95vh;
   overflow-y: auto;
 
   &.correct {
-    border-color: var(--correct, #64ff96);
-    background: linear-gradient(135deg, rgba(100, 255, 150, 0.1) 0%, var(--card-bg, rgba(45, 55, 72, 0.8)) 100%);
-    box-shadow: 0 4px 20px rgba(100, 255, 150, 0.2);
+    border-color: var(--correct, #6EE7B7);
+    background: linear-gradient(135deg, rgba(110, 231, 183, 0.1) 0%, var(--card-bg, rgba(45, 55, 72, 0.8)) 100%);
+    box-shadow: 0 4px 20px rgba(110, 231, 183, 0.2);
   }
 
   &.incorrect {
@@ -29,9 +30,73 @@
   }
 
   &.cancelled {
-    border-color: var(--pending, #ffd700);
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, var(--card-bg, rgba(45, 55, 72, 0.8)) 100%);
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+    border-color: var(--pending, #FBBF24);
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, var(--card-bg, rgba(45, 55, 72, 0.8)) 100%);
+    box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+  }
+
+  // Theme-specific styling
+  &.theme-wizard {
+    background: var(--card-bg, rgba(26, 43, 60, 0.8));
+    color: var(--text, #E8DBC3);
+    font-family: var(--font-primary, 'Crimson Text', serif);
+    
+    &.correct {
+      border-color: var(--correct, #6EE7B7);
+      box-shadow: 0 4px 20px rgba(110, 231, 183, 0.2);
+    }
+    
+    &.incorrect {
+      border-color: var(--wrong, #ff6464);
+      box-shadow: 0 4px 20px rgba(255, 100, 100, 0.2);
+    }
+    
+    &.cancelled {
+      border-color: var(--pending, #FBBF24);
+      box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+    }
+  }
+
+  &.theme-detective {
+    background: var(--card-bg, rgba(26, 26, 26, 0.95));
+    color: var(--text, #e0e0e0);
+    font-family: var(--font-primary, 'Lora', serif);
+    
+    &.correct {
+      border-color: var(--correct, #6EE7B7);
+      box-shadow: 0 4px 20px rgba(110, 231, 183, 0.2);
+    }
+    
+    &.incorrect {
+      border-color: var(--wrong, #d32f2f);
+      box-shadow: 0 4px 20px rgba(211, 47, 47, 0.2);
+    }
+    
+    &.cancelled {
+      border-color: var(--pending, #f57c00);
+      box-shadow: 0 4px 20px rgba(245, 124, 0, 0.2);
+    }
+  }
+
+  &.theme-space {
+    background: var(--card-bg, rgba(26, 26, 46, 0.8));
+    color: var(--text, #ffffff);
+    font-family: var(--font-primary, 'Space Grotesk', sans-serif);
+    
+    &.correct {
+      border-color: var(--correct, #6EE7B7);
+      box-shadow: 0 4px 20px rgba(110, 231, 183, 0.2);
+    }
+    
+    &.incorrect {
+      border-color: var(--wrong, #ff6b6b);
+      box-shadow: 0 4px 20px rgba(255, 107, 107, 0.2);
+    }
+    
+    &.cancelled {
+      border-color: var(--pending, #ffa726);
+      box-shadow: 0 4px 20px rgba(255, 167, 38, 0.2);
+    }
   }
 }
 
@@ -64,17 +129,47 @@
   gap: 1.5rem;
   flex: 1;
   overflow-y: auto;
+  max-height: 100vh; /* Ensure content can be scrollable */
+  padding: 0 1rem; /* Match the statsContainer left/right padding */
+  
+  /* Show scrollbar */
+  &::-webkit-scrollbar {
+    width: 16px; /* Make scrollbar thicker */
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin: 4px 0;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--pending, #FBBF24);
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    min-height: 60px; /* Minimum height for thumb */
+    max-height: 120px; /* Maximum height to make it shorter */
+    
+    &:hover {
+      background: rgba(var(--pending-rgb, 251, 191, 36), 0.8);
+    }
+  }
+  
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--pending, #FBBF24) rgba(255, 255, 255, 0.1);
 }
 
 .statsContainer {
   display: flex;
   justify-content: space-around;
   gap: 1rem;
-  padding: 1rem;
+  padding: 1rem 1rem; /* Match the feedbackContainer padding */
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   border: 1px solid var(--accent-primary, #6c5ce7);
   backdrop-filter: blur(10px);
+  margin: 0; /* No margin */
 }
 
 .stat {
@@ -217,81 +312,7 @@
   flex-shrink: 0;
 }
 
-.scrollIndicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  margin: 0.25rem 0;
-  background: linear-gradient(to top, rgba(255, 215, 0, 0.1) 0%, transparent 100%);
-  border: none;
-  border-radius: 8px;
-  animation: pulse 2s ease-in-out infinite;
-  flex-shrink: 0;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 15px;
-    background: radial-gradient(ellipse, rgba(255, 215, 0, 0.4) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: glow 2s ease-in-out infinite;
-  }
-}
 
-.scrollIndicatorFloating {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  background: transparent;
-  border: none;
-  border-radius: 8px;
-  animation: pulse 2s ease-in-out infinite;
-  position: absolute;
-  bottom: 80px; /* Position above the Continue button */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100; /* High z-index to appear in front */
-  pointer-events: none; /* Don't block interactions with content below */
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 15px;
-    background: radial-gradient(ellipse, rgba(255, 215, 0, 0.4) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: glow 2s ease-in-out infinite;
-  }
-}
-
-
-
-.scrollArrow {
-  font-size: 1.25rem;
-  color: var(--pending, #ffd700);
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
-  animation: bounce 1s ease-in-out infinite;
-}
-
-.scrollText {
-  font-size: 0.75rem;
-  color: var(--pending, #ffd700);
-  font-weight: 500;
-  text-align: center;
-  text-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
-}
 
 .continueButton {
   background: linear-gradient(135deg, var(--accent-primary, #6c5ce7) 0%, var(--accent-secondary, #ff7675) 100%);

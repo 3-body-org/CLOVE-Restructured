@@ -5,9 +5,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import MonacoCodeBlock from '../components/MonacoCodeBlock';
-import ChallengeSidebar from '../components/ChallengeSidebar';
 import ProgressIndicator from '../components/ProgressIndicator';
-import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
 import styles from '../styles/OutputTracing.module.scss';
 
 const OutputTracing = ({
@@ -84,29 +82,6 @@ const OutputTracing = ({
   };
 
   return (
-    <ChallengeThemeProvider>
-      <div className={styles.outputTracingContainer}>
-        {/* Left Sidebar */}
-        <ChallengeSidebar
-          mode="output_tracing"
-          scenario={challengeData.scenario}
-          timeRemaining={timeRemaining}
-          hintsUsed={hintsUsed}
-          hintsAvailable={hintsAvailable}
-          onHint={onHint}
-          disabled={disabled}
-          challengeIndex={challengeIndex}
-          totalChallenges={totalChallenges}
-          revealedHints={revealedHints}
-          initialTimerDuration={initialTimerDuration}
-          showTimer={isTimerEnabled}
-          showHints={isHintsEnabled}
-          timerState={timerState}
-        >
-          {/* Custom content for sidebar */}
-        </ChallengeSidebar>
-
-        {/* Right Challenge Area */}
         <div className={styles.challengeArea}>
           {/* Progress Indicator at the very top */}
           <ProgressIndicator
@@ -172,8 +147,6 @@ const OutputTracing = ({
             )}
           </div>
         </div>
-      </div>
-    </ChallengeThemeProvider>
   );
 };
 

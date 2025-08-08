@@ -5,46 +5,77 @@ $space-theme: (
   // ----------------------------------------------------------------
   "font-primary": '"Space Grotesk", sans-serif',
   "font-heading": '"Orbitron", sans-serif',
-  "font-mono": '"Courier New", monospace',
-  "text-primary": rgba(255, 255, 255, 0.95),
-  "text-secondary": #a8a5e6,
-  "bg-primary": #0a0a1a,
-  "bg-secondary": #1a1a2e,
-  "theme-bg": #0a0a1a,
-  "theme-text": rgba(255, 255, 255, 0.95),
-  "accent-color": #6c5ce7,
-  "glow-color": "rgba(108, 92, 231, 0.5)",
+  "font-mono": '"Fira Code", monospace',
+  "text-primary": #ffffff, // White
+  "text-secondary": #a8a5e6, // Light purple
+  "bg-primary": #0a0a1a, // Deep space blue
+  "bg-secondary": rgba(26, 26, 46, 0.8), // Dark blue
+  "theme-bg": #0a0a1a, // Deep space blue
+  "theme-text": #ffffff, // White
+  "accent-color": #a6aafb, // Light blue
+  "glow-color": "rgba(166, 170, 251, 0.5)", // Light blue glow
   "transition-speed": "0.3s",
   "transition-easing": "ease",
 
   // 2. Header & Title Styles
   // Colors for main headings (h1, h2) and icons.
   // ----------------------------------------------------------------
-  "accent-primary": #6c5ce7,
-  "accent-secondary": #ff7675,
+  "accent-primary": #a6aafb, // Light blue
+  "accent-secondary": #ff7675, // Pink
 
   // 3. Card & Section Styles
   // Used for the Challenge Area and Sidebar components.
   // ----------------------------------------------------------------
-  "card-bg": rgba(45, 55, 72, 0.8),
-  "card-hover": rgba(74, 85, 104, 0.8),
-  "card-border": "1px solid #6c5ce7",
-  "card-shadow": "0 4px 6px rgba(0, 0, 0, 0.1)",
+  "card-bg": rgba(26, 26, 46, 0.8), // Dark blue
+  "card-hover": rgba(62, 62, 94, 0.8), // Dark purple (active)
+  "card-border": "1px solid #a6aafb", // Light blue
+  "card-shadow": "0 4px 6px rgba(0, 0, 0, 0.1)", // Space shadow
 
   // 4. Challenge-Specific Colors
   // ----------------------------------------------------------------
-  "code-bg": #252540,
-  "correct": #64ff96,
-  "wrong": #ff6464,
-  "pending": #ffd700,
-  "timer": #ff7675,
-  "hint": #a8a5e6,
-  "bug": #ff6464,
-  "primary": #6c5ce7,
-  "secondary": #a8a5e6,
-  "accent": #ff7675,
-  "bg": #0a0a1a,
-  "text": #ffffff
+  "code-bg": #252540, // Dark code background
+  "correct": #6EE7B7, // Flickering Faerie Green (success)
+  "wrong": #ff6b6b, // Red (danger)
+  "pending": #ffa726, // Orange (warning)
+  "pending-rgb": "255, 167, 38", // RGB values for Orange
+  "timer": #ff7675, // Pink
+  "hint": #a8a5e6, // Light purple
+  "bug": #ff6b6b, // Red
+  "primary": #a6aafb, // Light blue
+  "secondary": #ff7675, // Pink
+  "accent": #a8a5e6, // Light purple
+  "bg": #0a0a1a, // Deep space blue
+  "text": #ffffff, // White
+  
+  // 5. Additional Colors from Palette
+  // ----------------------------------------------------------------
+  "bg-tertiary": #3e3e5e, // Dark purple (active)
+  "heading-primary": #a6aafb, // Light blue
+  "heading-secondary": #ff7675, // Pink
+  "heading-tertiary": #a6aafb, // Light blue
+  "success": #6EE7B7, // Flickering Faerie Green
+  "warning": #ffa726, // Orange
+  "error": #ff6b6b, // Red
+  "muted": #a8a5e6, // Light purple
+  "border": #a6aafb, // Light blue
+  "shadow": "rgba(166, 170, 251, 0.2)", // Light blue with opacity
+  "comment": #a8a5e6, // Light purple
+  "string": #ff7675, // Pink
+  "number": #a6aafb, // Light blue
+  "keyword": #6c5ce7, // Purple
+  "variable": #a6aafb, // Light blue
+  "operator": #a6aafb, // Light blue
+  "constant": #a6aafb, // Light blue
+  "function": #a6aafb, // Light blue
+  "regexp": #a8a5e6, // Light purple
+  "meta": #3e3e5e, // Dark purple
+  "invalid": #ff6b6b, // Red
+  "delimiter": #a8a5e6, // Light purple
+  "active": #3e3e5e, // Dark purple
+  "hover": #ff7675, // Pink
+  "hover-border": #a8a5e6, // Light purple
+  "danger": #ff6b6b, // Red
+  "quaternary": #a8a5e6 // Light purple
 );
 
 // Export the theme map
@@ -55,7 +86,12 @@ $space-theme: (
 }
 
 :global(body.theme-space) {
+  // Apply all theme variables
   @each $var, $value in $space-theme {
     --#{$var}: #{$value};
   }
+
+  // Explicitly set the page background
+  background-color: var(--theme-bg);
+  transition: background-color 0.3s ease;
 } 

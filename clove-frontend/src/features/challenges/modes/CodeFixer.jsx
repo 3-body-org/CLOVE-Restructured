@@ -5,9 +5,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import MonacoCodeBlock from '../components/MonacoCodeBlock';
-import ChallengeSidebar from '../components/ChallengeSidebar';
 import ProgressIndicator from '../components/ProgressIndicator';
-import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
 import styles from '../styles/CodeFixer.module.scss';
 
 const CodeFixer = ({
@@ -90,27 +88,6 @@ const CodeFixer = ({
   };
 
   return (
-    <ChallengeThemeProvider>
-      <div className={styles.codeFixerContainer}>
-        {/* Left Sidebar */}
-        <ChallengeSidebar
-          mode="code_fixer"
-          scenario={scenario}
-          timeRemaining={timeRemaining}
-          hintsUsed={hintsUsed}
-          hintsAvailable={hintsAvailable}
-          onHint={onHint}
-          disabled={disabled}
-          challengeIndex={challengeIndex}
-          totalChallenges={totalChallenges}
-          revealedHints={revealedHints}
-          initialTimerDuration={initialTimerDuration}
-          showTimer={isTimerEnabled}
-          showHints={isHintsEnabled}
-          timerState={timerState}
-        />
-
-        {/* Right Challenge Area */}
         <div className={styles.challengeArea}>
           {/* Progress Indicator at the very top */}
           <ProgressIndicator
@@ -172,8 +149,6 @@ const CodeFixer = ({
             )}
           </div>
         </div>
-      </div>
-    </ChallengeThemeProvider>
   );
 };
 

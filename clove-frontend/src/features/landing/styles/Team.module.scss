@@ -1,30 +1,64 @@
 @use "/variables" as *; /* import the global variable from _variables.scss */
 
 .teamSection {
-  padding: 60px 20px;
-  background-color: $light-black;
+  padding: 80px 20px;
   color: #e2e8f0;
   font-family: "Open Sauce One", "Roboto", sans-serif;
+  position: relative;
+}
+
+.teamSection .container {
+  position: relative;
+  z-index: 1;
 }
 
 .teamLabel {
-  font-size: 15px;
-  color: $white;
+  font-size: 16px;
+  color: $light-purple;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  opacity: 0.8;
+  position: relative;
+}
+
+.teamLabel::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, $light-purple, transparent);
 }
 
 .teamHeading {
-  font-size: 39px;
-  font-weight: bold;
-  color: $light-purple;
-  margin-bottom: 12px;
+  font-size: 56px;
+  font-weight: 900;
+  color: $white;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.teamHeading::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  z-index: -1;
+  filter: blur(12px);
 }
 
 .teamSubheading {
-  font-size: 24px;
-  color: $white;
-  margin-bottom: 40px;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 50px;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 /* Member Styles */
@@ -33,67 +67,183 @@
   height: 120px;
   object-fit: cover;
   border-radius: 50%;
-  margin-bottom: 16px;
-  background-color: $light-black;
+  margin-bottom: 20px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.teamPhoto::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.15) 0%, 
+    transparent 50%, 
+    rgba(124, 58, 237, 0.15) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 50%;
+}
+
+.teamPhoto:hover {
+  transform: scale(1.03);
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 
+    0 20px 40px rgba(139, 92, 246, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.teamPhoto:hover::before {
+  opacity: 1;
 }
 
 .teamName {
-  font-size: 24px;
-  font-weight: bold;
-  color: $light-purple;
-  margin-bottom: 4px;
+  font-size: 26px;
+  font-weight: 700;
+  color: $white;
+  margin-bottom: 8px;
+  line-height: 1.3;
+  background: linear-gradient(135deg, #ffffff 0%, $light-purple 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .teamRole {
-  font-size: 15px;
-  color: $white;
+  font-size: 16px;
+  color: $light-purple;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
 }
 
 .teamDesc {
-  font-size: 15px;
-  color: $white;
-  line-height: 1.4;
-  margin-bottom: 16px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 250px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Icon Links */
 .teamIcons {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .iconLink {
   color: $light-purple;
-  font-size: 20px;
-  border: 2px solid $light-purple;
-  background-color: transparent;
-  border-radius: 5px;
+  font-size: 16px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
   width: 40px;
   height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.iconLink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
 }
 
 .iconLink:hover {
-  background-color: $light-purple;
-  color: $light-black;
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 15px rgba(139, 92, 246, 0.25);
+}
+
+.iconLink:hover::before {
+  left: 100%;
+}
+
+/* Platform-specific hover colors */
+.linkedinIcon:hover {
+  background: linear-gradient(135deg, #00a0dc 0%, #0077b5 100%);
+  color: $white;
+  border-color: rgba(0, 160, 220, 0.5);
+  box-shadow: 0 6px 15px rgba(0, 160, 220, 0.3);
+}
+
+.xIcon:hover {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  color: $white;
+  border-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.facebookIcon:hover {
+  background: linear-gradient(135deg, #1877f2 0%, #0d5aa7 100%);
+  color: $white;
+  border-color: rgba(24, 119, 242, 0.5);
+  box-shadow: 0 6px 15px rgba(24, 119, 242, 0.3);
 }
 
 /* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .teamSection {
+    padding: 60px 20px;
+  }
+  
+  .teamHeading {
+    font-size: 40px;
+  }
+
+  .teamSubheading {
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  .teamPhoto {
+    width: 100px;
+    height: 100px;
+  }
+
+  .teamName {
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 768px) {
+  .teamSection {
+    padding: 50px 20px;
+  }
+
   .teamHeading {
     font-size: 32px;
   }
 
   .teamSubheading {
-    font-size: 16px;
+    font-size: 15px;
+    margin-bottom: 30px;
   }
 
   .teamName {
@@ -101,15 +251,61 @@
   }
 
   .teamRole {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .teamDesc {
     font-size: 13px;
+    max-width: 220px;
   }
 
   .teamPhoto {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
+  }
+
+  .iconLink {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .teamSection {
+    padding: 40px 15px;
+  }
+
+  .teamHeading {
+    font-size: 26px;
+  }
+
+  .teamSubheading {
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+
+  .teamPhoto {
+    width: 80px;
+    height: 80px;
+  }
+
+  .teamName {
+    font-size: 16px;
+  }
+
+  .teamRole {
+    font-size: 12px;
+  }
+
+  .teamDesc {
+    font-size: 12px;
+    max-width: 200px;
+  }
+
+  .iconLink {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
   }
 }

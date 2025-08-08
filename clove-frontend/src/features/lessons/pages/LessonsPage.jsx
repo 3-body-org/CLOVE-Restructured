@@ -393,38 +393,34 @@ const LessonsPage = () => {
   };
 
   const handleSectionClick = (sectionIndex) => {
+    // Set the section immediately for instant highlighting
     setCurrentSection(sectionIndex);
     setIsProgrammaticScroll(true);
     
-    // Scroll to the section with better positioning
+    // Scroll to the section
     const sectionElement = document.querySelector(`[data-section="${sectionIndex}"]`);
     if (sectionElement) {
-      // Get the document container for proper scrolling context
-      const documentContainer = document.querySelector(`.${styles.documentContent}`);
+      // Use scrollIntoView with offset for better positioning
+      sectionElement.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
       
-      if (documentContainer) {
-        // Calculate the scroll position to center the section
-        const containerRect = documentContainer.getBoundingClientRect();
-        const sectionRect = sectionElement.getBoundingClientRect();
-        const scrollTop = documentContainer.scrollTop + (sectionRect.top - containerRect.top) - 100; // 100px offset from top
-        
-        // Smooth scroll to the calculated position
-        documentContainer.scrollTo({
-          top: scrollTop,
+      // Add a small delay and then adjust the scroll position to account for any fixed headers
+      setTimeout(() => {
+        const currentScrollY = window.scrollY;
+        const offset = 100; // 100px offset from top
+        window.scrollTo({
+          top: currentScrollY - offset,
           behavior: 'smooth'
         });
-      } else {
-        // Fallback to scrollIntoView if document container not found
-        sectionElement.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
+      }, 100);
       
       // Re-enable intersection observer after scroll completes
+      // Use a longer delay to ensure the scroll animation is complete
       setTimeout(() => {
         setIsProgrammaticScroll(false);
-      }, 1500);
+      }, 10); // Increased to 1000ms to cover the entire scroll animation
     }
   };
 
@@ -435,8 +431,8 @@ const LessonsPage = () => {
 
     // Function to initialize the intersection observer
     const initializeObserver = () => {
-      const sections = document.querySelectorAll('[data-section]');
-      
+    const sections = document.querySelectorAll('[data-section]');
+    
       if (sections.length === 0) {
         console.log('No sections found with data-section attribute, retrying...');
         return false; // Return false to indicate retry needed
@@ -444,56 +440,57 @@ const LessonsPage = () => {
 
       console.log(`Found ${sections.length} sections to observe`);
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          // Skip intersection detection during programmatic scrolling
-          if (isProgrammaticScroll) {
-            return;
-          }
-          
-          // Find the section that is most visible in the viewport
-          let bestSection = null;
-          let bestScore = -1;
-
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const sectionIndex = parseInt(entry.target.getAttribute('data-section'));
-              const rect = entry.boundingClientRect;
-              const viewportHeight = window.innerHeight;
-              
-              // Calculate a score based on how much of the section is visible and its position
-              const visibleRatio = entry.intersectionRatio;
-              const distanceFromTop = Math.abs(rect.top);
-              const distanceFromCenter = Math.abs(rect.top + rect.height / 2 - viewportHeight / 2);
-              
-              // Prioritize sections that are more visible and closer to the center
-              const score = visibleRatio * 2 - (distanceFromCenter / viewportHeight);
-              
-              if (score > bestScore) {
-                bestScore = score;
-                bestSection = entry.target;
-              }
-            }
-          });
-
-          if (bestSection) {
-            const sectionIndex = parseInt(bestSection.getAttribute('data-section'));
-            console.log(`Setting current section to: ${sectionIndex}`);
-            setCurrentSection(sectionIndex);
-          }
-        },
-        {
-          rootMargin: '-20% 0px -20% 0px', // Larger margins for better detection
-          threshold: [0.1, 0.3, 0.5, 0.7, 0.9] // Multiple thresholds for smoother detection
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Skip intersection detection during programmatic scrolling
+        if (isProgrammaticScroll) {
+          return;
         }
-      );
+        
+        // Find the section that is most prominently visible in the viewport
+        let bestSection = null;
+        let bestScore = -1;
 
-      sections.forEach((section) => {
-        observer.observe(section);
-      });
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const sectionIndex = parseInt(entry.target.getAttribute('data-section'));
+            const rect = entry.boundingClientRect;
+            const viewportHeight = window.innerHeight;
+            
+            // Calculate a score based on how much of the section is visible and its position
+            const visibleRatio = entry.intersectionRatio;
+            const distanceFromTop = Math.abs(rect.top);
+            const distanceFromCenter = Math.abs(rect.top + rect.height / 2 - viewportHeight / 2);
+            
+            // Prioritize sections that are more visible and closer to the top
+            // Give more weight to sections that are at the top of the viewport
+            const topWeight = rect.top <= 150 ? 2 : 1; // Bonus for sections near the top
+            const score = (visibleRatio * topWeight) - (distanceFromTop / viewportHeight);
+            
+            if (score > bestScore) {
+              bestScore = score;
+              bestSection = entry.target;
+            }
+          }
+        });
+
+        if (bestSection) {
+          const sectionIndex = parseInt(bestSection.getAttribute('data-section'));
+          console.log(`Setting current section to: ${sectionIndex}`);
+          setCurrentSection(sectionIndex);
+        }
+      },
+      {
+        rootMargin: '-10% 0px -60% 0px', // Smaller top margin, larger bottom margin
+        threshold: [0.3, 0.5, 0.7] // Fewer, more meaningful thresholds
+      }
+    );
+
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
 
       // Add scroll event listener as backup for better synchronization
-      const documentContainer = document.querySelector(`.${styles.documentContent}`);
       const handleScroll = () => {
         if (isProgrammaticScroll) return;
         
@@ -505,7 +502,8 @@ const LessonsPage = () => {
           const rect = section.getBoundingClientRect();
           const distance = Math.abs(rect.top);
           
-          if (distance < closestDistance && rect.top <= 200) { // Within 200px of top
+          // Only consider sections that are within 100px of the top
+          if (distance < closestDistance && rect.top <= 100) {
             closestDistance = distance;
             closestSection = section;
           }
@@ -517,9 +515,8 @@ const LessonsPage = () => {
         }
       };
 
-      if (documentContainer) {
-        documentContainer.addEventListener('scroll', handleScroll, { passive: true });
-      }
+      // Add scroll listener to window since the page scrolls, not a container
+      window.addEventListener('scroll', handleScroll, { passive: true });
 
       // Set initial section immediately
       if (sections.length > 0) {
@@ -531,9 +528,7 @@ const LessonsPage = () => {
 
       return () => {
         observer.disconnect();
-        if (documentContainer) {
-          documentContainer.removeEventListener('scroll', handleScroll);
-        }
+        window.removeEventListener('scroll', handleScroll);
       };
     };
 

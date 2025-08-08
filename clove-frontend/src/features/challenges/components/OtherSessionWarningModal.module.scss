@@ -10,10 +10,28 @@
   justify-content: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease-out;
+  font-family: var(--font-primary, 'Space Grotesk', sans-serif);
+  color: var(--text, #ffffff);
+  
+  // Theme-specific styling
+  &.theme-wizard {
+    font-family: var(--font-primary, 'Crimson Text', serif);
+    color: var(--text, #E8DBC3);
+  }
+  
+  &.theme-detective {
+    font-family: var(--font-primary, 'Lora', serif);
+    color: var(--text, #e0e0e0);
+  }
+  
+  &.theme-space {
+    font-family: var(--font-primary, 'Space Grotesk', sans-serif);
+    color: var(--text, #ffffff);
+  }
 }
 
 .modalContent {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, var(--accent-secondary, #764ba2) 100%);
   border-radius: 16px;
   padding: 0;
   max-width: 500px;
@@ -22,28 +40,29 @@
   overflow-y: auto;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.3s ease-out;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--accent-primary, rgba(255, 255, 255, 0.1));
 }
 
 .modalHeader {
   background: rgba(255, 255, 255, 0.1);
   padding: 24px 24px 16px;
   border-radius: 14px 14px 0 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid var(--accent-primary, rgba(255, 255, 255, 0.2));
 
   h2 {
     margin: 0;
-    color: #ffffff;
+    color: var(--text, #ffffff);
     font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: var(--font-heading, 'Orbitron', sans-serif);
   }
 }
 
 .modalBody {
   padding: 24px;
-  color: #ffffff;
+  color: var(--text, #ffffff);
 
   p {
     margin: 0 0 20px 0;
@@ -59,7 +78,7 @@
 
     h3 {
       margin: 0 0 12px 0;
-      color: #ffffff;
+      color: var(--text, #ffffff);
       font-size: 1.1rem;
       font-weight: 600;
     }
@@ -73,11 +92,11 @@
         line-height: 1.4;
 
         strong {
-          color: #ffd700;
+          color: var(--accent, #ffd700);
         }
 
         small {
-          color: rgba(255, 255, 255, 0.8);
+          color: var(--text-secondary, rgba(255, 255, 255, 0.8));
           font-size: 0.85rem;
         }
       }
@@ -86,7 +105,7 @@
 
   .warning {
     background: rgba(255, 193, 7, 0.2);
-    border: 1px solid rgba(255, 193, 7, 0.4);
+    border: 1px solid var(--warning, rgba(255, 193, 7, 0.4));
     border-radius: 8px;
     padding: 16px;
     margin: 16px 0;
@@ -112,7 +131,7 @@
   background: rgba(255, 255, 255, 0.1);
   padding: 16px 24px 24px;
   border-radius: 0 0 14px 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid var(--accent-primary, rgba(255, 255, 255, 0.2));
   display: flex;
   gap: 12px;
   justify-content: flex-end;
@@ -120,14 +139,15 @@
 
 .cancelButton {
   background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text, #ffffff);
+  border: 1px solid var(--accent-primary, rgba(255, 255, 255, 0.3));
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: var(--font-primary, 'Space Grotesk', sans-serif);
 
   &:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.3);
@@ -141,8 +161,8 @@
 }
 
 .closeTabsButton {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--error, #ff6b6b) 0%, var(--error, #ee5a24) 100%);
+  color: var(--text, #ffffff);
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
@@ -151,6 +171,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  font-family: var(--font-primary, 'Space Grotesk', sans-serif);
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);

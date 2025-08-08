@@ -630,16 +630,17 @@ const PracticePage = () => {
             <div className={styles.codeFixerChallenge}>
               <div className={styles.challengeTitle}>CODE FIXER CHALLENGE</div>
               
-              <div className={styles.codeEditor}>
+              <div className={styles.codeEditorContainer}>
+                <h3>EDIT THE CODE:</h3>
                 <LessonMonacoEditor
                   value={challengeStates.codeFixer.code}
                   onChange={handleCodeFixerEditorChange}
                   language="java"
-                  height="400px"
+                  height="100%"
                   onMount={handleCodeFixerEditorMount}
                   options={{
                     minimap: { enabled: false },
-                    fontSize: 16,
+                    fontSize: 17,
                     wordWrap: 'on',
                     automaticLayout: true,
                     scrollBeyondLastLine: false,
@@ -649,7 +650,7 @@ const PracticePage = () => {
                     lineNumbers: 'on',
                     folding: true,
                     lineDecorationsWidth: 10,
-                    padding: { top: 15, bottom: 15, left: 0 },
+                    padding: { top: 15, bottom: 15, left: 15, right: 15 },
                     tabSize: 2,
                     fontFamily: 'Fira Code, monospace',
                     fontWeight: '400',
@@ -666,37 +667,28 @@ const PracticePage = () => {
                       verticalScrollbarSize: 0,
                       horizontalScrollbarSize: 0,
                     },
+                    fixedOverflowWidgets: true,
+                    overviewRulerBorder: false,
+                    hideCursorInOverviewRuler: true,
                   }}
                 />
               </div>
 
               {/* Expected Output Section */}
               <div className={styles.expectedOutput}>
-                <div className={styles.expectedOutputHeader}>
-                  <span className={styles.expectedOutputTitle}>Expected Output</span>
-                </div>
-                <div className={styles.expectedOutputContent}>
-                  <pre>{challenges.codeFixer?.challenge_data?.expected_output?.[0] || 'No expected output available'}</pre>
+                <h3>Expected Output:</h3>
+                <div className={styles.outputText}>
+                  {challenges.codeFixer?.challenge_data?.expected_output?.[0] || 'No expected output available'}
                 </div>
               </div>
 
-              <div className={styles.consoleOutput}>
-                <div className={styles.consoleHeader}>
-                  <span className={styles.consoleTitle}>Console Output</span>
-                  {challengeStates.codeFixer.isExecuting && <span className={styles.executingIndicator}>Executing...</span>}
-                </div>
-                <div className={styles.consoleContent}>
-                  <pre>{challengeStates.codeFixer.output}</pre>
-                </div>
-              </div>
-
-              <div className={styles.controls}>
+              <div className={styles.submitButton}>
                 <button
-                  className={styles.submitBtn}
                   onClick={checkCodeFixerSolution}
                   disabled={challengeStates.codeFixer.isExecuting || challengeStates.codeFixer.isCompleted}
+                  className={challengeStates.codeFixer.isExecuting ? styles.submitting : ''}
                 >
-                  {challengeStates.codeFixer.isExecuting ? 'Executing...' : 'VALIDATE REPAIRS'}
+                  {challengeStates.codeFixer.isExecuting ? 'Executing...' : 'Submit'}
                 </button>
               </div>
             </div>
@@ -707,16 +699,17 @@ const PracticePage = () => {
             <div className={styles.outputTracingChallenge}>
               <div className={styles.challengeTitle}>OUTPUT TRACING CHALLENGE</div>
               
-              <div className={styles.codeEditor}>
+              <div className={styles.codeDisplayContainer}>
+                <h3>CODE TO ANALYZE:</h3>
                 <LessonMonacoEditor
                   value={challenges.outputTracing.challenge_data.code}
                   onChange={() => {}}
                   language="java"
-                  height="350px"
+                  height="100%"
                   options={{
                     readOnly: true,
                     minimap: { enabled: false },
-                    fontSize: 16,
+                    fontSize: 17,
                     wordWrap: 'on',
                     automaticLayout: true,
                     scrollBeyondLastLine: false,
@@ -726,7 +719,7 @@ const PracticePage = () => {
                     lineNumbers: 'on',
                     folding: true,
                     lineDecorationsWidth: 10,
-                    padding: { top: 15, bottom: 15, left: 0 },
+                    padding: { top: 15, bottom: 15, left: 15, right: 15 },
                     tabSize: 2,
                     fontFamily: 'Fira Code, monospace',
                     fontWeight: '400',
@@ -743,26 +736,30 @@ const PracticePage = () => {
                       verticalScrollbarSize: 0,
                       horizontalScrollbarSize: 0,
                     },
+                    fixedOverflowWidgets: true,
+                    overviewRulerBorder: false,
+                    hideCursorInOverviewRuler: true,
                   }}
                 />
               </div>
 
               <div className={styles.questionContainer}>
-                <h3 className={styles.questionText}>
-                  {challenges.outputTracing.scenario}
-                </h3>
+                <h3>What is the output of the following code?</h3>
+                <div className={styles.selectionInfo}>
+                  Selected: {challengeStates.outputTracing.selectedOptions?.length || 0} option(s)
+                </div>
               </div>
 
-              <div className={styles.optionsGrid}>
+              <div className={styles.choicesContainer}>
                 {challenges.outputTracing.challenge_data.choices.map((choice, i) => {
                   const isSelected = challengeStates.outputTracing.selectedOptions?.includes(choice);
                   const expectedOutputs = challenges.outputTracing?.challenge_data?.expected_output || [];
                   const isCorrect = expectedOutputs.includes(choice);
                   
                   return (
-                    <div
+                    <button
                       key={i}
-                      className={`${styles.codeInput} ${
+                      className={`${styles.choiceButton} ${
                         isSelected
                           ? challengeStates.outputTracing.isCompleted
                             ? isCorrect
@@ -775,29 +772,23 @@ const PracticePage = () => {
                         !challengeStates.outputTracing.isCompleted && 
                         handleOutputTracingOptionSelect(choice)
                       }
+                      disabled={challengeStates.outputTracing.isCompleted}
                     >
                       {choice}
-                    </div>
+                    </button>
                   );
                 })}
               </div>
 
-              {/* Selected outputs display */}
-              {challengeStates.outputTracing.selectedOptions && challengeStates.outputTracing.selectedOptions.length > 0 && (
-                <div className={styles.selectedOutputsDisplay}>
-                  <strong>Selected outputs:</strong> {challengeStates.outputTracing.selectedOptions.join(', ')}
-                </div>
-              )}
-
               {/* Validation button */}
               {!challengeStates.outputTracing.isCompleted && (
-                <div className={styles.validationControls}>
+                <div className={styles.submitButton}>
                   <button
-                    className={styles.validateButton}
+                    className={styles.submitButton}
                     onClick={validateOutputTracing}
                     disabled={!challengeStates.outputTracing.selectedOptions || challengeStates.outputTracing.selectedOptions.length === 0}
                   >
-                    Validate Selection
+                    Submit
                   </button>
                 </div>
               )}
@@ -833,7 +824,7 @@ const PracticePage = () => {
                 {codeCompletionAvailableChoices.map((choice, idx) => (
                   <div
                     key={idx}
-                    className={`${styles.choice} ${
+                    className={`${styles.choiceItem} ${
                       challengeStates.codeCompletion.currentDragItem?.value === choice ? styles.dragging : ''
                     }`}
                     draggable
@@ -842,152 +833,131 @@ const PracticePage = () => {
                     onDragOver={(e) => e.preventDefault()}
                   >
                     {choice}
-                    <span className={styles.dragHandle}>⋮⋮</span>
                   </div>
                 ))}
               </div>
               
               {/* Code Editor */}
-              <div 
-                className={styles.codeEditor}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  e.dataTransfer.dropEffect = 'copy';
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  
-                  let dragData;
-                  try {
-                    const jsonData = e.dataTransfer.getData('application/json');
-                    dragData = jsonData ? JSON.parse(jsonData) : null;
-                  } catch (error) {
-                    return;
-                  }
-                  
-                  if (!dragData || dragData.isFromEditor) return;
-                  
-                  const editor = editorRefs.current.codeCompletion;
-                  if (!editor) return;
-                  
-                  const model = editor.getModel();
-                  if (!model) return;
-                  
-                  const rect = editor.getDomNode().getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  const position = editor.getTargetAtClientPoint ? editor.getTargetAtClientPoint(e.clientX, e.clientY) : null;
-                  
-                  let offset = null;
-                  if (position && position.position) {
-                    offset = model.getOffsetAt(position.position);
-                  } else {
-                    const lineCount = model.getLineCount();
-                    for (let line = 1; line <= lineCount; line++) {
-                      const lineTop = editor.getTopForLineNumber(line);
-                      const lineHeight = editor.getOption && editor.getOption(editor.constructor.EditorOption.lineHeight) || 24;
-                      if (y >= lineTop && y < lineTop + lineHeight) {
-                        offset = model.getOffsetAt({ lineNumber: line, column: 1 });
-                        break;
+              <div className={styles.codeEditorContainer}>
+                <h3>COMPLETE THE CODE:</h3>
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'copy';
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    
+                    let dragData;
+                    try {
+                      const jsonData = e.dataTransfer.getData('application/json');
+                      dragData = jsonData ? JSON.parse(jsonData) : null;
+                    } catch (error) {
+                      return;
+                    }
+                    
+                    if (!dragData || dragData.isFromEditor) return;
+                    
+                    const editor = editorRefs.current.codeCompletion;
+                    if (!editor) return;
+                    
+                    const model = editor.getModel();
+                    if (!model) return;
+                    
+                    const rect = editor.getDomNode().getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const position = editor.getTargetAtClientPoint ? editor.getTargetAtClientPoint(e.clientX, e.clientY) : null;
+                    
+                    let offset = null;
+                    if (position && position.position) {
+                      offset = model.getOffsetAt(position.position);
+                    } else {
+                      const lineCount = model.getLineCount();
+                      for (let line = 1; line <= lineCount; line++) {
+                        const lineTop = editor.getTopForLineNumber(line);
+                        const lineHeight = editor.getOption && editor.getOption(editor.constructor.EditorOption.lineHeight) || 24;
+                        if (y >= lineTop && y < lineTop + lineHeight) {
+                          offset = model.getOffsetAt({ lineNumber: line, column: 1 });
+                          break;
+                        }
                       }
                     }
-                  }
-                  
-                  if (offset === null) return;
-                  
-                  const codeVal = model.getValue();
-                  const replaceables = getReplaceableRanges(codeVal);
-                  const target = replaceables.find(r => offset >= r.start && offset <= r.end);
-                  
-                  if (!target) return;
-                  
-                  const before = codeVal.slice(0, target.start);
-                  const after = codeVal.slice(target.end);
-                  const newCode = before + dragData.value + after;
-                  
-                  setChallengeStates(prev => ({
-                    ...prev,
-                    codeCompletion: {
-                      ...prev.codeCompletion,
-                      code: newCode
-                    }
-                  }));
-                  
-                  setChallengeStates(prev => ({
-                    ...prev,
-                    codeCompletion: {
-                      ...prev.codeCompletion,
-                      usedChoices: [...prev.codeCompletion.usedChoices, dragData.value]
-                    }
-                  }));
-                  
-                  setChallengeStates(prev => ({
-                    ...prev,
-                    codeCompletion: {
-                      ...prev.codeCompletion,
-                      currentDragItem: null
-                    }
-                  }));
-                }}
-              >
-                <LessonMonacoEditor
-                  value={challengeStates.codeCompletion.code}
-                  onChange={(newCode) => newCode !== undefined && setChallengeStates(prev => ({
-                    ...prev,
-                    codeCompletion: { ...prev.codeCompletion, code: newCode }
-                  }))}
-                  language="java"
-                  height="400px"
-                  onMount={(editor) => {
-                    editorRefs.current.codeCompletion = editor;
-                    editor.updateOptions({ 
-                      dragAndDrop: true,
-                      acceptSuggestionOnEnter: 'smart',
-                      selectOnLineNumbers: true,
-                      selectionClipboard: true,
-                      quickSuggestions: false
-                    });
+                    
+                    if (offset === null) return;
+                    
+                    const codeVal = model.getValue();
+                    const replaceables = getReplaceableRanges(codeVal);
+                    const target = replaceables.find(r => offset >= r.start && offset <= r.end);
+                    
+                    if (!target) return;
+                    
+                    const before = codeVal.slice(0, target.start);
+                    const after = codeVal.slice(target.end);
+                    const newCode = before + dragData.value + after;
+                    
+                    setChallengeStates(prev => ({
+                      ...prev,
+                      codeCompletion: {
+                        ...prev.codeCompletion,
+                        code: newCode
+                      }
+                    }));
+                    
+                    setChallengeStates(prev => ({
+                      ...prev,
+                      codeCompletion: {
+                        ...prev.codeCompletion,
+                        usedChoices: [...prev.codeCompletion.usedChoices, dragData.value]
+                      }
+                    }));
+                    
+                    setChallengeStates(prev => ({
+                      ...prev,
+                      codeCompletion: {
+                        ...prev.codeCompletion,
+                        currentDragItem: null
+                      }
+                    }));
                   }}
-                />
+                >
+                  <LessonMonacoEditor
+                    value={challengeStates.codeCompletion.code}
+                    onChange={(newCode) => newCode !== undefined && setChallengeStates(prev => ({
+                      ...prev,
+                      codeCompletion: { ...prev.codeCompletion, code: newCode }
+                    }))}
+                    language="java"
+                    height="100%"
+                    onMount={(editor) => {
+                      editorRefs.current.codeCompletion = editor;
+                      editor.updateOptions({ 
+                        dragAndDrop: true,
+                        acceptSuggestionOnEnter: 'smart',
+                        selectOnLineNumbers: true,
+                        selectionClipboard: true,
+                        quickSuggestions: false
+                      });
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Expected Output Section */}
               <div className={styles.expectedOutput}>
-                <div className={styles.expectedOutputHeader}>
-                  <span className={styles.expectedOutputTitle}>Expected Output</span>
-                </div>
-                <div className={styles.expectedOutputContent}>
-                  <pre>{challenges.codeCompletion?.challenge_data?.expected_output?.[0] || 'No expected output available'}</pre>
+                <h3>Expected Output:</h3>
+                <div className={styles.outputText}>
+                  {challenges.codeCompletion?.challenge_data?.expected_output?.[0] || 'No expected output available'}
                 </div>
               </div>
 
-              <div className={styles.terminalWindow}>
-                <div className={styles.terminalHeader}>
-                  <div className={styles.terminalButtons}>
-                    <span className={styles.closeBtn}></span>
-                    <span className={styles.minimizeBtn}></span>
-                    <span className={styles.expandBtn}></span>
-                  </div>
-                  <div className={styles.terminalTitle}>console</div>
-                </div>
-                <div className={styles.terminalContent}>
-                  <div className={styles.terminalLine}>
-                    <span className={styles.prompt}>{'>'}</span>
-                    <span>{challengeStates.codeCompletion.consoleOutput}</span>
-                  </div>
-                  <div className={`${styles.terminalLine} ${styles.comment}`}>
-                    {'// Type your code above and click "VALIDATE SOLUTION" to see the output here'}
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.actionButtons}>
+              <div className={styles.submitButton}>
                 <button
-                  className={styles.submitBtn}
                   onClick={checkCodeCompletionSolution}
                   disabled={challengeStates.codeCompletion.isCompleted}
+                  className={challengeStates.codeCompletion.isCompleted ? styles.submitted : ''}
                 >
-                  {challengeStates.codeCompletion.isCompleted ? "MISSION COMPLETE" : "VALIDATE SOLUTION"}
+                  {challengeStates.codeCompletion.isCompleted ? "Submitted" : "Submit"}
                 </button>
               </div>
             </div>
