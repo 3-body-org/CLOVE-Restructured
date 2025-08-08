@@ -4,19 +4,8 @@ import { useState } from "react";
 import styles from "features/landing/styles/Features.module.scss";
 // Replace with your actual images
 import tempPic from "assets/images/landing/image-landing-flowers.jpg";
-//fontawesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 export default function Features() {
-  // State to track whether additional content is expanded
-  const [expanded, setExpanded] = useState(false);
-
-  // Toggles the expanded state
-  const handleExpand = () => {
-    setExpanded(!expanded);
-  };
-
   return (
     <section className={styles.featuresSection}>
       <div className="container">
@@ -25,15 +14,15 @@ export default function Features() {
           <div className="col-md-6">
             <p className={styles.innovateText}>Innovate</p>
             <h1 className={styles.featuresHeading}>
-              Unlock Your Learning Potential with Us
+              How Clove Helps You Learn Java Better
             </h1>
           </div>
           <div className="col-md-6">
             <p className={styles.featuresParagraph}>
-              Experience a transformative learning journey tailored just for
-              you. Our innovative approach ensures that every learner receives
-              personalized content that adapts in real-time. This not only
-              enhances understanding but also keeps you motivated and engaged.
+              Clove adjusts each coding challenge based on how you're doing,
+               from hints to timers to difficulty levels. Set inside unique,
+                themed scenarios, your learning journey stays fresh, balanced, 
+                and just challenging enough to keep you moving forward.
             </p>
           </div>
         </div>
@@ -49,11 +38,11 @@ export default function Features() {
                 className={styles.featureImg}
               />
               <h3 className={styles.featureTitle}>
-                Personalized Learning Paths for Every Student
+                Challenges That Adjust With You
               </h3>
               <p className={styles.featureDescription}>
-                Our system creates unique learning paths based on individual
-                progress.
+                Clove responds intelligently to your progress, 
+                adapting each challenge to meet you at your current skill level.
               </p>
             </div>
           </div>
@@ -67,10 +56,11 @@ export default function Features() {
                 className={styles.featureImg}
               />
               <h3 className={styles.featureTitle}>
-                Real-Time Adaptability to Enhance Learning Experience
+                 More Than Just Practice
               </h3>
               <p className={styles.featureDescription}>
-                Adjustments are made instantly to match your skill level.
+                Every challenge is purposefully designed to build
+                mastery through thoughtful pacing and gradual complexity.
               </p>
             </div>
           </div>
@@ -84,49 +74,14 @@ export default function Features() {
                 className={styles.featureImg}
               />
               <h3 className={styles.featureTitle}>
-                Boost Retention and Motivation with Engaging Content
+                Built-In Support That Doesn't Interrupt
               </h3>
               <p className={styles.featureDescription}>
-                Stay motivated with challenges that evolve with you.
+                Assistance appears only when it's needed, 
+                helping you stay focused without breaking your learning flow.
               </p>
             </div>
           </div>
-        </div>
-
-        {/* ===== Hidden Feature Row (Expanded Content) ===== */}
-        {expanded && (
-          <div className="row mt-5">
-            <div className="col-md-4 d-flex align-items-stretch">
-              <div className={styles.featureCard}>
-                <img
-                  src={tempPic}
-                  alt="Analytics"
-                  className={styles.featureImg}
-                />
-                <h3 className={styles.featureTitle}>In-Depth Analytics</h3>
-                <p className={styles.featureDescription}>
-                  Gain insights into your performance with real-time analytics.
-                </p>
-              </div>
-            </div>
-            {/* Add more cards if needed */}
-          </div>
-        )}
-
-        {/* ===== Arrow to Expand/Collapse ===== */}
-        <div className={styles.arrowWrapper}>
-          {/* White line above the arrow */}
-          <div className={styles.arrowSeparator}></div>
-
-          {/* Arrow button toggles expanded content */}
-          <button onClick={handleExpand} className={styles.arrowBtn}>
-            <FontAwesomeIcon
-              icon={faAngleDown}
-              className={`${styles.arrowIcon} ${
-                expanded ? styles.rotated : ""
-              }`}
-            />
-          </button>
         </div>
       </div>
     </section>

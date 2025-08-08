@@ -13,6 +13,8 @@ import CodeFixer from '../modes/CodeFixer';
 import CodeCompletion from '../modes/CodeCompletion';
 import OutputTracing from '../modes/OutputTracing';
 import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
+import ChallengeSidebar from '../components/ChallengeSidebar';
+import ProgressIndicator from '../components/ProgressIndicator';
 import ChallengeFeedback from '../components/ChallengeFeedback';
 import LoadingScreen from '../../../components/layout/StatusScreen/LoadingScreen';
 import ErrorScreen from '../../../components/layout/StatusScreen/ErrorScreen';
@@ -276,7 +278,27 @@ const ChallengesPage = () => {
           </div>
         )}
 
-        {/* Challenge Component */}
+        {/* Left Sidebar */}
+        {!showFeedback && currentChallenge && (
+          <ChallengeSidebar
+            mode={currentChallenge.mode}
+            scenario={currentChallenge.scenario}
+            timeRemaining={timeRemaining}
+            hintsUsed={hintsUsed}
+            hintsAvailable={hintsAvailable}
+            onHint={useHint}
+            disabled={challengeState !== 'active' || timerState === 'expired'}
+            challengeIndex={getCurrentProgress()}
+            totalChallenges={totalChallenges}
+            revealedHints={revealedHints}
+            initialTimerDuration={initialTimerDuration}
+            showTimer={isTimerEnabled}
+            showHints={isHintsEnabled}
+            timerState={timerState}
+          />
+        )}
+
+        {/* Right Challenge Area */}
         <div className={styles.challengeWrapper}>
           <div className={styles.fullWidthChallenge}>
             {showFeedback && feedbackData ? (

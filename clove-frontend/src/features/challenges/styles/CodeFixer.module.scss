@@ -16,7 +16,6 @@
 }
 
 .challengeArea {
-  flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -25,13 +24,13 @@
   border: 1px solid var(--primary, #6c5ce7);
   box-shadow: 0 0 20px rgba(108, 92, 231, 0.2);
   margin-left: 20px;
-  min-height: 100vh;
-  max-width: calc(100vw - 340px);
+  min-width: 0; /* Allow flex item to shrink below content size */
   overflow-x: hidden;
+  height: fit-content; /* Make container wrap its content exactly */
 }
 
 .challengeTitle {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: var(--text);
   text-align: center;
@@ -44,7 +43,7 @@
 .codeEditorContainer {
   display: flex;
   flex-direction: column;
-  height: 450px;
+  height: 500px; //change koto later, cant decide yet eh 
   margin-bottom: 20px;
   border: 2px solid var(--primary, #6c5ce7);
   border-radius: 8px;
@@ -72,7 +71,7 @@
   
   // Increase font size in Monaco editor
   :global(.monaco-editor) {
-    font-size: 16px !important;
+    font-size: 17px !important;
     border: 1px solid var(--primary, #6c5ce7) !important;
     border-radius: 6px !important;
     overflow: hidden !important;
@@ -125,7 +124,7 @@
   .outputText {
     color: var(--text);
     font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     background: rgba(0, 0, 0, 0.3);
     padding: 8px 12px;
     border-radius: 5px;

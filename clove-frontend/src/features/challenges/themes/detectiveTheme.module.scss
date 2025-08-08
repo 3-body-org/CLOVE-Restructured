@@ -5,51 +5,76 @@ $detective-theme: (
   // ----------------------------------------------------------------
   "font-primary": '"Lora", serif',
   "font-heading": '"Playfair Display", serif',
-  "font-mono": '"Courier New", monospace',
-  "text-primary": #dcdcdc, // Pale Gray
-  "text-secondary": #888c94, // Steel Gray
-  "bg-primary": #121212, // Deep Charcoal
-  "bg-secondary": #1a1a1a, // Darkened Charcoal
-  "theme-bg": #121212,
-  "theme-text": #dcdcdc,
-  "accent-color": #00bcd4,
-  "glow-color": "rgba(0, 139, 163, 0.4)",
+  "font-mono": '"IBM Plex Mono", monospace',
+  "text-primary": #e0e0e0, // Brighter light grey
+  "text-secondary": #b4a287, // Sepia brown
+  "bg-primary": #0a0a0a, // Deeper noir black
+  "bg-secondary": #1a1a1a, // Darker code background
+  "theme-bg": #0a0a0a, // Deeper noir black
+  "theme-text": #e0e0e0, // Brighter light grey
+  "accent-color": #d1b773, // Gold
+  "glow-color": "rgba(209, 183, 115, 0.4)", // Gold glow
   "transition-speed": "0.3s",
   "transition-easing": "ease",
 
   // 2. Header & Title Styles
   // Colors for main headings (h1, h2) and icons.
   // ----------------------------------------------------------------
-  "accent-primary": #008ba3, // Darker Cyber Blue
-  "accent-secondary": #d4c23d, // Darker Crime Yellow
+  "accent-primary": #d1b773, // Gold
+  "accent-secondary": #7a9e7e, // Olive green
 
   // 3. Card & Section Styles
   // Used for the Challenge Area and Sidebar components.
   // ----------------------------------------------------------------
-  "card-bg": rgba(43, 47, 56, 0.9), // Gunmetal
-  "card-hover": rgba(54, 59, 70, 0.95), // Darkened Gunmetal
-  "card-border": "1px solid #008ba3", // Darker cyber blue border for visibility
-  "card-shadow": "0 4px 6px rgba(0, 0, 0, 0.5)", // Cyber Neon Blue glow
+  "card-bg": rgba(26, 26, 26, 0.95), // Darker gunmetal
+  "card-hover": rgba(42, 42, 42, 0.95), // Darker active items
+  "card-border": "1px solid #d1b773", // Gold border
+  "card-shadow": "0 4px 6px rgba(0, 0, 0, 0.5)", // Noir shadow
 
   // 4. Challenge-Specific Colors
   // ----------------------------------------------------------------
-  "code-bg": #2a2a3a,
-  "correct": #64ff96,
-  "wrong": #ff6464,
-  "pending": #ffd700,
-  "timer": #00bcd4,
-  "hint": #888c94,
-  "bug": #ff6464,
-  "primary": #008ba3, // Use the darker cyber blue for better visibility
-  "secondary": #888c94,
-  "accent": #00bcd4,
-  "bg": #121212,
-  "text": #dcdcdc,
+  "code-bg": #1a1a1a, // Darker code background
+  "correct": #6EE7B7, // Flickering Faerie Green (success)
+  "wrong": #d32f2f, // Dark red (danger)
+  "pending": #f57c00, // Orange-red (warning)
+  "pending-rgb": "245, 124, 0", // RGB values for Orange-red
+  "timer": #d1b773, // Gold
+  "hint": #8a8a8a, // Muted grey
+  "bug": #d32f2f, // Dark red
+  "primary": #d1b773, // Gold
+  "secondary": #7a9e7e, // Olive green
+  "accent": #b4a287, // Sepia
+  "bg": #0a0a0a, // Deeper noir black
+  "text": #e0e0e0, // Brighter light grey,
 
-  // 5. Additional Colors
-  // For specific UI elements
+  // 5. Additional Colors from Palette
   // ----------------------------------------------------------------
-  "error-alert": "#b53939" // Blood Crimson
+  "bg-tertiary": #2a2a2a, // Darker active items
+  "heading-primary": #d1b773, // Gold
+  "heading-secondary": #7a9e7e, // Olive green
+  "heading-tertiary": #b4a287, // Sepia
+  "success": #6EE7B7, // Flickering Faerie Green
+  "warning": #f57c00, // Orange-red
+  "error": #d32f2f, // Dark red
+  "muted": #8a8a8a, // Muted grey
+  "border": #d1b773, // Gold
+  "shadow": "rgba(209, 183, 115, 0.2)", // Gold with opacity
+  "error-alert": #d32f2f, // Dark red (Blood Crimson)
+  "comment": #8a8a8a, // Muted grey
+  "string": #cdaa7d, // Brass
+  "number": #cdaa7d, // Brass
+  "keyword": #d1b773, // Gold
+  "variable": #7a9e7e, // Olive green
+  "operator": #d1b773, // Gold
+  "constant": #cdaa7d, // Brass
+  "function": #d1b773, // Gold
+  "regexp": #b4a287, // Sepia
+  "meta": #3c4c5a, // Navy
+  "invalid": #8c3b3b, // Oxblood
+  "delimiter": #444444, // Muted
+  "active": #2a2a2a, // Darker active items
+  "hover": #7a9e7e, // Olive green
+  "hover-border": #8a8a8a // Muted grey
 );
 
 // Export the theme map

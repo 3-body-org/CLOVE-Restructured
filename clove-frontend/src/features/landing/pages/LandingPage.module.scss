@@ -1,0 +1,54 @@
+@use "/variables" as *; /* import the global variable from _variables.scss */
+
+.landingPage {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.backgroundWrapper {
+  background-color: $light-black;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Background patterns and circles to mask gradient edges */
+.backgroundWrapper::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(124, 58, 237, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 75% 15%, rgba(139, 92, 246, 0.04) 0%, transparent 35%),
+    radial-gradient(circle at 25% 85%, rgba(124, 58, 237, 0.04) 0%, transparent 35%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Additional subtle patterns */
+.backgroundWrapper::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure all child components are positioned above the background */
+.backgroundWrapper > * {
+  position: relative;
+  z-index: 1;
+} 

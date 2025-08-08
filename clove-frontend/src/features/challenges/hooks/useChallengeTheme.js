@@ -10,7 +10,16 @@ import detectiveTheme from '../themes/detectiveTheme.module.scss';
  * @returns {Object} Theme object with current theme data and utility functions
  */
 export const useChallengeTheme = () => {
-  const { currentTheme, setTheme } = useContext(ThemeContext);
+  // Safely get context with fallback
+  let contextValue;
+  try {
+    contextValue = useContext(ThemeContext);
+  } catch (error) {
+    console.warn('ThemeContext not available, using fallback theme');
+    contextValue = { currentTheme: 'space', setTheme: () => {} };
+  }
+  
+  const { currentTheme = 'space', setTheme = () => {} } = contextValue || {};
   const { topicId } = useParams();
 
   // Get theme from topic ID automatically
@@ -30,13 +39,17 @@ export const useChallengeTheme = () => {
       }
       return 'space'; // Default fallback
     }
-    return currentTheme;
+    return currentTheme || 'space';
   }, [topicId, currentTheme]);
 
   // Set theme automatically based on topic (useEffect, not useMemo!)
   useEffect(() => {
-    if (topicId && topicTheme !== currentTheme) {
-      setTheme(topicTheme);
+    if (topicId && topicTheme !== currentTheme && setTheme) {
+      try {
+        setTheme(topicTheme);
+      } catch (error) {
+        console.warn('Failed to set theme:', error);
+      }
     }
   }, [topicId, topicTheme, currentTheme, setTheme]);
 

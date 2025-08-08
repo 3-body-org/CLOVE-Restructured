@@ -6,11 +6,38 @@
   box-shadow: 0 0 20px rgba(108, 92, 231, 0.2);
   margin-bottom: 15px;
   flex-shrink: 0;
+  font-family: var(--font-primary, 'Space Grotesk', sans-serif);
+  color: var(--text, #ffffff);
+  
+  // Theme-specific styling
+  &.theme-wizard {
+    background: var(--card-bg, rgba(26, 43, 60, 0.8));
+    color: var(--text, #E8DBC3);
+    font-family: var(--font-primary, 'Crimson Text', serif);
+    border-color: var(--accent-primary, #0EA5E9);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+  }
+  
+  &.theme-detective {
+    background: var(--card-bg, rgba(26, 26, 26, 0.95));
+    color: var(--text, #e0e0e0);
+    font-family: var(--font-primary, 'Lora', serif);
+    border-color: var(--accent-primary, #d1b773);
+    box-shadow: 0 0 20px rgba(209, 183, 115, 0.2);
+  }
+  
+  &.theme-space {
+    background: var(--card-bg, rgba(26, 26, 46, 0.8));
+    color: var(--text, #ffffff);
+    font-family: var(--font-primary, 'Space Grotesk', sans-serif);
+    border-color: var(--accent-primary, #a6aafb);
+    box-shadow: 0 0 20px rgba(166, 170, 251, 0.2);
+  }
   
   .progressText {
     display: block;
     font-family: var(--font-heading, "Orbitron"), sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: var(--accent, #ff7675);
     margin-bottom: 8px;
@@ -27,7 +54,7 @@
     
     .progressFill {
       height: 100%;
-      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      background: linear-gradient(90deg, var(--success, #6EE7B7), var(--accent, #ff7675));
       transition: width 0.3s ease;
       border-radius: 3px;
     }

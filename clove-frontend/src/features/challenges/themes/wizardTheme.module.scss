@@ -5,39 +5,57 @@ $wizard-theme: (
   // ----------------------------------------------------------------
   "font-primary": '"Crimson Text", serif',
   "font-heading": '"Cinzel", serif',
-  "theme-bg": #1e102b, // Deep Violet
-  "theme-text": #e8dbc3, // Soft Parchment
-  "text-primary": #e8dbc3, // Soft Parchment
-  "text-secondary": #a99fcc, // Pale Violet
-  "glow-color": "rgba(183, 138, 91, 0.4)", // Ancient Copper glow
+  "font-mono": '"JetBrains Mono", "Fira Code", monospace',
+  "theme-bg": #0F172A, // Deep Twilight Blue
+  "theme-text": #E8DBC3, // Aged Parchment
+  "text-primary": #E8DBC3, // Aged Parchment
+  "text-secondary": #6B7280, // Ancient Stone Light
+  "glow-color": "rgba(14, 165, 233, 0.4)", // Arcane Turquoise Bright glow
 
   // 2. Header & Title Styles
   // Colors for main headings (h1, h2) and icons.
   // ----------------------------------------------------------------
-  "accent-primary": #b78a5b, // Ancient Copper (darker, more visible)
-  "accent-secondary": #3fbabf, // Enchanted Teal
+  "accent-primary": #0EA5E9, // Arcane Turquoise Bright
+  "accent-secondary": #06B6D4, // Arcane Turquoise Deep
 
   // 3. Card & Section Styles
   // Used for the Challenge Area and Sidebar components.
   // ----------------------------------------------------------------
-  "card-bg": rgba(30, 16, 43, 0.8), // Deep Violet with transparency
-  "card-hover": rgba(42, 15, 61, 0.9), // Darkened Deep Violet
-  "card-border": "1px solid #b78a5b", // Ancient Copper
+  "card-bg": rgba(26, 43, 60, 0.8), // Deep Navy with transparency
+  "card-hover": rgba(26, 43, 60, 0.9), // Darkened Deep Navy
+  "card-border": "1px solid #0EA5E9", // Arcane Turquoise Bright
 
   // 4. Challenge-Specific Colors
   // ----------------------------------------------------------------
-  "code-bg": #2a1a3a,
-  "correct": #64ff96,
-  "wrong": #ff6464,
-  "pending": #ffd700,
-  "timer": #f5d782,
-  "hint": #a99fcc,
-  "bug": #ff6464,
-  "primary": #b78a5b,
-  "secondary": #a99fcc,
-  "accent": #f5d782,
-  "bg": #1e102b,
-  "text": #e8dbc3
+  "code-bg": #1A2B3C, // Deep Navy
+  "correct": #6EE7B7, // Flickering Faerie Green
+  "wrong": #ff6464, // Keep existing red for errors
+  "pending": #FBBF24, // Enchanted Gold Bright
+  "pending-rgb": "251, 191, 36", // RGB values for Enchanted Gold Bright
+  "timer": #FBBF24, // Enchanted Gold Bright
+  "hint": #6B7280, // Ancient Stone Light
+  "bug": #ff6464, // Keep existing red for bugs
+  "primary": #0EA5E9, // Arcane Turquoise Bright
+  "secondary": #06B6D4, // Arcane Turquoise Deep
+  "accent": #FBBF24, // Enchanted Gold Bright
+  "bg": #0F172A, // Deep Twilight Blue
+  "text": #E8DBC3, // Aged Parchment
+  
+  // 5. Additional Colors from Palette
+  // ----------------------------------------------------------------
+  "bg-secondary": #1A2B3C, // Deep Navy
+  "bg-tertiary": #4A5568, // Ancient Stone Grey
+  "heading-primary": #FBBF24, // Enchanted Gold Bright
+  "heading-secondary": #0EA5E9, // Arcane Turquoise Bright
+  "heading-tertiary": #6EE7B7, // Flickering Faerie Green
+  "success": #6EE7B7, // Flickering Faerie Green
+  "warning": #FBBF24, // Enchanted Gold Bright
+  "error": #ff6464, // Keep existing red for errors
+  "muted": #6B7280, // Ancient Stone Light
+  "border": #0EA5E9, // Arcane Turquoise Bright
+  "shadow": "rgba(14, 165, 233, 0.2)", // Arcane Turquoise Bright with opacity
+  "transition-speed": "0.3s",
+  "transition-easing": "ease"
 );
 
 // Export the theme map

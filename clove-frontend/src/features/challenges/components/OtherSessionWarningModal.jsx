@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './OtherSessionWarningModal.module.scss';
+import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const OtherSessionWarningModal = ({ 
   isVisible, 
@@ -8,6 +9,23 @@ const OtherSessionWarningModal = ({
   onCancel,
   isLoading = false 
 }) => {
+  // Safely get theme with fallback
+  let themeData;
+  try {
+    themeData = useChallengeTheme();
+  } catch (error) {
+    console.warn('Failed to get theme data, using fallback:', error);
+    themeData = {
+      getThemeStyles: () => ({}),
+      currentTheme: 'space'
+    };
+  }
+  
+  const { getThemeStyles, currentTheme } = themeData;
+  
+  // Get theme-specific styles with fallback
+  const themeStyles = getThemeStyles ? getThemeStyles() : {};
+  
   if (!isVisible) return null;
 
   const handleCloseOtherTabs = async () => {
@@ -15,7 +33,7 @@ const OtherSessionWarningModal = ({
   };
 
   return (
-    <div className={styles.modalOverlay}>
+    <div className={`${styles.modalOverlay} theme-${currentTheme || 'space'}`} style={themeStyles}>
       <div className={styles.modalContent}>
         <div className={styles.modalHeader}>
           <h2>⚠️ Active Challenge Detected</h2>

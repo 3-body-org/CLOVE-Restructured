@@ -6,9 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import MonacoCodeBlock from '../components/MonacoCodeBlock';
 import ChoicesBar from '../components/ChoicesBar';
-import ChallengeSidebar from '../components/ChallengeSidebar';
 import ProgressIndicator from '../components/ProgressIndicator';
-import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
 import styles from '../styles/CodeCompletion.module.scss';
 
 const CodeCompletion = ({
@@ -533,27 +531,6 @@ const CodeCompletion = ({
   }, [isSubmitted, userChoices, onAnswerSubmit, isSubmitting, disabled]);
 
   return (
-    <ChallengeThemeProvider>
-      <div className={styles.codeCompletionContainer}>
-        {/* Left Sidebar */}
-        <ChallengeSidebar
-          mode="code_completion"
-          scenario={scenario}
-          timeRemaining={timeRemaining}
-          hintsUsed={hintsUsed}
-          hintsAvailable={hintsAvailable}
-          onHint={onHint}
-          disabled={disabled}
-          challengeIndex={challengeIndex}
-          totalChallenges={totalChallenges}
-          revealedHints={revealedHints}
-          initialTimerDuration={initialTimerDuration}
-          showTimer={isTimerEnabled}
-          showHints={isHintsEnabled}
-          timerState={timerState}
-        />
-
-        {/* Right Challenge Area */}
         <div className={styles.challengeArea}>
           {/* Progress Indicator at the very top */}
           <ProgressIndicator
@@ -743,8 +720,6 @@ const CodeCompletion = ({
             )}
           </div>
         </div>
-      </div>
-    </ChallengeThemeProvider>
   );
 };
 

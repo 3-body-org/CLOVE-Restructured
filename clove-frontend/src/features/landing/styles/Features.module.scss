@@ -2,192 +2,323 @@
 
 .featuresSection {
   /* Remove left/right padding here so Bootstrap's container sets alignment */
-  padding: 60px 0;
-  background-color: $light-black;
+  padding: 80px 0;
   color: $white;
-  font-family: "Open Sauce One", "Roboto", sans-serif; /*needs to be change to open sauce*/
+  font-family: "Open Sauce One", "Roboto", sans-serif;
+  position: relative;
+}
+
+.featuresSection .container {
+  position: relative;
+  z-index: 1;
 }
 
 /* Top Row: Innovate & Heading */
 .innovateText {
-  font-size: 22px;
-  color: $white;
+  font-size: 16px;
+  color: $light-purple;
   margin-bottom: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  opacity: 0.8;
+  position: relative;
+}
+
+.innovateText::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, $light-purple, transparent);
 }
 
 .featuresHeading {
-  font-size: 58px;
-  font-weight: bold;
-  color: $light-purple;
-  line-height: 1.2;
-  margin-bottom: 20px;
+  font-size: 52px;
+  font-weight: 900;
+  color: $white;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, $light-purple 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.featuresHeading::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  background: linear-gradient(45deg, rgba(139, 92, 246, 0.05), transparent, rgba(124, 58, 237, 0.05));
+  border-radius: 16px;
+  z-index: -1;
+  filter: blur(12px);
 }
 
 /* Paragraph on Right */
 .featuresParagraph {
-  font-size: 22px;
-  line-height: 1.6;
-  margin-bottom: 40px;
+  font-size: 18px;
+  line-height: 1.7;
+  margin-bottom: 60px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+  position: relative;
 }
 
 /* Feature Cards */
 .featureCard {
-  background-color: $black;
-  padding: 32px;
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0;
+  border-radius: 20px;
   text-align: left;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   margin-bottom: 30px;
   width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.05) 0%, 
+    rgba(124, 58, 237, 0.03) 50%, 
+    rgba(168, 85, 247, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.featureCard::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    $light-purple, 
+    $dark-purple, 
+    #8b5cf6, 
+    $light-purple);
+  border-radius: 22px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .featureCard:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(139, 92, 246, 0.2);
+  box-shadow: 
+    0 25px 50px rgba(139, 92, 246, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.featureCard:hover::before {
+  opacity: 1;
+}
+
+.featureCard:hover::after {
+  opacity: 0.2;
 }
 
 .featureImg {
   width: 100%;
-  height: auto;
-  max-height: 180px;
+  height: 200px;
   object-fit: cover;
-  margin-bottom: 20px;
-  border-radius: 8px;
+  margin-bottom: 0;
+  border-radius: 20px 20px 0 0;
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.featureImg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.1) 0%, 
+    transparent 50%, 
+    rgba(124, 58, 237, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 20px 20px 0 0;
+}
+
+.featureCard:hover .featureImg {
+  transform: scale(1.03);
+}
+
+.featureCard:hover .featureImg::before {
+  opacity: 1;
 }
 
 .featureTitle {
   font-size: 24px;
-  font-weight: bold;
-  color: $light-purple;
-  margin-bottom: 16px;
+  font-weight: 700;
+  color: $white;
+  margin: 28px 28px 16px 28px;
+  line-height: 1.3;
+  position: relative;
+  z-index: 2;
+}
+
+.featureTitle::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 3px;
+  height: calc(100% + 12px);
+  background: linear-gradient(180deg, $light-purple, $dark-purple);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.featureCard:hover .featureTitle::before {
+  opacity: 1;
 }
 
 .featureDescription {
   font-size: 15px;
-  line-height: 1.5;
-  color: $white;
-}
-
-/* Arrow Section */
-.arrowWrapper {
-  text-align: center;
-  margin-top: 50px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
+  margin: 0 28px 28px 28px;
   position: relative;
-}
-
-.arrowSeparator {
-  width: 50px;
-  height: 2px;
-  background-color: $white;
-  margin: 0 auto 8px auto;
-}
-
-.arrowBtn {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  outline: none;
-}
-
-.arrowIcon {
-  font-size: 36px;
-  color: $light-purple;
-  transition: transform 0.3s ease;
-}
-
-.rotated {
-  transform: rotate(180deg);
+  z-index: 2;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
+  .featuresSection {
+    padding: 60px 0;
+  }
+  
   .featuresHeading {
-    font-size: 36px;
+    font-size: 42px;
     margin-bottom: 20px;
   }
 
   .featuresParagraph {
-    font-size: 16px;
-    margin-bottom: 30px;
+    font-size: 17px;
+    margin-bottom: 50px;
   }
 
   .featureTitle {
-    font-size: 18px;
-    margin-bottom: 12px;
+    font-size: 22px;
+    margin: 24px 24px 14px 24px;
   }
 
   .featureDescription {
     font-size: 14px;
-    margin-bottom: 20px;
+    margin: 0 24px 24px 24px;
   }
 
   .featureCard {
-    padding: 28px;
+    border-radius: 18px;
+  }
+  
+  .featureImg {
+    height: 180px;
+    border-radius: 18px 18px 0 0;
   }
 }
 
 @media (max-width: 768px) {
   .featuresSection {
-    padding: 40px 0;
+    padding: 50px 0;
   }
 
   .featuresHeading {
-    font-size: 22px;
-    margin-bottom: 15px;
+    font-size: 36px;
+    margin-bottom: 16px;
   }
 
   .featuresParagraph {
-    font-size: 14px;
-    margin-bottom: 25px;
+    font-size: 16px;
+    margin-bottom: 40px;
   }
 
   .featureCard {
-    padding: 24px;
-    margin-bottom: 20px;
+    padding: 0;
+    margin-bottom: 24px;
+    border-radius: 16px;
   }
 
   .featureTitle {
-    font-size: 16px;
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin: 20px 20px 12px 20px;
   }
 
   .featureDescription {
     font-size: 14px;
-    margin-bottom: 15px;
+    margin: 0 20px 20px 20px;
+  }
+  
+  .featureImg {
+    height: 160px;
+    border-radius: 16px 16px 0 0;
   }
 }
 
 @media (max-width: 480px) {
   .featuresSection {
-    padding: 30px 0;
+    padding: 40px 0;
   }
 
   .featuresHeading {
-    font-size: 13px;
-    margin-bottom: 10px;
+    font-size: 28px;
+    margin-bottom: 12px;
   }
 
   .featuresParagraph {
-    font-size: 12px;
-    margin-bottom: 20px;
+    font-size: 15px;
+    margin-bottom: 30px;
   }
 
   .featureCard {
-    padding: 20px;
-    margin-bottom: 15px;
+    padding: 0;
+    margin-bottom: 20px;
+    border-radius: 14px;
   }
 
   .featureTitle {
-    font-size: 14px;
-    margin-bottom: 8px;
+    font-size: 18px;
+    margin: 18px 18px 10px 18px;
   }
 
   .featureDescription {
-    font-size: 12px;
-    margin-bottom: 10px;
+    font-size: 13px;
+    margin: 0 18px 18px 18px;
+  }
+  
+  .featureImg {
+    height: 140px;
+    border-radius: 14px 14px 0 0;
   }
 }

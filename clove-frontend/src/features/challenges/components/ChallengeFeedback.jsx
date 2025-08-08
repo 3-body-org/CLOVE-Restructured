@@ -20,7 +20,10 @@ const ChallengeFeedback = ({
   challengeCode,
   explanation
 }) => {
-  const { getThemeValue, getThemeStyles } = useChallengeTheme();
+  const { getThemeValue, getThemeStyles, currentTheme } = useChallengeTheme();
+  
+  // Get theme-specific styles
+  const themeStyles = getThemeStyles();
   
   // Format time spent
   const formatTimeSpent = (seconds, timerEnabled) => {
@@ -40,12 +43,6 @@ const ChallengeFeedback = ({
     if (!hintsUsed) return '0 hints';
     return `${hintsUsed} hint${hintsUsed !== 1 ? 's' : ''}`;
   };
-  
-  // Scroll state management
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [canScroll, setCanScroll] = useState(false);
-  const contentRef = useRef(null);
-  const containerRef = useRef(null);
   
   const getFeedbackIcon = () => {
     if (isTimeExpired) return '⏰';
@@ -98,56 +95,9 @@ const ChallengeFeedback = ({
     return answer;
   };
 
-  // Get theme-specific styles
-  const themeStyles = getThemeStyles();
-
-  // Scroll detection effect
-  useEffect(() => {
-    const contentElement = contentRef.current;
-    const containerElement = containerRef.current;
-    
-    if (!contentElement || !containerElement) return;
-
-    const checkScrollability = () => {
-      const canScrollContent = contentElement.scrollHeight > contentElement.clientHeight;
-      console.log('🔍 SCROLL DEBUG:', {
-        scrollHeight: contentElement.scrollHeight,
-        clientHeight: contentElement.clientHeight,
-        canScroll: canScrollContent
-      });
-      setCanScroll(canScrollContent);
-    };
-
-    const handleScroll = () => {
-      const scrollTop = contentElement.scrollTop;
-      const maxScroll = contentElement.scrollHeight - contentElement.clientHeight;
-      const scrolled = scrollTop > 10;
-      console.log('🔍 SCROLL DEBUG:', {
-        scrollTop,
-        maxScroll,
-        scrolled
-      });
-      setIsScrolled(scrolled);
-    };
-
-    // Initial check
-    checkScrollability();
-
-    // Add event listeners
-    contentElement.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', checkScrollability);
-
-    // Cleanup
-    return () => {
-      contentElement.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', checkScrollability);
-    };
-  }, []);
-
   return (
     <div 
-      ref={containerRef}
-      className={`${styles.feedbackContainer} ${getFeedbackColor()}`}
+      className={`${styles.feedbackContainer} ${getFeedbackColor()} theme-${currentTheme}`}
       style={themeStyles}
     >
       <div className={styles.feedbackHeader}>
@@ -157,26 +107,23 @@ const ChallengeFeedback = ({
         <h2 className={styles.feedbackTitle}>{getFeedbackTitle()}</h2>
       </div>
 
-      <div 
-        ref={contentRef}
-        className={styles.feedbackContent}
-      >
-        {/* Points and Stats */}
-        <div className={styles.statsContainer}>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Points:</span>
-            <span className={styles.statValue}>{isCorrect ? points : 0}</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Time:</span>
-            <span className={styles.statValue}>{formatTimeSpent(timeSpent, timerEnabled)}</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statLabel}>Hints Used:</span>
-            <span className={styles.statValue}>{formatHintsUsed(hintsUsed, hintsEnabled)}</span>
-          </div>
+      {/* Points and Stats - Moved to top */}
+      <div className={styles.statsContainer}>
+        <div className={styles.stat}>
+          <span className={styles.statLabel}>Points:</span>
+          <span className={styles.statValue}>{isCorrect ? points : 0}</span>
         </div>
+        <div className={styles.stat}>
+          <span className={styles.statLabel}>Time:</span>
+          <span className={styles.statValue}>{formatTimeSpent(timeSpent, timerEnabled)}</span>
+        </div>
+        <div className={styles.stat}>
+          <span className={styles.statLabel}>Hints Used:</span>
+          <span className={styles.statValue}>{formatHintsUsed(hintsUsed, hintsEnabled)}</span>
+        </div>
+      </div>
 
+      <div className={styles.feedbackContent}>
         {/* User's Answer */}
         <div className={styles.answerSection}>
           <h3>Your Answer:</h3>
@@ -219,14 +166,6 @@ const ChallengeFeedback = ({
           </div>
         </div>
       </div>
-
-      {/* Scroll Indicator - Between Content and Actions */}
-      {canScroll && !isScrolled && (
-        <div className={styles.scrollIndicator}>
-          <div className={styles.scrollArrow}>↓</div>
-          <div className={styles.scrollText}>Scroll For More</div>
-        </div>
-      )}
 
       <div className={styles.feedbackActions}>
         <button 

@@ -24,7 +24,7 @@ const defineMonacoThemes = (monaco) => {
   // Space Theme - Using actual colors from spaceTheme.module.scss
   monaco.editor.defineTheme('space-theme', {
     base: 'vs-dark',
-    inherit: true,
+    inherit: false, // Don't inherit to have full control
     rules: [
       { token: '', foreground: 'ffffff', background: '0a0a1a' }, // theme-text: #ffffff
       { token: 'keyword', foreground: '6c5ce7' }, // code-keyword: #6c5ce7
@@ -42,6 +42,38 @@ const defineMonacoThemes = (monaco) => {
       'editorLineNumber.foreground': '#a8a5e6', // text-muted: #a8a5e6
       'editor.selectionBackground': '#3e3e5e', // accent-active: #3e3e5e
       'editor.inactiveSelectionBackground': '#3e3e5e70',
+      'editorWhitespace.foreground': '#a8a5e6',
+      'editorIndentGuide.background': '#a8a5e6',
+      'editorIndentGuide.activeBackground': '#6c5ce7',
+      'editor.selectionHighlightBackground': '#3e3e5e33',
+      'editor.wordHighlightBackground': '#3e3e5e33',
+      'editor.wordHighlightStrongBackground': '#6c5ce733',
+      'editorBracketMatch.background': '#3e3e5e55',
+      'editorBracketMatch.border': '#a8a5e6',
+      'editorError.foreground': '#ff7675',
+      'editorWarning.foreground': '#fdcb6e',
+      'editorInfo.foreground': '#6c5ce7',
+      'editorGutter.background': '#0a0a1a',
+      'editorGutter.modifiedBackground': '#6c5ce7',
+      'editorGutter.addedBackground': '#00b894',
+      'editorGutter.deletedBackground': '#ff7675',
+      'editorWidget.background': '#252540',
+      'editorWidget.border': 'rgba(255,255,255,0.05)',
+      'editorSuggestWidget.background': '#252540',
+      'editorSuggestWidget.border': 'rgba(255,255,255,0.05)',
+      'editorSuggestWidget.foreground': '#ffffff',
+      'editorSuggestWidget.selectedBackground': '#3e3e5e',
+      'editorHoverWidget.background': '#252540',
+      'editorHoverWidget.border': 'rgba(255,255,255,0.05)',
+      'editorMarkerNavigation.background': '#0a0a1a',
+      'editorMarkerNavigationError.background': '#ff7675',
+      'editorMarkerNavigationWarning.background': '#fdcb6e',
+      'editorMarkerNavigationInfo.background': '#6c5ce7',
+      'editorOverviewRuler.border': 'rgba(255,255,255,0.05)',
+      'editorOverviewRuler.errorForeground': '#ff7675',
+      'editorOverviewRuler.warningForeground': '#fdcb6e',
+      'editorOverviewRuler.infoForeground': '#6c5ce7',
+      'editorWidget.shadow': '0 2px 8px rgba(0,0,0,0.5)',
     }
   });
   
@@ -201,7 +233,7 @@ const defineMonacoThemes = (monaco) => {
   // Detective/Noir Theme - Using actual colors from detectiveTheme.module.scss
   monaco.editor.defineTheme('detective-theme', {
     base: 'vs-dark',
-    inherit: true,
+    inherit: false, // Don't inherit to have full control
     rules: [
       { token: '', foreground: 'dcdcdc', background: '121212' }, // theme-text: #dcdcdc, theme-bg: #121212
       { token: 'keyword', foreground: 'd1b773', fontStyle: 'bold' }, // code-keyword: #d1b773
@@ -322,13 +354,24 @@ const LessonMonacoEditor = ({
   };
 
   // Add theme-specific container styling
-  const containerStyle = currentTheme === 'detective' ? {
-    borderRadius: 6,
-    boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-    overflow: 'hidden',
-    border: '1px solid rgba(255,255,255,0.05)',
-    background: '#232323',
-  } : {};
+  const containerStyle = {
+    width: '100%',
+    height: '100%',
+    ...(currentTheme === 'detective' ? {
+      borderRadius: 6,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+      overflow: 'hidden',
+      border: '1px solid rgba(255,255,255,0.05)',
+      background: '#232323',
+    } : currentTheme === 'space' ? {
+      borderRadius: 8,
+      overflow: 'hidden',
+      background: '#0a0a1a',
+    } : {
+      borderRadius: 8,
+      overflow: 'hidden',
+    }),
+  };
 
   return (
     <div style={containerStyle}>
@@ -349,7 +392,7 @@ const LessonMonacoEditor = ({
           lineNumbers: 'on',
           folding: true,
           lineDecorationsWidth: 10,
-          padding: { top: 15, bottom: 15, left: 0 },
+          padding: { top: 15, bottom: 15, left: 15, right: 15 }, // Add right padding for better spacing
           tabSize: 2,
           fontFamily: currentTheme === 'detective' ? 'IBM Plex Mono, monospace' : 
                      currentTheme === 'wizard' ? 'JetBrains Mono, Fira Code, monospace' : 
@@ -368,6 +411,10 @@ const LessonMonacoEditor = ({
             verticalScrollbarSize: 0,
             horizontalScrollbarSize: 0,
           },
+          // Ensure editor fills container properly
+          fixedOverflowWidgets: true,
+          overviewRulerBorder: false,
+          hideCursorInOverviewRuler: true,
           ...options,
         }}
         onMount={handleMount}
