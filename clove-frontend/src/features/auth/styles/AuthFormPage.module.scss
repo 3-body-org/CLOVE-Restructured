@@ -331,6 +331,22 @@ label {
   justify-content: center;
 }
 
+.successBox {
+  background: rgba(16,185,129,0.12);
+  border: 1.5px solid #10b981;
+  color: #6ee7b7;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 2px 8px 0 rgba(16,185,129,0.10);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
 .passwordEyeButton {
   position: absolute;
   right: 12px;

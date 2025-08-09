@@ -38,6 +38,15 @@ class Settings(BaseSettings):
     
     # Logging
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+    
+    # Email settings
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp-relay.brevo.com")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USER: str = os.getenv("SMTP_USER", "")
+    SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
+    EMAILS_FROM_EMAIL: str = os.getenv("EMAILS_FROM_EMAIL", "")
+    EMAILS_FROM_NAME: str = os.getenv("EMAILS_FROM_NAME", "CLOVE Learning Platform")
+    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = int(os.getenv("EMAIL_RESET_TOKEN_EXPIRE_HOURS", "6"))
 
     class Config:
         env_file = ".env"
@@ -52,6 +61,14 @@ class Settings(BaseSettings):
             raise ValueError("CORS_ORIGINS must be set")
         if not self.ALLOWED_HOSTS:
             raise ValueError("ALLOWED_HOSTS must be set")
+        # Email validation only for production
+        if self.ENV == "production":
+            if not self.SMTP_USER:
+                raise ValueError("SMTP_USER must be set for email functionality")
+            if not self.SMTP_PASSWORD:
+                raise ValueError("SMTP_PASSWORD must be set for email functionality")
+            if not self.EMAILS_FROM_EMAIL:
+                raise ValueError("EMAILS_FROM_EMAIL must be set for email functionality")
 
 @lru_cache()
 def get_settings() -> Settings:

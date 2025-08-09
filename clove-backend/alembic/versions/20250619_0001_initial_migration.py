@@ -48,6 +48,13 @@ def upgrade() -> None:
     sa.Column('login_cooldown_until', sa.DateTime(timezone=True), nullable=True),
     sa.Column('bio', sa.String(), nullable=True),
     sa.Column('profile_photo_url', sa.String(), nullable=True),
+    # Email verification fields
+    sa.Column('email_verified', sa.Boolean(), nullable=False, server_default=sa.text('false')),
+    sa.Column('email_verification_token', sa.String(length=255), nullable=True),
+    sa.Column('email_verification_expires', sa.DateTime(timezone=True), nullable=True),
+    # Password reset fields
+    sa.Column('password_reset_token', sa.String(length=255), nullable=True),
+    sa.Column('password_reset_expires', sa.DateTime(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)

@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: clove-backend
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: clove-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 10080
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: 30
+      - key: CORS_ORIGINS
+        value: '["https://clove-app.netlify.app"]'
+      - key: DEBUG
+        value: false
+      - key: DB_POOL_SIZE
+        value: 20
+      - key: DB_MAX_OVERFLOW
+        value: 10
+      - key: DB_POOL_TIMEOUT
+        value: 30
+      - key: DB_POOL_RECYCLE
+        value: 1800
+      - key: RATE_LIMIT_PER_MINUTE
+        value: 60
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ALLOWED_HOSTS
+        value: '["clove-backend.onrender.com"]'
+      - key: SMTP_HOST
+        value: smtp-relay.brevo.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        sync: false  # You'll set this manually in Render dashboard
+      - key: SMTP_PASSWORD
+        sync: false  # You'll set this manually in Render dashboard
+      - key: EMAILS_FROM_EMAIL
+        sync: false  # You'll set this manually in Render dashboard
+      - key: EMAILS_FROM_NAME
+        value: CLOVE
+      - key: EMAIL_RESET_TOKEN_EXPIRE_HOURS
+        value: 24
+
+databases:
+  - name: clove-db
+    databaseName: clove_db
+    user: clove_user 

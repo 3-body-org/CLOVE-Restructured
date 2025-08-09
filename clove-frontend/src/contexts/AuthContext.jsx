@@ -313,8 +313,12 @@ export function AuthProvider({ children }) {
         }),
       });
       if (res.ok) {
-        // Auto-login after signup
-        return await login(email, password);
+        // Don't auto-login anymore since email verification is required
+        return { 
+          success: true, 
+          message: "Account created successfully! Please check your email to verify your account before logging in.",
+          requiresVerification: true
+        };
       } else {
         let errorMsg = "Signup failed";
         try {
@@ -366,6 +370,79 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // --- Email Verification Functions ---
+  async function sendVerificationEmail(email) {
+    try {
+      const res = await fetch(`${API_BASE}/auth/send-verification`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (res.ok) {
+        return { success: true, message: "Verification email sent successfully" };
+      } else {
+        const error = await res.json();
+        return { success: false, message: error.detail || "Failed to send verification email" };
+      }
+    } catch (err) {
+      return { success: false, message: "Network error" };
+    }
+  }
+
+  async function verifyEmail(token) {
+    try {
+      const res = await fetch(`${API_BASE}/auth/verify-email/${token}`);
+      
+      if (res.ok) {
+        return { success: true, message: "Email verified successfully" };
+      } else {
+        const error = await res.json();
+        return { success: false, message: error.detail || "Failed to verify email" };
+      }
+    } catch (err) {
+      return { success: false, message: "Network error" };
+    }
+  }
+
+  async function forgotPassword(email) {
+    try {
+      const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (res.ok) {
+        return { success: true, message: "If the email exists, a reset link has been sent" };
+      } else {
+        const error = await res.json();
+        return { success: false, message: error.detail || "Failed to send reset email" };
+      }
+    } catch (err) {
+      return { success: false, message: "Network error" };
+    }
+  }
+
+  async function resetPassword(token, newPassword) {
+    try {
+      const res = await fetch(`${API_BASE}/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, new_password: newPassword }),
+      });
+      
+      if (res.ok) {
+        return { success: true, message: "Password reset successfully" };
+      } else {
+        const error = await res.json();
+        return { success: false, message: error.detail || "Failed to reset password" };
+      }
+    } catch (err) {
+      return { success: false, message: "Network error" };
+    }
+  }
+
   // --- Provide all auth info and functions to the app ---
   return (
     <AuthContext.Provider value={{ 
@@ -383,7 +460,12 @@ export function AuthProvider({ children }) {
       showLogoutWarning, // State for logout warning modal
       handleContinueChallenge, // Function to continue challenge
       handleLogoutAnyway, // Function to logout anyway
-      isProcessingLogout // State for processing logout
+      isProcessingLogout, // State for processing logout
+      // Email verification functions
+      sendVerificationEmail, // Send verification email
+      verifyEmail, // Verify email with token
+      forgotPassword, // Send password reset email
+      resetPassword // Reset password with token
     }}>
       {children}
       
