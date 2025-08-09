@@ -119,7 +119,7 @@ async def create_user_endpoint(
         print(f"Verification email sent to {user.email}")
     except Exception as e:
         print(f"Failed to send verification email: {e}")
-    
+
     return user
 
 @router.post("/login", response_model=Token)

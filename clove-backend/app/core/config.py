@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     
     # Logging
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
-    
+
     # Email settings
     SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp-relay.brevo.com")
     SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
