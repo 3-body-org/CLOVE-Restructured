@@ -36,8 +36,16 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 def get_url():
-    # Convert asyncpg URL to psycopg2 URL for migrations
-    return settings.DATABASE_URL.replace("postgresql+asyncpg", "postgresql")
+    # Use separate URL for Alembic if available, or convert asyncpg URL to psycopg2 URL
+    alembic_url = os.getenv("ALEMBIC_DATABASE_URL")
+    if alembic_url:
+        return alembic_url
+    
+    # Convert asyncpg URL to psycopg2 URL and fix SSL parameter
+    url = settings.DATABASE_URL.replace("postgresql+asyncpg", "postgresql")
+    # Convert asyncpg SSL parameter to psycopg2 format
+    url = url.replace("?ssl=require", "?sslmode=require")
+    return url
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
