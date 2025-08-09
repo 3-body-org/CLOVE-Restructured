@@ -27,7 +27,7 @@ engine = create_async_engine(
             "application_name": settings.PROJECT_NAME,
             "timezone": "UTC"
         },
-        "ssl": False,  # Disable SSL for local development
+        "ssl": "require" if not settings.DEBUG else False,  # SSL required in production
         "command_timeout": 60,  # Increase command timeout
         "statement_cache_size": 0,  # Disable statement cache
     }
