@@ -47,13 +47,20 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting up application...")
     try:
-        # Only create tables in development mode
-        if settings.DEBUG:
+        # Run migrations in production mode
+        if not settings.DEBUG:
+            import subprocess
+            result = subprocess.run(["alembic", "upgrade", "head"], 
+                                  capture_output=True, text=True, cwd="/opt/render/project/src/clove-backend")
+            if result.returncode == 0:
+                logger.info("Database migrations completed successfully")
+            else:
+                logger.error(f"Migration failed: {result.stderr}")
+        else:
+            # Only create tables in development mode
             async with engine.begin() as conn:
                 await conn.run_sync(Base.metadata.create_all)
             logger.info("Database tables created successfully (development mode)")
-        else:
-            logger.info("Skipping table creation in production mode (use Alembic migrations)")
     except Exception as e:
         logger.error(f"Error during startup: {str(e)}")
         raise
