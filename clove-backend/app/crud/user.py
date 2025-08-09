@@ -92,6 +92,8 @@ async def create_user(
         last_name=last_name,
         birthday=birthday,
         is_superuser=is_superuser,
+        is_active=is_superuser,  # Superusers are active by default, regular users need email verification
+        email_verified=is_superuser,  # Superusers are auto-verified
         bio=bio,
         profile_photo_url=profile_photo_url
     )

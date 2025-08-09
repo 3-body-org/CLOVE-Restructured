@@ -1,7 +1,7 @@
 //react
 import { useState, useEffect } from "react";
 //react router
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 //framer motion
 import { motion } from "framer-motion"; //this is being USED, its just flaging as "unused"
 //scss
@@ -12,8 +12,9 @@ import CloveLogo from "assets/icons/common/icon-common-clove-logo.png";
 import TermsAndConditions from "features/auth/components/TermsAndConditions";
 import { useAuth } from "contexts/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx"; // for conditional classnames (optional, if available)
+import { getEmailValidationError } from "../../../utils/validation";
 
 export default function AuthFormPage() {
   // Set default to Sign Up (false = Sign Up, true = Login)
@@ -32,6 +33,7 @@ export default function AuthFormPage() {
   const [birthday, setBirthday] = useState("");
   
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [formLoading, setFormLoading] = useState(false);
   const navigate = useNavigate();
   const { login, signup, loading } = useAuth();
@@ -47,6 +49,8 @@ export default function AuthFormPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccessMessage(""); // Clear success message on login attempt
     
     // Validate login fields first
     let loginErrors = {};
@@ -85,8 +89,11 @@ export default function AuthFormPage() {
     if (!signupPassword || signupPassword.length < 8) newErrors.password = "Password must be at least 8 characters";
     
     // Check email format if email is provided
-    if (signupEmail.trim() && !/\S+@\S+\.\S+/.test(signupEmail)) {
-      newErrors.email = "Please enter a valid email";
+    if (signupEmail.trim()) {
+      const emailError = getEmailValidationError(signupEmail);
+      if (emailError && emailError !== "Email is required") {
+        newErrors.email = emailError;
+      }
     }
     
     setSignupErrors(newErrors);
@@ -106,17 +113,38 @@ export default function AuthFormPage() {
     }
     setFormLoading(true);
     const res = await signup(firstName, lastName, birthday, signupEmail, signupPassword);
-    if (!res.success) setError(res.message);
     setFormLoading(false);
+    
+    if (res.success) {
+      if (res.requiresVerification) {
+        // Show success message and switch to login
+        setError(""); // Clear any errors
+        setSuccessMessage(res.message);
+        // Switch to login tab
+        setIsLogin(true);
+        // Clear signup form
+        setSignupEmail("");
+        setSignupPassword("");
+        setFirstName("");
+        setLastName("");
+        setBirthday("");
+        setAcceptedTerms(false);
+        // Clear login errors too
+        setLoginErrors({});
+        // Auto-clear success message after 10 seconds
+        setTimeout(() => setSuccessMessage(""), 10000);
+      }
+    } else {
+      setError(res.message);
+      setSuccessMessage("");
+    }
   };
 
   // Helper to validate login fields
   const validateLoginField = (field, value) => {
     switch (field) {
       case "email":
-        if (!value.trim()) return "Email is required";
-        if (!/\S+@\S+\.\S+/.test(value)) return "Please enter a valid email";
-        return "";
+        return getEmailValidationError(value);
       case "password":
         if (!value.trim()) return "Password is required";
         return "";
@@ -145,9 +173,7 @@ export default function AuthFormPage() {
         if (age < 13) return "You must be at least 13 years old to sign up";
         return "";
       case "email":
-        if (!value.trim()) return "Email is required";
-        if (!/\S+@\S+\.\S+/.test(value)) return "Please enter a valid email";
-        return "";
+        return getEmailValidationError(value);
       case "password":
         if (!value.trim()) return "Password is required";
         if (value.length < 8) return "Password must be at least 8 characters";
@@ -188,6 +214,7 @@ export default function AuthFormPage() {
               onClick={() => { 
                 setIsLogin(false); 
                 setError(""); 
+                setSuccessMessage("");
                 setLoginErrors({});
                 setSignupErrors({});
               }}
@@ -201,6 +228,7 @@ export default function AuthFormPage() {
               onClick={() => { 
                 setIsLogin(true); 
                 setError(""); 
+                setSuccessMessage("");
                 setLoginErrors({});
                 setSignupErrors({});
               }}
@@ -227,6 +255,12 @@ export default function AuthFormPage() {
                   <div className={styles.errorBox}>
                     <FontAwesomeIcon icon={faEyeSlash} style={{ color: "#ef4444", fontSize: 18 }} />
                     <span>{error}</span>
+                  </div>
+                )}
+                {successMessage && (
+                  <div className={styles.successBox}>
+                    <FontAwesomeIcon icon={faCheckCircle} style={{ color: "#10b981", fontSize: 18 }} />
+                    <span>{successMessage}</span>
                   </div>
                 )}
                 <form onSubmit={handleLogin}>
@@ -282,12 +316,12 @@ export default function AuthFormPage() {
                   </div>
                   {loginErrors.password && <div className={styles.fieldError}>{loginErrors.password}</div>}
                   <div className={styles.forgotPassword}>
-                    <a
-                      href="/forgot-password"
+                    <Link
+                      to="/forgot-password"
                       className={styles.forgotPassword}
                     >
                       Forgot your password?
-                    </a>
+                    </Link>
                   </div>
                   <button 
                     type="submit" 

@@ -35,6 +35,7 @@ class UserRead(UserBase):
     last_failed_login: Optional[datetime] = None
     login_cooldown_until: Optional[datetime] = None
     is_active: bool
+    email_verified: bool
 
     class Config:
         from_attributes = True
@@ -52,3 +53,16 @@ class TokenData(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+class EmailVerificationRequest(BaseModel):
+    email: EmailStr
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+class PasswordResetConfirm(BaseModel):
+    token: str
+    new_password: str = Field(min_length=8)
+
+class MessageResponse(BaseModel):
+    message: str

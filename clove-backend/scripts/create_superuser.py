@@ -63,6 +63,11 @@ async def main():
                 bio='Admin user',
                 profile_photo_url=''
             )
+            
+            # Auto-verify superuser email
+            user.email_verified = True
+            user.is_active = True
+            await session.commit()
 
             print(f"Superuser '{username}' created successfully with all required data.")
 

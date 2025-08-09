@@ -5,6 +5,8 @@ from typing import Optional, Dict, Any
 from fastapi import HTTPException, status
 from app.core.config import settings
 import logging
+import secrets
+import string
 
 logger = logging.getLogger(__name__)
 
@@ -84,3 +86,19 @@ def verify_token(token: str, token_type: str = "access") -> Dict[str, Any]:
             detail="Could not verify token",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+def generate_verification_token() -> str:
+    """Generate a secure random token for email verification"""
+    return secrets.token_urlsafe(32)
+
+def generate_reset_token() -> str:
+    """Generate a secure random token for password reset"""
+    return secrets.token_urlsafe(32)
+
+def create_verification_token_expires() -> datetime:
+    """Create expiry time for verification token (6 hours from now)"""
+    return datetime.now(timezone.utc) + timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)
+
+def create_reset_token_expires() -> datetime:
+    """Create expiry time for reset token (6 hours from now)"""
+    return datetime.now(timezone.utc) + timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)

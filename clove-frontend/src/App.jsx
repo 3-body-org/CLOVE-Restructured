@@ -12,6 +12,9 @@ import "features/mydeck/styles";
 
 //src/features/auth/...
 import Authform from "features/auth/pages/AuthFormPage";
+import EmailVerificationPage from "features/auth/pages/EmailVerificationPage";
+import ForgotPasswordPage from "features/auth/pages/ForgotPasswordPage";
+import PasswordResetPage from "features/auth/pages/PasswordResetPage";
 
 //src/features/challenges/...
 import ChallengesPage from "features/challenges/pages/ChallengesPage";
@@ -148,6 +151,9 @@ const protectedRoutes = [
 const publicRoutes = [
   { path: "/", element: <LandingPage /> },
   { path: "/login-signup", element: <Authform /> },
+  { path: "/verify-email", element: <EmailVerificationPage /> },
+  { path: "/forgot-password", element: <ForgotPasswordPage /> },
+  { path: "/reset-password", element: <PasswordResetPage /> },
 ];
 
 function AppContent() {

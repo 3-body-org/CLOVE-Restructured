@@ -924,3 +924,139 @@
 2025-08-05 18:26:25,262 - alembic.runtime.migration - INFO - Will assume transactional DDL.
 2025-08-05 18:26:25,299 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
 2025-08-05 18:26:25,299 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-08-09 17:17:39,142 - alembic - INFO - Running online migrations
+2025-08-09 17:17:39,142 - alembic - INFO - Running online migrations
+2025-08-09 17:17:52,807 - alembic - INFO - Running online migrations
+2025-08-09 17:17:52,807 - alembic - INFO - Running online migrations
+2025-08-09 17:17:53,052 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:17:53,052 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:17:53,052 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:17:53,052 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:17:53,085 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-08-09 17:17:53,085 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-08-09 17:33:42,603 - alembic - INFO - Running online migrations
+2025-08-09 17:33:42,603 - alembic - INFO - Running online migrations
+2025-08-09 17:33:42,803 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:33:42,803 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:33:42,803 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:33:42,803 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:33:42,913 - alembic.ddl.postgresql - INFO - Detected sequence named 'user_subtopics_id_seq' as owned by integer column 'user_subtopics(id)', assuming SERIAL and omitting
+2025-08-09 17:33:42,913 - alembic.ddl.postgresql - INFO - Detected sequence named 'user_subtopics_id_seq' as owned by integer column 'user_subtopics(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,013 - alembic.ddl.postgresql - INFO - Detected sequence named 'user_topics_id_seq' as owned by integer column 'user_topics(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,013 - alembic.ddl.postgresql - INFO - Detected sequence named 'user_topics_id_seq' as owned by integer column 'user_topics(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,033 - alembic.ddl.postgresql - INFO - Detected sequence named 'challenges_id_seq' as owned by integer column 'challenges(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,033 - alembic.ddl.postgresql - INFO - Detected sequence named 'challenges_id_seq' as owned by integer column 'challenges(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,058 - alembic.ddl.postgresql - INFO - Detected sequence named 'post_assessments_post_assessment_id_seq' as owned by integer column 'post_assessments(post_assessment_id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,058 - alembic.ddl.postgresql - INFO - Detected sequence named 'post_assessments_post_assessment_id_seq' as owned by integer column 'post_assessments(post_assessment_id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,082 - alembic.ddl.postgresql - INFO - Detected sequence named 'pre_assessments_pre_assessment_id_seq' as owned by integer column 'pre_assessments(pre_assessment_id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,082 - alembic.ddl.postgresql - INFO - Detected sequence named 'pre_assessments_pre_assessment_id_seq' as owned by integer column 'pre_assessments(pre_assessment_id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,102 - alembic.ddl.postgresql - INFO - Detected sequence named 'statistics_id_seq' as owned by integer column 'statistics(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,102 - alembic.ddl.postgresql - INFO - Detected sequence named 'statistics_id_seq' as owned by integer column 'statistics(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,128 - alembic.ddl.postgresql - INFO - Detected sequence named 'lessons_id_seq' as owned by integer column 'lessons(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,128 - alembic.ddl.postgresql - INFO - Detected sequence named 'lessons_id_seq' as owned by integer column 'lessons(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,146 - alembic.ddl.postgresql - INFO - Detected sequence named 'assessment_questions_id_seq' as owned by integer column 'assessment_questions(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,146 - alembic.ddl.postgresql - INFO - Detected sequence named 'assessment_questions_id_seq' as owned by integer column 'assessment_questions(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,167 - alembic.ddl.postgresql - INFO - Detected sequence named 'q_values_id_seq' as owned by integer column 'q_values(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,167 - alembic.ddl.postgresql - INFO - Detected sequence named 'q_values_id_seq' as owned by integer column 'q_values(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,185 - alembic.ddl.postgresql - INFO - Detected sequence named 'user_challenges_id_seq' as owned by integer column 'user_challenges(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,185 - alembic.ddl.postgresql - INFO - Detected sequence named 'user_challenges_id_seq' as owned by integer column 'user_challenges(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,209 - alembic.ddl.postgresql - INFO - Detected sequence named 'challenge_attempts_id_seq' as owned by integer column 'challenge_attempts(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,209 - alembic.ddl.postgresql - INFO - Detected sequence named 'challenge_attempts_id_seq' as owned by integer column 'challenge_attempts(id)', assuming SERIAL and omitting
+2025-08-09 17:33:43,219 - alembic.autogenerate.compare - INFO - Detected NULL on column 'challenge_attempts.attempted_at'
+2025-08-09 17:33:43,219 - alembic.autogenerate.compare - INFO - Detected NULL on column 'challenge_attempts.attempted_at'
+2025-08-09 17:33:43,246 - alembic.autogenerate.compare - INFO - Detected server default on column 'post_assessments.is_unlocked'
+2025-08-09 17:33:43,246 - alembic.autogenerate.compare - INFO - Detected server default on column 'post_assessments.is_unlocked'
+2025-08-09 17:33:43,247 - alembic.autogenerate.compare - INFO - Detected server default on column 'post_assessments.is_completed'
+2025-08-09 17:33:43,247 - alembic.autogenerate.compare - INFO - Detected server default on column 'post_assessments.is_completed'
+2025-08-09 17:33:43,248 - alembic.autogenerate.compare - INFO - Detected NULL on column 'post_assessments.attempt_count'
+2025-08-09 17:33:43,248 - alembic.autogenerate.compare - INFO - Detected NULL on column 'post_assessments.attempt_count'
+2025-08-09 17:33:43,254 - alembic.autogenerate.compare - INFO - Detected server default on column 'pre_assessments.is_unlocked'
+2025-08-09 17:33:43,254 - alembic.autogenerate.compare - INFO - Detected server default on column 'pre_assessments.is_unlocked'
+2025-08-09 17:33:43,255 - alembic.autogenerate.compare - INFO - Detected server default on column 'pre_assessments.is_completed'
+2025-08-09 17:33:43,255 - alembic.autogenerate.compare - INFO - Detected server default on column 'pre_assessments.is_completed'
+2025-08-09 17:33:43,257 - alembic.autogenerate.compare - INFO - Detected NULL on column 'pre_assessments.attempt_count'
+2025-08-09 17:33:43,257 - alembic.autogenerate.compare - INFO - Detected NULL on column 'pre_assessments.attempt_count'
+2025-08-09 17:33:43,274 - alembic.autogenerate.compare - INFO - Detected server default on column 'statistics.login_days_this_week'
+2025-08-09 17:33:43,274 - alembic.autogenerate.compare - INFO - Detected server default on column 'statistics.login_days_this_week'
+2025-08-09 17:33:43,295 - alembic.autogenerate.compare - INFO - Detected server default on column 'topics.theme'
+2025-08-09 17:33:43,295 - alembic.autogenerate.compare - INFO - Detected server default on column 'topics.theme'
+2025-08-09 17:33:43,302 - alembic.autogenerate.compare - INFO - Detected server default on column 'user_challenges.was_cancelled'
+2025-08-09 17:33:43,302 - alembic.autogenerate.compare - INFO - Detected server default on column 'user_challenges.was_cancelled'
+2025-08-09 17:33:43,313 - alembic.autogenerate.compare - INFO - Detected added unique constraint None on '('session_token',)'
+2025-08-09 17:33:43,313 - alembic.autogenerate.compare - INFO - Detected added unique constraint None on '('session_token',)'
+2025-08-09 17:33:43,316 - alembic.autogenerate.compare - INFO - Detected server default on column 'user_subtopics.is_unlocked'
+2025-08-09 17:33:43,316 - alembic.autogenerate.compare - INFO - Detected server default on column 'user_subtopics.is_unlocked'
+2025-08-09 17:33:43,328 - alembic.autogenerate.compare - INFO - Detected server default on column 'user_topics.introduction_seen'
+2025-08-09 17:33:43,328 - alembic.autogenerate.compare - INFO - Detected server default on column 'user_topics.introduction_seen'
+2025-08-09 17:33:43,335 - alembic.autogenerate.compare - INFO - Detected added column 'users.email_verified'
+2025-08-09 17:33:43,335 - alembic.autogenerate.compare - INFO - Detected added column 'users.email_verified'
+2025-08-09 17:33:43,335 - alembic.autogenerate.compare - INFO - Detected added column 'users.email_verification_token'
+2025-08-09 17:33:43,335 - alembic.autogenerate.compare - INFO - Detected added column 'users.email_verification_token'
+2025-08-09 17:33:43,336 - alembic.autogenerate.compare - INFO - Detected added column 'users.email_verification_expires'
+2025-08-09 17:33:43,336 - alembic.autogenerate.compare - INFO - Detected added column 'users.email_verification_expires'
+2025-08-09 17:33:43,337 - alembic.autogenerate.compare - INFO - Detected added column 'users.password_reset_token'
+2025-08-09 17:33:43,337 - alembic.autogenerate.compare - INFO - Detected added column 'users.password_reset_token'
+2025-08-09 17:33:43,337 - alembic.autogenerate.compare - INFO - Detected added column 'users.password_reset_expires'
+2025-08-09 17:33:43,337 - alembic.autogenerate.compare - INFO - Detected added column 'users.password_reset_expires'
+2025-08-09 17:33:52,028 - alembic - INFO - Running online migrations
+2025-08-09 17:33:52,028 - alembic - INFO - Running online migrations
+2025-08-09 17:33:52,185 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:33:52,185 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:33:52,186 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:33:52,186 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:33:52,207 - alembic.runtime.migration - INFO - Running upgrade 20250619_0001 -> f4a998c47a73, add_email_verification_and_password_reset_fields
+2025-08-09 17:33:52,207 - alembic.runtime.migration - INFO - Running upgrade 20250619_0001 -> f4a998c47a73, add_email_verification_and_password_reset_fields
+2025-08-09 17:34:20,903 - alembic - INFO - Running online migrations
+2025-08-09 17:34:20,903 - alembic - INFO - Running online migrations
+2025-08-09 17:34:21,024 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:34:21,024 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:34:21,024 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:34:21,024 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:34:21,036 - alembic.runtime.migration - INFO - Running upgrade 20250619_0001 -> f4a998c47a73, add_email_verification_and_password_reset_fields
+2025-08-09 17:34:21,036 - alembic.runtime.migration - INFO - Running upgrade 20250619_0001 -> f4a998c47a73, add_email_verification_and_password_reset_fields
+2025-08-09 17:40:03,233 - alembic - INFO - Running online migrations
+2025-08-09 17:40:03,233 - alembic - INFO - Running online migrations
+2025-08-09 17:40:03,378 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:03,378 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:03,379 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:40:03,379 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:40:03,404 - alembic.util.messaging - ERROR - Can't locate revision identified by 'f4a998c47a73'
+2025-08-09 17:40:03,404 - alembic.util.messaging - ERROR - Can't locate revision identified by 'f4a998c47a73'
+2025-08-09 17:40:10,581 - alembic - INFO - Running online migrations
+2025-08-09 17:40:10,581 - alembic - INFO - Running online migrations
+2025-08-09 17:40:10,775 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:10,775 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:10,776 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:40:10,776 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:40:10,793 - alembic.util.messaging - ERROR - Can't locate revision identified by 'f4a998c47a73'
+2025-08-09 17:40:10,793 - alembic.util.messaging - ERROR - Can't locate revision identified by 'f4a998c47a73'
+2025-08-09 17:40:17,894 - alembic - INFO - Running online migrations
+2025-08-09 17:40:17,894 - alembic - INFO - Running online migrations
+2025-08-09 17:40:18,024 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:18,024 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:18,025 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:40:18,025 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:40:18,040 - alembic.util.messaging - ERROR - Can't locate revision identified by 'f4a998c47a73'
+2025-08-09 17:40:18,040 - alembic.util.messaging - ERROR - Can't locate revision identified by 'f4a998c47a73'
+2025-08-09 17:40:57,454 - alembic - INFO - Running online migrations
+2025-08-09 17:40:57,454 - alembic - INFO - Running online migrations
+2025-08-09 17:40:57,549 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:57,549 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:40:57,550 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:40:57,550 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:44:50,618 - alembic - INFO - Running online migrations
+2025-08-09 17:44:50,618 - alembic - INFO - Running online migrations
+2025-08-09 17:44:50,691 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:44:50,691 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 17:44:50,691 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:44:50,691 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 17:44:50,709 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-08-09 17:44:50,709 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-08-09 18:42:47,145 - alembic - INFO - Running online migrations
+2025-08-09 18:42:47,145 - alembic - INFO - Running online migrations
+2025-08-09 18:42:47,226 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 18:42:47,226 - alembic.runtime.migration - INFO - Context impl PostgresqlImpl.
+2025-08-09 18:42:47,226 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 18:42:47,226 - alembic.runtime.migration - INFO - Will assume transactional DDL.
+2025-08-09 18:42:47,239 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
+2025-08-09 18:42:47,239 - alembic.runtime.migration - INFO - Running upgrade  -> 20250619_0001, 20250619_0001_initial_migration
