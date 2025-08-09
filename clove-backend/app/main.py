@@ -50,12 +50,18 @@ async def lifespan(app: FastAPI):
         # Run migrations in production mode
         if not settings.DEBUG:
             import subprocess
+            import os
+            # Get the correct path - we're already in clove-backend when running
+            current_dir = os.getcwd()
+            logger.info(f"Current working directory: {current_dir}")
             result = subprocess.run(["alembic", "upgrade", "head"], 
-                                  capture_output=True, text=True, cwd="/opt/render/project/src/clove-backend")
+                                  capture_output=True, text=True)
             if result.returncode == 0:
                 logger.info("Database migrations completed successfully")
             else:
-                logger.error(f"Migration failed: {result.stderr}")
+                logger.error(f"Migration failed. Return code: {result.returncode}")
+                logger.error(f"STDERR: {result.stderr}")
+                logger.error(f"STDOUT: {result.stdout}")
         else:
             # Only create tables in development mode
             async with engine.begin() as conn:
