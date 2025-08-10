@@ -12,7 +12,7 @@ import { DashboardAnalytics } from "features/dashboard/components/DashboardAnaly
 import TitleAndProfile from "components/layout/Navbar/TitleAndProfile";
 import { useAuth } from "contexts/AuthContext";
 import { useApi } from "../../../hooks/useApi";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 import { useSidebar } from "../../../components/layout/Sidebar/Layout";
@@ -109,13 +109,21 @@ const Dashboard = () => {
   const challengesSolved = stats?.total_challenges_solved || 0;
   const totalChallenges = 405; // Total available challenges in database
   const challengePercent = totalChallenges ? ((challengesSolved / totalChallenges) * 100).toFixed(1) : 0;
+  
+  // Determine challenge description based on completion status
+  let challengeDescription;
+  if (totalChallenges === 0) {
+    challengeDescription = "You have not yet taken any challenges.";
+  } else if (challengesSolved === totalChallenges) {
+    challengeDescription = "🎉 Congratulations! You've solved ALL challenges! You're a coding master! 🏆";
+  } else {
+    challengeDescription = `You've solved ${challengesSolved} out of ${totalChallenges} challenges. Keep up answering the challenges!`;
+  }
+  
   const challengesData = {
     percentage: challengePercent, 
     label: "Solved",
-    description:
-      totalChallenges > 0
-        ? `You've solved ${challengesSolved} out of ${totalChallenges} challenges. Keep up answering the challenges!`
-        : "You have not yet taken any challenges.",
+    description: challengeDescription,
   };
 
   // Streak Data

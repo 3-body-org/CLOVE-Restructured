@@ -160,14 +160,11 @@ const LessonIntroBlock = ({ lessonIntro }) => (
 const ContentRenderer = ({ section, extractCodeFromBulletPoints, extractOutputFromBulletPoints, calculateMonacoHeight }) => {
   const blocks = [];
 
-  // Get all properties from the section object in their original order
   const sectionKeys = Object.keys(section);
 
-  // Render blocks based on the actual order of properties in the JSON
   sectionKeys.forEach(key => {
     switch (key) {
       case 'lessonTitle':
-        // Skip rendering lessonTitle as it's displayed in the header
         break;
       
       case 'lessonIntro':
@@ -199,7 +196,6 @@ const ContentRenderer = ({ section, extractCodeFromBulletPoints, extractOutputFr
         break;
       
       case 'bulletPoints':
-        // Choose the appropriate bullet point style based on section type
         if (section.heading === "Real-world Application") {
           blocks.push(<RealWorldBulletPointsBlock key="bulletPoints" bulletPoints={section.bulletPoints} />);
         } else if (section.heading === "How it Works") {
@@ -217,7 +213,6 @@ const ContentRenderer = ({ section, extractCodeFromBulletPoints, extractOutputFr
         blocks.push(<SummaryBlock key="summary" summary={section.summary} />);
         break;
       
-      // Ignore other properties that don't have corresponding blocks
       default:
         break;
     }
@@ -274,51 +269,40 @@ const LessonsPage = () => {
   const [userSubtopicData, setUserSubtopicData] = useState(null);
   const [minTimePassed, setMinTimePassed] = useState(false);
   
-  // Minimum loading time effect (like ProfilePage)
   useEffect(() => {
     setMinTimePassed(false);
     const timer = setTimeout(() => setMinTimePassed(true), 200);
     return () => clearTimeout(timer);
-  }, []); // Only on mount
+  }, []);
   
-  // Use the lesson data hook
   const { lessonData, loading, error } = useLessonData(subtopicId);
   
-  // Use the lesson service
   const { completeLesson } = useLessonService();
   
-  // Use the challenge service to get user subtopic data
   const { getUserSubtopic } = useChallengeService();
   
-  // Get lesson title from first section if available
   const lessonTitle = lessonData?.[0]?.lessonTitle || "Loading...";
 
-  // Complete lesson when lesson data loads successfully
   useEffect(() => {
     if (lessonData && lessonData.length > 0 && user && subtopicId) {
-      // Check if lesson has already been marked as completed
       const lessonCompletionKey = `lesson_completed_${subtopicId}_${user.id}`;
       const isLessonCompleted = localStorage.getItem(lessonCompletionKey);
       
       if (!isLessonCompleted) {
         const markLessonAsCompleted = async () => {
           try {
-            console.log('🔍 [LessonsPage] Marking lesson as completed for user:', user.id, 'subtopic:', subtopicId);
             await completeLesson(user.id, parseInt(subtopicId));
-            console.log('✅ [LessonsPage] Lesson marked as completed successfully');
             
-            // Mark as completed in localStorage to prevent repeated calls
             localStorage.setItem(lessonCompletionKey, 'true');
           } catch (error) {
-            console.error('❌ [LessonsPage] Failed to mark lesson as completed:', error);
+            // Handle error silently
           }
         };
         markLessonAsCompleted();
       }
     }
-      }, [lessonData, user, subtopicId]); // Removed completeLesson from dependencies
+      }, [lessonData, user, subtopicId]);
 
-  // Fetch user subtopic data to check progress
   useEffect(() => {
     const fetchUserSubtopicData = async () => {
       if (user && subtopicId) {
@@ -326,37 +310,25 @@ const LessonsPage = () => {
           const data = await getUserSubtopic(user.id, subtopicId);
           setUserSubtopicData(data);
         } catch (error) {
-          console.error('❌ [LessonsPage] Failed to fetch user subtopic data:', error);
-          // Set default data if fetch fails
           setUserSubtopicData({ progress: 0 });
         }
       }
     };
 
     fetchUserSubtopicData();
-  }, [user, subtopicId]); // Removed getUserSubtopic from dependencies
+  }, [user, subtopicId]);
 
-  // Show skip snackbar after lesson loads (only if progress >= 0.66)
   useEffect(() => {
     if (lessonData && lessonData.length > 0 && userSubtopicData) {
-      // Calculate progress based on completion status
       let progress = 0;
-      if (userSubtopicData.lessons_completed) progress += 0.5; // 50% for lessons
-      if (userSubtopicData.practice_completed) progress += 0.5; // 50% for practice
+      if (userSubtopicData.lessons_completed) progress += 0.5;
+      if (userSubtopicData.practice_completed) progress += 0.5;
       
-      // Only log once when progress is calculated
       if (progress >= 0.66) {
-        console.log('✅ [LessonsPage] Progress sufficient (', progress, '>= 0.66), setting up snackbar');
-      }
-      
-      // Only show snackbar if progress is 0.66 (66%) or higher
-      if (progress >= 0.66) {
-        // Show snackbar after 2 seconds
         const timer = setTimeout(() => {
           setShowSkipSnackbar(true);
         }, 2000);
 
-        // Auto-hide after 7 seconds total (5 seconds visible)
         const hideTimer = setTimeout(() => {
           setShowSkipSnackbar(false);
         }, 7000);
@@ -369,7 +341,6 @@ const LessonsPage = () => {
     }
   }, [lessonData, userSubtopicData?.lessons_completed, userSubtopicData?.practice_completed]);
 
-  // Dynamically set accent line width to match title width
   useEffect(() => {
     if (titleRef.current && accentRef.current) {
       const titleWidth = titleRef.current.offsetWidth;
@@ -379,7 +350,6 @@ const LessonsPage = () => {
   }, [lessonData?.title, isHovered]);
 
   const handleStartChallenges = () => {
-    // setLessonCompleted(subtopicId);
     navigate(`/lesson/${topicId}/${subtopicId}/practice`);
   };
 
@@ -393,61 +363,47 @@ const LessonsPage = () => {
   };
 
   const handleSectionClick = (sectionIndex) => {
-    // Set the section immediately for instant highlighting
     setCurrentSection(sectionIndex);
     setIsProgrammaticScroll(true);
     
-    // Scroll to the section
     const sectionElement = document.querySelector(`[data-section="${sectionIndex}"]`);
     if (sectionElement) {
-      // Use scrollIntoView with offset for better positioning
       sectionElement.scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
       });
       
-      // Add a small delay and then adjust the scroll position to account for any fixed headers
       setTimeout(() => {
         const currentScrollY = window.scrollY;
-        const offset = 100; // 100px offset from top
+        const offset = 100;
         window.scrollTo({
           top: currentScrollY - offset,
           behavior: 'smooth'
         });
       }, 100);
       
-      // Re-enable intersection observer after scroll completes
-      // Use a longer delay to ensure the scroll animation is complete
       setTimeout(() => {
         setIsProgrammaticScroll(false);
-      }, 10); // Increased to 1000ms to cover the entire scroll animation
+      }, 10);
     }
   };
 
-  // Intersection Observer for section detection
   useEffect(() => {
-    // Wait for lesson data to be available and sections to be rendered
     if (!lessonData || lessonData.length === 0) return;
 
-    // Function to initialize the intersection observer
     const initializeObserver = () => {
     const sections = document.querySelectorAll('[data-section]');
     
       if (sections.length === 0) {
-        console.log('No sections found with data-section attribute, retrying...');
-        return false; // Return false to indicate retry needed
+        return false;
       }
-
-      console.log(`Found ${sections.length} sections to observe`);
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Skip intersection detection during programmatic scrolling
         if (isProgrammaticScroll) {
           return;
         }
         
-        // Find the section that is most prominently visible in the viewport
         let bestSection = null;
         let bestScore = -1;
 
@@ -457,14 +413,11 @@ const LessonsPage = () => {
             const rect = entry.boundingClientRect;
             const viewportHeight = window.innerHeight;
             
-            // Calculate a score based on how much of the section is visible and its position
             const visibleRatio = entry.intersectionRatio;
             const distanceFromTop = Math.abs(rect.top);
             const distanceFromCenter = Math.abs(rect.top + rect.height / 2 - viewportHeight / 2);
             
-            // Prioritize sections that are more visible and closer to the top
-            // Give more weight to sections that are at the top of the viewport
-            const topWeight = rect.top <= 150 ? 2 : 1; // Bonus for sections near the top
+            const topWeight = rect.top <= 150 ? 2 : 1;
             const score = (visibleRatio * topWeight) - (distanceFromTop / viewportHeight);
             
             if (score > bestScore) {
@@ -476,13 +429,12 @@ const LessonsPage = () => {
 
         if (bestSection) {
           const sectionIndex = parseInt(bestSection.getAttribute('data-section'));
-          console.log(`Setting current section to: ${sectionIndex}`);
           setCurrentSection(sectionIndex);
         }
       },
       {
-        rootMargin: '-10% 0px -60% 0px', // Smaller top margin, larger bottom margin
-        threshold: [0.3, 0.5, 0.7] // Fewer, more meaningful thresholds
+        rootMargin: '-10% 0px -60% 0px',
+        threshold: [0.3, 0.5, 0.7]
       }
     );
 
@@ -490,11 +442,9 @@ const LessonsPage = () => {
       observer.observe(section);
     });
 
-      // Add scroll event listener as backup for better synchronization
       const handleScroll = () => {
         if (isProgrammaticScroll) return;
         
-        // Find the section closest to the top of the viewport
         let closestSection = null;
         let closestDistance = Infinity;
         
@@ -502,7 +452,6 @@ const LessonsPage = () => {
           const rect = section.getBoundingClientRect();
           const distance = Math.abs(rect.top);
           
-          // Only consider sections that are within 100px of the top
           if (distance < closestDistance && rect.top <= 100) {
             closestDistance = distance;
             closestSection = section;
@@ -515,14 +464,11 @@ const LessonsPage = () => {
         }
       };
 
-      // Add scroll listener to window since the page scrolls, not a container
       window.addEventListener('scroll', handleScroll, { passive: true });
 
-      // Set initial section immediately
       if (sections.length > 0) {
         const firstSection = sections[0];
         const sectionIndex = parseInt(firstSection.getAttribute('data-section'));
-        console.log(`Setting initial section to: ${sectionIndex}`);
         setCurrentSection(sectionIndex);
       }
 
@@ -532,10 +478,8 @@ const LessonsPage = () => {
       };
     };
 
-    // Try to initialize immediately
     let cleanup = initializeObserver();
     
-    // If initialization failed, retry with increasing delays
     if (!cleanup) {
       const retryDelays = [50, 100, 200, 500];
       let retryCount = 0;
@@ -558,7 +502,6 @@ const LessonsPage = () => {
     return cleanup;
   }, [lessonData, isProgrammaticScroll]);
 
-  // Helper function to extract code from bullet points
   const extractCodeFromBulletPoints = (bulletPoints) => {
     if (!bulletPoints) return "";
     const codeLines = [];
@@ -577,7 +520,6 @@ const LessonsPage = () => {
     return codeLines.join("\n");
   };
 
-  // Helper function to extract output from bullet points
   const extractOutputFromBulletPoints = (bulletPoints) => {
     if (!bulletPoints) return "";
     const outputLines = [];
@@ -596,29 +538,25 @@ const LessonsPage = () => {
     return outputLines.join("\n");
   };
 
-  // Helper function to calculate Monaco Editor height based on content
   const calculateMonacoHeight = (codeContent) => {
     if (!codeContent) return "200px";
     
     const lines = codeContent.split('\n').length;
-    const lineHeight = 24; // Monaco Editor line height
-    const padding = 60; // Top and bottom padding
+    const lineHeight = 24;
+    const padding = 60;
     const calculatedHeight = Math.min(lines * lineHeight + padding, 1000);
     
     return `${calculatedHeight}px`;
   };
 
-  // Loading state (comprehensive like ProfilePage)
   if (authLoading || !user || !minTimePassed || loading) {
     return <LoadingScreen message="Loading lesson content..." />;
   }
 
-  // Error state
   if (error) {
     return <ErrorScreen message={error} />;
   }
 
-  // No lesson data
   if (!lessonData || lessonData.length === 0) {
     return <ErrorScreen message="No lesson content available for this subtopic." />;
   }
@@ -633,7 +571,6 @@ const LessonsPage = () => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className={styles.documentContainer}>
-          {/* Document Header */}
           <div className={styles.documentHeader}>
             <div className={styles.documentTitle}>
               <div className={styles.titleWrapper}>
@@ -643,9 +580,7 @@ const LessonsPage = () => {
             </div>
           </div>
 
-          {/* Document Content */}
           <div className={styles.documentContent}>
-            {/* Dynamic Sections using Content Renderer */}
             {Array.isArray(lessonData) && lessonData.map((section, index) => (
               <section 
                 key={index} 
@@ -666,7 +601,6 @@ const LessonsPage = () => {
             ))}
           </div>
 
-          {/* Document Footer */}
           <div className={styles.documentFooter}>
             <div className={styles.navigationButtons}>
               <Button 
@@ -687,7 +621,6 @@ const LessonsPage = () => {
         </div>
       </div>
 
-      {/* Contents Sidebar */}
       {Array.isArray(lessonData) && lessonData.length > 0 && (
         <ContentsSidebar 
           sections={lessonData}
@@ -697,7 +630,6 @@ const LessonsPage = () => {
       )}
     </div>
 
-          {/* Skip to Challenges Snackbar - Outside main layout for fixed positioning */}
       {showSkipSnackbar && (
         <div className={styles.skipSnackbar}>
           <button 

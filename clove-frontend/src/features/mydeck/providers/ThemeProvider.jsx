@@ -7,9 +7,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import ThemeContext from "contexts/ThemeContext";
 import { THEMES, DEFAULT_THEME } from "features/mydeck/styles";
-import "features/mydeck/themes/spaceTheme.module.scss";
-import "features/mydeck/themes/wizardTheme.module.scss";
-import "features/mydeck/themes/detectiveTheme.module.scss";
 
 const THEME_PREFIX = "theme-";
 const THEME_STORAGE_KEY = "clove_theme";

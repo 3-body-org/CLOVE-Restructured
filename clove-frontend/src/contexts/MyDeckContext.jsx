@@ -45,19 +45,16 @@ const MyDeckProvider = ({ children }) => {
   // Load topic overview using service layer (memoized to prevent infinite loops)
   const loadTopicOverview = useCallback(async (topicId, force = false) => {
     if (!topicId) {
-      console.warn('Cannot load topic overview: missing topicId');
       return;
     }
     
     // Prevent multiple simultaneous calls for the same topic
     if (overviewLoading) {
-      console.warn('Topic overview already loading, skipping duplicate call');
       return;
     }
     
     // Check if we already have fresh data for this topic (unless force refresh is requested)
     if (!force && topicOverview && topicOverview.topicId === topicId) {
-      console.log('Topic overview already loaded for topic:', topicId);
       return;
     }
     
@@ -78,7 +75,7 @@ const MyDeckProvider = ({ children }) => {
       setTopicOverview(overviewWithTopicId);
       setUnlockStatus(unlock);
     } catch (error) {
-      console.error('Failed to load topic overview:', error);
+      // Failed to load topic overview
     } finally {
       setOverviewLoading(false);
     }
@@ -123,7 +120,6 @@ const MyDeckProvider = ({ children }) => {
   // Complete subtopic component using service layer (memoized)
   const completeSubtopicComponent = useCallback(async (subtopicId, component) => {
     if (!subtopicId || !component) {
-      console.warn('Cannot complete subtopic component: missing subtopicId or component');
       return;
     }
     
@@ -136,7 +132,7 @@ const MyDeckProvider = ({ children }) => {
         await loadTopicOverview(topicId);
       }
     } catch (error) {
-      console.error('Failed to complete subtopic component:', error);
+      // Failed to complete subtopic component
     } finally {
       setCompletionLoading(prev => ({ ...prev, [`${subtopicId}-${component}`]: false }));
     }
@@ -158,7 +154,6 @@ const MyDeckProvider = ({ children }) => {
       
       return result;
     } catch (error) {
-      console.error('Failed to submit assessment answer:', error);
       throw error;
     }
   }, [myDeckService, loadTopicOverview]);
@@ -166,13 +161,10 @@ const MyDeckProvider = ({ children }) => {
   // Refresh topics list with latest progress data
   const refreshTopics = useCallback(async () => {
     try {
-      console.log('🔍 Refreshing topics list with latest progress');
       const updatedTopics = await myDeckService.getTopicsWithProgress();
       setTopics(updatedTopics);
-      console.log('🔍 Topics list refreshed successfully');
       return updatedTopics;
     } catch (error) {
-      console.error('Failed to refresh topics list:', error);
       throw error;
     }
   }, [myDeckService, setTopics]);
@@ -180,7 +172,6 @@ const MyDeckProvider = ({ children }) => {
   // Get and store assessment questions summary
   const getAssessmentQuestionsSummary = useCallback(async (topicId, assessmentType) => {
     if (!topicId || !assessmentType) {
-      console.warn('Cannot get assessment questions summary: missing topicId or assessmentType');
       return;
     }
     
@@ -192,7 +183,6 @@ const MyDeckProvider = ({ children }) => {
       }));
       return summary;
     } catch (error) {
-      console.error('Failed to get assessment questions summary:', error);
       // Don't throw the error - just log it and return null
       // This prevents the assessment from failing completely
       return null;

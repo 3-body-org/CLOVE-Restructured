@@ -37,36 +37,22 @@ export function AuthProvider({ children }) {
       key.startsWith(`challenge_active_${user.id}_`)
     );
     
-    console.log('Logout prevention: Checking for active challenges...');
-    console.log('User ID:', user.id);
-    console.log('All localStorage keys:', Object.keys(localStorage));
-    console.log('Challenge-related keys:', Object.keys(localStorage).filter(key => key.includes('challenge')));
-    console.log('Found challenge keys:', challengeKeys);
-    console.log('Should show warning:', challengeKeys.length > 0);
-    
     return challengeKeys.length > 0;
   };
 
   // --- Handle logout with exit prevention ---
   const handleLogout = () => {
-    console.log('Logout prevention: handleLogout called');
-    console.log('User:', user);
-    console.log('Checking for active challenges...');
-    
     if (isInActiveChallenge()) {
-      console.log('Logout prevention: User is in active challenge, showing warning');
       setShowLogoutWarning(true);
       return;
     }
     
-    console.log('Logout prevention: No active challenge, proceeding with logout');
     // No active challenge, proceed with normal logout
     performLogout();
   };
 
   // --- Perform actual logout ---
   const performLogout = () => {
-    console.log('Performing logout...');
     setUser(null);
     setToken(null);
     setRefreshToken(null);
@@ -75,7 +61,7 @@ export function AuthProvider({ children }) {
     
     // Call all registered reset callbacks (e.g., MyDeckContext)
     resetCallbacks.forEach(fn => {
-      try { fn(); } catch (e) { console.error("Reset callback error", e); }
+      try { fn(); } catch (e) { /* Reset callback error */ }
     });
     
     // Clear session storage
@@ -95,12 +81,10 @@ export function AuthProvider({ children }) {
 
   // --- Handle logout warning modal actions ---
   const handleContinueChallenge = () => {
-    console.log('Logout prevention: User chose to continue challenge');
     setShowLogoutWarning(false);
   };
 
   const handleLogoutAnyway = async () => {
-    console.log('Logout prevention: User chose to logout anyway');
     setIsProcessingLogout(true);
     
     try {
@@ -122,15 +106,15 @@ export function AuthProvider({ children }) {
                   'Authorization': `Bearer ${token}`
                 }
               });
-              console.log('Challenge cancellation response:', response.status);
+              // Challenge cancellation response logged
             }
           } catch (error) {
-            console.error('Error cancelling challenge during logout:', error);
+            // Error cancelling challenge during logout
           }
         }
       }
     } catch (error) {
-      console.error('Error during logout challenge cancellation:', error);
+      // Error during logout challenge cancellation
     } finally {
       setIsProcessingLogout(false);
       setShowLogoutWarning(false);
@@ -164,7 +148,6 @@ export function AuthProvider({ children }) {
         throw new Error("Refresh token is invalid");
       }
     } catch (error) {
-      console.error("Error refreshing token:", error);
       throw error;
     }
   };
@@ -244,11 +227,10 @@ export function AuthProvider({ children }) {
             localStorage.removeItem("refreshToken");
           } else {
             // Other errors: keep user data for now
-            console.warn("Failed to fetch user data:", res.status);
+            // Failed to fetch user data
           }
         } catch (error) {
           if (!isMounted) return;
-          console.error("Error fetching user data:", error);
           if (!user) setUser(null);
         }
       } else {
@@ -349,7 +331,7 @@ export function AuthProvider({ children }) {
           localStorage.removeItem("refreshToken");
         }
       } catch (error) {
-        console.error("Error refreshing user:", error);
+        // Error refreshing user
       }
     }
   }

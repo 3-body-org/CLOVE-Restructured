@@ -1,10 +1,8 @@
-// Theme-specific configurations for SVG paths and assets
 import bigRock from 'assets/icons/space/icon-big-rock.png';
 import exSmallRock from 'assets/icons/space/icon-exsmall-rock.png';
 import mediumRock from 'assets/icons/space/iconn-medium-rock.png';
 import smallRock from 'assets/icons/space/icon-small-rock.png';
 
-// Space theme configuration
 export const spaceThemeConfig = {
   floatingElements: {
     images: [bigRock, exSmallRock, mediumRock, smallRock],
@@ -24,7 +22,6 @@ export const spaceThemeConfig = {
   }
 };
 
-// Wizard theme configuration
 export const wizardThemeConfig = {
   floatingElements: {
     images: [],
@@ -46,7 +43,6 @@ export const wizardThemeConfig = {
   }
 };
 
-// Detective theme configuration
 export const detectiveThemeConfig = {
   floatingElements: {
     images: [],
@@ -66,14 +62,12 @@ export const detectiveThemeConfig = {
   }
 };
 
-// Theme configuration map
 export const themeConfigs = {
   space: spaceThemeConfig,
   wizard: wizardThemeConfig,
   detective: detectiveThemeConfig
 };
 
-// Helper function to get theme configuration
 export const getThemeConfig = (theme) => {
   return themeConfigs[theme] || spaceThemeConfig;
 }; 

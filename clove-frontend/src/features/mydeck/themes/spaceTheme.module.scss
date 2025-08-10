@@ -1,4 +1,3 @@
-// Space Theme Variables
 $space-theme: (
   "font-primary": '"Space Grotesk", sans-serif',
   "font-heading": '"Orbitron", sans-serif',
@@ -33,7 +32,6 @@ $space-theme: (
   }
 }
 
-/* Starfield effect styles */
 @keyframes animStar {
   from { transform: translateY(0px); }
   to { transform: translateY(-2000px); }

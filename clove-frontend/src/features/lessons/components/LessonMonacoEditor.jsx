@@ -3,7 +3,6 @@ import Editor from "@monaco-editor/react";
 import { useParams } from 'react-router-dom';
 import { useMemo, useEffect } from 'react';
 import { subtopicContent } from '../../mydeck/content/subtopicContent';
-// Import theme modules
 import wizardTheme from '../themes/wizardTheme.module.scss';
 import detectiveTheme from '../themes/detectiveTheme.module.scss';
 import spaceTheme from '../themes/spaceTheme.module.scss';
@@ -19,28 +18,25 @@ const getMonacoThemeName = (appTheme) => {
 const defineMonacoThemes = (monaco) => {
   if (monaco.__cloveThemesDefined) return;
   
-  console.log('LessonMonacoEditor - Defining Monaco themes...');
-  
-  // Space Theme - Using actual colors from spaceTheme.module.scss
   monaco.editor.defineTheme('space-theme', {
     base: 'vs-dark',
-    inherit: false, // Don't inherit to have full control
+    inherit: false,
     rules: [
-      { token: '', foreground: 'ffffff', background: '0a0a1a' }, // theme-text: #ffffff
-      { token: 'keyword', foreground: '6c5ce7' }, // code-keyword: #6c5ce7
-      { token: 'string', foreground: 'ff7675' }, // code-string: #ff7675
-      { token: 'number', foreground: 'a6aafb' }, // code-number: #a6aafb
-      { token: 'comment', foreground: 'a8a5e6' }, // code-comment: #a8a5e6
-      { token: 'type.identifier.java', foreground: 'a6aafb' }, // code-variable: #a6aafb
-      { token: 'variable', foreground: 'a6aafb' }, // code-variable: #a6aafb
+      { token: '', foreground: 'ffffff', background: '0a0a1a' },
+      { token: 'keyword', foreground: '6c5ce7' },
+      { token: 'string', foreground: 'ff7675' },
+      { token: 'number', foreground: 'a6aafb' },
+      { token: 'comment', foreground: 'a8a5e6' },
+      { token: 'type.identifier.java', foreground: 'a6aafb' },
+      { token: 'variable', foreground: 'a6aafb' },
     ],
     colors: {
-      'editor.background': '#0a0a1a', // theme-bg: #0a0a1a
-      'editor.foreground': '#ffffff', // theme-text: #ffffff
-      'editor.lineHighlightBackground': '#252540', // code-bg: #252540
-      'editorCursor.foreground': '#6c5ce7', // accent-primary: #6c5ce7
-      'editorLineNumber.foreground': '#a8a5e6', // text-muted: #a8a5e6
-      'editor.selectionBackground': '#3e3e5e', // accent-active: #3e3e5e
+      'editor.background': '#0a0a1a',
+      'editor.foreground': '#ffffff',
+      'editor.lineHighlightBackground': '#252540',
+      'editorCursor.foreground': '#6c5ce7',
+      'editorLineNumber.foreground': '#a8a5e6',
+      'editor.selectionBackground': '#3e3e5e',
       'editor.inactiveSelectionBackground': '#3e3e5e70',
       'editorWhitespace.foreground': '#a8a5e6',
       'editorIndentGuide.background': '#a8a5e6',
@@ -77,123 +73,122 @@ const defineMonacoThemes = (monaco) => {
     }
   });
   
-  // Wizard Theme - Using actual colors from wizardTheme.module.scss
   monaco.editor.defineTheme('wizard-theme', {
     base: 'vs-dark',
-    inherit: false, // Don't inherit to have full control
+    inherit: false,
     rules: [
-      { token: '', foreground: 'E8DBC3', background: '0F172A' }, // theme-text: #E8DBC3, theme-bg: #0F172A
-      { token: 'keyword', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'string', foreground: 'E8DBC3' }, // code-string: #E8DBC3 (Aged Parchment)
-      { token: 'number', foreground: '06B6D4' }, // code-number: #06B6D4 (Arcane Turquoise Deep)
-      { token: 'comment', foreground: 'E8DBC3' }, // code-comment: #E8DBC3 (Aged Parchment)
-      { token: 'type.identifier.java', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'variable', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'operator', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'delimiter', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'constant', foreground: '06B6D4' }, // code-number: #06B6D4 (Arcane Turquoise Deep)
-      { token: 'function', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'class', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'type', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'namespace', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'parameter', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'property', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'enum', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'enumMember', foreground: '06B6D4' }, // code-number: #06B6D4 (Arcane Turquoise Deep)
-      { token: 'interface', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'typeParameter', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'decorator', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'annotation', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'modifier', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'control', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'entity', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'invalid', foreground: 'EF4444', background: '0F172A' }, // Error color
-      { token: 'regexp', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'meta', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'punctuation', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'bracket', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'brace', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'parenthesis', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'squareBracket', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'angleBracket', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'curlyBracket', foreground: 'E8DBC3' }, // theme-text: #E8DBC3 (Aged Parchment)
-      { token: 'identifier', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'member', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'method', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'field', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'constructor', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'destructuring', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'label', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'unit', foreground: '06B6D4' }, // code-number: #06B6D4 (Arcane Turquoise Deep)
-      { token: 'boolean', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'null', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'undefined', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'this', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'super', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'new', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'return', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'throw', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'try', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'catch', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'finally', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'if', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'else', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'switch', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'case', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'default', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'for', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'while', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'do', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'break', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'continue', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'import', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'export', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'package', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'extends', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'implements', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'interface', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'abstract', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'final', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'static', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'public', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'private', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'protected', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'synchronized', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'volatile', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'transient', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'native', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'strictfp', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'instanceof', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'assert', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'enum', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'const', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'goto', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'var', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'let', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'function', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'class', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'interface', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'type', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'namespace', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'module', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'async', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'await', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'yield', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'generator', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'decorator', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'annotation', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'modifier', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'control', foreground: 'FBBF24' }, // code-keyword: #FBBF24 (Enchanted Gold Bright)
-      { token: 'entity', foreground: '0EA5E9' }, // code-variable: #0EA5E9 (Arcane Turquoise Bright)
-      { token: 'invalid', foreground: 'EF4444', background: '0F172A' }, // Error color
+      { token: '', foreground: 'E8DBC3', background: '0F172A' },
+      { token: 'keyword', foreground: 'FBBF24' },
+      { token: 'string', foreground: 'E8DBC3' },
+      { token: 'number', foreground: '06B6D4' },
+      { token: 'comment', foreground: 'E8DBC3' },
+      { token: 'type.identifier.java', foreground: '0EA5E9' },
+      { token: 'variable', foreground: '0EA5E9' },
+      { token: 'operator', foreground: 'E8DBC3' },
+      { token: 'delimiter', foreground: 'E8DBC3' },
+      { token: 'constant', foreground: '06B6D4' },
+      { token: 'function', foreground: 'FBBF24' },
+      { token: 'class', foreground: '0EA5E9' },
+      { token: 'type', foreground: '0EA5E9' },
+      { token: 'namespace', foreground: '0EA5E9' },
+      { token: 'parameter', foreground: '0EA5E9' },
+      { token: 'property', foreground: '0EA5E9' },
+      { token: 'enum', foreground: '0EA5E9' },
+      { token: 'enumMember', foreground: '06B6D4' },
+      { token: 'interface', foreground: '0EA5E9' },
+      { token: 'typeParameter', foreground: '0EA5E9' },
+      { token: 'decorator', foreground: 'FBBF24' },
+      { token: 'annotation', foreground: 'FBBF24' },
+      { token: 'modifier', foreground: 'FBBF24' },
+      { token: 'control', foreground: 'FBBF24' },
+      { token: 'entity', foreground: '0EA5E9' },
+      { token: 'invalid', foreground: 'EF4444', background: '0F172A' },
+      { token: 'regexp', foreground: 'E8DBC3' },
+      { token: 'meta', foreground: '0EA5E9' },
+      { token: 'punctuation', foreground: 'E8DBC3' },
+      { token: 'bracket', foreground: 'E8DBC3' },
+      { token: 'brace', foreground: 'E8DBC3' },
+      { token: 'parenthesis', foreground: 'E8DBC3' },
+      { token: 'squareBracket', foreground: 'E8DBC3' },
+      { token: 'angleBracket', foreground: 'E8DBC3' },
+      { token: 'curlyBracket', foreground: 'E8DBC3' },
+      { token: 'identifier', foreground: '0EA5E9' },
+      { token: 'member', foreground: '0EA5E9' },
+      { token: 'method', foreground: '0EA5E9' },
+      { token: 'field', foreground: '0EA5E9' },
+      { token: 'constructor', foreground: '0EA5E9' },
+      { token: 'destructuring', foreground: '0EA5E9' },
+      { token: 'label', foreground: 'FBBF24' },
+      { token: 'unit', foreground: '06B6D4' },
+      { token: 'boolean', foreground: 'FBBF24' },
+      { token: 'null', foreground: 'FBBF24' },
+      { token: 'undefined', foreground: 'FBBF24' },
+      { token: 'this', foreground: 'FBBF24' },
+      { token: 'super', foreground: 'FBBF24' },
+      { token: 'new', foreground: 'FBBF24' },
+      { token: 'return', foreground: 'FBBF24' },
+      { token: 'throw', foreground: 'FBBF24' },
+      { token: 'try', foreground: 'FBBF24' },
+      { token: 'catch', foreground: 'FBBF24' },
+      { token: 'finally', foreground: 'FBBF24' },
+      { token: 'if', foreground: 'FBBF24' },
+      { token: 'else', foreground: 'FBBF24' },
+      { token: 'switch', foreground: 'FBBF24' },
+      { token: 'case', foreground: 'FBBF24' },
+      { token: 'default', foreground: 'FBBF24' },
+      { token: 'for', foreground: 'FBBF24' },
+      { token: 'while', foreground: 'FBBF24' },
+      { token: 'do', foreground: 'FBBF24' },
+      { token: 'break', foreground: 'FBBF24' },
+      { token: 'continue', foreground: 'FBBF24' },
+      { token: 'import', foreground: 'FBBF24' },
+      { token: 'export', foreground: 'FBBF24' },
+      { token: 'package', foreground: 'FBBF24' },
+      { token: 'extends', foreground: 'FBBF24' },
+      { token: 'implements', foreground: 'FBBF24' },
+      { token: 'interface', foreground: 'FBBF24' },
+      { token: 'abstract', foreground: 'FBBF24' },
+      { token: 'final', foreground: 'FBBF24' },
+      { token: 'static', foreground: 'FBBF24' },
+      { token: 'public', foreground: 'FBBF24' },
+      { token: 'private', foreground: 'FBBF24' },
+      { token: 'protected', foreground: 'FBBF24' },
+      { token: 'synchronized', foreground: 'FBBF24' },
+      { token: 'volatile', foreground: 'FBBF24' },
+      { token: 'transient', foreground: 'FBBF24' },
+      { token: 'native', foreground: 'FBBF24' },
+      { token: 'strictfp', foreground: 'FBBF24' },
+      { token: 'instanceof', foreground: 'FBBF24' },
+      { token: 'assert', foreground: 'FBBF24' },
+      { token: 'enum', foreground: 'FBBF24' },
+      { token: 'const', foreground: 'FBBF24' },
+      { token: 'goto', foreground: 'FBBF24' },
+      { token: 'var', foreground: 'FBBF24' },
+      { token: 'let', foreground: 'FBBF24' },
+      { token: 'function', foreground: 'FBBF24' },
+      { token: 'class', foreground: 'FBBF24' },
+      { token: 'interface', foreground: 'FBBF24' },
+      { token: 'type', foreground: 'FBBF24' },
+      { token: 'namespace', foreground: 'FBBF24' },
+      { token: 'module', foreground: 'FBBF24' },
+      { token: 'async', foreground: 'FBBF24' },
+      { token: 'await', foreground: 'FBBF24' },
+      { token: 'yield', foreground: 'FBBF24' },
+      { token: 'generator', foreground: 'FBBF24' },
+      { token: 'decorator', foreground: 'FBBF24' },
+      { token: 'annotation', foreground: 'FBBF24' },
+      { token: 'modifier', foreground: 'FBBF24' },
+      { token: 'control', foreground: 'FBBF24' },
+      { token: 'entity', foreground: '0EA5E9' },
+      { token: 'invalid', foreground: 'EF4444', background: '0F172A' },
     ],
     colors: {
-      'editor.background': '#0F172A', // theme-bg: #0F172A (Deep Twilight Blue)
-      'editor.foreground': '#E8DBC3', // theme-text: #E8DBC3 (Aged Parchment)
-      'editor.lineHighlightBackground': '#1A2B3C', // card-bg: #1A2B3C (Deep Navy)
-      'editorCursor.foreground': '#FBBF24', // gold-accent: #FBBF24 (Enchanted Gold Bright)
-      'editorLineNumber.foreground': '#6B7280', // text-secondary: #6B7280 (Ancient Stone Light)
-      'editor.selectionBackground': '#0EA5E9', // accent-primary: #0EA5E9 (Arcane Turquoise Bright)
+      'editor.background': '#0F172A',
+      'editor.foreground': '#E8DBC3',
+      'editor.lineHighlightBackground': '#1A2B3C',
+      'editorCursor.foreground': '#FBBF24',
+      'editorLineNumber.foreground': '#6B7280',
+      'editor.selectionBackground': '#0EA5E9',
       'editor.inactiveSelectionBackground': '#0EA5E970',
       'editorWhitespace.foreground': '#6B7280',
       'editorIndentGuide.background': '#6B7280',
@@ -230,71 +225,69 @@ const defineMonacoThemes = (monaco) => {
     }
   });
   
-  // Detective/Noir Theme - Using actual colors from detectiveTheme.module.scss
   monaco.editor.defineTheme('detective-theme', {
     base: 'vs-dark',
-    inherit: false, // Don't inherit to have full control
+    inherit: false,
     rules: [
-      { token: '', foreground: 'dcdcdc', background: '121212' }, // theme-text: #dcdcdc, theme-bg: #121212
-      { token: 'keyword', foreground: 'd1b773', fontStyle: 'bold' }, // code-keyword: #d1b773
-      { token: 'string', foreground: 'cdaa7d' }, // code-string: #cdaa7d
-      { token: 'number', foreground: 'cdaa7d' }, // code-number: #cdaa7d
-      { token: 'comment', foreground: 'b4a287', fontStyle: 'italic' }, // code-comment: #b4a287
-      { token: 'type.identifier.java', foreground: '7a9e7e' }, // code-variable: #7a9e7e
-      { token: 'variable', foreground: '7a9e7e' }, // code-variable: #7a9e7e
+      { token: '', foreground: 'dcdcdc', background: '121212' },
+      { token: 'keyword', foreground: 'd1b773', fontStyle: 'bold' },
+      { token: 'string', foreground: 'cdaa7d' },
+      { token: 'number', foreground: 'cdaa7d' },
+      { token: 'comment', foreground: 'b4a287', fontStyle: 'italic' },
+      { token: 'type.identifier.java', foreground: '7a9e7e' },
+      { token: 'variable', foreground: '7a9e7e' },
       { token: 'invalid', foreground: '8C3B3B', background: '2C2C2C' },
       { token: 'delimiter', foreground: '444444' },
-      { token: 'operator', foreground: 'd1b773' }, // code-keyword: #d1b773
-      { token: 'constant', foreground: 'cdaa7d' }, // code-string: #cdaa7d
-      { token: 'function', foreground: 'd1b773' }, // code-keyword: #d1b773
-      { token: 'regexp', foreground: 'b4a287' }, // code-comment: #b4a287
-      { token: 'meta', foreground: '3c4c5a' }, // accent-active: #3c4c5a
+      { token: 'operator', foreground: 'd1b773' },
+      { token: 'constant', foreground: 'cdaa7d' },
+      { token: 'function', foreground: 'd1b773' },
+      { token: 'regexp', foreground: 'b4a287' },
+      { token: 'meta', foreground: '3c4c5a' },
     ],
     colors: {
-      'editor.background': '#121212', // theme-bg: #121212
-      'editor.foreground': '#dcdcdc', // theme-text: #dcdcdc
-      'editor.lineHighlightBackground': '#2a2a3a', // code-bg: #2a2a3a
-      'editor.selectionBackground': '#3c4c5a55', // accent-active: #3c4c5a with opacity
+      'editor.background': '#121212',
+      'editor.foreground': '#dcdcdc',
+      'editor.lineHighlightBackground': '#2a2a3a',
+      'editor.selectionBackground': '#3c4c5a55',
       'editor.inactiveSelectionBackground': '#44444433',
-      'editorCursor.foreground': '#d1b773', // code-keyword: #d1b773
-      'editorLineNumber.foreground': '#b4a287', // code-comment: #b4a287
-      'editorLineNumber.activeForeground': '#d1b773', // code-keyword: #d1b773
+      'editorCursor.foreground': '#d1b773',
+      'editorLineNumber.foreground': '#b4a287',
+      'editorLineNumber.activeForeground': '#d1b773',
       'editorWhitespace.foreground': '#444444',
       'editorIndentGuide.background': '#444444',
-      'editorIndentGuide.activeBackground': '#7a9e7e', // code-variable: #7a9e7e
-      'editor.selectionHighlightBackground': '#3c4c5a33', // accent-active: #3c4c5a with opacity
-      'editor.wordHighlightBackground': '#7a9e7e33', // code-variable: #7a9e7e with opacity
-      'editor.wordHighlightStrongBackground': '#d1b77333', // code-keyword: #d1b773 with opacity
-      'editorBracketMatch.background': '#3c4c5a55', // accent-active: #3c4c5a with opacity
+      'editorIndentGuide.activeBackground': '#7a9e7e',
+      'editor.selectionHighlightBackground': '#3c4c5a33',
+      'editor.wordHighlightBackground': '#7a9e7e33',
+      'editor.wordHighlightStrongBackground': '#d1b77333',
+      'editorBracketMatch.background': '#3c4c5a55',
       'editorBracketMatch.border': '#444444',
       'editorError.foreground': '#8C3B3B',
-      'editorWarning.foreground': '#d1b773', // code-keyword: #d1b773
-      'editorInfo.foreground': '#7a9e7e', // code-variable: #7a9e7e
-      'editorGutter.background': '#121212', // theme-bg: #121212
-      'editorGutter.modifiedBackground': '#d1b773', // code-keyword: #d1b773
-      'editorGutter.addedBackground': '#7a9e7e', // code-variable: #7a9e7e
+      'editorWarning.foreground': '#d1b773',
+      'editorInfo.foreground': '#7a9e7e',
+      'editorGutter.background': '#121212',
+      'editorGutter.modifiedBackground': '#d1b773',
+      'editorGutter.addedBackground': '#7a9e7e',
       'editorGutter.deletedBackground': '#8C3B3B',
-      'editorWidget.background': '#2a2a3a', // code-bg: #2a2a3a
+      'editorWidget.background': '#2a2a3a',
       'editorWidget.border': 'rgba(255,255,255,0.05)',
-      'editorSuggestWidget.background': '#2a2a3a', // code-bg: #2a2a3a
+      'editorSuggestWidget.background': '#2a2a3a',
       'editorSuggestWidget.border': 'rgba(255,255,255,0.05)',
-      'editorSuggestWidget.foreground': '#dcdcdc', // theme-text: #dcdcdc
-      'editorSuggestWidget.selectedBackground': '#3c4c5a', // accent-active: #3c4c5a
-      'editorHoverWidget.background': '#2a2a3a', // code-bg: #2a2a3a
+      'editorSuggestWidget.foreground': '#dcdcdc',
+      'editorSuggestWidget.selectedBackground': '#3c4c5a',
+      'editorHoverWidget.background': '#2a2a3a',
       'editorHoverWidget.border': 'rgba(255,255,255,0.05)',
-      'editorMarkerNavigation.background': '#121212', // theme-bg: #121212
+      'editorMarkerNavigation.background': '#121212',
       'editorMarkerNavigationError.background': '#8C3B3B',
-      'editorMarkerNavigationWarning.background': '#d1b773', // code-keyword: #d1b773
-      'editorMarkerNavigationInfo.background': '#7a9e7e', // code-variable: #7a9e7e
+      'editorMarkerNavigationWarning.background': '#d1b773',
+      'editorMarkerNavigationInfo.background': '#7a9e7e',
       'editorOverviewRuler.border': 'rgba(255,255,255,0.05)',
       'editorOverviewRuler.errorForeground': '#8C3B3B',
-      'editorOverviewRuler.warningForeground': '#d1b773', // code-keyword: #d1b773
-      'editorOverviewRuler.infoForeground': '#7a9e7e', // code-variable: #7a9e7e
+      'editorOverviewRuler.warningForeground': '#d1b773',
+      'editorOverviewRuler.infoForeground': '#7a9e7e',
       'editorWidget.shadow': '0 2px 8px rgba(0,0,0,0.5)',
     }
   });
   
-  console.log('LessonMonacoEditor - All themes defined successfully');
   monaco.__cloveThemesDefined = true;
 };
 
@@ -305,24 +298,25 @@ const LessonMonacoEditor = ({
   height = "400px",
   options = {},
   onMount: customOnMount,
+  fixTagClass = null,
+  fixTagRegex = null,
+  fixTagHoverMessage = null,
+  userChoices = {},
+  placedChoicePositions = {},
   ...rest
 }) => {
   const editorRef = useRef(null);
   const { topicId } = useParams();
 
-  // Get theme from topic ID automatically (same logic as LessonThemeProvider)
   const currentTheme = useMemo(() => {
     if (topicId) {
-      // Extract the numeric part from topicId (e.g., "1-data-types-and-variables" -> "1")
       const numericTopicId = topicId.split('-')[0];
       const topic = subtopicContent[numericTopicId];
-      console.log('LessonMonacoEditor - Parsed topicId:', numericTopicId, 'from:', topicId);
       return topic ? topic.theme : 'space';
     }
-    return 'space'; // Default to space theme
+    return 'space';
   }, [topicId, subtopicContent]);
 
-  // Get the parsed topicId for consistent use
   const parsedTopicId = useMemo(() => {
     return topicId ? topicId.split('-')[0] : null;
   }, [topicId]);
@@ -331,21 +325,57 @@ const LessonMonacoEditor = ({
     editorRef.current = editor;
     defineMonacoThemes(monaco);
     
-    // Debug logging
-    console.log('LessonMonacoEditor - Current theme:', currentTheme);
-    console.log('LessonMonacoEditor - Topic ID:', topicId);
-    console.log('LessonMonacoEditor - Monaco theme name:', getMonacoThemeName(currentTheme));
-    console.log('LessonMonacoEditor - Subtopic content for topicId:', subtopicContent[parsedTopicId]);
-    
-    // Set the theme
     const themeName = getMonacoThemeName(currentTheme);
-    console.log('LessonMonacoEditor - Setting Monaco theme to:', themeName);
     monaco.editor.setTheme(themeName);
     
-    // Force a refresh of the editor to ensure theme is applied
+    if (fixTagRegex && fixTagClass) {
+      const model = editor.getModel();
+      if (model) {
+        const updateDecorations = () => {
+          const code = model.getValue();
+          const matches = code.match(fixTagRegex);
+          const decorations = [];
+          
+          if (matches) {
+            matches.forEach(match => {
+              const positions = [];
+              let index = 0;
+              while ((index = code.indexOf(match, index)) !== -1) {
+                const startPos = model.getPositionAt(index);
+                const endPos = model.getPositionAt(index + match.length);
+                
+                positions.push({
+                  range: new monaco.Range(startPos.lineNumber, startPos.column, endPos.lineNumber, endPos.column),
+                  options: {
+                    className: fixTagClass,
+                    hoverMessage: fixTagHoverMessage ? { value: fixTagHoverMessage } : undefined
+                  }
+                });
+                index += match.length;
+              }
+              decorations.push(...positions);
+            });
+          }
+          
+          editor.deltaDecorations([], decorations);
+        };
+        
+        updateDecorations();
+        
+        const changeDisposable = model.onDidChangeContent(() => {
+          updateDecorations();
+        });
+        
+        return () => {
+          if (changeDisposable) {
+            changeDisposable.dispose();
+          }
+        };
+      }
+    }
+    
     setTimeout(() => {
       editor.updateOptions({});
-      console.log('LessonMonacoEditor - Editor refreshed');
     }, 100);
     
     if (customOnMount) {
@@ -353,7 +383,6 @@ const LessonMonacoEditor = ({
     }
   };
 
-  // Add theme-specific container styling
   const containerStyle = {
     width: '100%',
     height: '100%',
@@ -392,7 +421,7 @@ const LessonMonacoEditor = ({
           lineNumbers: 'on',
           folding: true,
           lineDecorationsWidth: 10,
-          padding: { top: 15, bottom: 15, left: 15, right: 15 }, // Add right padding for better spacing
+          padding: { top: 15, bottom: 15, left: 15, right: 15 },
           tabSize: 2,
           fontFamily: currentTheme === 'detective' ? 'IBM Plex Mono, monospace' : 
                      currentTheme === 'wizard' ? 'JetBrains Mono, Fira Code, monospace' : 
@@ -411,7 +440,6 @@ const LessonMonacoEditor = ({
             verticalScrollbarSize: 0,
             horizontalScrollbarSize: 0,
           },
-          // Ensure editor fills container properly
           fixedOverflowWidgets: true,
           overviewRulerBorder: false,
           hideCursorInOverviewRuler: true,

@@ -279,8 +279,6 @@ const ProgressPage = () => {
                               {strengths.length > 0 ? (
                                 strengths.map((st, idx) => {
                                   const subtopicName = st.subtopic?.title || "Untitled Subtopic";
-                                  // Debug log for strengths
-                                  console.log("Strength chip:", subtopicName, st);
                                   return (
                                     <span key={idx} className={styles.swChip}>
                                       <span className={styles.dotGreen}></span> {subtopicName}
@@ -304,8 +302,6 @@ const ProgressPage = () => {
                               {weaknesses.length > 0 ? (
                                 weaknesses.map((st, idx) => {
                                   const subtopicName = st.subtopic?.title || "Untitled Subtopic";
-                                  // Debug log for weaknesses
-                                  console.log("Weakness chip:", subtopicName, st);
                                   return (
                                     <span key={idx} className={styles.swChip}>
                                       <span className={styles.dotRed}></span> {subtopicName}

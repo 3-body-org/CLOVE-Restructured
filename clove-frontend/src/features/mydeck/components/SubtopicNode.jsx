@@ -3,7 +3,6 @@
  * @description Renders a clickable subtopic node with theme-aware icon and popover.
  */
 
-import React from "react";
 import PropTypes from "prop-types";
 import { Image, OverlayTrigger, Popover } from "react-bootstrap";
 import styles from "../styles/SubtopicPage.module.scss";

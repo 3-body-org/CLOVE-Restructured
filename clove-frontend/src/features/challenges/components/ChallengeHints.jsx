@@ -17,10 +17,8 @@ const ChallengeHints = ({
 }) => {
   const { topicTheme } = useChallengeTheme();
   
-  // Don't render if not visible
   if (!visible) return null;
   
-  // Handle hint
   const handleHint = () => {
     if (!disabled && onHint) {
       onHint();
@@ -31,7 +29,6 @@ const ChallengeHints = ({
     <div className={styles.hintSystem} data-theme={topicTheme}>
       <div className={styles.hintTitle}>HINTS</div>
       
-      {/* Hint Dots in Top-Right Corner */}
       <div className={styles.hintDotsCorner}>
         {[...Array(hintsAvailable)].map((_, i) => (
           <div 
@@ -51,7 +48,6 @@ const ChallengeHints = ({
         {hintsUsed >= hintsAvailable ? 'No Hints Left' : 'Get Hint'}
       </button>
       
-      {/* Hint Display Area */}
       <div className={styles.hintDisplay}>
         {revealedHints.map((hint, index) => (
           <div key={index} className={styles.hintContent}>

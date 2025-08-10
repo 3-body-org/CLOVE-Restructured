@@ -88,7 +88,6 @@ const ResultsPage = () => {
         setAttempts(results);
         setError(null);
       } catch (err) {
-        console.error('Error fetching challenge results:', err);
         setError('Failed to load challenge results. Please try again.');
       } finally {
     setLoading(false);
@@ -106,19 +105,13 @@ const ResultsPage = () => {
     setHasResetFields(true);
     
     try {
-      console.log('🔄 RESETTING: Challenge fields for navigation/refresh protection');
       const response = await post(`/user_challenges/reset-challenge-fields/user/${currentUser.id}/subtopic/${subtopicId}`);
       
-      if (response.ok) {
-        const result = await response.json();
-        console.log('✅ RESET SUCCESS:', result.message);
-      } else {
-        console.warn('⚠️ RESET WARNING: Could not reset challenge fields');
+      if (!response.ok) {
         // Reset flag if failed
         setHasResetFields(false);
       }
     } catch (error) {
-      console.error('❌ RESET ERROR:', error);
       // Reset flag if failed
       setHasResetFields(false);
     }
@@ -211,20 +204,6 @@ const ResultsPage = () => {
     const timeLimit = getTimeLimit(attempt.challenge_difficulty);
     const isTimeExpired = attempt.timer_enabled && attempt.time_spent >= timeLimit;
     
-    // Debug logging for highlighted rows
-    if (isCancelled || isTimeExpired) {
-      console.log('🎯 HIGHLIGHTING ROW:', {
-        attemptId: attempt.id,
-        isCancelled,
-        isTimeExpired,
-        wasCancelled: attempt.was_cancelled,
-        timerEnabled: attempt.timer_enabled,
-        timeSpent: attempt.time_spent,
-        timeLimit,
-        difficulty: attempt.challenge_difficulty
-      });
-    }
-    
     if (isCancelled) {
       return {
         shouldHighlight: true,
@@ -274,7 +253,6 @@ const ResultsPage = () => {
       // Reset challenge fields before going back to lesson
       await resetChallengeFields();
     } catch (error) {
-      console.error('❌ RESET ERROR:', error);
       // Continue anyway - don't block the user from going back
     }
     

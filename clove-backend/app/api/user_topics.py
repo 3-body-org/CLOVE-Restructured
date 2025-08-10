@@ -84,6 +84,9 @@ async def get_topic_overview(
     if not current_user.is_superuser and user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to view this overview")
 
+    # Fetch user_topic to get the unlock status
+    user_topic = await get_by_user_and_topic(db, user_id, topic_id)
+    
     # Fetch pre-assessment (should be one per user/topic)
     pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
     pre_assessment = pre_assessments[0] if pre_assessments else None
@@ -99,7 +102,8 @@ async def get_topic_overview(
     return {
         "pre_assessment": PreAssessmentRead.model_validate(pre_assessment).model_dump() if pre_assessment else None,
         "subtopics": [UserSubtopicRead.model_validate(s).model_dump() for s in subtopics],
-        "post_assessment": PostAssessmentRead.model_validate(post_assessment).model_dump() if post_assessment else None
+        "post_assessment": PostAssessmentRead.model_validate(post_assessment).model_dump() if post_assessment else None,
+        "is_unlocked": user_topic.is_unlocked if user_topic else False
     }
 
 @router.patch("/user/{user_id}/topic/{topic_id}", response_model=UserTopicRead)

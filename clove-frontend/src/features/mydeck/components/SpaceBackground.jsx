@@ -4,7 +4,7 @@
  * of a starfield for the 'space' theme.
  */
 
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 /**
  * Default star layers for the space theme.

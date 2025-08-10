@@ -2014,7 +2014,7 @@
         "Final Entry Code: 1539151595",
         "System Locked: true",
         "Lock Status Message: Emergency Lockdown",
-        "Final Entry Code: 123456789123",
+        "Final Entry Code: 12345678912345",
         "System Locked: false"
       ],
       "explanation": "1. Variables are initialized: `entryCode = 123456789123L`, `maxAttempts = 5`, `isLocked = true`, `lockStatus = \"Secure\"`.\n2. `byte remainingAttempts = (byte) (maxAttempts - 1);` calculates `5 - 1 = 4`, casts to `byte`, so `remainingAttempts` is `4`.\n3. `if (entryCode % 2 == 0)`: `123456789123` is an odd number, so `entryCode % 2` is `1`. `1 == 0` is `false`. The `else` block executes.\n    * `lockStatus = \"Breach Detected\";` updates `lockStatus` to \"Breach Detected\". `isLocked` remains `true`.\n4. `if (remainingAttempts < 5 && isLocked)`: `4 < 5` is `true`, AND `isLocked` (`true`) is `true`. The condition `true && true` is `true`. The block is entered.\n    * `lockStatus = \"Emergency Lockdown\";` updates `lockStatus` to \"Emergency Lockdown\".\n5. **Output 1**: `System.out.println(\"Final Entry Code: \" + (int)entryCode);` The `long` value `123456789123L` is cast to `int`, causing an **integer overflow**. The result is `1539151595`.\n6. **Output 2**: `System.out.println(\"System Locked: \" + isLocked);` prints \"System Locked: true\".\n7. **Output 3**: `System.out.println(\"Lock Status Message: \" + lockStatus);` prints \"Lock Status Message: Emergency Lockdown\"."

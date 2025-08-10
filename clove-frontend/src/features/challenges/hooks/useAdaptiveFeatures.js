@@ -16,13 +16,11 @@ export const useAdaptiveFeatures = (subtopicId, currentTakeAttempts = 0) => {
   const cacheRef = useRef(new Map());
   const fetchingRef = useRef(false);
 
-  // Clear cache when subtopicId changes (new challenge run)
   useEffect(() => {
     cacheRef.current.clear();
     fetchingRef.current = false;
   }, [subtopicId]);
 
-  // Memoize the API call function to prevent infinite re-renders
   const fetchAdaptiveData = useCallback(async () => {
     if (!user || !subtopicId) {
       setAdaptiveState({
@@ -44,9 +42,7 @@ export const useAdaptiveFeatures = (subtopicId, currentTakeAttempts = 0) => {
       return;
     }
 
-    // 🎯 NEW LOGIC: If we're on the first challenge of any take, disable both timer and hints
     if (currentTakeAttempts === 0) {
-      console.log('🎯 FIRST CHALLENGE: Disabling timer and hints for first challenge of take');
       setAdaptiveState({
         isTimerEnabled: false,
         isHintsEnabled: false,
@@ -115,7 +111,6 @@ export const useAdaptiveFeatures = (subtopicId, currentTakeAttempts = 0) => {
       setAdaptiveState(result);
 
     } catch (error) {
-      console.error('Error determining adaptive features:', error);
       const fallbackResult = {
         isTimerEnabled: false,
         isHintsEnabled: false,
@@ -127,9 +122,8 @@ export const useAdaptiveFeatures = (subtopicId, currentTakeAttempts = 0) => {
     } finally {
       fetchingRef.current = false;
     }
-  }, [user, subtopicId, currentTakeAttempts]); // Added currentTakeAttempts to dependencies
+  }, [user, subtopicId, currentTakeAttempts]);
 
-  // Function to refresh adaptive features (clear cache and refetch)
   const refreshAdaptiveFeatures = useCallback(() => {
     const cacheKey = `${user?.id}_${subtopicId}_${currentTakeAttempts}`;
     cacheRef.current.delete(cacheKey);

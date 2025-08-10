@@ -5,8 +5,6 @@
  */
 
 // --- Icon Imports ---
-// Common
-import placeholderIconPath from 'assets/icons/common/icon-placeholder.svg';
 // Noir (Detective)
 import noirPreAss from 'assets/icons/noir/icon-pre-ass.svg';
 import noirSubtopic1 from 'assets/icons/noir/icon-subtopic1.svg';

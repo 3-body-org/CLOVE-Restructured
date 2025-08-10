@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from '../themes/detectiveTheme.module.scss';
 
 const DEFAULT_FLASH_DURATION = 100;

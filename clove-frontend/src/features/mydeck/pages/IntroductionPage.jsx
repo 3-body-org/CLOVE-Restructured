@@ -7,7 +7,6 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  useRef,
   useMemo,
   useState,
 } from "react";
@@ -87,7 +86,6 @@ const IntroductionPage = () => {
       })
       .catch((error) => {
         if (mounted) {
-          console.error("Failed to load topic:", error);
           setError("Failed to load topic. Please try again.");
         }
       })
@@ -147,7 +145,6 @@ const IntroductionPage = () => {
         }));
         navigate(`/my-deck/${topicId}`);
       } catch (error) {
-        console.error("Failed to update introduction status:", error);
         navigate(`/my-deck/${topicId}`);
       }
     }
@@ -263,7 +260,5 @@ const IntroductionPage = () => {
     </div>
   );
 };
-
-IntroductionPage.propTypes = {};
 
 export default IntroductionPage;

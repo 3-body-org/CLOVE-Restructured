@@ -13,7 +13,6 @@ import { subtopicContent } from '../content/subtopicContent';
  */
 export const mergeBackendAndFrontendContent = (backendOverview, frontendContent) => {
   if (!backendOverview || !frontendContent) {
-    console.warn('Missing backend overview or frontend content');
     return null;
   }
   
@@ -95,7 +94,6 @@ const getBackendData = (key, preAssessment, subtopics, postAssessment) => {
   const subtopic = subtopics.find(s => {
     // Handle cases where subtopic data might be malformed
     if (!s || !s.subtopic || !s.subtopic.title) {
-      console.warn('Malformed subtopic data:', s);
       return false;
     }
     
@@ -129,10 +127,6 @@ const getBackendData = (key, preAssessment, subtopics, postAssessment) => {
   });
 
   if (!subtopic) {
-    console.warn(`Subtopic not found for key: ${key}`, { 
-      availableKeys: subtopics?.map(s => s?.subtopic?.title).filter(Boolean) || [],
-      searchedKey: key
-    });
     return {
       id: key,
       title: key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
