@@ -44,12 +44,9 @@ const OutputTracing = ({
   // Restore user answer when resuming a cancelled challenge
   useEffect(() => {
     if (userAnswer && isResumed) {
-      console.log('🔄 RESTORING: User selections for cancelled challenge:', userAnswer);
       // Only restore if userAnswer is not empty
       if (userAnswer && Array.isArray(userAnswer) && userAnswer.length > 0) {
         setSelectedChoices(userAnswer);
-      } else {
-        console.log('🔄 EMPTY USER ANSWER: Not restoring empty userAnswer');
       }
     }
   }, [userAnswer, isResumed]);

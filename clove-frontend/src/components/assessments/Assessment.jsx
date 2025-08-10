@@ -11,7 +11,6 @@ import { useMyDeckService } from "features/mydeck/hooks/useMydeckService";
 import LoadingScreen from "../../components/layout/StatusScreen/LoadingScreen";
 import { showErrorNotification, showSuccessNotification } from "../../utils/notifications";
 import { getSubtopicContent } from "features/mydeck/content/subtopicContent";
-// import Assessment from "./Assessment";
 
 const Assessment = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -61,7 +60,7 @@ const Assessment = () => {
             }
           }
         } catch (error) {
-          console.error('Error checking assessment completion:', error);
+          // Error checking assessment completion
         } finally {
           // Increased minimum loading time
           setTimeout(() => {
@@ -92,33 +91,27 @@ const Assessment = () => {
     setIsLoading(true);
     const fetchQuestions = async () => {
       try {
-        console.log(`🔍 Fetching questions for topic ${numericTopicId}, assessment type ${assessmentType}`);
-        
         // Get questions summary and store in context
         try {
           await getAssessmentQuestionsSummary(numericTopicId, assessmentType);
         } catch (summaryError) {
-          console.warn('🔍 Failed to fetch questions summary, continuing without it:', summaryError);
+          // Failed to fetch questions summary, continuing without it
           // Continue without the summary - it's not critical for the assessment to work
         }
         
         const response = await get(`/assessment_questions/topic/${numericTopicId}/randomized?assessment_type=${assessmentType}`);
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('🔍 API Error Response:', response.status, errorText);
           throw new Error(`Failed to fetch questions: ${response.status} ${errorText}`);
         }
         const questions = await response.json();
-        console.log('🔍 Questions fetched successfully:', questions.length, 'questions');
         setQuestionsToAsk(questions);
         
 
       } catch (err) {
-        console.error('Error fetching questions:', err);
         setQuestionsToAsk([]);
         // Show error notification
         if (err.message.includes('Failed to fetch')) {
-          console.error('🔍 Network error - backend might not be running or endpoint not found');
           showErrorNotification('Unable to load assessment questions. Please check your connection and try again.');
         } else {
           showErrorNotification('Failed to load assessment questions. Please try again.');
@@ -193,7 +186,7 @@ const Assessment = () => {
         user_answer: option,
       });
     } catch (e) {
-      console.error('Error submitting answer:', e);
+      // Error submitting answer
     }
   };
 
@@ -212,32 +205,23 @@ const Assessment = () => {
     } else {
       // Assessment completed - immediately refresh topics to unlock subtopics
       try {
-        console.log('🔍 Assessment completed, refreshing topics to unlock subtopics');
-        console.log('🔍 Topic ID:', topicId, 'Numeric Topic ID:', numericTopicId);
-          
-          // Show success notification
-          showSuccessNotification('Assessment completed! Viewing your results...');
+        // Show success notification
+        showSuccessNotification('Assessment completed! Viewing your results...');
         
         // Reduced delay to ensure backend has processed the final answer
         await new Promise(resolve => setTimeout(resolve, 500));
         
         // First refresh the topics list
         await refreshTopics();
-        console.log('🔍 Topics list refreshed');
         
         // Then refresh the topic overview to update unlock status
         if (loadTopicOverview) {
           const parsedTopicId = parseInt(numericTopicId);
-          console.log('🔍 Refreshing topic overview for topic ID:', parsedTopicId);
           await loadTopicOverview(parsedTopicId, true); // Force refresh
-          console.log('🔍 Topic overview refreshed');
-        } else {
-          console.warn('🔍 loadTopicOverview function not available');
         }
         
-        console.log('🔍 Topics refreshed successfully');
       } catch (error) {
-        console.error('Failed to refresh topics:', error);
+        // Failed to refresh topics
       }
       
       // Navigate to result page after refreshing topics

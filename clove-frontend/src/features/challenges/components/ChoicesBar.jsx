@@ -8,22 +8,9 @@ import styles from '../styles/CodeCompletion.module.scss';
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const ChoicesBar = ({ choices = [], onDragStart, disabled = false }) => {
-  // Safely get theme with fallback
-  let themeData;
-  try {
-    themeData = useChallengeTheme();
-  } catch (error) {
-    console.warn('Failed to get theme data, using fallback:', error);
-    themeData = {
-      getThemeStyles: () => ({}),
-      currentTheme: 'space'
-    };
-  }
+  const { getThemeStyles, currentTheme } = useChallengeTheme();
   
-  const { getThemeStyles, currentTheme } = themeData;
-  
-  // Get theme-specific styles with fallback
-  const themeStyles = getThemeStyles ? getThemeStyles() : {};
+  const themeStyles = getThemeStyles();
   
   const handleDragStart = (e, choice) => {
     if (disabled) return;
@@ -31,7 +18,6 @@ const ChoicesBar = ({ choices = [], onDragStart, disabled = false }) => {
     if (onDragStart) {
       onDragStart(e, choice);
     } else {
-      // Default drag behavior
       e.dataTransfer.setData('choice', choice);
       e.dataTransfer.effectAllowed = 'move';
     }

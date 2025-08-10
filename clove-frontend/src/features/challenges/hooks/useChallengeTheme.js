@@ -15,7 +15,6 @@ export const useChallengeTheme = () => {
   try {
     contextValue = useContext(ThemeContext);
   } catch (error) {
-    console.warn('ThemeContext not available, using fallback theme');
     contextValue = { currentTheme: 'space', setTheme: () => {} };
   }
   
@@ -48,7 +47,6 @@ export const useChallengeTheme = () => {
       try {
         setTheme(topicTheme);
       } catch (error) {
-        console.warn('Failed to set theme:', error);
       }
     }
   }, [topicId, topicTheme, currentTheme, setTheme]);

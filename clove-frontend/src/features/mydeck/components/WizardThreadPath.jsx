@@ -3,7 +3,6 @@
  * @description Renders the animated thread path between wizard subtopic nodes using themed SVGs.
  */
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import path1 from 'assets/icons/wizard/icon-path1.svg';
 import path2 from 'assets/icons/wizard/icon-path2.svg';

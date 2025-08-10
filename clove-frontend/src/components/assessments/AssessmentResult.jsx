@@ -53,7 +53,6 @@ const AssessmentResult = () => {
         const comprehensiveResults = await getComprehensiveAssessmentResults(numericTopicId, assessmentType);
         setResults(comprehensiveResults);
       } catch (error) {
-        console.error('Error fetching assessment data:', error);
         setError("Failed to fetch assessment result.");
       } finally {
         setTimeout(() => {
@@ -104,9 +103,6 @@ const AssessmentResult = () => {
     percentage: Math.round((subtopic.correctCount / subtopic.totalCount) * 100),
     questions: subtopic.questions
   }));
-  
-  // Debug subtopic data
-  console.log('🔍 Subtopic Data:', subtopicData);
 
   // Handle the finish button to navigate to the topic page
   const handleFinish = async () => {
@@ -120,7 +116,7 @@ const AssessmentResult = () => {
         await loadTopicOverview(parsedTopicId, true); // Force refresh
       }
     } catch (error) {
-      console.error('Failed to refresh topics:', error);
+      // Failed to refresh topics
     }
     // Navigate back to topic page
     navigate(`/my-deck/${topicId}`);
@@ -134,18 +130,6 @@ const AssessmentResult = () => {
     intermediate: '#f59e0b', // Yellow (alias for medium)
     advanced: '#ef4444'   // Red (alias for hard)
   };
-
-  // Debug logging
-  console.log('🔍 Comprehensive Assessment Results:', {
-    assessmentType,
-    totalCorrect: results.totalCorrect,
-    totalQuestions: results.totalQuestions,
-    scorePercentage: results.scorePercentage,
-    actualTotalItems: results.assessment.total_items,
-    assessmentData: results.assessment,
-    questionsBySubtopic: results.questionsBySubtopic,
-    storedAssessmentQuestions: assessmentQuestions[`${numericTopicId}-${assessmentType}`]
-  });
 
   return (
     <div className={styles.pageContainer}>

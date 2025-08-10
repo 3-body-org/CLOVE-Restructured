@@ -1,5 +1,4 @@
 
-import React from 'react';
 import wizardBg from 'assets/images/wizard/illustration-wizard-background.svg';
 import ImageThemeBackground from './ImageThemeBackground';
 

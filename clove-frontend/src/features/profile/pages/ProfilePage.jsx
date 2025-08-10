@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faEdit, faSave, faTimes, faEnvelope, faBirthdayCake, faIdBadge, faCalendarAlt, faCamera, faBolt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faSave, faTimes, faEnvelope, faBirthdayCake, faIdBadge, faCamera, faBolt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/profile/styles/ProfilePage.module.scss";
 import TitleAndProfile from "components/layout/Navbar/TitleAndProfile";
 import { useAuth } from "contexts/AuthContext";
@@ -138,7 +138,6 @@ const ProfilePage = () => {
       }
     } catch (error) {
       showErrorNotification("Failed to update profile. Please try again.");
-      console.error("Error updating profile:", error);
     } finally {
       setSaving(false);
     }

@@ -2,10 +2,6 @@ import React from 'react';
 import styles from './CustomExitWarningModal.module.scss';
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
-/**
- * Custom Exit Warning Modal Component
- * Beautiful custom warning when user tries to leave the challenge page
- */
 const CustomExitWarningModal = ({ 
   isVisible, 
   onContinueChallenge, 
@@ -13,26 +9,12 @@ const CustomExitWarningModal = ({
   isLoading = false,
   challengeState = 'active'
 }) => {
-  // Safely get theme with fallback
-  let themeData;
-  try {
-    themeData = useChallengeTheme();
-  } catch (error) {
-    console.warn('Failed to get theme data, using fallback:', error);
-    themeData = {
-      getThemeStyles: () => ({}),
-      currentTheme: 'space'
-    };
-  }
+  const { getThemeStyles, currentTheme } = useChallengeTheme();
   
-  const { getThemeStyles, currentTheme } = themeData;
-  
-  // Get theme-specific styles with fallback
-  const themeStyles = getThemeStyles ? getThemeStyles() : {};
+  const themeStyles = getThemeStyles();
   
   if (!isVisible) return null;
 
-  // Determine the appropriate message based on challenge state
   const getModalContent = () => {
     switch (challengeState) {
       case 'submitted':
@@ -59,7 +41,7 @@ const CustomExitWarningModal = ({
           continueText: 'Continue Challenge',
           leaveText: 'Leave Anyway'
         };
-      default: // active
+      default:
         return {
           icon: '⚠️',
           title: 'Leave Challenge?',

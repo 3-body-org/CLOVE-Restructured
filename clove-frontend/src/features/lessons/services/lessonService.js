@@ -9,7 +9,6 @@ export const useLessonService = () => {
       // Convert string to number if needed
       const numericSubtopicId = parseInt(subtopicId);
       if (isNaN(numericSubtopicId)) {
-        console.error('❌ [lessonService] Invalid subtopic ID:', subtopicId);
         throw new Error('Invalid subtopic ID');
       }
       
@@ -22,7 +21,6 @@ export const useLessonService = () => {
       
       return null;
     } catch (error) {
-      console.error('❌ [lessonService] Error fetching lesson:', error);
       showErrorNotification('Failed to load lesson content');
       throw error;
     }
@@ -34,7 +32,6 @@ export const useLessonService = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('❌ [lessonService] Error completing lesson:', error);
       showErrorNotification('Failed to mark lesson as completed');
       throw error;
     }
@@ -46,7 +43,6 @@ export const useLessonService = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('❌ [lessonService] Error completing practice:', error);
       showErrorNotification('Failed to mark practice as completed');
       throw error;
     }

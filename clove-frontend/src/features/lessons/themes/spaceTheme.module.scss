@@ -1,56 +1,53 @@
 $space-theme: (
-  "theme-bg": #0a0a1a, // Deep space blue
-  "card-bg": rgba(26, 26, 46, 0.8), // Dark blue
-  "code-bg": #252540, // Dark code background
-  "theme-text": #ffffff, // White
-  "heading-primary": #a6aafb, // Light blue instead of purple
-  "heading-secondary": #a6aafb, // Light blue for secondary headings
-  "heading-tertiary": #ff7675, // Pink for tertiary headings
-  "text-secondary": #a8a5e6, // Light purple
-  "text-muted": #a8a5e6, // Light purple for comments
-  "accent-primary": #a6aafb, // Light blue instead of purple
-  "accent-secondary": #ff7675, // Pink
-  "accent-tertiary": #a6aafb, // Light blue for tertiary accent
-  "accent-quaternary": #a8a5e6, // Light purple for subtle accents
-  "accent-danger": #ff6b6b, // Red for danger/important elements
-  "accent-warning": #ffa726, // Orange for warnings
-  "accent-active": #3e3e5e, // Dark purple for active items
-  "accent-primary-rgb": "166, 170, 251", // RGB version for rgba() - light blue
-  "accent-secondary-rgb": "255, 118, 117", // RGB version for rgba()
-  "accent-tertiary-rgb": "166, 170, 251", // RGB version for rgba()
-  "accent-quaternary-rgb": "168, 165, 230", // RGB version for rgba()
-  "accent-danger-rgb": "255, 107, 107", // RGB version for rgba()
-  "accent-warning-rgb": "255, 167, 38", // RGB version for rgba()
-  "hover-accent": #a6aafb, // Light blue for hover effects
-  "hover-border": #ff7675, // Pink for hover borders
-  "hover-accent-rgb": "166, 170, 251", // RGB version for rgba()
-  "hover-border-rgb": "255, 118, 117", // RGB version for rgba()
-  "code-keyword": #6c5ce7, // Purple for keywords
-  "code-variable": #a6aafb, // Light blue for variables
-  "code-string": #ff7675, // Pink for strings
-  "code-number": #a6aafb, // Light blue for numbers
-  "code-comment": #a8a5e6, // Light purple for comments
-  "code-inline": #a6aafb, // Light blue for inline code highlighting
-  "bullet-icon": #ff7675, // Pink for bullet icons
-  "output-text": #ffffff, // White for output text
+  "theme-bg": #0a0a1a,
+  "card-bg": rgba(26, 26, 46, 0.8),
+  "code-bg": #252540,
+  "theme-text": #ffffff,
+  "heading-primary": #a6aafb,
+  "heading-secondary": #a6aafb,
+  "heading-tertiary": #ff7675,
+  "text-secondary": #a8a5e6,
+  "text-muted": #a8a5e6,
+  "accent-primary": #a6aafb,
+  "accent-secondary": #ff7675,
+  "accent-tertiary": #a6aafb,
+  "accent-quaternary": #a8a5e6,
+  "accent-danger": #ff6b6b,
+  "accent-warning": #ffa726,
+  "accent-active": #3e3e5e,
+  "accent-primary-rgb": "166, 170, 251",
+  "accent-secondary-rgb": "255, 118, 117",
+  "accent-tertiary-rgb": "166, 170, 251",
+  "accent-quaternary-rgb": "168, 165, 230",
+  "accent-danger-rgb": "255, 107, 107",
+  "accent-warning-rgb": "255, 167, 38",
+  "hover-accent": #a6aafb,
+  "hover-border": #ff7675,
+  "hover-accent-rgb": "166, 170, 251",
+  "hover-border-rgb": "255, 118, 117",
+  "code-keyword": #6c5ce7,
+  "code-variable": #a6aafb,
+  "code-string": #ff7675,
+  "code-number": #a6aafb,
+  "code-comment": #a8a5e6,
+  "code-inline": #a6aafb,
+  "bullet-icon": #ff7675,
+  "output-text": #ffffff,
   "font-primary": '"Space Grotesk", sans-serif',
   "font-heading": '"Orbitron", sans-serif',
   "font-mono": '"Fira Code", monospace',
-  // Summary section colors - matching wizard theme
-  "summary-bg": rgba(110, 231, 183, 0.1), // Faerie Green with opacity
-  "summary-title": #6EE7B7, // Flickering Faerie Green
-  "summary-border": #6EE7B7, // Flickering Faerie Green
-  "success-color": #6EE7B7, // Flickering Faerie Green
-  "footer-border": #a6aafb, // Light blue border for footer line
-
-  "button-primary-bg": #ff6b6b, // More vibrant red for primary button
-  "button-primary-text": #ffffff, // White text
-  "button-secondary-bg": #252540, // Dark blue background
-  "button-secondary-text": #ffffff, // White text
-  "button-secondary-border": #a6aafb, // Light blue border
+  "summary-bg": rgba(110, 231, 183, 0.1),
+  "summary-title": #6EE7B7,
+  "summary-border": #6EE7B7,
+  "success-color": #6EE7B7,
+  "footer-border": #a6aafb,
+  "button-primary-bg": #ff6b6b,
+  "button-primary-text": #ffffff,
+  "button-secondary-bg": #252540,
+  "button-secondary-text": #ffffff,
+  "button-secondary-border": #a6aafb
 );
 
-// Export the theme map
 :export {
   @each $key, $value in $space-theme {
     #{$key}: $value;

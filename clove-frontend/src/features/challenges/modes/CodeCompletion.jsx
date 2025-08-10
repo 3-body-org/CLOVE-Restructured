@@ -135,8 +135,6 @@ const CodeCompletion = ({
               column: choiceIndex + 1, // +1 because Monaco uses 1-based columns
               length: placedChoice.choice.length
             };
-            
-            console.log('🔄 POSITION: Found final position for', blank.id, 'at column:', choiceIndex + 1, 'length:', placedChoice.choice.length);
           }
         }
       });
@@ -150,8 +148,6 @@ const CodeCompletion = ({
       finalChoicePositions
     };
     
-    console.log('🔄 PROCESSED CODE: Final result:', result.code);
-    console.log('🔄 PROCESSED CODE: Final choice positions:', finalChoicePositions);
     return result;
   }, [code, userChoices, isResumed]);
 
@@ -170,9 +166,6 @@ const CodeCompletion = ({
       }
     }
   }, [processedCode.code]);
-
-  // Simple state update - no complex decoration logic needed
-  // The MonacoCodeBlock component handles all decorations automatically
 
   // Handle drag start from choices bar
   const handleDragStart = useCallback((e, choice) => {
@@ -312,7 +305,6 @@ const CodeCompletion = ({
                     slotId: targetPlaceholder.blankId
                   }
                 };
-                console.log('🔄 DRAG-DROP: Placed choice:', choice, 'in slot:', targetPlaceholder.blankId, 'All choices:', newChoices);
                 return newChoices;
               });
               setUsedChoices(prev => new Set([...prev, choice]));
@@ -462,10 +454,6 @@ const CodeCompletion = ({
         // Use final choice positions from ref for accurate click detection
         const finalPositions = finalPositionsRef.current;
         
-        console.log('🔄 CLICK DEBUG: Clicked position:', position);
-        console.log('🔄 CLICK DEBUG: Final positions:', finalPositions);
-        console.log('🔄 CLICK DEBUG: Current user choices:', currentUserChoices);
-        
         // Check each placed choice using its final position
         for (const [slotId, finalPosition] of Object.entries(finalPositions)) {
           const { line, column, length } = finalPosition;
@@ -481,24 +469,18 @@ const CodeCompletion = ({
           const expandedStartColumn = Math.max(1, column - 2); // Don't go below column 1
           const expandedEndColumn = endColumn + 2; // Add 2 characters buffer
           
-          console.log('🔄 CLICK DEBUG: Checking slot:', slotId, 'choice:', choice);
-          console.log('🔄 CLICK DEBUG: Position range:', expandedStartColumn, 'to', expandedEndColumn);
-          
           // Check if the click position is within the expanded range
           const isInExpandedRange = position.lineNumber === line &&
                                    position.column >= expandedStartColumn && 
                                    position.column <= expandedEndColumn;
           
           if (isInExpandedRange) {
-            console.log('🔄 CLICK: Clicked on choice:', choice, 'in slot:', slotId);
             handleChoiceClick(choice);
             return; // Found and removed the choice, exit
           }
         }
-        
-        console.log('🔄 CLICK DEBUG: No choice found at clicked position');
       } catch (error) {
-        console.error('Error in click handler:', error);
+        // Error handling
       }
     };
           
@@ -656,7 +638,7 @@ const CodeCompletion = ({
                   disabled={disabled}
                   isResumed={isResumed}
                   fixTagClass={dropTarget ? "bug-placeholder-highlight" : "bug-placeholder"}
-                  fixTagRegex={/\[\d+\]/g}
+                  fixTagRegex={/(?<!\w)\[\d+\](?!\w)/g}
                   fixTagHoverMessage={dropTarget ? `Drop here to fill ${dropTarget.tag}` : "Drop a choice here"}
                   onMount={handleMonacoMount}
                   userChoices={userChoices}

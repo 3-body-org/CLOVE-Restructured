@@ -13,20 +13,15 @@ import { useApi } from '../../../hooks/useApi';
  */
 const makeApiCall = async (apiCall, errorMessage) => {
   try {
-    console.log('🔍 makeApiCall: Starting API call...');
     const response = await apiCall();
-    console.log('🔍 makeApiCall: Response received, status:', response.status);
     
     if (!response.ok) {
-      console.error('❌ makeApiCall: Response not ok, status:', response.status);
       throw new Error(`${errorMessage}: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('✅ makeApiCall: Success, data:', data);
     return data;
   } catch (error) {
-    console.error('❌ makeApiCall: Error occurred:', error);
     // Re-throw with original error message if it's already formatted
     if (error.message.includes(errorMessage)) {
       throw error;
@@ -44,15 +39,6 @@ const makeApiCall = async (apiCall, errorMessage) => {
 const createCommonChallengeProps = (backendChallenge, mode) => {
   const { id, scenario, timer, hints, points } = backendChallenge;
   
-  console.log('createCommonChallengeProps - backend data:', {
-    id,
-    scenario,
-    timer,
-    hints,
-    points,
-    hintsKeys: hints ? Object.keys(hints) : 'no hints'
-  });
-  
   const processedProps = {
     id,
     mode,
@@ -62,8 +48,6 @@ const createCommonChallengeProps = (backendChallenge, mode) => {
     hints: hints || {},
     points: points || 10
   };
-  
-  console.log('createCommonChallengeProps - processed props:', processedProps);
   
   return processedProps;
 };
@@ -99,18 +83,13 @@ export const useChallengeApi = () => {
    * @returns {Promise<Object>} Submitted attempt data
    */
   const submitChallengeAttempt = async (attemptData) => {
-    console.log('🔍 submitChallengeAttempt called with data:', attemptData);
-    console.log('🔍 Making POST request to /challenge_attempts/');
-    
     try {
       const result = await makeApiCall(
         () => api.post('/challenge_attempts/', attemptData),
         'Failed to submit challenge attempt'
       );
-      console.log('✅ submitChallengeAttempt successful, result:', result);
       return result;
     } catch (error) {
-      console.error('❌ submitChallengeAttempt failed:', error);
       throw error;
     }
   };
@@ -208,7 +187,6 @@ export const useChallengeApi = () => {
    */
   const cancelChallengeSync = (userId, challengeId) => {
     // Synchronous XHR is deprecated - use localStorage approach instead
-    console.log('Synchronous cancel not supported - use localStorage approach');
     return false;
   };
 
@@ -220,7 +198,6 @@ export const useChallengeApi = () => {
    */
   const createFallbackAttemptSync = (attemptData) => {
     // Synchronous XHR is deprecated - use localStorage approach instead
-    console.log('Synchronous fallback attempt not supported - use localStorage approach');
     return false;
   };
 
@@ -251,7 +228,6 @@ export const useChallengeApi = () => {
       );
       return data.count || 0;
     } catch (error) {
-      console.error('Error getting challenge attempt count:', error);
       return 0; // Return 0 as fallback
     }
   };
@@ -285,7 +261,6 @@ export const useChallengeApi = () => {
 
       return attempts;
     } catch (error) {
-      console.error('Error getting challenge attempts for results:', error);
       throw error;
     }
   };

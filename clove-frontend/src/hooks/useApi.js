@@ -26,7 +26,6 @@ export const useApi = () => {
       const response = await makeAuthenticatedRequest(withBase(url), options);
       return response;
     } catch (error) {
-      console.error('API call failed:', error);
       throw error;
     }
   };

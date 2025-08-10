@@ -3,7 +3,6 @@
  * @description Lays out subtopic nodes in a grid or custom arrangement, with support for refs and custom node rendering.
  */
 
-import React from "react";
 import PropTypes from "prop-types";
 import SubtopicNode from "./SubtopicNode";
 import styles from "../styles/SubtopicPage.module.scss";
@@ -41,10 +40,6 @@ const SubtopicLayout = ({
       {nodes.map((node) => {
         const subtopic = subtopics[node.key];
         if (!subtopic) {
-          console.error(`[SubtopicLayout] Subtopic not found for key: ${node.key}`, {
-            availableKeys: Object.keys(subtopics),
-            nodeKey: node.key
-          });
           return null;
         }
         // Allow for a custom node renderer

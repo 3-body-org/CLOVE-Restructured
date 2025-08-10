@@ -12,8 +12,6 @@ function getCenter(ref, containerRef) {
   };
 }
 
-const PIN_RADIUS = 10;
-const PIN_COLOR = '#e53935';
 const THREAD_COLOR = '#5a120a'; // darker red to match screenshot
 const THREAD_WIDTH = 5; // increased from 3
 const WIGGLE_RANGE = 20; // px

@@ -45,14 +45,9 @@ const CodeFixer = ({
   // Restore user answer when resuming a cancelled challenge
   useEffect(() => {
     if (userAnswer && isResumed) {
-      console.log('🔄 CODEFIXER: userAnswer =', userAnswer, 'isResumed =', isResumed);
-      console.log('🔄 RESTORING: User code for cancelled challenge:', userAnswer);
       // Only set userCode if userAnswer is not empty
       if (userAnswer && typeof userAnswer === 'string' && userAnswer.trim() !== '') {
-        console.log('🔄 RESTORING: Setting userCode to:', userAnswer);
         setUserCode(userAnswer);
-      } else {
-        console.log('🔄 EMPTY USER ANSWER: Not setting empty userAnswer to editor');
       }
     }
   }, [userAnswer, isResumed]);
@@ -64,17 +59,13 @@ const CodeFixer = ({
 
   // Update parent component with current answer for partial progress saving
   useEffect(() => {
-    console.log('🔄 CODEFIXER SAVE: userCode =', userCode, 'onAnswerUpdate =', !!onAnswerUpdate);
     if (onAnswerUpdate) {
-      console.log('🔄 CODEFIXER SAVE: Calling onAnswerUpdate with:', userCode);
       onAnswerUpdate(userCode);
     }
   }, [userCode, onAnswerUpdate]);
 
   const handleCodeChange = (value) => {
-    console.log('🔄 CODEFIXER CHANGE: New value =', value, 'disabled =', disabled, 'isResumed =', isResumed, 'timerState =', timerState);
     if (disabled || isSubmitted || isResumed || timerState === 'expired') return;
-    console.log('🔄 CODEFIXER CHANGE: Setting userCode to:', value);
     setUserCode(value);
   };
 

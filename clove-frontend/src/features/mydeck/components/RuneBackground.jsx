@@ -4,7 +4,7 @@
  * of glowing, floating runes for the 'wizard' theme.
  */
 
-import React, { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import styles from 'features/mydeck/themes/wizardTheme.module.scss';
 
 // An array of Elder Futhark rune characters to be displayed.

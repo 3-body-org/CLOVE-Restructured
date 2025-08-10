@@ -4,7 +4,6 @@
  */
 
 import React, { useCallback, useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import TitleAndProfile from "../../../components/layout/Navbar/TitleAndProfile";
@@ -41,6 +40,14 @@ const TopicPage = () => {
   const { closeSidebar } = useSidebar();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [minTimePassed, setMinTimePassed] = useState(false);
+
+  // Minimum loading time effect for consistent UX
+  useEffect(() => {
+    setMinTimePassed(false);
+    const timer = setTimeout(() => setMinTimePassed(true), 200);
+    return () => clearTimeout(timer);
+  }, []); // Only on mount
 
   // Load topics with user progress only if not already in context
   useEffect(() => {
@@ -57,7 +64,6 @@ const TopicPage = () => {
         })
         .catch((error) => {
           if (mounted) {
-            console.error("Failed to load topics:", error);
             setError("Failed to load topics. Please try again.");
           }
         })
@@ -74,9 +80,6 @@ const TopicPage = () => {
       mounted = false;
     };
   }, [setTopics, getTopicsWithProgress]); // Removed 'topics' from dependency array
-
-  // Remove automatic refresh triggers to prevent resource-intensive behavior
-  // Topics will only be refreshed when explicitly requested (e.g., after assessment completion)
 
   /**
    * Get theme styles based on topic theme name.
@@ -106,13 +109,12 @@ const TopicPage = () => {
         }
         closeSidebar(); // Close sidebar after navigation
       } catch (error) {
-        console.error('Error updating recent topic:', error);
         // Continue with navigation even if recent topic update fails
-      const res = await getTopicById(topic.id);
-      if (res.introduction_seen) {
-        navigate(`/my-deck/${topic.id}-${topic.slug}`);
-      } else {
-        navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
+        const res = await getTopicById(topic.id);
+        if (res.introduction_seen) {
+          navigate(`/my-deck/${topic.id}-${topic.slug}`);
+        } else {
+          navigate(`/my-deck/${topic.id}-${topic.slug}/introduction`);
         }
         closeSidebar();
       }
@@ -121,7 +123,7 @@ const TopicPage = () => {
   );
 
   // Simple loading state management - AFTER all hooks
-  if (loading) return <LoadingScreen message="Loading topics..." />;
+  if (loading || !minTimePassed) return <LoadingScreen message="Loading topics..." />;
   if (error) return <ErrorScreen message={error} />;
 
   return (
@@ -151,8 +153,6 @@ const TopicPage = () => {
             ...topics.map(topic => ({ type: "topic", topic, theme: topic.theme })),
             { type: "comingSoon" }
           ].map((card, idx) => {
-            if (card.type === "topic") {
-            }
             return card.type === "topic" ? (
               <TopicCard
                 key={card.topic.id}
@@ -173,7 +173,5 @@ const TopicPage = () => {
     </Container>
   );
 };
-
-TopicPage.propTypes = {};
 
 export default TopicPage;

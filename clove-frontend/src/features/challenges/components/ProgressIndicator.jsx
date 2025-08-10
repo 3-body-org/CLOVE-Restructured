@@ -12,22 +12,9 @@ const ProgressIndicator = ({
   totalChallenges = 5,
   className = ""
 }) => {
-  // Safely get theme with fallback
-  let themeData;
-  try {
-    themeData = useChallengeTheme();
-  } catch (error) {
-    console.warn('Failed to get theme data, using fallback:', error);
-    themeData = {
-      getThemeStyles: () => ({}),
-      currentTheme: 'space'
-    };
-  }
+  const { getThemeStyles, currentTheme } = useChallengeTheme();
   
-  const { getThemeStyles, currentTheme } = themeData;
-  
-  // Get theme-specific styles with fallback
-  const themeStyles = getThemeStyles ? getThemeStyles() : {};
+  const themeStyles = getThemeStyles();
   
   const progressPercentage = ((challengeIndex + 1) / totalChallenges) * 100;
 

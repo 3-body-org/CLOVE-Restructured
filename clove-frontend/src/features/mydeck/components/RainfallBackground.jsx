@@ -4,7 +4,7 @@
  * of falling rain for the 'detective' theme.
  */
 
-import React, { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import styles from 'features/mydeck/themes/detectiveTheme.module.scss';
 
 /**

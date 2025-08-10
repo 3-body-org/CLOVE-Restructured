@@ -14,7 +14,6 @@
   @media (max-width: 768px) { padding: 1.5rem;   }
 }
 
-// Loading Overlay Styles
 .loadingOverlay {
   position: absolute;
   top: 0;
@@ -111,7 +110,6 @@
 .backgroundImage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none; user-select: none; }
 .blur { filter: blur(4px); }
 
-// Introduction Button Styles
 .introductionButtonContainer {
   margin-bottom: 20px;
   display: flex;
@@ -134,7 +132,6 @@
   border: none;
   outline: none;
 
-  // Wizard Theme
   &.wizardTheme {
     background: rgba(14, 165, 233, 0.15);
     border: 1px solid rgba(14, 165, 233, 0.3);
@@ -150,7 +147,6 @@
     }
   }
 
-  // Detective Theme
   &.detectiveTheme {
     background: rgba(209, 183, 115, 0.15);
     border: 1px solid rgba(209, 183, 115, 0.3);
@@ -166,7 +162,6 @@
     }
   }
 
-  // Space Theme
   &.spaceTheme {
     background: rgba(166, 170, 251, 0.15);
     border: 1px solid rgba(166, 170, 251, 0.3);

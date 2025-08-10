@@ -33,14 +33,6 @@ const normalizeCode = (code) => {
 export const validateCodeCompletion = (userChoices, challengeData) => {
   const { completion_slots, points = 10 } = challengeData;
   
-  // Debug logging
-  console.log('validateCodeCompletion - Input data:', { 
-    userChoices, 
-    completion_slots, 
-    points,
-    challengeDataKeys: Object.keys(challengeData)
-  });
-  
   if (!completion_slots || completion_slots.length === 0) {
     return {
       isCorrect: false,
@@ -131,7 +123,6 @@ export const validateCodeFixer = (userCode, challengeData) => {
   
   // Safety check for solution code
   if (!actualSolutionCode) {
-    console.error('validateCodeFixer - No solution code found:', { solutionCode, solution_code });
     return {
       isCorrect: false,
       score: 0,
@@ -144,27 +135,12 @@ export const validateCodeFixer = (userCode, challengeData) => {
     };
   }
   
-  // Debug logging
-  console.log('validateCodeFixer - Input data:', {
-    userCode,
-    solutionCode,
-    solution_code,
-    actualSolutionCode,
-    points
-  });
-  
   // Check if user has submitted any code
   const hasSubmittedCode = userCode && userCode.trim().length > 0;
   
   // 🎯 NEW: Use intelligent code comparison that ignores comments and formatting
   const normalizedUserCode = normalizeCode(userCode);
   const normalizedSolutionCode = normalizeCode(actualSolutionCode);
-  
-  console.log('validateCodeFixer - Normalized comparison:', {
-    normalizedUserCode,
-    normalizedSolutionCode,
-    matches: normalizedUserCode === normalizedSolutionCode
-  });
   
   // Method 1: Intelligent code comparison (ignores comments, whitespace, formatting)
   const codeMatches = hasSubmittedCode && normalizedUserCode === normalizedSolutionCode;
@@ -231,7 +207,6 @@ export const validateOutputTracing = (userSelections, challengeData) => {
   
   // Safety check for expectedOutputArray
   if (!expectedOutputArray || !Array.isArray(expectedOutputArray)) {
-    console.error('validateOutputTracing - Invalid expectedOutputArray:', expectedOutputArray);
     return {
       isCorrect: false,
       score: 0,
@@ -244,18 +219,6 @@ export const validateOutputTracing = (userSelections, challengeData) => {
       }
     };
   }
-  
-  // Debug logging
-  console.log('validateOutputTracing - Input data:', {
-    userSelections,
-    expectedOutput,
-    correctOutput,
-    expectedOutputArray,
-    expectedOutputArrayType: typeof expectedOutputArray,
-    expectedOutputArrayIsArray: Array.isArray(expectedOutputArray),
-    choices,
-    points
-  });
   
   // Check if user has made any selections
   const hasAnySelections = userSelections && userSelections.length > 0;

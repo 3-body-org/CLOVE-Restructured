@@ -89,7 +89,6 @@ export const useMyDeckService = () => {
       const response = await get(`/user_topics/user/${user.id}/topic/${topicId}/overview?t=${timestamp}`);
       return response.json();
     } catch (error) {
-      console.error('Error fetching topic overview:', error);
       throw error;
     }
   };
@@ -199,20 +198,16 @@ export const useMyDeckService = () => {
     if (!user) throw new Error('User not authenticated');
     
     try {
-      console.log(`🔍 Fetching questions summary for topic ${topicId}, assessment type ${assessmentType}`);
       const response = await get(`/assessment_questions/topic/${topicId}/randomized/summary?assessment_type=${assessmentType}`);
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('🔍 API Error Response:', response.status, errorText);
         throw new Error(`Failed to fetch questions summary: ${response.status} ${errorText}`);
       }
       
       const data = await response.json();
-      console.log('🔍 Questions summary fetched successfully:', data);
       return data;
     } catch (error) {
-      console.error('Error fetching randomized questions summary:', error);
       throw error;
     }
   };
@@ -247,10 +242,6 @@ export const useMyDeckService = () => {
         });
       }
       
-      // Debug subtopic names
-      console.log('🔍 Subtopic Names Mapping:', subtopicNames);
-      console.log('🔍 Overview Subtopics:', overview.subtopics);
-      
       // 4. Get detailed question data for each answered question
       const questionDetails = {};
       const questionsBySubtopic = {};
@@ -283,19 +274,6 @@ export const useMyDeckService = () => {
               const answerData = assessmentData.questions_answers_iscorrect[questionId];
               const isCorrect = answerData.is_correct || answerData === true;
               
-              // Debug the question data structure
-              console.log('🔍 Question Data Structure:', {
-                questionId,
-                questionData,
-                questionText: questionData.question_choices_correctanswer?.question,
-                correctAnswer: questionData.question_choices_correctanswer?.correct_answer,
-                explanation: questionData.question_choices_correctanswer?.explanation,
-                difficulty: questionData.difficulty,
-                subtopicName: subtopicName,
-                answerData: answerData,
-                isCorrect: isCorrect
-              });
-              
               questionsBySubtopic[subtopicId].questions.push({
                 id: questionId,
                 question: questionData.question_choices_correctanswer?.question || 'Question text not available',
@@ -315,7 +293,7 @@ export const useMyDeckService = () => {
               }
             }
           } catch (error) {
-            console.error(`Failed to fetch question ${questionId}:`, error);
+            // Silently handle individual question fetch failures
           }
         }
       }
@@ -340,7 +318,6 @@ export const useMyDeckService = () => {
       };
       
     } catch (error) {
-      console.error('Error fetching comprehensive assessment results:', error);
       throw error;
     }
   };

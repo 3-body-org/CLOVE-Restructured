@@ -437,15 +437,6 @@
   background: linear-gradient(135deg, rgba($light-purple, 0.08) 0%, rgba($dark-purple, 0.05) 100%);
 }
 
-.editActions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  padding-top: 1rem;
-  border-top: 1px solid;
-  border-image: linear-gradient(90deg, transparent, rgba($light-purple, 0.2), transparent) 1;
-}
-
 .saveButton {
   background: $light-purple;
   color: #fff;

@@ -1,48 +1,3 @@
-/**
- * @file ChallengeSidebar.jsx
- * @description Challenge sidebar component with backend integration
- *
- * Usage Examples:
- *
- * // Show both timer and hints (default)
- * <ChallengeSidebar
- *   showTimer={true}
- *   showHints={true}
- *   disableTimer={false}
- *   disableHints={false}
- *   // ... other props
- * />
- *
- * // Hide timer completely, show hints
- * <ChallengeSidebar
- *   showTimer={false}
- *   showHints={true}
- *   // ... other props
- * />
- *
- * // Show timer but disable it (grayed out), show hints
- * <ChallengeSidebar
- *   showTimer={true}
- *   showHints={true}
- *   disableTimer={true}
- *   // ... other props
- * />
- *
- * // Hide hints completely, show timer
- * <ChallengeSidebar
- *   showHints={false}
- *   showTimer={true}
- *   // ... other props
- * />
- *
- * // Minimal sidebar - no timer, no hints
- * <ChallengeSidebar
- *   showTimer={false}
- *   showHints={false}
- *   // ... other props
- * />
- */
-
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ChallengeSidebar.module.scss";
@@ -77,7 +32,6 @@ const ChallengeSidebar = ({
   const { closeSidebar } = useSidebar();
   const { topicId, subtopicId } = useContext(MyDeckContext);
 
-  // Get mode-specific information
   const getModeInfo = (mode) => {
     switch (mode) {
       case "code_completion":
@@ -162,20 +116,18 @@ const ChallengeSidebar = ({
 
   const modeInfo = getModeInfo(mode);
 
-  // Handle navigation
   const handleNavigation = (path) => {
     if (onNavigation) {
       onNavigation(path);
     } else {
       navigate(path);
     }
-    closeSidebar(); // Close sidebar after navigation
+    closeSidebar();
   };
 
   return (
     <div className={styles.sidebarContainer} style={getThemeStyles()}>
       <div className={styles.missionDetails}>
-        {/* Mode Instruction Box */}
         <div className={styles.instructionBox}>
           <h3 className={styles.instructionTitle}>{modeInfo.title}</h3>
           <p className={styles.instructionDescription}>
@@ -195,12 +147,10 @@ const ChallengeSidebar = ({
           )}
         </div>
 
-        {/* Custom children */}
         {children}
       </div>
 
       <div className={styles.controlsPanel}>
-        {/* Scenario Box */}
         {scenario && (
           <div className={styles.scenarioBox}>
             <h3 className={styles.scenarioTitle}>SCENARIO:</h3>
@@ -215,7 +165,6 @@ const ChallengeSidebar = ({
           </div>
         )}
 
-        {/* Timer Component */}
         <ChallengeTimer
           timeRemaining={timeRemaining}
           initialTimerDuration={initialTimerDuration}
@@ -224,7 +173,6 @@ const ChallengeSidebar = ({
           timerState={timerState}
         />
 
-        {/* Hints Component */}
         <ChallengeHints
           hintsUsed={hintsUsed}
           hintsAvailable={hintsAvailable}
@@ -234,7 +182,6 @@ const ChallengeSidebar = ({
           visible={showHints}
         />
 
-        {/* Back Button - always below timer and hints */}
         <button
           className={styles.backButton}
           onClick={() =>

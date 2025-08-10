@@ -117,10 +117,8 @@ export default function SubtopicSelectionPage() {
     // Only load topic overview if we don't have data for this topic or if it's stale
     const hasDataForThisTopic = topicOverview && topicOverview.topicId === numericTopicId;
     if (!hasDataForThisTopic) {
-      console.log('🔍 Loading topic overview for topic:', numericTopicId);
       loadTopicOverview(numericTopicId);
     } else {
-      console.log('🔍 Topic overview already loaded for topic:', numericTopicId);
       setLoading(false);
     }
   }, [topicId, topicOverview]);
@@ -158,9 +156,6 @@ export default function SubtopicSelectionPage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [topicId]);
-
-  // Remove the automatic refresh triggers that cause resource-intensive behavior
-  // The topic overview will only be loaded when the topic changes or when explicitly requested
 
   const { story, subtopics, styling, layout, nodeOrder } = safeContent;
 
@@ -225,7 +220,6 @@ export default function SubtopicSelectionPage() {
         title: subtopic.title,
       };
       } catch (error) {
-        console.warn(`Error calculating position for ${key}:`, error);
         return null;
       }
     }).filter(Boolean); // Remove null values
@@ -260,8 +254,6 @@ export default function SubtopicSelectionPage() {
   }, [updateTitlePositions]);
 
   const handleSubtopicClick = async (subtopic) => {
-    console.log('🔍 Clicked subtopic:', subtopic);
-    
     if (isSubtopicLocked(subtopic)) { // Uses imported helper
       // Determine if it's an assessment or regular subtopic
       const isAssessment = subtopic.key === 'pre-assessment' || 
@@ -277,7 +269,6 @@ export default function SubtopicSelectionPage() {
       // Update recent topic in statistics
       await updateRecentTopic(numericTopicId);
     } catch (error) {
-      console.error('Error updating recent topic:', error);
       // Continue with navigation even if recent topic update fails
     }
     
@@ -285,10 +276,8 @@ export default function SubtopicSelectionPage() {
     if (subtopic.key === 'pre-assessment' || subtopic.type === 'assessment' && subtopic.title === 'Pre-Assessment') {
       // Check if pre-assessment is completed
       if (unlockStatus?.preAssessment?.isCompleted) {
-        console.log('🔍 Pre-assessment completed, navigating to results');
         navigate(`/my-deck/${topicId}/assessment/pre/result`);
       } else {
-        console.log('🔍 Showing pre-assessment instructions');
         setSelectedAssessment({ type: 'pre', subtopic });
         setShowInstructions(true);
       }
@@ -298,10 +287,8 @@ export default function SubtopicSelectionPage() {
     if (subtopic.key === 'post-assessment' || subtopic.type === 'assessment' && subtopic.title === 'Post-Assessment') {
       // Check if post-assessment is completed
       if (unlockStatus?.postAssessment?.isCompleted) {
-        console.log('🔍 Post-assessment completed, navigating to results');
         navigate(`/my-deck/${topicId}/assessment/post/result`);
       } else {
-        console.log('🔍 Showing post-assessment instructions');
         setSelectedAssessment({ type: 'post', subtopic });
         setShowInstructions(true);
       }
@@ -312,10 +299,8 @@ export default function SubtopicSelectionPage() {
     // Fallback: check if it's an assessment by title
     if (subtopic.title && subtopic.title.toLowerCase().includes('pre-assessment')) {
       if (unlockStatus?.preAssessment?.isCompleted) {
-        console.log('🔍 Pre-assessment completed, navigating to results (fallback)');
         navigate(`/my-deck/${topicId}/assessment/pre/result`);
       } else {
-        console.log('🔍 Showing pre-assessment instructions (fallback)');
         setSelectedAssessment({ type: 'pre', subtopic });
         setShowInstructions(true);
       }
@@ -324,17 +309,14 @@ export default function SubtopicSelectionPage() {
     }
     if (subtopic.title && subtopic.title.toLowerCase().includes('post-assessment')) {
       if (unlockStatus?.postAssessment?.isCompleted) {
-        console.log('🔍 Post-assessment completed, navigating to results (fallback)');
         navigate(`/my-deck/${topicId}/assessment/post/result`);
       } else {
-        console.log('🔍 Showing post-assessment instructions (fallback)');
         setSelectedAssessment({ type: 'post', subtopic });
         setShowInstructions(true);
       }
       closeSidebar();
       return;
     }
-    console.log('🔍 Navigating to lesson:', subtopic.backendId);
     setSubtopicId(subtopic.backendId); // Use backendId for lesson navigation
     navigate(`/lesson/${topicId}/${subtopic.backendId}`); // Use backendId for lesson navigation
     closeSidebar(); // Close sidebar after navigation
@@ -435,10 +417,8 @@ export default function SubtopicSelectionPage() {
           <div className={styles.introductionButtonContainer}>
             <button
               onClick={() => {
-                console.log('🔍 Introduction button clicked, navigating to:', `/my-deck/${topicId}/introduction`);
                 // Temporarily clear introduction_seen flag to allow revisiting
                 if (topicCache && topicCache[numericTopicId]) {
-                  console.log('🔍 Clearing introduction_seen flag for topic:', numericTopicId);
                   setTopicCache(prev => ({
                     ...prev,
                     [numericTopicId]: {
@@ -495,7 +475,6 @@ export default function SubtopicSelectionPage() {
                 y: nodeRect.top - containerRect.top + nodeRect.height / 2,
               };
                } catch (error) {
-                 console.warn(`Error calculating center for ${key}:`, error);
                  return { x: 0, y: 0 };
                }
              })}

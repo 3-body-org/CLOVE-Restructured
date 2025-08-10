@@ -1,7 +1,5 @@
 //router
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-//fontawesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 //bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -34,6 +32,9 @@ import PracticePage from "features/lessons/pages/PracticePage";
 import IntroductionPage from "features/mydeck/pages/IntroductionPage";
 import SubtopicPage from "features/mydeck/pages/SubtopicPage";
 import MyDeckPage from "features/mydeck/pages/TopicPage";
+
+// Protected route component
+import ProtectedTopicRoute from "components/error_fallback/ProtectedTopicRoute";
 
 //src/features/progress/...
 import ProgressPage from "features/progress/pages/ProgressPage";
@@ -138,14 +139,14 @@ const protectedRoutes = [
   { path: "/progress", element: <ProgressPage /> },
   { path: "/profile", element: <ProfilePage /> },
   { path: "/my-deck", element: <MyDeckPage /> },
-  { path: "/my-deck/:topicId/assessment/:assessmentType", element: <AssessmentPage /> },
-  { path: "/my-deck/:topicId/assessment/:assessmentType/result", element: <AssessmentResultPage /> },
-  { path: "/my-deck/:topicId", element: <SubtopicPage /> },
-  { path: "/my-deck/:topicId/introduction", element: <IntroductionPage /> },
-  { path: "/lesson/:topicId/:subtopicId", element: <LessonsPage /> },
-  { path: "/lesson/:topicId/:subtopicId/practice", element: <PracticePage /> },
-  { path: "/lesson/:topicId/:subtopicId/challenges", element: <ChallengesPage /> },
-  { path: "/lesson/:topicId/:subtopicId/challenges/results", element: <ResultsPage /> },
+  { path: "/my-deck/:topicId/assessment/:assessmentType", element: <ProtectedTopicRoute><AssessmentPage /></ProtectedTopicRoute> },
+  { path: "/my-deck/:topicId/assessment/:assessmentType/result", element: <ProtectedTopicRoute><AssessmentResultPage /></ProtectedTopicRoute> },
+  { path: "/my-deck/:topicId", element: <ProtectedTopicRoute><SubtopicPage /></ProtectedTopicRoute> },
+  { path: "/my-deck/:topicId/introduction", element: <ProtectedTopicRoute><IntroductionPage /></ProtectedTopicRoute> },
+  { path: "/lesson/:topicId/:subtopicId", element: <ProtectedTopicRoute><LessonsPage /></ProtectedTopicRoute> },
+  { path: "/lesson/:topicId/:subtopicId/practice", element: <ProtectedTopicRoute><PracticePage /></ProtectedTopicRoute> },
+  { path: "/lesson/:topicId/:subtopicId/challenges", element: <ProtectedTopicRoute><ChallengesPage /></ProtectedTopicRoute> },
+  { path: "/lesson/:topicId/:subtopicId/challenges/results", element: <ProtectedTopicRoute><ResultsPage /></ProtectedTopicRoute> },
 ];
 
 const publicRoutes = [

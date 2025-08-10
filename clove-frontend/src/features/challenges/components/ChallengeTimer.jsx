@@ -16,20 +16,16 @@ const ChallengeTimer = ({
 }) => {
   const { topicTheme } = useChallengeTheme();
   
-  // Don't render if not visible or disabled
   if (!visible || disabled) return null;
   
-  // Format time
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
   
-  // Calculate timer percentage
   const timerPercent = timeRemaining > 0 ? Math.floor((timeRemaining / initialTimerDuration) * 100) : 0;
   
-  // Get theme-specific timer title
   const getTimerTitle = (theme) => {
     switch (theme) {
       case 'space':
@@ -43,7 +39,6 @@ const ChallengeTimer = ({
     }
   };
 
-  // Get timer display based on state
   const getTimerDisplay = () => {
     if (timerState === 'paused') {
       return (

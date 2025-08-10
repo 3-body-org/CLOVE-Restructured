@@ -3,7 +3,6 @@
  * @description Renders a type/info card with icon, title, description, code, and badges. Theme-aware.
  */
 
-import React from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "features/mydeck/styles/TypeCard.module.scss";

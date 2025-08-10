@@ -4,6 +4,7 @@ import confetti from "canvas-confetti";
 import styles from "features/lessons/styles/PracticePage.module.scss";
 import LessonThemeProvider from "features/lessons/components/LessonThemeProvider";
 import LessonMonacoEditor from "../components/LessonMonacoEditor";
+import MonacoCodeBlock from "features/challenges/components/MonacoCodeBlock";
 import ChallengeSidebar from "features/challenges/components/ChallengeSidebar";
 import { useChallengeTheme } from 'features/challenges/hooks/useChallengeTheme';
 import { useChallengeData } from '../hooks/useChallengeData';
@@ -11,6 +12,9 @@ import { useLessonService } from '../services/lessonService';
 import { useAuth } from "contexts/AuthContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
+
+// Monaco editor types for highlighting
+let monaco = null;
 
 const PracticePage = () => {
   const navigate = useNavigate();
@@ -40,7 +44,9 @@ const PracticePage = () => {
       code: '',
       output: 'System ready. Waiting for code execution...',
       isExecuting: false,
-      isCompleted: false
+      isCompleted: false,
+      isCorrect: false,
+      solutionCode: ''
     },
     outputTracing: {
       score: 0,
@@ -59,7 +65,10 @@ const PracticePage = () => {
       usedChoices: [],
       isDragging: false,
       currentDragItem: null,
-      hoveredPlaceholder: null
+      hoveredPlaceholder: null,
+      solutionCode: '',
+      explanation: '',
+      userChoices: {} // Store choices with position info
     }
   });
 
@@ -73,31 +82,10 @@ const PracticePage = () => {
     const completed = availableChallenges.length > 0 && 
            availableChallenges.every(challengeType => {
              const state = challengeStates[challengeType];
-             // Check if user has attempted the challenge (has output, selected option, or used choices)
-             return state && (
-               state.output || 
-               state.selectedOption || 
-               (state.selectedOptions && state.selectedOptions.length > 0) ||
-               (state.usedChoices && state.usedChoices.length > 0) ||
-               state.isCompleted
-             );
+             // Challenges are only completed when user clicks submit button
+             // This ensures the modal only appears after actual engagement
+             return state && state.isCompleted;
            });
-    
-    console.log('🔍 [PracticePage] Completion check:', {
-      availableChallenges,
-      challengeStates,
-      completed,
-              attempts: availableChallenges.map(type => ({
-          type,
-          hasAttempted: challengeStates[type] && (
-            challengeStates[type].output || 
-            challengeStates[type].selectedOption || 
-            (challengeStates[type].selectedOptions && challengeStates[type].selectedOptions.length > 0) ||
-            (challengeStates[type].usedChoices && challengeStates[type].usedChoices.length > 0) ||
-            challengeStates[type].isCompleted
-          )
-        }))
-    });
     
     return completed;
   }, [challenges, challengeStates]);
@@ -112,21 +100,16 @@ const PracticePage = () => {
       if (!isPracticeCompleted) {
         const markPracticeAsCompleted = async () => {
           try {
-            console.log('🔍 [PracticePage] Marking practice as completed for user:', user.id, 'subtopic:', subtopicId);
             await completePractice(user.id, parseInt(subtopicId));
-            console.log('✅ [PracticePage] Practice marked as completed successfully');
             
             // Mark as completed in localStorage to prevent repeated calls
             localStorage.setItem(practiceCompletionKey, 'true');
           } catch (error) {
-            console.error('❌ [PracticePage] Failed to mark practice as completed:', error);
             // Don't show error notification to user as this is a background operation
           }
         };
         
         markPracticeAsCompleted();
-      } else {
-        console.log('🔍 [PracticePage] Practice already marked as completed for user:', user.id, 'subtopic:', subtopicId);
       }
     }
   }, [allChallengesCompleted, user, subtopicId, completePractice]);
@@ -148,6 +131,10 @@ const PracticePage = () => {
     codeCompletion: null
   });
 
+  // Refs for code completion state to avoid closure issues (like CodeCompletion.jsx)
+  const userChoicesRef = useRef({});
+  const finalPositionsRef = useRef({});
+
   // Initialize challenge data when challenges are loaded
   useEffect(() => {
     if (challenges.codeFixer) {
@@ -163,18 +150,12 @@ const PracticePage = () => {
 
   useEffect(() => {
     if (challenges.codeCompletion) {
-      // Convert ??? placeholders to FIX_ tags for Monaco editor
-      let code = challenges.codeCompletion.challenge_data.initial_code;
-      let fixCounter = 1;
-      
-      // Replace ??? with FIX_1, FIX_2, etc.
-      code = code.replace(/\?\?\?/g, () => `FIX_${fixCounter++}`);
-      
+      // Initialize with empty code - the processed code will handle the display
       setChallengeStates(prev => ({
         ...prev,
         codeCompletion: {
           ...prev.codeCompletion,
-          code: code
+          code: challenges.codeCompletion.challenge_data.initial_code
         }
       }));
     }
@@ -290,7 +271,7 @@ const PracticePage = () => {
     if (currentState.isExecuting || currentState.isCompleted) return;
 
     try {
-      // Get solution code from challenge data (CORRECT approach)
+      // Get solution code from challenge data
       const solutionCode = challenges.codeFixer?.challenge_data?.solution_code;
       
       if (!solutionCode) {
@@ -298,13 +279,14 @@ const PracticePage = () => {
           ...prev,
           codeFixer: {
             ...prev.codeFixer,
-            output: '❌ Error: No solution code available for validation'
+            output: '❌ Error: No solution code available for validation',
+            isCompleted: true
           }
         }));
         return;
       }
 
-      // Normalize both codes for comparison (like the proper validation service)
+      // Normalize both codes for comparison
       const normalizeCode = (code) => {
         if (!code || typeof code !== 'string') return '';
         return code
@@ -325,7 +307,10 @@ const PracticePage = () => {
           ...prev,
           codeFixer: {
             ...prev.codeFixer,
-            output: '✅ Correct! Code fixed successfully!'
+            output: '✅ Correct! Code fixed successfully!',
+            isCompleted: true,
+            isCorrect: true,
+            solutionCode: solutionCode
           }
         }));
         handleChallengeCompletion('codeFixer', true, 100);
@@ -336,7 +321,10 @@ const PracticePage = () => {
           ...prev,
           codeFixer: {
             ...prev.codeFixer,
-            output: `❌ Incorrect! Your code produces: ${actualOutput}\nExpected solution: ${solutionCode}`
+            output: `❌ Incorrect! Your code produces: ${actualOutput}`,
+            isCompleted: true,
+            isCorrect: false,
+            solutionCode: solutionCode
           }
         }));
       }
@@ -345,7 +333,10 @@ const PracticePage = () => {
         ...prev,
         codeFixer: {
           ...prev.codeFixer,
-          output: `❌ Error: ${error.message}`
+          output: `❌ Error: ${error.message}`,
+          isCompleted: true,
+          isCorrect: false,
+          solutionCode: challenges.codeFixer?.challenge_data?.solution_code || 'No solution available'
         }
       }));
     }
@@ -442,80 +433,78 @@ const PracticePage = () => {
     handleChallengeCompletion('outputTracing', isCorrect, score);
   }, [challengeStates.outputTracing, challenges.outputTracing, handleChallengeCompletion]);
 
-  // Code Completion Functions
-  const handleCodeCompletionDragStart = useCallback((e, choice) => {
-    const dragData = {
-      ...choice,
-      type: 'choice',
-      isFromEditor: false
-    };
 
-    e.dataTransfer.effectAllowed = 'copyMove';
-    e.dataTransfer.dropEffect = 'copy';
-    e.dataTransfer.clearData();
-    e.dataTransfer.setData('text/plain', dragData.value);
-    e.dataTransfer.setData('application/json', JSON.stringify(dragData));
+
+  // Handle click to remove placed choices
+  const handleChoiceClick = useCallback((choice) => {
+    if (challengeStates.codeCompletion.isCompleted) return;
     
+    // Use ref to avoid closure issues (like CodeCompletion.jsx)
+    const currentUserChoices = userChoicesRef.current;
+    
+    // Find which blank this choice was placed in
+    const blankId = Object.keys(currentUserChoices).find(key => 
+      currentUserChoices[key].choice === choice
+    );
+    
+    if (!blankId) return;
+      
+    // Remove the choice
     setChallengeStates(prev => ({
       ...prev,
       codeCompletion: {
         ...prev.codeCompletion,
-        currentDragItem: dragData
+        userChoices: (() => {
+          const newChoices = { ...prev.codeCompletion.userChoices };
+          delete newChoices[blankId];
+          return newChoices;
+        })(),
+        usedChoices: prev.codeCompletion.usedChoices.filter(c => c !== choice)
       }
     }));
-    
-    e.currentTarget.classList.add('dragging');
-  }, []);
-
-  const handleCodeCompletionDragEnd = useCallback((e) => {
-    setChallengeStates(prev => ({
-      ...prev,
-      codeCompletion: {
-        ...prev.codeCompletion,
-        currentDragItem: null
-      }
-    }));
-    
-    const elements = document.querySelectorAll('.choice');
-    elements.forEach((el) => el.classList.remove('dragging'));
-  }, []);
+  }, [challengeStates.codeCompletion.isCompleted, challengeStates.codeCompletion.userChoices]);
 
   const checkCodeCompletionSolution = useCallback(() => {
     const currentState = challengeStates.codeCompletion;
     if (currentState.isCompleted) return;
 
-    // Get completion slots from challenge data (CORRECT approach)
+    // Get the actual user choices that were placed (CORRECT approach)
+    const userChoices = currentState.userChoices || {};
     const completionSlots = challenges.codeCompletion?.challenge_data.completion_slots || [];
     
-    // Create user choices object from the used choices (from drag-and-drop)
-    const userChoices = {};
-    const usedChoices = currentState.usedChoices || [];
+    // Count correct choices by checking each user choice against the expected answer
+    let correctCount = 0;
+    let totalSlots = 0;
     
-    // Map used choices to completion slots
-    completionSlots.forEach((slot, index) => {
+    // Check each completion slot
+    completionSlots.forEach((slot) => {
       const slotId = slot.id;
-      if (usedChoices[index]) {
-        userChoices[slotId] = { choice: usedChoices[index] };
+      const userChoice = userChoices[slotId];
+      const expectedAnswer = slot.correct_answer;
+      
+      if (userChoice && userChoice.choice === expectedAnswer) {
+        correctCount++;
       }
+      
+      totalSlots++;
     });
     
-    // Count correct choices using the proper validation logic
-    const correctCount = completionSlots.filter((slot) => {
-      const slotId = slot.id;
-      const userChoice = userChoices && userChoices[slotId];
-      return userChoice && userChoice.choice === slot.correct_answer;
-    }).length;
-    
-    const totalSlots = completionSlots.length;
     const allCorrect = correctCount === totalSlots && totalSlots > 0;
     const totalScore = correctCount * 25 + (allCorrect ? 50 : 0);
+
+    // Get solution code and explanation from challenge data
+    const solutionCode = challenges.codeCompletion?.challenge_data?.solution_code || 'No solution available';
+    const explanation = completionSlots.length > 0 ? completionSlots[0].explanation : 'No explanation available';
 
     setChallengeStates(prev => ({
       ...prev,
       codeCompletion: {
         ...prev.codeCompletion,
         score: totalScore,
-        allCorrect
+        allCorrect,
+        isCompleted: true,
+        solutionCode: solutionCode,
+        explanation: explanation
       }
     }));
 
@@ -549,35 +538,105 @@ const PracticePage = () => {
     handleChallengeCompletion('codeCompletion', allCorrect, totalScore);
   }, [challengeStates.codeCompletion, challenges.codeCompletion, handleChallengeCompletion]);
 
-  // Helper function to get replaceable ranges for code completion
-  const getReplaceableRanges = useCallback((code) => {
-    // First, convert ??? to FIX_ tags if they exist
-    let processedCode = code;
-    let fixCounter = 1;
-    processedCode = processedCode.replace(/\?\?\?/g, () => `FIX_${fixCounter++}`);
-    
-    // Get all FIX tags and choices
-    const fixTags = processedCode.match(/FIX_\d+/g) || [];
-    const choices = challenges.codeCompletion?.challenge_data.choices || [];
-    const allReplaceables = [...fixTags, ...choices];
-    const ranges = [];
-    
-    allReplaceables.forEach(tag => {
-      let idx = processedCode.indexOf(tag);
-      while (idx !== -1) {
-        ranges.push({ tag, start: idx, end: idx + tag.length });
-        idx = processedCode.indexOf(tag, idx + tag.length);
+
+
+  // Process code to replace ??? with [1], [2], etc. placeholders and track final positions
+  const processedCodeCompletion = useMemo(() => {
+    if (!challenges.codeCompletion?.challenge_data?.initial_code) {
+      return { code: '', blanks: [], finalChoicePositions: {} };
+    }
+
+    const code = challenges.codeCompletion.challenge_data.initial_code;
+    const lines = code.split('\n');
+    const blanks = [];
+    const finalChoicePositions = {}; // Store final positions of placed choices
+    let blankId = 1;
+
+    const processedLines = lines.map((line, lineIndex) => {
+      const blankPattern = /\?\?\?/g;
+      let match;
+      const lineBlanks = [];
+
+      while ((match = blankPattern.exec(line)) !== null) {
+        const blankInfo = {
+          id: `slot_${blankId}`, // Use slot_1, slot_2 to match backend
+          displayId: `[${blankId}]`, // Keep [1], [2] for display
+          line: lineIndex + 1,
+          column: match.index + 1,
+          length: match[0].length,
+          position: { line: lineIndex + 1, column: match.index + 1 }
+        };
+
+        blanks.push(blankInfo);
+        lineBlanks.push({ ...blankInfo, matchIndex: match.index });
+        blankId++;
       }
+      
+      let processedLine = line;
+      
+      // Sort lineBlanks by matchIndex in descending order to avoid index shifting
+      lineBlanks.sort((a, b) => b.matchIndex - a.matchIndex);
+      
+      // First pass: replace placeholders with choices
+      lineBlanks.forEach((blank) => {
+        // Check if we have a placed choice for this blank
+        const placedChoice = challengeStates.codeCompletion.userChoices[blank.id];
+        const placeholder = placedChoice ? placedChoice.choice : blank.displayId; // Use [1], [2] for display
+        
+        const before = processedLine.substring(0, blank.matchIndex);
+        const after = processedLine.substring(blank.matchIndex + 3);
+        processedLine = before + placeholder + after;
+      });
+
+      // Second pass: find final positions of placed choices in the processed line
+      lineBlanks.forEach((blank) => {
+        const placedChoice = challengeStates.codeCompletion.userChoices[blank.id];
+        if (placedChoice) {
+          // Find the actual position of this choice in the final processed line
+          const choiceIndex = processedLine.indexOf(placedChoice.choice);
+          if (choiceIndex !== -1) {
+            finalChoicePositions[blank.id] = {
+              line: lineIndex + 1,
+              column: choiceIndex + 1, // +1 because Monaco uses 1-based columns
+              length: placedChoice.choice.length
+            };
+          }
+        }
+      });
+
+      return processedLine;
     });
+
+    const result = {
+      code: processedLines.join('\n'),
+      blanks,
+      finalChoicePositions
+    };
     
-    return ranges;
-  }, [challenges.codeCompletion]);
+    return result;
+  }, [challenges.codeCompletion?.challenge_data?.initial_code, challengeStates.codeCompletion.userChoices]);
+
+  // Update refs whenever state changes (like CodeCompletion.jsx)
+  useEffect(() => {
+    userChoicesRef.current = challengeStates.codeCompletion.userChoices;
+  }, [challengeStates.codeCompletion.userChoices]);
+
+  useEffect(() => {
+    finalPositionsRef.current = processedCodeCompletion.finalChoicePositions;
+  }, [processedCodeCompletion.finalChoicePositions]);
 
   // Available choices for code completion
   const codeCompletionAvailableChoices = useMemo(() => {
     const choices = challenges.codeCompletion?.challenge_data.choices || [];
     const usedChoices = challengeStates.codeCompletion.usedChoices;
-    return choices.filter(choice => !usedChoices.includes(choice));
+    const availableChoices = choices.filter(choice => !usedChoices.includes(choice));
+    
+    // Sort choices to maintain consistent order
+    return availableChoices.sort((a, b) => {
+      const aIndex = choices.indexOf(a);
+      const bIndex = choices.indexOf(b);
+      return aIndex - bIndex;
+    });
   }, [challenges.codeCompletion, challengeStates.codeCompletion.usedChoices]);
 
   // Loading state (comprehensive like ProfilePage)
@@ -639,6 +698,7 @@ const PracticePage = () => {
                   height="100%"
                   onMount={handleCodeFixerEditorMount}
                   options={{
+                    readOnly: challengeStates.codeFixer.isCompleted,
                     minimap: { enabled: false },
                     fontSize: 17,
                     wordWrap: 'on',
@@ -682,15 +742,50 @@ const PracticePage = () => {
                 </div>
               </div>
 
-              <div className={styles.submitButton}>
-                <button
-                  onClick={checkCodeFixerSolution}
-                  disabled={challengeStates.codeFixer.isExecuting || challengeStates.codeFixer.isCompleted}
-                  className={challengeStates.codeFixer.isExecuting ? styles.submitting : ''}
-                >
-                  {challengeStates.codeFixer.isExecuting ? 'Executing...' : 'Submit'}
-                </button>
-              </div>
+              {/* Solution Code Section - Only show after submission */}
+              {challengeStates.codeFixer.isCompleted && challengeStates.codeFixer.solutionCode && (
+                <div className={styles.solutionCode}>
+                  <h3>Solution Code:</h3>
+                  <div className={styles.codeBlock}>
+                    <pre>{challengeStates.codeFixer.solutionCode}</pre>
+                  </div>
+                </div>
+              )}
+
+              {/* Feedback after validation */}
+              {challengeStates.codeFixer.isCompleted && (
+                <div className={styles.feedback}>
+                  <div className={challengeStates.codeFixer.isCorrect ? styles.feedbackCorrect : styles.feedbackWrong}>
+                    <strong>
+                      {challengeStates.codeFixer.isCorrect 
+                        ? "✅ Correct! Code fixed successfully!" 
+                        : "❌ Incorrect! Your code needs fixing."
+                      }
+                    </strong>
+                  </div>
+                  {!challengeStates.codeFixer.isCorrect && (
+                    <div className={styles.detailedFeedback}>
+                      Your code produced: "{challengeStates.codeFixer.output}"
+                    </div>
+                  )}
+                </div>
+              )}
+
+
+
+
+              {/* Submit Button - Only show when not completed */}
+              {!challengeStates.codeFixer.isCompleted && (
+                <div className={styles.submitButton}>
+                  <button
+                    onClick={checkCodeFixerSolution}
+                    disabled={challengeStates.codeFixer.isExecuting}
+                    className={challengeStates.codeFixer.isExecuting ? styles.submitting : ''}
+                  >
+                    {challengeStates.codeFixer.isExecuting ? 'Executing...' : 'Submit'}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -820,21 +915,137 @@ const PracticePage = () => {
               <div className={styles.challengeTitle}>CODE COMPLETION CHALLENGE</div>
               
               {/* Choices Bar */}
-              <div className={`${styles.choicesBar} ${challengeStates.codeCompletion.isDragging ? styles.dragOver : ''}`}>
+              <div 
+                className={`${styles.choicesBar} ${challengeStates.codeCompletion.isDragging ? styles.dragOver : ''}`}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  
+                  // Check if this is coming from the editor
+                  try {
+                    const jsonData = e.dataTransfer.getData('application/json');
+                    const dragData = jsonData ? JSON.parse(jsonData) : null;
+                    
+                    if (dragData?.isFromEditor) {
+                      e.dataTransfer.dropEffect = 'copy';
+                      setChallengeStates(prev => ({
+                        ...prev,
+                        codeCompletion: { ...prev.codeCompletion, isDragging: true }
+                      }));
+                    } else {
+                      e.dataTransfer.dropEffect = 'none';
+                    }
+                  } catch (error) {
+                    e.dataTransfer.dropEffect = 'none';
+                  }
+                }}
+                onDragLeave={() => {
+                  setChallengeStates(prev => ({
+                    ...prev,
+                    codeCompletion: { ...prev.codeCompletion, isDragging: false }
+                  }));
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  
+                  // Always reset dragging state when dropping on choices bar
+                  setChallengeStates(prev => ({
+                    ...prev,
+                    codeCompletion: { ...prev.codeCompletion, isDragging: false }
+                  }));
+                  
+                  let dragData;
+                  try {
+                    const jsonData = e.dataTransfer.getData('application/json');
+                    dragData = jsonData ? JSON.parse(jsonData) : null;
+                  } catch (error) {
+                    return;
+                  }
+                  
+                  // Only process if this is coming from the editor and has a value
+                  if (dragData?.isFromEditor && dragData.value) {
+                    // Remove the choice from usedChoices (return it to choices bar)
+                    setChallengeStates(prev => ({
+                      ...prev,
+                      codeCompletion: {
+                        ...prev.codeCompletion,
+                        usedChoices: prev.codeCompletion.usedChoices.filter(c => c !== dragData.value)
+                      }
+                    }));
+                    
+                    // If this was a move operation, remove the text from the editor
+                    if (e.dataTransfer.dropEffect === 'move' && dragData.range) {
+                      const editor = editorRefs.current.codeCompletion;
+                      if (editor) {
+                        try {
+                          const model = editor.getModel();
+                          if (!model) return;
+                          
+                          // Find which blank this choice was placed in and restore placeholder
+                          const blankId = Object.keys(challengeStates.codeCompletion.userChoices).find(key => 
+                            challengeStates.codeCompletion.userChoices[key].choice === dragData.value
+                          );
+                          if (blankId) {
+                            setChallengeStates(prev => ({
+                              ...prev,
+                              codeCompletion: {
+                                ...prev.codeCompletion,
+                                userChoices: (() => {
+                                  const newChoices = { ...prev.codeCompletion.userChoices };
+                                  delete newChoices[blankId];
+                                  return newChoices;
+                                })(),
+
+                              }
+                            }));
+                          }
+                        } catch (error) {
+                          // Error handling
+                        }
+                      }
+                    }
+                  }
+                }}
+              >
                 {codeCompletionAvailableChoices.map((choice, idx) => (
                   <div
                     key={idx}
                     className={`${styles.choiceItem} ${
                       challengeStates.codeCompletion.currentDragItem?.value === choice ? styles.dragging : ''
                     }`}
-                    draggable
-                    onDragStart={(e) => handleCodeCompletionDragStart(e, { value: choice })}
-                    onDragEnd={handleCodeCompletionDragEnd}
+                    draggable={!challengeStates.codeCompletion.isCompleted}
+                    onDragStart={(e) => {
+                      if (challengeStates.codeCompletion.isCompleted) return;
+                      
+                      setChallengeStates(prev => ({
+                        ...prev,
+                        codeCompletion: { ...prev.codeCompletion, isDragging: true }
+                      }));
+                      
+                      const dragData = {
+                        type: 'choice',
+                        value: choice,
+                        isFromEditor: false
+                      };
+                      
+                      e.dataTransfer.effectAllowed = 'copy';
+                      e.dataTransfer.setData('text/plain', choice);
+                      e.dataTransfer.setData('application/json', JSON.stringify(dragData));
+                    }}
+                    onDragEnd={() => {
+                      setChallengeStates(prev => ({
+                        ...prev,
+                        codeCompletion: { ...prev.codeCompletion, isDragging: false }
+                      }));
+                    }}
                     onDragOver={(e) => e.preventDefault()}
                   >
                     {choice}
                   </div>
                 ))}
+                
+
               </div>
               
               {/* Code Editor */}
@@ -842,10 +1053,20 @@ const PracticePage = () => {
                 <h3>COMPLETE THE CODE:</h3>
                 <div
                   onDragOver={(e) => {
+                    // Don't allow drag over when completed
+                    if (challengeStates.codeCompletion.isCompleted) {
+                      e.preventDefault();
+                      return;
+                    }
+                    
                     e.preventDefault();
                     e.dataTransfer.dropEffect = 'copy';
                   }}
                   onDrop={(e) => {
+                    if (challengeStates.codeCompletion.isCompleted) {
+                      e.preventDefault();
+                      return;
+                    }
                     e.preventDefault();
                     
                     let dragData;
@@ -856,88 +1077,164 @@ const PracticePage = () => {
                       return;
                     }
                     
-                    if (!dragData || dragData.isFromEditor) return;
+                    const choice = dragData?.value || e.dataTransfer.getData('text/plain');
+                    if (!choice || challengeStates.codeCompletion.usedChoices.includes(choice)) return;
                     
-                    const editor = editorRefs.current.codeCompletion;
-                    if (!editor) return;
+                    // Get the target element
+                    const target = e.target;
                     
-                    const model = editor.getModel();
-                    if (!model) return;
-                    
-                    const rect = editor.getDomNode().getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const position = editor.getTargetAtClientPoint ? editor.getTargetAtClientPoint(e.clientX, e.clientY) : null;
-                    
-                    let offset = null;
-                    if (position && position.position) {
-                      offset = model.getOffsetAt(position.position);
-                    } else {
-                      const lineCount = model.getLineCount();
-                      for (let line = 1; line <= lineCount; line++) {
-                        const lineTop = editor.getTopForLineNumber(line);
-                        const lineHeight = editor.getOption && editor.getOption(editor.constructor.EditorOption.lineHeight) || 24;
-                        if (y >= lineTop && y < lineTop + lineHeight) {
-                          offset = model.getOffsetAt({ lineNumber: line, column: 1 });
-                          break;
+                    // Check if the target is a placeholder element
+                    if (target && target.classList && target.classList.contains('bug-placeholder')) {
+                      // Extract the placeholder text (e.g., "1", "2" - just the number)
+                      const placeholderText = target.textContent.trim();
+                      
+                      // Find the placeholder in our data
+                      const editor = editorRefs.current.codeCompletion;
+                      if (editor) {
+                        const model = editor.getModel();
+                        if (model) {
+                          const codeText = model.getValue();
+                          
+                          const blankPattern = /\[[0-9]+\]/g;
+                          let match;
+                          
+                          while ((match = blankPattern.exec(codeText)) !== null) {
+                            // Extract just the number from [1], [2], etc.
+                            const matchNumber = match[0].replace(/[\[\]]/g, '');
+                            
+                            // Check if this is the placeholder we're looking for
+                            if (matchNumber === placeholderText) {
+                              const startPos = model.getPositionAt(match.index);
+                              const slotId = `slot_${matchNumber}`; // Convert to backend format
+                              
+                              // Check if placeholder is already filled
+                              if (challengeStates.codeCompletion.userChoices[slotId]) {
+                                return;
+                              }
+                              
+                              // Store choice with position information
+                              setChallengeStates(prev => ({
+                                ...prev,
+                                codeCompletion: {
+                                  ...prev.codeCompletion,
+                                  userChoices: {
+                                    ...prev.codeCompletion.userChoices,
+                                    [slotId]: {
+                                      choice: choice,
+                                      position: {
+                                        line: startPos.lineNumber,
+                                        column: startPos.column
+                                      },
+                                      slotId: slotId
+                                    }
+                                  },
+                                  usedChoices: [...prev.codeCompletion.usedChoices, choice]
+                                }
+                              }));
+                              
+                              // Note: finalChoicePositions will be automatically calculated by processedCodeCompletion useMemo
+                              
+                              return; // Successfully filled the placeholder
+                            }
+                          }
                         }
                       }
                     }
-                    
-                    if (offset === null) return;
-                    
-                    const codeVal = model.getValue();
-                    const replaceables = getReplaceableRanges(codeVal);
-                    const target = replaceables.find(r => offset >= r.start && offset <= r.end);
-                    
-                    if (!target) return;
-                    
-                    const before = codeVal.slice(0, target.start);
-                    const after = codeVal.slice(target.end);
-                    const newCode = before + dragData.value + after;
-                    
-                    setChallengeStates(prev => ({
-                      ...prev,
-                      codeCompletion: {
-                        ...prev.codeCompletion,
-                        code: newCode
-                      }
-                    }));
-                    
-                    setChallengeStates(prev => ({
-                      ...prev,
-                      codeCompletion: {
-                        ...prev.codeCompletion,
-                        usedChoices: [...prev.codeCompletion.usedChoices, dragData.value]
-                      }
-                    }));
-                    
-                    setChallengeStates(prev => ({
-                      ...prev,
-                      codeCompletion: {
-                        ...prev.codeCompletion,
-                        currentDragItem: null
-                      }
-                    }));
                   }}
                 >
-                  <LessonMonacoEditor
-                    value={challengeStates.codeCompletion.code}
+                  <MonacoCodeBlock
+                    value={processedCodeCompletion.code}
                     onChange={(newCode) => newCode !== undefined && setChallengeStates(prev => ({
                       ...prev,
                       codeCompletion: { ...prev.codeCompletion, code: newCode }
                     }))}
                     language="java"
+                    mode="code_completion"
                     height="100%"
-                    onMount={(editor) => {
+                    fixTagClass="bug-placeholder"
+                    fixTagRegex={/(?<!\w)\[\d+\](?!\w)/g}
+                    fixTagHoverMessage="Drop a choice here"
+                    userChoices={challengeStates.codeCompletion.userChoices}
+                    placedChoicePositions={processedCodeCompletion.finalChoicePositions}
+                    timerState="active"
+                    disabled={challengeStates.codeCompletion.isCompleted}
+                    isResumed={false}
+                    onMount={(editor, monacoInstance) => {
                       editorRefs.current.codeCompletion = editor;
-                      editor.updateOptions({ 
-                        dragAndDrop: true,
-                        acceptSuggestionOnEnter: 'smart',
-                        selectOnLineNumbers: true,
-                        selectionClipboard: true,
-                        quickSuggestions: false
-                      });
+                      monaco = monacoInstance;
+                      
+                      // Set up click-to-remove functionality for placed choices
+                      const handleMouseDown = (e) => {
+                        if (challengeStates.codeCompletion.isCompleted) return;
+                        
+                        const model = editor.getModel();
+                        if (!model) return;
+                        
+                        // Get the click position from the event using Monaco's position API
+                        let clickPosition = e.target.position;
+                        if (!clickPosition) {
+                          // Fallback: try to get position from the event coordinates
+                          const rect = editor.getDomNode().getBoundingClientRect();
+                          const x = e.clientX - rect.left;
+                          const y = e.clientY - rect.top;
+                          clickPosition = editor.getPositionAt({ x, y });
+                          if (!clickPosition) return;
+                        }
+                        
+                        // Use refs to avoid closure issues (like CodeCompletion.jsx)
+                        const currentUserChoices = userChoicesRef.current;
+                        const finalPositions = finalPositionsRef.current;
+                        
+                        // Check each placed choice using its final position
+                        for (const [slotId, finalPosition] of Object.entries(finalPositions)) {
+                          const { line, column, length } = finalPosition;
+                          const choiceData = currentUserChoices[slotId];
+                          if (!choiceData) continue;
+                          
+                          const choice = choiceData.choice;
+                          
+                          // Calculate the end position of this choice with buffer
+                          const expandedStartColumn = Math.max(1, column - 2);
+                          const expandedEndColumn = column + length + 2;
+                          
+                          // Check if the click position is within the expanded range
+                          const isInExpandedRange = clickPosition.lineNumber === line &&
+                                                   clickPosition.column >= expandedStartColumn && 
+                                                   clickPosition.column <= expandedEndColumn;
+                          
+                          if (isInExpandedRange) {
+                            handleChoiceClick(choice);
+                            return; // Found and removed the choice, exit
+                          }
+                        }
+                      };
+                      
+                      // Add Monaco mouse down event listener for click-to-remove
+                      const mouseDownDisposable = editor.onMouseDown(handleMouseDown);
+                      
+                      // Also try onMouseUp as a fallback
+                      const mouseUpDisposable = editor.onMouseUp(handleMouseDown);
+                      
+                      // Cleanup function
+                      return () => {
+                        if (mouseDownDisposable) {
+                          mouseDownDisposable.dispose();
+                        }
+                        if (mouseUpDisposable) {
+                          mouseUpDisposable.dispose();
+                        }
+                      };
+                    }}
+                    options={{
+                      contextmenu: false,
+                      quickSuggestions: false,
+                      suggestOnTriggerCharacters: false,
+                      acceptSuggestionOnCommitCharacter: false,
+                      acceptSuggestionOnEnter: 'off',
+                      tabCompletion: 'off',
+                      wordBasedSuggestions: 'off',
+                      parameterHints: { enabled: false },
+                      hover: { enabled: true, delay: 100 }
                     }}
                   />
                 </div>
@@ -951,15 +1248,73 @@ const PracticePage = () => {
                 </div>
               </div>
 
-              <div className={styles.submitButton}>
-                <button
-                  onClick={checkCodeCompletionSolution}
-                  disabled={challengeStates.codeCompletion.isCompleted}
-                  className={challengeStates.codeCompletion.isCompleted ? styles.submitted : ''}
-                >
-                  {challengeStates.codeCompletion.isCompleted ? "Submitted" : "Submit"}
-                </button>
-              </div>
+              {/* Feedback after validation */}
+              {challengeStates.codeCompletion.isCompleted && (
+                <div className={styles.feedback}>
+                  <div className={challengeStates.codeCompletion.allCorrect ? styles.feedbackCorrect : styles.feedbackWrong}>
+                    <strong>
+                      {challengeStates.codeCompletion.allCorrect 
+                        ? "✅ Perfect! All placeholders completed correctly!" 
+                        : "❌ Incorrect! Some placeholders need fixing."
+                      }
+                    </strong>
+                  </div>
+                  {!challengeStates.codeCompletion.allCorrect && (
+                    <div className={styles.detailedFeedback}>
+                      {(() => {
+                        const completionSlots = challenges.codeCompletion?.challenge_data.completion_slots || [];
+                        const userChoices = challengeStates.codeCompletion.userChoices || {};
+                        const correctCount = completionSlots.filter((slot) => {
+                          const slotId = slot.id;
+                          const userChoice = userChoices[slotId];
+                          return userChoice && userChoice.choice === slot.correct_answer;
+                        }).length;
+                        const totalSlots = completionSlots.length;
+                        return `You completed ${correctCount} out of ${totalSlots} placeholders correctly.`;
+                      })()}
+                    </div>
+                  )}
+                </div>
+              )}
+
+
+              {/* Solution Code Section - Only show after submission */}
+              {challengeStates.codeCompletion.isCompleted && challengeStates.codeCompletion.solutionCode && (
+                <div className={styles.solutionCode}>
+                  <h3>Solution Code:</h3>
+                  <div className={styles.codeBlock}>
+                    <pre>{challengeStates.codeCompletion.solutionCode}</pre>
+                  </div>
+                </div>
+              )}
+
+
+              {/* Explanation Section - Only show after submission */}
+              {challengeStates.codeCompletion.isCompleted && challengeStates.codeCompletion.explanation && (
+                <div className={styles.explanation}>
+                  <h3>Explanation:</h3>
+                  <div className={styles.explanationText}>
+                    {challengeStates.codeCompletion.explanation}
+                  </div>
+                </div>
+              )}
+
+
+              {/* Submit Button - Only show when not completed */}
+              {!challengeStates.codeCompletion.isCompleted && (
+                <div className={styles.submitButton}>
+                  <button
+                    onClick={checkCodeCompletionSolution}
+                    disabled={challengeStates.codeCompletion.isCompleted}
+                    className={challengeStates.codeCompletion.isCompleted ? styles.submitted : ''}
+                  >
+                    {challengeStates.codeCompletion.isCompleted ? "Submitted" : "Submit"}
+                  </button>
+                </div>
+              )}
+              
+
+
             </div>
           )}
         </div>
@@ -988,7 +1343,6 @@ const PracticePage = () => {
             </div>
           </div>
         )}
-        {console.log('🔍 [PracticePage] Rendering completion button:', allChallengesCompleted)}
       </div>
     </LessonThemeProvider>
   );
