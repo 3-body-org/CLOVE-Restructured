@@ -32,7 +32,7 @@ services:
       - key: DB_POOL_RECYCLE
         value: 1800
       - key: RATE_LIMIT_PER_MINUTE
-        value: 60
+        value: 300
       - key: LOG_LEVEL
         value: INFO
       - key: ALLOWED_HOSTS
@@ -51,6 +51,8 @@ services:
         value: CLOVE
       - key: EMAIL_RESET_TOKEN_EXPIRE_HOURS
         value: 24
+      - key: FRONTEND_URL
+        value: "https://clove-frontend.netlify.app"
 
 databases:
   - name: clove-db
