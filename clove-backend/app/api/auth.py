@@ -1,5 +1,6 @@
 # app/api/auth.py
 
+import os
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -106,7 +107,7 @@ async def create_user_endpoint(
     await db.commit()
     
     # Create verification link
-    frontend_url = settings.CORS_ORIGINS[0] if settings.CORS_ORIGINS else "http://localhost:3000"
+    frontend_url = os.getenv("FRONTEND_URL", "https://clove-frontend.netlify.app")
     verification_link = f"{frontend_url}/verify-email?token={verification_token}"
     
     # Send verification email (don't fail signup if email fails)
@@ -291,7 +292,7 @@ async def send_verification_email(
     await db.commit()
     
     # Create verification link
-    frontend_url = settings.CORS_ORIGINS[0] if settings.CORS_ORIGINS else "http://localhost:3000"
+    frontend_url = os.getenv("FRONTEND_URL", "https://clove-frontend.netlify.app")
     verification_link = f"{frontend_url}/verify-email?token={verification_token}"
     
     # Send email
@@ -359,7 +360,7 @@ async def forgot_password(
     await db.commit()
     
     # Create reset link
-    frontend_url = settings.CORS_ORIGINS[0] if settings.CORS_ORIGINS else "http://localhost:3000"
+    frontend_url = os.getenv("FRONTEND_URL", "https://clove-frontend.netlify.app")
     reset_link = f"{frontend_url}/reset-password?token={reset_token}"
     
     # Send email
