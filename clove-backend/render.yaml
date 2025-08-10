@@ -32,7 +32,7 @@ services:
       - key: DB_POOL_RECYCLE
         value: 1800
       - key: RATE_LIMIT_PER_MINUTE
-        value: 300
+        value: 1000
       - key: LOG_LEVEL
         value: INFO
       - key: ALLOWED_HOSTS
