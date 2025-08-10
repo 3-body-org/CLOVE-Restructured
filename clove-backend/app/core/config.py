@@ -2,7 +2,10 @@ from pydantic_settings import BaseSettings
 from typing import List
 import os
 import json
+import logging
 from functools import lru_cache
+
+logger = logging.getLogger(__name__)
 
 class Settings(BaseSettings):
     # Environment
@@ -23,7 +26,18 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "30"))
     
     # CORS settings
-    CORS_ORIGINS: List[str] = json.loads(os.getenv("CORS_ORIGINS", "[]"))
+    CORS_ORIGINS: List[str] = json.loads(os.getenv("CORS_ORIGINS", '["http://localhost:5173", "http://localhost:3000"]'))
+    
+    @property
+    def cors_origins_clean(self) -> List[str]:
+        """Clean CORS origins by removing trailing slashes and ensuring proper format"""
+        cleaned = []
+        for origin in self.CORS_ORIGINS:
+            if origin:
+                # Remove trailing slash if present
+                cleaned_origin = origin.rstrip('/')
+                cleaned.append(cleaned_origin)
+        return cleaned
     
     # Rate limiting
     RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
@@ -61,6 +75,12 @@ class Settings(BaseSettings):
             raise ValueError("CORS_ORIGINS must be set")
         if not self.ALLOWED_HOSTS:
             raise ValueError("ALLOWED_HOSTS must be set")
+        
+        # Validate CORS_ORIGINS format
+        if self.CORS_ORIGINS:
+            logger.info(f"Validating CORS_ORIGINS: {self.CORS_ORIGINS}")
+            logger.info(f"Cleaned CORS_ORIGINS: {self.cors_origins_clean}")
+        
         # Email validation only for production
         if self.ENV == "production":
             if not self.SMTP_USER:
