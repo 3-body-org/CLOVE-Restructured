@@ -46,12 +46,6 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting up application...")
-    
-    # Debug: Log CORS settings
-    logger.info(f"CORS_ORIGINS: {settings.CORS_ORIGINS}")
-    logger.info(f"ENV: {settings.ENV}")
-    logger.info(f"DEBUG: {settings.DEBUG}")
-    
     try:
         # Run migrations in production mode
         if not settings.DEBUG:
@@ -120,18 +114,6 @@ async def health_check():
     return {
         "status": "healthy" if db_health else "unhealthy",
         "database": "connected" if db_health else "disconnected"
-    }
-
-# Test CORS endpoint
-@app.get("/test-cors")
-async def test_cors():
-    """Test endpoint to verify CORS is working"""
-    return {
-        "message": "CORS test successful",
-        "cors_origins": settings.CORS_ORIGINS,
-        "cors_origins_clean": settings.cors_origins_clean,
-        "env": settings.ENV,
-        "debug": settings.DEBUG
     }
 
 # Include routers without version prefix
