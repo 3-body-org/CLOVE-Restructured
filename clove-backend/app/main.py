@@ -46,6 +46,12 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting up application...")
+    
+    # Debug: Log CORS settings
+    logger.info(f"CORS_ORIGINS: {settings.CORS_ORIGINS}")
+    logger.info(f"ENV: {settings.ENV}")
+    logger.info(f"DEBUG: {settings.DEBUG}")
+    
     try:
         # Run migrations in production mode
         if not settings.DEBUG:
