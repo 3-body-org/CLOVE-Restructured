@@ -122,6 +122,18 @@ async def health_check():
         "database": "connected" if db_health else "disconnected"
     }
 
+# Test CORS endpoint
+@app.get("/test-cors")
+async def test_cors():
+    """Test endpoint to verify CORS is working"""
+    return {
+        "message": "CORS test successful",
+        "cors_origins": settings.CORS_ORIGINS,
+        "cors_origins_clean": settings.cors_origins_clean,
+        "env": settings.ENV,
+        "debug": settings.DEBUG
+    }
+
 # Include routers without version prefix
 app.include_router(auth.router)
 app.include_router(users.router)
