@@ -58,12 +58,31 @@ async def lifespan(app: FastAPI):
                                   capture_output=True, text=True)
             if result.returncode == 0:
                 logger.info("Database migrations completed successfully")
+                
+                # Now run seeding after successful migrations
+                try:
+                    from app.db.seeder import DatabaseSeeder
+                    from app.db.session import get_db
+                    
+                    logger.info("Checking if database needs seeding...")
+                    async for session in get_db():
+                        if await DatabaseSeeder.needs_seeding(session):
+                            logger.info("Starting database seeding...")
+                            seeder = DatabaseSeeder(session)
+                            await seeder.seed_database()
+                            logger.info("Database seeding completed successfully!")
+                        else:
+                            logger.info("Database already seeded, skipping...")
+                        break
+                except Exception as e:
+                    logger.error(f"Seeding failed: {str(e)}")
+                    # Don't fail startup if seeding fails
             else:
                 logger.error(f"Migration failed. Return code: {result.returncode}")
                 logger.error(f"STDERR: {result.stderr}")
                 logger.error(f"STDOUT: {result.stdout}")
         else:
-            # Only create tables in development mode
+        # Only create tables in development mode
             async with engine.begin() as conn:
                 await conn.run_sync(Base.metadata.create_all)
             logger.info("Database tables created successfully (development mode)")
