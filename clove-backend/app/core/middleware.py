@@ -24,7 +24,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "/post_assessments": 500,
             "/assessment_questions": 300,  # Question fetching: medium limit
             "/user_subtopics": 200,  # Progress updates: lower limit
-            "/user_topics": 300,  # User topic data: medium limit
         }
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
@@ -43,25 +42,15 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 last_request_time, count = self.requests[client_ip]
                 if current_time - last_request_time < 60:  # Within 1 minute
                     if count >= endpoint_limit:
-                        logger.warning(f"Rate limit exceeded for {client_ip} on {request.url.path}: {count}/{endpoint_limit}")
-                        response = JSONResponse(
+                        return JSONResponse(
                             status_code=429,
                             content={"detail": f"Too many requests. Please try again later."}
                         )
-                        # Ensure CORS headers are set for rate limit responses
-                        origin = request.headers.get("origin")
-                        if origin and origin in settings.cors_origins_clean:
-                            response.headers["Access-Control-Allow-Origin"] = origin
-                            response.headers["Access-Control-Allow-Credentials"] = "true"
-                        return response
                     self.requests[client_ip] = (last_request_time, count + 1)
-                    logger.debug(f"Request {count + 1}/{endpoint_limit} for {client_ip} on {request.url.path}")
                 else:
                     self.requests[client_ip] = (current_time, 1)
-                    logger.debug(f"New request window for {client_ip} on {request.url.path}")
             else:
                 self.requests[client_ip] = (current_time, 1)
-                logger.debug(f"First request for {client_ip} on {request.url.path}")
 
         return await call_next(request)
 
@@ -69,17 +58,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
         start_time = time.time()
         
-        # Log CORS-related headers for debugging
-        origin = request.headers.get("origin")
-        if origin:
-            logger.info(f"Request origin: {origin}")
-        
         response = await call_next(request)
-        
-        # Log CORS response headers
-        cors_origin = response.headers.get("access-control-allow-origin")
-        if cors_origin:
-            logger.info(f"Response CORS origin: {cors_origin}")
         
         process_time = time.time() - start_time
         logger.info(
@@ -94,7 +73,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         # Add security headers
         response = await call_next(request)
         
-        # Security headers (but don't override CORS headers)
+        # Security headers
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
@@ -109,55 +88,19 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
         
-        # Debug: Log what headers we're setting
-        logger.debug(f"Security headers set for {request.url.path}")
-        
         return response
 
 def setup_middleware(app):
-    # Debug: Log CORS settings
-    logger.info(f"Setting up CORS middleware with origins: {settings.cors_origins_clean}")
-    
     # CORS middleware
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.cors_origins_clean,
+        allow_origins=settings.CORS_ORIGINS,
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
         allow_headers=["*"],
         expose_headers=["Content-Length", "X-Request-ID"],
         max_age=3600
     )
-    
-    # Add a custom CORS debugging middleware
-    class CORSDebugMiddleware(BaseHTTPMiddleware):
-        async def dispatch(self, request: Request, call_next: Callable) -> Response:
-            # Log the request details
-            origin = request.headers.get("origin")
-            method = request.method
-            path = request.url.path
-            
-            logger.info(f"CORS Debug - Request: {method} {path}, Origin: {origin}")
-            
-            response = await call_next(request)
-            
-            # Log the response CORS headers
-            cors_origin = response.headers.get("access-control-allow-origin")
-            cors_methods = response.headers.get("access-control-allow-methods")
-            cors_headers = response.headers.get("access-control-allow-headers")
-            
-            logger.info(f"CORS Debug - Response: {response.status_code}, CORS Origin: {cors_origin}, Methods: {cors_methods}, Headers: {cors_headers}")
-            
-            return response
-    
-    app.add_middleware(CORSDebugMiddleware)
-    
-    # Debug: Log CORS configuration
-    logger.info(f"CORS middleware configured with:")
-    logger.info(f"  - allow_origins: {settings.cors_origins_clean}")
-    logger.info(f"  - allow_credentials: True")
-    logger.info(f"  - allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH']")
-    logger.info(f"  - allow_headers: ['*']")
     
     # Rate limiting middleware
     app.add_middleware(
