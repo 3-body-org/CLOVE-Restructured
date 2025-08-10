@@ -20,7 +20,7 @@ services:
       - key: REFRESH_TOKEN_EXPIRE_DAYS
         value: 30
       - key: CORS_ORIGINS
-        value: '["https://clove-app.netlify.app"]'
+        value: '["https://clove-frontend.netlify.app"]'
       - key: DEBUG
         value: false
       - key: DB_POOL_SIZE
