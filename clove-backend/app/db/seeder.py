@@ -140,6 +140,8 @@ class DatabaseSeeder:
                     last_name="User",
                     birthday=date(2000, 1, 1),
                     is_adaptive=True,
+                    email_verified=True,  # Make verified
+                    is_active=True,       # Make active
                     bio="",
                     profile_photo_url=""
                 )
@@ -157,6 +159,8 @@ class DatabaseSeeder:
                     last_name="User",
                     birthday=date(2000, 1, 1),
                     is_adaptive=False,
+                    email_verified=True,  # Make verified
+                    is_active=True,       # Make active
                     bio="",
                     profile_photo_url=""
                 )
