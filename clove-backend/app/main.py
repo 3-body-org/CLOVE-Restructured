@@ -109,6 +109,7 @@ setup_middleware(app)
 
 # Health check endpoint
 @app.get("/health")
+@app.head("/health")
 async def health_check():
     db_health = await check_db_health()
     return {
