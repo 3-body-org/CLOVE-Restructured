@@ -4,6 +4,7 @@
   color: $white;
   font-family: "Open Sauce One", "Roboto", sans-serif;
   position: relative;
+  padding-bottom: 40px;
 }
 
 .footerSection > * {
@@ -41,9 +42,15 @@
 
 /* Custom container to match Heading/Features spacing */
 .footerContainer {
-  max-width: 1440px;
+  max-width: none;
+  margin: 0;
+  padding: 40px 0;
+}
+
+.wideContainer {
+  padding: 0 0 0 100px;
   margin: 0 auto;
-  padding: 40px 80px;
+  max-width: 1400px;
 }
 
 /* Grid for the 5 columns */
@@ -51,8 +58,15 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 30px;
+  margin: 20px 0;
+  justify-items: center;
+  align-items: center;
+}
+
+.linkContainer > div {
   text-align: left;
-  margin-bottom: 20px;
+  width: 100%;
+  max-width: 200px;
 }
 
 /* Column Title */
@@ -120,9 +134,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 25px;
-  padding-top: 20px;
+  margin-top: 0;
+  padding: 40px 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
 }
 
 .footerLogo {
@@ -198,7 +213,7 @@
 
 @media (max-width: 768px) {
   .footerContainer {
-    padding: 25px 20px;
+    padding: 25px 40px;
   }
 
   .linkContainer {

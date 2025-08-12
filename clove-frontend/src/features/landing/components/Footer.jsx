@@ -9,7 +9,7 @@ export default function Footer() {
       <div className={styles.topLine}></div>
 
       {/* ===== Container for Link Columns (custom .footerContainer) ===== */}
-      <div className={styles.footerContainer}>
+      <div className={`container-fluid ${styles.wideContainer}`}>
         <div className={styles.linkContainer}>
           {/* 5 columns in a grid */}
           <div>
@@ -65,7 +65,7 @@ export default function Footer() {
       <div className={styles.bottomLine}></div>
 
       {/* ===== Bottom Container: Logo & Copyright ===== */}
-      <div className={`${styles.footerContainer}`}>
+      <div className={`container-fluid ${styles.wideContainer}`}>
         <div className={styles.bottomContainer}>
           {/* Left side: Logo or text */}
           <div className={styles.logoSection}>

@@ -2,13 +2,15 @@
 import { useState } from "react";
 //scss
 import styles from "features/landing/styles/Features.module.scss";
-// Replace with your actual images
-import tempPic from "assets/images/landing/image-landing-flowers.jpg";
+// Import the 3 feature GIFs
+import feature1Gif from "assets/GIF/landing/gif-feature1.gif";
+import feature2Gif from "assets/GIF/landing/gif-feature2.gif";
+import feature3Gif from "assets/GIF/landing/gif-feature3.gif";
 
 export default function Features() {
   return (
     <section className={styles.featuresSection}>
-      <div className="container">
+      <div className={`container-fluid ${styles.wideContainer}`}>
         {/* ===== Top Row: Title / Paragraph ===== */}
         <div className="row">
           <div className="col-md-6">
@@ -33,7 +35,7 @@ export default function Features() {
           <div className="col-md-4 d-flex align-items-stretch">
             <div className={styles.featureCard}>
               <img
-                src={tempPic}
+                src={feature1Gif}
                 alt="Personalized Learning"
                 className={styles.featureImg}
               />
@@ -51,7 +53,7 @@ export default function Features() {
           <div className="col-md-4 d-flex align-items-stretch mt-4 mt-md-0">
             <div className={styles.featureCard}>
               <img
-                src={tempPic}
+                src={feature2Gif}
                 alt="Real-Time Adaptability"
                 className={styles.featureImg}
               />
@@ -69,7 +71,7 @@ export default function Features() {
           <div className="col-md-4 d-flex align-items-stretch mt-4 mt-md-0">
             <div className={styles.featureCard}>
               <img
-                src={tempPic}
+                src={feature3Gif}
                 alt="Engaging Content"
                 className={styles.featureImg}
               />

@@ -85,7 +85,7 @@ const getBackendData = (key, preAssessment, subtopics, postAssessment) => {
       progress: postAssessment.total_items || 0,
       maxProgress: 15,
       attemptCount: postAssessment.attempt_count || 0,
-      canTake: postAssessment.is_unlocked && !postAssessment.is_completed,
+      canTake: postAssessment?.is_unlocked && (!postAssessment?.is_completed || (postAssessment?.attempt_count || 0) < 2),
       type: 'assessment'
     };
   }

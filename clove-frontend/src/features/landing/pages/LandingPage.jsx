@@ -1,4 +1,5 @@
 import React from "react";
+import HeaderNavbar from "features/landing/components/HeaderNavbar";
 import Heading from "features/landing/components/Heading";
 import Features from "features/landing/components/Features";
 import Team from "features/landing/components/Team";
@@ -9,9 +10,12 @@ export default function LandingPage() {
   return (
     <div className={styles.landingPage}>
       <div className={styles.backgroundWrapper}>
-        <Heading />
-        <Features />
-        <Team />
+        <HeaderNavbar />
+        <div className={styles.contentWrapper}>
+          <Heading />
+          <Features />
+          <Team />
+        </div>
         <Footer />
       </div>
     </div>

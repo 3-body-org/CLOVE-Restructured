@@ -51,4 +51,11 @@
 .backgroundWrapper > * {
   position: relative;
   z-index: 1;
+}
+
+/* Global content wrapper for consistent spacing */
+.contentWrapper {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 20px;
 } 

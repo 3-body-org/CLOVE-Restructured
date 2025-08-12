@@ -9,93 +9,7 @@
   position: relative;
 }
 
-/* ===== HEADER ===== */
-.header {
-  padding: 0 80px;
-  background-color: $black;
-}
 
-.logoSection {
-  padding-top: 5px;
-  display: flex;
-  align-items: center;
-}
-
-.logoImg {
-  width: 50px;
-  height: auto;
-  margin-left: 8px;
-  filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3));
-}
-
-.logo {
-  font-size: 58px;
-  font-weight: 900;
-  color: $white;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, $light-purple 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.headerButtons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-}
-
-.headerButtons button {
-  width: 85px;
-  height: 50px;
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-}
-
-.headerButtons button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.headerButtons button:hover::before {
-  left: 100%;
-}
-
-.loginBtnBtn {
-  background: linear-gradient(135deg, $light-purple 0%, $dark-purple 100%);
-  color: $white;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-}
-
-.loginBtnBtn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
-}
-
-.signUpBtnBtn {
-  background: rgba(255, 255, 255, 0.05);
-  color: $light-purple;
-  backdrop-filter: blur(10px);
-}
-
-.signUpBtnBtn:hover {
-  background: rgba(139, 92, 246, 0.1);
-  color: $white;
-  border-color: rgba(139, 92, 246, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
 
 /* ===== HERO SECTION ===== */
 .hero {
@@ -103,11 +17,16 @@
   position: relative;
 }
 
+.wideContainer {
+  padding: 0;
+  margin: 0;
+}
+
 /* Hero Title & Paragraph */
 .heroTitle {
-  font-size: 56px;
+  font-size: 72px;
   font-weight: 900;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   line-height: 1.1;
   background: linear-gradient(135deg, 
     #ffffff 0%, 
@@ -137,9 +56,9 @@
 }
 
 .heroParagraph {
-  font-size: 20px;
+  font-size: 24px;
   line-height: 1.7;
-  margin-bottom: 40px;
+  margin-bottom: 45px;
   color: rgba(255, 255, 255, 0.85);
   font-weight: 400;
   animation: slideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s both;
@@ -153,14 +72,14 @@
 }
 
 .heroButtons button {
-  width: 160px;
-  height: 60px;
-  font-size: 18px;
+  width: 180px;
+  height: 70px;
+  font-size: 20px;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid rgba(139, 92, 246, 0.3);
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  border-radius: 16px;
+  border-radius: 18px;
   position: relative;
   overflow: hidden;
 }
@@ -264,11 +183,11 @@
   }
 
   .heroTitle {
-    font-size: 48px;
+    font-size: 60px;
   }
 
   .heroParagraph {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   .heroImg {
@@ -282,16 +201,20 @@
 
 @media (max-width: 768px) {
   .header {
-    padding: 20px;
+    padding: 20px 40px;
     align-items: center;
+  }
+  
+  .hero .container {
+    padding: 0 40px;
   }
 
   .heroTitle {
-    font-size: 36px;
+    font-size: 44px;
   }
 
   .heroParagraph {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .heroButtons {
@@ -299,9 +222,9 @@
   }
 
   .heroButtons button {
-    width: 140px;
-    height: 55px;
-    font-size: 16px;
+    width: 160px;
+    height: 65px;
+    font-size: 18px;
   }
 
   .heroImg {
@@ -311,7 +234,11 @@
 
 @media (max-width: 480px) {
   .header {
-    padding: 15px;
+    padding: 15px 20px;
+  }
+  
+  .hero .container {
+    padding: 0 20px;
   }
 
   .logo {
@@ -319,11 +246,11 @@
   }
 
   .heroTitle {
-    font-size: 28px;
+    font-size: 32px;
   }
 
   .heroParagraph {
-    font-size: 15px;
+    font-size: 18px;
   }
 
   .heroButtons {
@@ -333,8 +260,8 @@
 
   .heroButtons button {
     width: 100%;
-    height: 50px;
-    font-size: 16px;
+    height: 55px;
+    font-size: 18px;
   }
 
   .heroImg {

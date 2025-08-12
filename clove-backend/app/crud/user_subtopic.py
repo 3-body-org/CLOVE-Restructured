@@ -183,6 +183,27 @@ async def update_user_topic_progress(db, user_id, topic_id):
 
     if user_topic:
         user_topic.progress_percent = progress_percent
+        
+        # Check if topic should be marked as completed
+        # Topic is completed when: pre-assessment done + post-assessment done
+        # (Subtopics are optional - user can skip them and just do assessments)
+        pre_assessment_completed = pre_assessment and pre_assessment.is_completed
+        post_assessment_completed = post_assessment and post_assessment.is_completed
+        
+        # Mark topic as completed if both assessments are done
+        if (pre_assessment_completed and post_assessment_completed):
+            user_topic.is_completed = True
+            # Set completion timestamp if not already set
+            if not user_topic.completed_at:
+                from datetime import datetime, timezone
+                user_topic.completed_at = datetime.now(timezone.utc)
+        
+        # Ensure assessments are marked as completed if they have 15+ items
+        if pre_assessment and pre_assessment.total_items >= 15:
+            user_topic.pre_assessment_completed = True
+        if post_assessment and post_assessment.total_items >= 15:
+            user_topic.post_assessment_completed = True
+        
         await db.commit()
         await db.refresh(user_topic)
 

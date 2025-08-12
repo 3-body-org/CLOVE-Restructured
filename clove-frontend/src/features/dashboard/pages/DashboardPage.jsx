@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookOpen,
@@ -16,16 +16,17 @@ import { useNavigate } from "react-router-dom";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 import { useSidebar } from "../../../components/layout/Sidebar/Layout";
+import { MyDeckContext } from "contexts/MyDeckContext";
 
 // Reusable components
 const CompletedTopicItem = ({ topicNumber, date, badgeText }) => {
   const getBadgeClass = (badgeText) => {
     switch (badgeText) {
-      case 'Mastered': return styles.badgeMastered;
-      case 'Proficient': return styles.badgeProficient;
-      case 'Learned': return styles.badgeLearned;
-      case 'Completed': return styles.badgeCompleted;
-      default: return styles.badgeCompleted;
+      case 'Mastered': return styles.badgeMastered || 'badge-mastered';
+      case 'Proficient': return styles.badgeProficient || 'badge-proficient';
+      case 'Learned': return styles.badgeLearned || 'badge-learned';
+      case 'Completed': return styles.badgeCompleted || 'badge-completed';
+      default: return styles.badgeCompleted || 'badge-completed';
     }
   };
 
@@ -33,7 +34,7 @@ const CompletedTopicItem = ({ topicNumber, date, badgeText }) => {
     <div className={styles.completedTopic}>
       <div className={styles.topicInfo}>
         <h5>
-          <FontAwesomeIcon icon={faCheck} /> Topic {topicNumber}: ...
+          <FontAwesomeIcon icon={faCheck} /> {topicNumber}
         </h5>
         <small>Completed on {date}</small>
       </div>
@@ -57,6 +58,39 @@ const Dashboard = () => {
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
   const { closeSidebar } = useSidebar();
+  
+  // Get MyDeckContext to access pre-assessment subtopic data
+  const { topicOverview } = useContext(MyDeckContext);
+
+  // Function to calculate knowledge level from assessment scores
+  const calculateKnowledgeLevelFromAssessment = (topicId) => {
+    // Check if we have topic overview data for this topic
+    if (topicOverview && topicOverview.topicId === topicId) {
+      // Check post-assessment scores
+      if (topicOverview.post_assessment && topicOverview.post_assessment.subtopic_scores) {
+        const subtopicScores = topicOverview.post_assessment.subtopic_scores;
+        const scores = Object.values(subtopicScores);
+        
+        if (scores.length > 0) {
+          const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+          console.log(`🔍 Topic ${topicId} post-assessment scores:`, subtopicScores, 'Average:', averageScore);
+          return averageScore;
+        }
+      }
+      // Fallback to pre-assessment scores
+      if (topicOverview.pre_assessment && topicOverview.pre_assessment.subtopic_scores) {
+        const subtopicScores = topicOverview.pre_assessment.subtopic_scores;
+        const scores = Object.values(subtopicScores);
+        
+        if (scores.length > 0) {
+          const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+          console.log(`🔍 Topic ${topicId} pre-assessment scores:`, subtopicScores, 'Average:', averageScore);
+          return averageScore;
+        }
+      }
+    }
+    return 0.8; // Default to "Learned" level
+  };
 
   // Update streak on dashboard load, then fetch stats
   React.useEffect(() => {
@@ -136,15 +170,36 @@ const Dashboard = () => {
     .filter(tp => tp.is_completed)
     .map(tp => {
       let badgeText = "";
-      const kl = tp.knowledge_level || 0;
-      if (kl === 1.0) badgeText = "Mastered";
-      else if (kl >= 0.9) badgeText = "Proficient";
-      else if (kl >= 0.8) badgeText = "Learned";
+      
+      // Calculate knowledge level from pre-assessment subtopic scores
+      // The scores are stored in the assessment data, not in the topic itself
+      let averageKnowledgeLevel = 0;
+      
+      // try to calculate from assessment scores
+      averageKnowledgeLevel = calculateKnowledgeLevelFromAssessment(tp.topic_id);
+      
+      // Determine badge based on knowledge level
+      if (averageKnowledgeLevel >= 0.95) badgeText = "Mastered";
+      else if (averageKnowledgeLevel >= 0.85) badgeText = "Proficient";
+      else if (averageKnowledgeLevel >= 0.75) badgeText = "Learned";
       else badgeText = "Completed";
+      
+      // Handle completion date - if completed_at is null but topic is completed,
+      // use current date or a fallback
+      let completionDate = "Unknown";
+      if (tp.completed_at) {
+        completionDate = new Date(tp.completed_at).toLocaleDateString();
+      } else if (tp.is_completed) {
+        // If topic is completed but no completion date, use a fallback
+        // This handles cases where topics are completed through assessments
+        completionDate = "Recently completed";
+      }
+      
       return {
         topicNumber: tp.topic?.title || `Topic ${tp.topic_id}`,
-        date: tp.completed_at ? new Date(tp.completed_at).toLocaleDateString() : "Unknown",
+        date: completionDate,
         badgeText,
+        averageKnowledgeLevel: averageKnowledgeLevel.toFixed(2) 
       };
     });
 
@@ -219,7 +274,7 @@ const Dashboard = () => {
             challengesData={challengesData}
           />
 
-          <div className={styles.card}>
+          <div className={`${styles.card} ${styles.bottomHighlight}`}>
             <h3>
               <FontAwesomeIcon icon={faCheckCircle} /> Completed Topics
             </h3>
