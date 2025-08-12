@@ -234,11 +234,9 @@ async def _update_existing_assessment(
         final_score = (total_correct / denominator) * 100
         if existing.attempt_count < 2:
             existing.attempt_count += 1
-        # Mark the pre-assessment as completed
-        existing.is_completed = True
+        existing.is_completed = True # Mark as completed
         # Unlock the first subtopic for this user/topic
         await unlock_first_subtopic_for_user(db, user_topic.user_id, user_topic.topic_id)
-        existing.is_completed = True # Mark as completed
     else:
         # The attempt is still in progress, score based on answered questions
         final_score = (total_correct / total_items) * 100 if total_items > 0 else 0

@@ -32,7 +32,7 @@ const Assessment = () => {
   const numericTopicId = topicId ? topicId.split('-')[0] : null;
   const navigate = useNavigate();
   const { getTopicsWithProgress } = useMyDeckService();
-  const { setTopics, loadTopicOverview, refreshTopics, getAssessmentQuestionsSummary } = useContext(MyDeckContext);
+  const { setTopics, loadTopicOverview, refreshTopics } = useContext(MyDeckContext);
   
   // Get theme for dynamic styling
   const frontendContent = getSubtopicContent(numericTopicId);
@@ -91,14 +91,6 @@ const Assessment = () => {
     setIsLoading(true);
     const fetchQuestions = async () => {
       try {
-        // Get questions summary and store in context
-        try {
-          await getAssessmentQuestionsSummary(numericTopicId, assessmentType);
-        } catch (summaryError) {
-          // Failed to fetch questions summary, continuing without it
-          // Continue without the summary - it's not critical for the assessment to work
-        }
-        
         const response = await get(`/assessment_questions/topic/${numericTopicId}/randomized?assessment_type=${assessmentType}`);
         if (!response.ok) {
           const errorText = await response.text();
@@ -106,8 +98,6 @@ const Assessment = () => {
         }
         const questions = await response.json();
         setQuestionsToAsk(questions);
-        
-
       } catch (err) {
         setQuestionsToAsk([]);
         // Show error notification

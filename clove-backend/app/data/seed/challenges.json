@@ -2669,7 +2669,7 @@
     "scenario": "A `CharmGuardian` activates a `protectionCharm`. The `protectionCharmActive` variable needs to be declared as a boolean and initialized to `true`. Complete the declaration and initialization.",
     "story_context": "The CharmGuardian needs to activate protection charms. Your task is to complete the variable declaration and initialization.",
     "challenge_data": {
-      "initial_code": "public class CharmGuardian {\n    public static void main(String[] args) {\n        boolean ??? = ???;\n        System.out.println(\"Protection Charm Active: \" + protectionCharmActive);\n    }\n}",
+      "initial_code": "public class CharmGuardian {\n    public static void main(String[] args) {\n        ??? = ???;\n        System.out.println(\"Protection Charm Active: \" + protectionCharmActive);\n    }\n}",
       "expected_output": [
         "Protection Charm Active: true"
       ],
@@ -2686,7 +2686,7 @@
           "line": 3,
           "type": "variable_name",
           "description": "Variable name for the boolean protection charm status",
-          "correct_answer": "protectionCharmActive",
+          "correct_answer": "boolean protectionCharmActive",
           "explanation": "The variable should be named `protectionCharmActive` as indicated by the print statement."
         },
         {

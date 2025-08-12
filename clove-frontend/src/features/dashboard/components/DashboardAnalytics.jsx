@@ -45,7 +45,7 @@ const DonutChart = ({ percentage, label, description }) => {
 };
 
 export const DashboardAnalytics = ({ progressData, challengesData }) => (
-  <>
+  <div className={styles.analyticsRow}>
     <div className={styles.card}>
       <h3>
         <FontAwesomeIcon icon={faChartBar} /> Progress Overview
@@ -63,5 +63,5 @@ export const DashboardAnalytics = ({ progressData, challengesData }) => (
         description={challengesData.description}
       />
     </div>
-  </>
+  </div>
 );

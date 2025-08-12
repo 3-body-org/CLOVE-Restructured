@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "features/landing/styles/Heading.module.scss";
-import tempPic from "assets/images/landing/image-landing-flowers.jpg";
-import CloveLogo from "assets/icons/common/icon-common-clove-logo.png";
+import ImageCarousel from "./ImageCarousel";
+import ScrollIndicator from "./ScrollIndicator";
 
 export default function Heading() {
   const navigate = useNavigate();
@@ -11,42 +11,21 @@ export default function Heading() {
     navigate("/login-signup", { state: { isLogin: false } });
   };
 
+  const handleLearnMore = () => {
+    const featuresSection = document.querySelector('[class*="featuresSection"]');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className={styles.page}>
-      {/* ====== HEADER ====== */}
-      <header className={styles.header}>
-        <div className={styles.logoSection}>
-          <h1 className={styles.logo}>
-            CLOVE
-            <img src={CloveLogo} alt="Clover Logo" className={styles.logoImg} />
-          </h1>
-        </div>
-        <div className={styles.headerButtons}>
-          <button
-            onClick={() =>
-              navigate("/login-signup", { state: { isLogin: false } })
-            }
-            className={styles.signUpBtnBtn}
-          >
-            Sign Up
-          </button>
-          <button
-            onClick={() =>
-              navigate("/login-signup", { state: { isLogin: true } })
-            }
-            className={styles.loginBtnBtn}
-          >
-            Login
-          </button>
-        </div>
-      </header>
-
       {/* ====== HERO SECTION ====== */}
       <section className={styles.hero}>
-        <div className="container">
+        <div className={`container-fluid ${styles.wideContainer}`}>
           <div className="row align-items-center">
             {/* Left side text */}
-            <div className="col-md-6">
+            <div className="col-md-7">
               <h1 className={styles.heroTitle}>
                 Learn Java Through Immersive, Game-Inspired Challenges
               </h1>
@@ -56,22 +35,19 @@ export default function Heading() {
               all within immersive, theme-inspired environments
               </p>
               <div className={styles.heroButtons}>
-                <button className={styles.learnMoreBtn}>Learn More</button>
                 <button className={styles.signUpBtn} onClick={handleRedirect}>
                   Sign Up
                 </button>
+                <button className={styles.learnMoreBtn} onClick={handleLearnMore}>Learn More</button>
               </div>
             </div>
-            {/* Right side image */}
-            <div className="col-md-6 mt-4 mt-md-0 text-center">
-              <img
-                src={tempPic}
-                className={styles.heroImg}
-                alt="Large visual"
-              />
+            {/* Right side carousel */}
+            <div className="col-md-5 mt-4 mt-md-0 text-center">
+              <ImageCarousel />
             </div>
           </div>
         </div>
+        <ScrollIndicator />
       </section>
     </div>
   );

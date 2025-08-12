@@ -7,14 +7,14 @@ import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 
 // Replace these with actual images
-import teamPic1 from "assets/images/landing/image-landing-flowers.jpg";
-import teamPic2 from "assets/images/landing/image-landing-flowers.jpg";
-import teamPic3 from "assets/images/landing/image-landing-flowers.jpg";
+import teamPic1 from "assets/images/landing/image-profile-1.webp";
+import teamPic2 from "assets/images/landing/image-profile-2.webp";
+import teamPic3 from "assets/images/landing/image-profile-3.webp";
 
 export default function Team() {
   return (
     <section className={styles.teamSection}>
-      <div className="container text-center">
+      <div className={`container-fluid ${styles.wideContainer} text-center`}>
         {/* Top Labels */}
         <p className={styles.teamLabel}>INNOVATORS AND RESEARCHERS</p>
         <h1 className={styles.teamHeading}>Our Team</h1>
