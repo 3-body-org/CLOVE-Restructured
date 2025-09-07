@@ -210,6 +210,12 @@
 - **Lesson**: React effects (useEffect) run after first paint; theme classes need useLayoutEffect + container-level theme classes for immediate variable availability
 - **Prevention**: Use useLayoutEffect for critical CSS class application; apply theme classes directly to page containers when CSS variables are needed immediately
 
+### 2025-01-19: Netlify Deployment - Missing Dependencies
+- **Mistake**: Had rollup-plugin-visualizer in devDependencies but used in vite.config.js for production builds
+- **Impact**: Netlify build failed with "Cannot find package 'rollup-plugin-visualizer'" error
+- **Lesson**: Production builds need all dependencies in regular dependencies, not devDependencies
+- **Prevention**: Move build-time dependencies to regular dependencies or make them optional in config
+
 ### [FUTURE MISTAKE LOG ENTRY]
 - **Date**: [Date when mistake was made]
 - **Mistake**: [Description of the mistake]

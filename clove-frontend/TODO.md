@@ -50,6 +50,10 @@ Migrate from fragile, duplicate theme files to a centralized, DRY-compliant them
    - ✅ **Documentation updates**: TODO.md updated with current progress
 
 ### **🔄 CURRENT TASK:**
+- [x] **Netlify Deployment Fix** - COMPLETED ✅
+  - [x] **Fixed rollup-plugin-visualizer dependency issue**: Moved from devDependencies to dependencies
+  - [x] **Simplified vite.config.js**: Removed visualizer plugin to prevent build failures
+  - [x] **Updated package.json**: Ensured all build dependencies are properly installed
 - [ ] **Phase 5: Validation** - IN PROGRESS
   - [ ] **Comprehensive theme testing**: Test all migrated components in all three themes
   - [ ] **Dynamic theming verification**: Ensure theme switching works correctly
