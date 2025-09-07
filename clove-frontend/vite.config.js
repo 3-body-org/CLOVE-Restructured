@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { visualizer } from 'rollup-plugin-visualizer';
+// import { visualizer } from 'rollup-plugin-visualizer';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -10,12 +10,12 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
   plugins: [
     react(),
-    visualizer({
-      filename: 'dist/stats.html',
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-    })
+    // visualizer({
+    //   filename: 'dist/stats.html',
+    //   open: true,
+    //   gzipSize: true,
+    //   brotliSize: true,
+    // })
   ],
   server: {
     host: '0.0.0.0', // Allows access via local network
