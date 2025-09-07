@@ -60,17 +60,47 @@ async def list_user_topics(
         raise HTTPException(status_code=403, detail="Not authorized to view this user's topics")
     
     user_topics = await list_for_user(db, user_id=user_id, skip=skip, limit=limit)
-    # For each topic, fetch subtopics for this user and topic
-    all_user_subtopics = await list_user_subtopics(db, user_id=user_id)
+    
+    # For each topic, fetch subtopics and assessment data
     for ut in user_topics:
-        ut.subtopics = sorted(
-            [
-                UserSubtopicRead.model_validate(st)
-                for st in all_user_subtopics
-                if st.subtopic.topic_id == ut.topic_id
-            ],
-            key=lambda st: st.subtopic.subtopic_id
-        )
+        # Get subtopics for this topic
+        topic_subtopics = await list_user_subtopics(db, user_id=user_id)
+        topic_subtopics = [st for st in topic_subtopics if st.subtopic.topic_id == ut.topic_id]
+        
+        # Get assessment data for this topic
+        pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, ut.topic_id)
+        post_assessments = await get_post_assessment_for_user_topic(db, user_id, ut.topic_id)
+        
+        pre_assessment = pre_assessments[0] if pre_assessments else None
+        post_assessment = post_assessments[0] if post_assessments else None
+        
+        # Process subtopics with assessment scores
+        processed_subtopics = []
+        for st in topic_subtopics:
+            subtopic_data = UserSubtopicRead.model_validate(st).model_dump()
+            
+            # Calculate knowledge level for this subtopic
+            knowledge_level = 0.0
+            
+            # Try to get post-assessment score first (more accurate)
+            if post_assessment and post_assessment.subtopic_scores:
+                subtopic_id_str = str(st.subtopic.subtopic_id)
+                if subtopic_id_str in post_assessment.subtopic_scores:
+                    knowledge_level = post_assessment.subtopic_scores[subtopic_id_str]
+            
+            # Fallback to pre-assessment score
+            elif pre_assessment and pre_assessment.subtopic_scores:
+                subtopic_id_str = str(st.subtopic.subtopic_id)
+                if subtopic_id_str in pre_assessment.subtopic_scores:
+                    knowledge_level = pre_assessment.subtopic_scores[subtopic_id_str]
+            
+            # Add knowledge level to subtopic data
+            subtopic_data["knowledge_level"] = knowledge_level
+            processed_subtopics.append(subtopic_data)
+        
+        # Sort subtopics and assign to user topic
+        ut.subtopics = sorted(processed_subtopics, key=lambda st: st["subtopic"]["subtopic_id"])
+    
     return user_topics
 
 @router.get("/user/{user_id}/topic/{topic_id}/overview", response_model=dict)

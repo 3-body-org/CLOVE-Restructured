@@ -359,18 +359,18 @@
   // Mastery Level Badges
   .masteryLevel {
     &.statusBeginner {
-      background-color: rgba(16, 185, 129, 0.1);
-      color: $success;
+      background-color: rgba(239, 68, 68, 0.1);   
+      color: $danger;                               
     }
 
     &.statusIntermediate {
-      background-color: rgba(245, 158, 11, 0.1);
-      color: $warning;
+      background-color: rgba(245, 158, 11, 0.1);  
+      color: $warning;                              
     }
 
     &.statusAdvanced {
-      background-color: rgba(239, 68, 68, 0.1);
-      color: $danger;
+      background-color: rgba(16, 185, 129, 0.1);  
+      color: $success;                              
     }
   }
 }
@@ -410,18 +410,18 @@
       text-transform: capitalize;
 
       &.statusBeginner {
-        background-color: rgba(16, 185, 129, 0.1);
-        color: $success;
+        background-color: rgba(239, 68, 68, 0.1);   
+        color: $danger;                               
       }
 
       &.statusIntermediate {
-        background-color: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
+        background-color: rgba(245, 158, 11, 0.1);  
+        color: $warning;                              
       }
 
       &.statusAdvanced {
-        background-color: rgba(239, 68, 68, 0.1);
-        color: $danger;
+        background-color: rgba(16, 185, 129, 0.1);  
+        color: $success;                              
       }
     }
   }

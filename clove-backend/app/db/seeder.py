@@ -228,6 +228,8 @@ class DatabaseSeeder:
         await self.session.flush()
         logger.info(f"Seeded {len(self.assessment_questions)} assessment questions (inserted or updated)")
 
+
+
     @staticmethod
     async def needs_seeding(session: AsyncSession) -> bool:
         """Check if database needs seeding"""

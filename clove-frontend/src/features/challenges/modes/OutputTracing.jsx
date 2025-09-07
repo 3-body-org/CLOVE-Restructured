@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MonacoCodeBlock from '../components/MonacoCodeBlock';
 import ProgressIndicator from '../components/ProgressIndicator';
-import styles from '../styles/OutputTracing.module.scss';
+import "../../../styles/components/challenge.scss";
 
 const OutputTracing = ({
   challengeData,
@@ -79,16 +79,16 @@ const OutputTracing = ({
   };
 
   return (
-        <div className={styles.challengeArea}>
+        <div className="outputTracingChallengeArea">
           {/* Progress Indicator at the very top */}
           <ProgressIndicator
             challengeIndex={challengeIndex}
             totalChallenges={totalChallenges}
           />
           
-          <h1 className={styles.challengeTitle}>OUTPUT TRACING CHALLENGE</h1>
+          <h1 className="outputTracingChallengeTitle">OUTPUT TRACING CHALLENGE</h1>
           
-          <div className={styles.codeDisplayContainer}>
+          <div className="outputTracingCodeDisplayContainer">
             <h3>CODE TO ANALYZE:</h3>
             <MonacoCodeBlock
               value={challengeData.code}
@@ -101,19 +101,19 @@ const OutputTracing = ({
             />
           </div>
 
-          <div className={styles.questionContainer}>
+          <div className="outputTracingQuestionContainer">
             <h3>What is the output of the following code?</h3>
-            <div className={styles.selectionInfo}>
+            <div className="outputTracingSelectionInfo">
               Selected: {selectedChoices.length} option(s)
             </div>
           </div>
 
-          <div className={styles.choicesContainer}>
+          <div className="outputTracingChoicesContainer">
             {choices.map((choice, index) => (
               <button
                 key={index}
-                className={`${styles.choiceButton} ${
-                  selectedChoices.includes(choice) ? styles.selected : ''
+                className={`outputTracingChoiceButton ${
+                  selectedChoices.includes(choice) ? 'outputTracingSelected' : ''
                 }`}
                 onClick={() => handleChoiceToggle(choice)}
                 disabled={disabled || isSubmitted || timerState === 'expired'}
@@ -123,9 +123,9 @@ const OutputTracing = ({
             ))}
           </div>
 
-          <div className={styles.submitButton}>
+          <div className="outputTracingSubmitButton">
             <button
-              className={`${styles.submitButton} ${isSubmitting ? styles.submitting : ''} ${isSubmitted ? styles.submitted : ''}`}
+              className={`outputTracingSubmitButton ${isSubmitting ? 'outputTracingSubmitting' : ''} ${isSubmitted ? 'outputTracingSubmitted' : ''}`}
               onClick={handleSubmit}
               disabled={isSubmitted || isSubmitting}
               title={isSubmitting ? "Submitting..." : "Submit your answer (empty submissions allowed)"}
@@ -133,12 +133,12 @@ const OutputTracing = ({
               {isSubmitting ? 'Submitting...' : isSubmitted ? 'Submitted' : 'Submit'}
             </button>
             {isResumed && (
-              <p className={styles.submitHint}>
+              <p className="outputTracingSubmitHint">
                 This challenge was cancelled earlier. Your answers will be counted as wrong regardless of your progress.
               </p>
             )}
             {timerState === 'expired' && (
-              <p className={styles.submitHint}>
+              <p className="outputTracingSubmitHint">
                 Time's up! Your answers will be counted as wrong regardless of your progress.
               </p>
             )}

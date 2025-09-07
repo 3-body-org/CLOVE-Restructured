@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import confetti from "canvas-confetti";
-import styles from "features/lessons/styles/PracticePage.module.scss";
-import LessonThemeProvider from "features/lessons/components/LessonThemeProvider";
+import "../../../styles/components/lesson.scss";
 import LessonMonacoEditor from "../components/LessonMonacoEditor";
 import MonacoCodeBlock from "features/challenges/components/MonacoCodeBlock";
 import ChallengeSidebar from "features/challenges/components/ChallengeSidebar";
 import { useChallengeTheme } from 'features/challenges/hooks/useChallengeTheme';
 import { useChallengeData } from '../hooks/useChallengeData';
-import { useLessonService } from '../services/lessonService';
+import { useChallengeService } from '../services/challengeService';
 import { useAuth } from "contexts/AuthContext";
+import { MyDeckContext } from "contexts/MyDeckContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 
@@ -22,6 +22,10 @@ const PracticePage = () => {
   const { getThemeStyles, currentTheme } = useChallengeTheme();
   const { user, loading: authLoading } = useAuth();
   const [minTimePassed, setMinTimePassed] = useState(false);
+  const [showSkipSnackbar, setShowSkipSnackbar] = useState(false);
+
+  // Use the lesson service and get topics from context
+  const { completeSubtopicComponent, topics } = useContext(MyDeckContext);
 
   // Minimum loading time effect (like ProfilePage)
   useEffect(() => {
@@ -30,11 +34,45 @@ const PracticePage = () => {
     return () => clearTimeout(timer);
   }, []); // Only on mount
 
+  // Skip button effect - show when topic progress is at least 33%
+  useEffect(() => {
+    const checkTopicProgress = () => {
+      // Add safety check to ensure topics is loaded and is an array
+      if (user && topicId && topics && Array.isArray(topics) && topics.length > 0) {
+        // Find the current topic
+        const currentTopic = topics.find(topic => topic.id === parseInt(topicId));
+        
+        if (currentTopic) {
+          // Check if topic progress is at least 33% (0.33)
+          const topicProgress = currentTopic.progress || 0;
+          const progressPercentage = Math.round(topicProgress * 100);
+          
+          if (progressPercentage >= 33) {
+            const timer = setTimeout(() => {
+              setShowSkipSnackbar(true);
+            }, 2000); // Show after 2 seconds
+
+            const hideTimer = setTimeout(() => {
+              setShowSkipSnackbar(false);
+            }, 10000); // Hide after 10 seconds
+
+            return () => {
+              clearTimeout(timer);
+              clearTimeout(hideTimer);
+            };
+          }
+        }
+      }
+    };
+
+    checkTopicProgress();
+  }, [user, topicId, topics]);
+
   // Use the challenge data hook
   const { challenges, loading, error } = useChallengeData(subtopicId, user);
-
-  // Use the lesson service
-  const { completePractice } = useLessonService();
+  
+  // Use the challenge service to get user progress
+  const { getUserSubtopic } = useChallengeService();
 
   // Challenge State Management
   const [currentChallenge, setCurrentChallenge] = useState('codeFixer');
@@ -46,14 +84,20 @@ const PracticePage = () => {
       isExecuting: false,
       isCompleted: false,
       isCorrect: false,
-      solutionCode: ''
+      solutionCode: '',
+      attempts: 0,
+      maxAttempts: 3,
+      hasSubmittedCurrentAttempt: false
     },
     outputTracing: {
       score: 0,
       correctAnswers: 0,
       selectedOption: null,
       selectedOptions: [],
-      isCompleted: false
+      isCompleted: false,
+      attempts: 0,
+      maxAttempts: 3,
+      hasSubmittedCurrentAttempt: false
     },
     codeCompletion: {
       code: '',
@@ -68,7 +112,10 @@ const PracticePage = () => {
       hoveredPlaceholder: null,
       solutionCode: '',
       explanation: '',
-      userChoices: {} // Store choices with position info
+      userChoices: {}, // Store choices with position info
+      attempts: 0,
+      maxAttempts: 3,
+      hasSubmittedCurrentAttempt: false
     }
   });
 
@@ -100,7 +147,7 @@ const PracticePage = () => {
       if (!isPracticeCompleted) {
         const markPracticeAsCompleted = async () => {
           try {
-            await completePractice(user.id, parseInt(subtopicId));
+            await completeSubtopicComponent(parseInt(subtopicId), 'practice');
             
             // Mark as completed in localStorage to prevent repeated calls
             localStorage.setItem(practiceCompletionKey, 'true');
@@ -112,16 +159,43 @@ const PracticePage = () => {
         markPracticeAsCompleted();
       }
     }
-  }, [allChallengesCompleted, user, subtopicId, completePractice]);
+  }, [allChallengesCompleted, user, subtopicId]);
 
-  // Handle navigation to challenges page
+  // Handle navigation to challenge instructions page
   const handleProceedToChallenges = useCallback(() => {
-    navigate(`/lesson/${topicId}/${subtopicId}/challenges`);
+    navigate(`/lesson/${topicId}/${subtopicId}/challenge-instructions`);
   }, [navigate, topicId, subtopicId]);
 
   // Handle closing the completion popup
   const handleCloseCompletionPopup = useCallback(() => {
     setShowCompletionPopup(false);
+  }, []);
+
+  // Handle skip to challenges
+  const handleSkipToChallenges = useCallback(async () => {
+    setShowSkipSnackbar(false);
+    
+    // Mark practice as completed when skipping (only once for efficiency)
+    const practiceCompletionKey = `practice_skipped_${subtopicId}_${user?.id}`;
+    const isPracticeAlreadySkipped = localStorage.getItem(practiceCompletionKey);
+    
+    if (!isPracticeAlreadySkipped) {
+      try {
+        await completeSubtopicComponent(parseInt(subtopicId), 'practice');
+        // Mark as skipped in localStorage to prevent duplicate calls
+        localStorage.setItem(practiceCompletionKey, 'true');
+      } catch (error) {
+        // Silent error handling - don't show error to user
+        console.warn('Failed to mark practice as completed:', error);
+      }
+    }
+    
+    navigate(`/lesson/${topicId}/${subtopicId}/challenge-instructions`);
+  }, [navigate, topicId, subtopicId, completeSubtopicComponent, user?.id]);
+
+  // Handle closing the skip snackbar
+  const handleCloseSkipSnackbar = useCallback(() => {
+    setShowSkipSnackbar(false);
   }, []);
 
   // Refs
@@ -266,6 +340,23 @@ const PracticePage = () => {
     }
   }, [simulateJavaExecution]);
 
+  // Try Again function for Code Fixer
+  const handleCodeFixerTryAgain = useCallback(() => {
+    setChallengeStates(prev => ({
+      ...prev,
+      codeFixer: {
+        ...prev.codeFixer,
+        code: challenges.codeFixer?.challenge_data?.initial_code || '',
+        output: 'System ready. Waiting for code execution...',
+        isExecuting: false,
+        isCorrect: false,
+        // Keep attempts count, don't reset it
+        isCompleted: false, // Reset completion status to re-enable interactions
+        hasSubmittedCurrentAttempt: false // Reset submission flag to re-enable interactions
+      }
+    }));
+  }, [challenges.codeFixer]);
+
   const checkCodeFixerSolution = useCallback(async () => {
     const currentState = challengeStates.codeFixer;
     if (currentState.isExecuting || currentState.isCompleted) return;
@@ -302,32 +393,57 @@ const PracticePage = () => {
       // Compare the normalized codes
       const isCorrect = normalizedUserCode === normalizedSolutionCode;
       
-      if (isCorrect) {
-        setChallengeStates(prev => ({
-          ...prev,
-          codeFixer: {
-            ...prev.codeFixer,
-            output: '✅ Correct! Code fixed successfully!',
-            isCompleted: true,
-            isCorrect: true,
-            solutionCode: solutionCode
+      // Increment attempt counter
+      const newAttempts = currentState.attempts + 1;
+      const isMaxAttemptsReached = newAttempts >= currentState.maxAttempts;
+      
+              if (isCorrect) {
+          setChallengeStates(prev => ({
+            ...prev,
+            codeFixer: {
+              ...prev.codeFixer,
+              output: `✅ Correct! Code fixed successfully!`,
+              isCompleted: true,
+              isCorrect: true,
+              solutionCode: solutionCode,
+              attempts: newAttempts,
+              hasSubmittedCurrentAttempt: true
+            }
+          }));
+          handleChallengeCompletion('codeFixer', true, 100);
+        } else {
+          // Execute the code to show what output it produces
+          const actualOutput = await executeJavaCode(currentState.code);
+          
+          if (isMaxAttemptsReached) {
+            // After 3 attempts, show solution and mark as completed
+            setChallengeStates(prev => ({
+              ...prev,
+              codeFixer: {
+                ...prev.codeFixer,
+                output: `❌ Incorrect! Your code produces: ${actualOutput}`,
+                isCompleted: true,
+                isCorrect: false,
+                solutionCode: solutionCode,
+                attempts: newAttempts,
+                hasSubmittedCurrentAttempt: true
+              }
+            }));
+          } else {
+            // Show feedback and allow retry
+            setChallengeStates(prev => ({
+              ...prev,
+              codeFixer: {
+                ...prev.codeFixer,
+                output: `❌ Incorrect! Your code produces: ${actualOutput}`,
+                isCompleted: false,
+                isCorrect: false,
+                attempts: newAttempts,
+                hasSubmittedCurrentAttempt: true
+              }
+            }));
           }
-        }));
-        handleChallengeCompletion('codeFixer', true, 100);
-      } else {
-        // Execute the code to show what output it produces
-        const actualOutput = await executeJavaCode(currentState.code);
-        setChallengeStates(prev => ({
-          ...prev,
-          codeFixer: {
-            ...prev.codeFixer,
-            output: `❌ Incorrect! Your code produces: ${actualOutput}`,
-            isCompleted: true,
-            isCorrect: false,
-            solutionCode: solutionCode
-          }
-        }));
-      }
+        }
     } catch (error) {
       setChallengeStates(prev => ({
         ...prev,
@@ -364,6 +480,23 @@ const PracticePage = () => {
       }
     }));
   }, [challengeStates.outputTracing]);
+
+  // Try Again function for Output Tracing
+  const handleOutputTracingTryAgain = useCallback(() => {
+    setChallengeStates(prev => ({
+      ...prev,
+      outputTracing: {
+        ...prev.outputTracing,
+        selectedOptions: [],
+        isCompleted: false,
+        score: 0,
+        feedback: '',
+        detailedFeedback: '',
+        // Keep attempts count, don't reset it
+        hasSubmittedCurrentAttempt: false // Reset submission flag to re-enable interactions
+      }
+    }));
+  }, []);
 
   const validateOutputTracing = useCallback(() => {
     const currentState = challengeStates.outputTracing;
@@ -418,19 +551,44 @@ const PracticePage = () => {
       }
     }
     
-    setChallengeStates(prev => ({
-      ...prev,
-      outputTracing: {
-        ...prev.outputTracing,
-        isCompleted: true,
-        score: score,
-        feedback: feedback,
-        detailedFeedback: detailedFeedback
-      }
-    }));
+    // Increment attempt counter
+    const newAttempts = currentState.attempts + 1;
+    const isMaxAttemptsReached = newAttempts >= currentState.maxAttempts;
+    
+    if (isCorrect || isMaxAttemptsReached) {
+      // Mark as completed if correct OR max attempts reached
+      setChallengeStates(prev => ({
+        ...prev,
+        outputTracing: {
+          ...prev.outputTracing,
+          isCompleted: true,
+          score: score,
+          feedback: feedback,
+          detailedFeedback: detailedFeedback,
+          attempts: newAttempts,
+          hasSubmittedCurrentAttempt: true
+        }
+      }));
+    } else {
+      // Allow retry if not correct and not max attempts
+      setChallengeStates(prev => ({
+        ...prev,
+        outputTracing: {
+          ...prev.outputTracing,
+          isCompleted: false,
+          score: score,
+          feedback: feedback,
+          detailedFeedback: detailedFeedback,
+          attempts: newAttempts,
+          hasSubmittedCurrentAttempt: true
+        }
+      }));
+    }
 
-    // Call completion handler
-    handleChallengeCompletion('outputTracing', isCorrect, score);
+    // Call completion handler only when actually completed
+    if (isCorrect || isMaxAttemptsReached) {
+      handleChallengeCompletion('outputTracing', isCorrect, score);
+    }
   }, [challengeStates.outputTracing, challenges.outputTracing, handleChallengeCompletion]);
 
 
@@ -464,6 +622,24 @@ const PracticePage = () => {
     }));
   }, [challengeStates.codeCompletion.isCompleted, challengeStates.codeCompletion.userChoices]);
 
+  // Try Again function for Code Completion
+  const handleCodeCompletionTryAgain = useCallback(() => {
+    setChallengeStates(prev => ({
+      ...prev,
+      codeCompletion: {
+        ...prev.codeCompletion,
+        userChoices: {},
+        usedChoices: [],
+        isCompleted: false,
+        allCorrect: false,
+        score: 0,
+        consoleOutput: 'System ready. Waiting for code execution...',
+        // Keep attempts count, don't reset it
+        hasSubmittedCurrentAttempt: false // Reset submission flag to re-enable interactions
+      }
+    }));
+  }, []);
+
   const checkCodeCompletionSolution = useCallback(() => {
     const currentState = challengeStates.codeCompletion;
     if (currentState.isCompleted) return;
@@ -496,17 +672,41 @@ const PracticePage = () => {
     const solutionCode = challenges.codeCompletion?.challenge_data?.solution_code || 'No solution available';
     const explanation = completionSlots.length > 0 ? completionSlots[0].explanation : 'No explanation available';
 
-    setChallengeStates(prev => ({
-      ...prev,
-      codeCompletion: {
-        ...prev.codeCompletion,
-        score: totalScore,
-        allCorrect,
-        isCompleted: true,
-        solutionCode: solutionCode,
-        explanation: explanation
-      }
-    }));
+    // Increment attempt counter
+    const newAttempts = currentState.attempts + 1;
+    const isMaxAttemptsReached = newAttempts >= currentState.maxAttempts;
+    
+    if (allCorrect || isMaxAttemptsReached) {
+      // Mark as completed if correct OR max attempts reached
+      setChallengeStates(prev => ({
+        ...prev,
+        codeCompletion: {
+          ...prev.codeCompletion,
+          score: totalScore,
+          allCorrect,
+          isCompleted: true,
+          solutionCode: solutionCode,
+          explanation: explanation,
+          attempts: newAttempts,
+          hasSubmittedCurrentAttempt: true
+        }
+      }));
+    } else {
+      // Allow retry if not correct and not max attempts
+      setChallengeStates(prev => ({
+        ...prev,
+        codeCompletion: {
+          ...prev.codeCompletion,
+          score: totalScore,
+          allCorrect,
+          isCompleted: false,
+          solutionCode: '',
+          explanation: '',
+          attempts: newAttempts,
+          hasSubmittedCurrentAttempt: true
+        }
+      }));
+    }
 
     // Update console output with result
     if (allCorrect) {
@@ -514,7 +714,7 @@ const PracticePage = () => {
         ...prev,
         codeCompletion: {
           ...prev.codeCompletion,
-          consoleOutput: '✅ Perfect! All placeholders completed correctly!'
+          consoleOutput: `✅ Perfect! All placeholders completed correctly!`
         }
       }));
     } else if (correctCount > 0) {
@@ -530,12 +730,15 @@ const PracticePage = () => {
         ...prev,
         codeCompletion: {
           ...prev.codeCompletion,
-          consoleOutput: '❌ No correct answers found. Try again!'
+          consoleOutput: `❌ No correct answers found. Try again!`
         }
       }));
     }
 
-    handleChallengeCompletion('codeCompletion', allCorrect, totalScore);
+    // Call completion handler only when actually completed
+    if (allCorrect || isMaxAttemptsReached) {
+      handleChallengeCompletion('codeCompletion', allCorrect, totalScore);
+    }
   }, [challengeStates.codeCompletion, challenges.codeCompletion, handleChallengeCompletion]);
 
 
@@ -639,6 +842,55 @@ const PracticePage = () => {
     });
   }, [challenges.codeCompletion, challengeStates.codeCompletion.usedChoices]);
 
+  // Get mode instructions (same as ChallengeSidebar)
+  const getModeInstructions = (mode) => {
+    switch (mode) {
+      case "code_completion":
+        return {
+          title: "🧩 CODE COMPLETION",
+          description: "Fill in the missing code blocks to complete the program logic as described in the scenario.",
+          instructions: [
+            { icon: "🖱️", text: "Drag and drop the code choices into the marked positions" },
+            { icon: "🔄", text: "Click on filled choices to remove them if needed" },
+            { icon: "✅", text: "Ensure the code produces the expected output" },
+            { icon: "🔍", text: "Check for proper syntax and logic flow" }
+          ]
+        };
+      case "code_fixer":
+        return {
+          title: "🛠️ CODE FIXER",
+          description: "Identify and fix all errors in the code to restore correct functionality.",
+          instructions: [
+            { icon: "🔧", text: "Edit the code to fix all syntax errors and logical issues" },
+            { icon: "✅", text: "Make sure the code produces the expected output" },
+            { icon: "📝", text: "Check for missing semicolons, brackets, and other syntax elements" },
+            { icon: "🔍", text: "Verify that variable declarations and method calls are correct" }
+          ]
+        };
+      case "output_tracing":
+        return {
+          title: "🔍 OUTPUT TRACING",
+          description: "Analyze the code and predict the output that will be produced when it runs.",
+          instructions: [
+            { icon: "🧠", text: "Analyze the code and predict the output" },
+            { icon: "📋", text: "Select the correct output from the choices below" },
+            { icon: "🔢", text: "Consider the order and content of program outputs" },
+            { icon: "👣", text: "Trace through the code step by step" }
+          ]
+        };
+      default:
+        return {
+          title: "🎯 CHALLENGE",
+          description: "Complete the challenge as described in the scenario.",
+          instructions: [
+            { icon: "📖", text: "Follow the scenario description carefully" },
+            { icon: "✅", text: "Complete all required tasks" },
+            { icon: "📤", text: "Submit your answer when ready" }
+          ]
+        };
+    }
+  };
+
   // Loading state (comprehensive like ProfilePage)
   if (authLoading || !user || !minTimePassed || loading) {
     return <LoadingScreen message="Loading practice challenges..." />;
@@ -655,146 +907,224 @@ const PracticePage = () => {
     return <ErrorScreen message="No practice challenges available for this lesson." />;
   }
 
-  return (
-    <LessonThemeProvider>
-      <div className={styles.container}>
-        {/* Left Sidebar */}
-        <div className={styles.sidebar}>
-          <div className={styles.sidebarContent}>
-            <div className={styles.sidebarSection}>
-              <div className={styles.sectionHeader}>
-                <span className={styles.sectionIcon}>🧩</span>
-                <h3>PRACTICE CHALLENGES</h3>
-              </div>
-              <p>Complete interactive coding challenges to test your understanding and improve your programming skills.</p>
+    return (
+    <div className={`practice-container theme-${currentTheme || 'space'}`}>
+      {/* Left Sidebar */}
+      <div className="sidebar">
+        <div className="sidebarContent">
+          <div className="sidebarSection">
+            <div className="sectionHeader">
+              <span className="sectionIcon">🧩</span>
+              <h3>PRACTICE CHALLENGES</h3>
             </div>
-
-            <div className={styles.sidebarSection}>
-              <div className={styles.sectionHeader}>
-                <span className={styles.sectionIcon}>✏️</span>
-                <h3>SCENARIO:</h3>
-              </div>
-              <p>This section displays the scenario description for each challenge. The scenario provides context and explains what you need to accomplish in the current challenge.</p>
-            </div>
+            <p>Complete interactive coding challenges to test your understanding and improve your programming skills.</p>
           </div>
 
-          <button className={styles.backButton} onClick={() => navigate(`/lesson/${topicId}/${subtopicId}`)}>
-            ← Back to Lessons
-          </button>
+          <div className="sidebarSection">
+            <div className="sectionHeader">
+              <span className="sectionIcon">✏️</span>
+              <h3>SCENARIO:</h3>
+            </div>
+            <p>This section displays the scenario description for each challenge. The scenario provides context and explains what you need to accomplish in the current challenge.</p>
+          </div>
         </div>
 
-        <div className={styles.lessonContainer}>
-          {/* Code Fixer Challenge */}
-          {challenges.codeFixer && (
-            <div className={styles.codeFixerChallenge}>
-              <div className={styles.challengeTitle}>CODE FIXER CHALLENGE</div>
-              
-              <div className={styles.codeEditorContainer}>
-                <h3>EDIT THE CODE:</h3>
-                <LessonMonacoEditor
-                  value={challengeStates.codeFixer.code}
-                  onChange={handleCodeFixerEditorChange}
-                  language="java"
-                  height="100%"
-                  onMount={handleCodeFixerEditorMount}
-                  options={{
-                    readOnly: challengeStates.codeFixer.isCompleted,
-                    minimap: { enabled: false },
-                    fontSize: 17,
-                    wordWrap: 'on',
-                    automaticLayout: true,
-                    scrollBeyondLastLine: false,
-                    renderWhitespace: 'selection',
-                    formatOnPaste: true,
-                    formatOnType: true,
-                    lineNumbers: 'on',
-                    folding: true,
-                    lineDecorationsWidth: 10,
-                    padding: { top: 15, bottom: 15, left: 15, right: 15 },
-                    tabSize: 2,
-                    fontFamily: 'Fira Code, monospace',
-                    fontWeight: '400',
-                    lineHeight: 24,
-                    glyphMargin: false,
-                    lineNumbersMinChars: 3,
-                    renderLineHighlight: 'all',
-                    scrollbar: {
-                      vertical: 'hidden',
-                      horizontal: 'hidden',
-                      useShadows: false,
-                      verticalHasArrows: false,
-                      horizontalHasArrows: false,
-                      verticalScrollbarSize: 0,
-                      horizontalScrollbarSize: 0,
-                    },
-                    fixedOverflowWidgets: true,
-                    overviewRulerBorder: false,
-                    hideCursorInOverviewRuler: true,
-                  }}
-                />
+        <button className="backButton" onClick={() => navigate(`/lesson/${topicId}/${subtopicId}`)}>
+          ← Back to Lessons
+        </button>
+      </div>
+
+      <div className="practicePageContainer">
+                  {/* Code Fixer Challenge */}
+        {challenges.codeFixer && (
+          <div className="codeFixerChallenge">
+            <div className="challengeTitle">CODE FIXER CHALLENGE</div>
+            
+            {/* Attempts Indicator - Top Right */}
+            {challengeStates.codeFixer.attempts > 0 && !challengeStates.codeFixer.isCompleted && (
+              <div className="attemptsIndicator">
+                <span className="attemptsBadge">
+                  {challengeStates.codeFixer.maxAttempts - challengeStates.codeFixer.attempts} attempts left
+                </span>
               </div>
+            )}
 
-              {/* Expected Output Section */}
-              <div className={styles.expectedOutput}>
-                <h3>Expected Output:</h3>
-                <div className={styles.outputText}>
-                  {challenges.codeFixer?.challenge_data?.expected_output?.[0] || 'No expected output available'}
-                </div>
-              </div>
-
-              {/* Solution Code Section - Only show after submission */}
-              {challengeStates.codeFixer.isCompleted && challengeStates.codeFixer.solutionCode && (
-                <div className={styles.solutionCode}>
-                  <h3>Solution Code:</h3>
-                  <div className={styles.codeBlock}>
-                    <pre>{challengeStates.codeFixer.solutionCode}</pre>
-                  </div>
-                </div>
-              )}
-
-              {/* Feedback after validation */}
-              {challengeStates.codeFixer.isCompleted && (
-                <div className={styles.feedback}>
-                  <div className={challengeStates.codeFixer.isCorrect ? styles.feedbackCorrect : styles.feedbackWrong}>
-                    <strong>
-                      {challengeStates.codeFixer.isCorrect 
-                        ? "✅ Correct! Code fixed successfully!" 
-                        : "❌ Incorrect! Your code needs fixing."
-                      }
-                    </strong>
-                  </div>
-                  {!challengeStates.codeFixer.isCorrect && (
-                    <div className={styles.detailedFeedback}>
-                      Your code produced: "{challengeStates.codeFixer.output}"
-                    </div>
-                  )}
-                </div>
-              )}
-
-
-
-
-              {/* Submit Button - Only show when not completed */}
-              {!challengeStates.codeFixer.isCompleted && (
-                <div className={styles.submitButton}>
-                  <button
-                    onClick={checkCodeFixerSolution}
-                    disabled={challengeStates.codeFixer.isExecuting}
-                    className={challengeStates.codeFixer.isExecuting ? styles.submitting : ''}
-                  >
-                    {challengeStates.codeFixer.isExecuting ? 'Executing...' : 'Submit'}
-                  </button>
-                </div>
-              )}
+            {/* Instructions Section */}
+            <div className="instructionSection">
+              <h3 className="instructionTitle">
+                Instruction:
+              </h3>
+              <p className="instructionDescription">
+                {getModeInstructions('code_fixer').description}
+              </p>
+              <ul className="instructionList">
+                {getModeInstructions('code_fixer').instructions.map((instruction, index) => (
+                  <li key={index} className="instructionItem">
+                    <span className="instructionIcon">
+                      {instruction.icon}
+                    </span>{" "}
+                    {instruction.text}
+                  </li>
+                ))}
+              </ul>
             </div>
-          )}
+
+              
+                          <div className="codeEditorContainer">
+              <h3>EDIT THE CODE:</h3>
+              <LessonMonacoEditor
+                value={challengeStates.codeFixer.code}
+                onChange={handleCodeFixerEditorChange}
+                language="java"
+                height="100%"
+                onMount={handleCodeFixerEditorMount}
+                options={{
+                  readOnly: challengeStates.codeFixer.isCompleted || challengeStates.codeFixer.hasSubmittedCurrentAttempt,
+                  minimap: { enabled: false },
+                  fontSize: 17,
+                  wordWrap: 'on',
+                  automaticLayout: true,
+                  scrollBeyondLastLine: false,
+                  renderWhitespace: 'selection',
+                  formatOnPaste: true,
+                  formatOnType: true,
+                  lineNumbers: 'on',
+                  folding: true,
+                  lineDecorationsWidth: 10,
+                  padding: { top: 15, bottom: 15, left: 15, right: 15 },
+                  tabSize: 2,
+                  fontFamily: 'Fira Code, monospace',
+                  fontWeight: '400',
+                  lineHeight: 24,
+                  glyphMargin: false,
+                  lineNumbersMinChars: 3,
+                  renderLineHighlight: 'all',
+                  scrollbar: {
+                    vertical: 'hidden',
+                    horizontal: 'hidden',
+                    useShadows: false,
+                    verticalHasArrows: false,
+                    horizontalHasArrows: false,
+                    verticalScrollbarSize: 0,
+                    horizontalScrollbarSize: 0,
+                  },
+                  fixedOverflowWidgets: true,
+                  overviewRulerBorder: false,
+                  hideCursorInOverviewRuler: true,
+                }}
+              />
+            </div>
+
+                          {/* Expected Output Section */}
+            <div className="expectedOutput">
+              <h3>Expected Output:</h3>
+              <div className="outputText">
+                {challenges.codeFixer?.challenge_data?.expected_output?.[0] || 'No expected output available'}
+              </div>
+            </div>
+
+            {/* Feedback after validation - Show for all attempts */}
+            {challengeStates.codeFixer.hasSubmittedCurrentAttempt && (
+              <div className="feedback">
+                <div className={challengeStates.codeFixer.isCorrect ? "feedbackCorrect" : "feedbackWrong"}>
+                  <strong>
+                    {challengeStates.codeFixer.isCorrect 
+                      ? "✅ Correct! Code fixed successfully!" 
+                      : "❌ Incorrect! Your code needs fixing."
+                    }
+                  </strong>
+                </div>
+                {!challengeStates.codeFixer.isCorrect && (
+                  <div className="detailedFeedback">
+                    Your code produced: "{challengeStates.codeFixer.output}"
+                  </div>
+                )}
+                
+                {/* Solution Code Section - Show after completion (correct OR 3 attempts) */}
+                {challengeStates.codeFixer.isCompleted && challengeStates.codeFixer.solutionCode && (
+                  <div className="solutionCode">
+                    <h3>Solution Code:</h3>
+                    <div className="codeBlock">
+                      <pre>{challengeStates.codeFixer.solutionCode}</pre>
+                    </div>
+                  </div>
+                )}
+
+                {/* Explanation Section - Show after completion (correct OR 3 attempts) */}
+                {challengeStates.codeFixer.isCompleted && challenges.codeFixer?.challenge_data?.explanation && (
+                  <div className="explanation">
+                    <h3>Explanation:</h3>
+                    <div className="explanationText">
+                      {challenges.codeFixer.challenge_data.explanation}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+
+
+                          {/* Submit Button - Only show when not submitted and not completed */}
+            {!challengeStates.codeFixer.hasSubmittedCurrentAttempt && !challengeStates.codeFixer.isCompleted && (
+              <div className="submitButton">
+                <button
+                  onClick={checkCodeFixerSolution}
+                  disabled={challengeStates.codeFixer.isExecuting}
+                  className={challengeStates.codeFixer.isExecuting ? "submitting" : ''}
+                >
+                  {challengeStates.codeFixer.isExecuting ? 'Executing...' : 'Submit'}
+                </button>
+              </div>
+            )}
+
+            {/* Try Again Button - Show after submission but before completion */}
+            {challengeStates.codeFixer.hasSubmittedCurrentAttempt && 
+             challengeStates.codeFixer.attempts < challengeStates.codeFixer.maxAttempts && 
+             !challengeStates.codeFixer.isCompleted && (
+              <div className="tryAgainButton">
+                <button onClick={handleCodeFixerTryAgain}>
+                  Try Again
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
           {/* Output Tracing Challenge */}
           {challenges.outputTracing && (
-            <div className={styles.outputTracingChallenge}>
-              <div className={styles.challengeTitle}>OUTPUT TRACING CHALLENGE</div>
+            <div className="outputTracingChallenge">
+              <div className="challengeTitle">OUTPUT TRACING CHALLENGE</div>
               
-              <div className={styles.codeDisplayContainer}>
+              {/* Attempts Indicator - Top Right */}
+              {challengeStates.outputTracing.attempts > 0 && !challengeStates.outputTracing.isCompleted && (
+                <div className="attemptsIndicator">
+                  <span className="attemptsBadge">
+                    {challengeStates.outputTracing.maxAttempts - challengeStates.outputTracing.attempts} attempts left
+                  </span>
+                </div>
+              )}
+
+              {/* Instructions Section */}
+              <div className="instructionSection">
+                <h3 className="instructionTitle">
+                  Instruction:
+                </h3>
+                <p className="instructionDescription">
+                  {getModeInstructions('output_tracing').description}
+                </p>
+                <ul className="instructionList">
+                  {getModeInstructions('output_tracing').instructions.map((instruction, index) => (
+                    <li key={index} className="instructionItem">
+                      <span className="instructionIcon">
+                        {instruction.icon}
+                      </span>{" "}
+                      {instruction.text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="codeDisplayContainer">
                 <h3>CODE TO ANALYZE:</h3>
                 <LessonMonacoEditor
                   value={challenges.outputTracing.challenge_data.code}
@@ -838,14 +1168,14 @@ const PracticePage = () => {
                 />
               </div>
 
-              <div className={styles.questionContainer}>
+              <div className="questionContainer">
                 <h3>What is the output of the following code?</h3>
-                <div className={styles.selectionInfo}>
+                <div className="selectionInfo">
                   Selected: {challengeStates.outputTracing.selectedOptions?.length || 0} option(s)
                 </div>
               </div>
 
-              <div className={styles.choicesContainer}>
+              <div className="choicesContainer">
                 {challenges.outputTracing.challenge_data.choices.map((choice, i) => {
                   const isSelected = challengeStates.outputTracing.selectedOptions?.includes(choice);
                   const expectedOutputs = challenges.outputTracing?.challenge_data?.expected_output || [];
@@ -854,20 +1184,21 @@ const PracticePage = () => {
                   return (
                     <button
                       key={i}
-                      className={`${styles.choiceButton} ${
+                      className={`choiceButton ${
                         isSelected
                           ? challengeStates.outputTracing.isCompleted
                             ? isCorrect
-                              ? styles.correct
-                              : styles.wrong
-                            : styles.selected
+                              ? "correct"
+                              : "wrong"
+                            : "selected"
                           : ""
                       }`}
                       onClick={() =>
                         !challengeStates.outputTracing.isCompleted && 
+                        !challengeStates.outputTracing.hasSubmittedCurrentAttempt &&
                         handleOutputTracingOptionSelect(choice)
                       }
-                      disabled={challengeStates.outputTracing.isCompleted}
+                      disabled={challengeStates.outputTracing.isCompleted || challengeStates.outputTracing.hasSubmittedCurrentAttempt}
                     >
                       {choice}
                     </button>
@@ -875,11 +1206,13 @@ const PracticePage = () => {
                 })}
               </div>
 
+
+
               {/* Validation button */}
-              {!challengeStates.outputTracing.isCompleted && (
-                <div className={styles.submitButton}>
+              {!challengeStates.outputTracing.hasSubmittedCurrentAttempt && !challengeStates.outputTracing.isCompleted && (
+                <div className="submitButton">
                   <button
-                    className={styles.submitButton}
+                    className="submitButton"
                     onClick={validateOutputTracing}
                     disabled={!challengeStates.outputTracing.selectedOptions || challengeStates.outputTracing.selectedOptions.length === 0}
                   >
@@ -888,22 +1221,49 @@ const PracticePage = () => {
                 </div>
               )}
 
+
+
               {/* Feedback after validation */}
-              {challengeStates.outputTracing.isCompleted && (
-                <div className={styles.feedback}>
-                  <div className={challengeStates.outputTracing.score === 100 ? styles.feedbackCorrect : styles.feedbackWrong}>
+              {challengeStates.outputTracing.hasSubmittedCurrentAttempt && (
+                <div className="feedback">
+                  <div className={challengeStates.outputTracing.score === 100 ? "feedbackCorrect" : "feedbackWrong"}>
                     <strong>{challengeStates.outputTracing.feedback}</strong>
                   </div>
                   {challengeStates.outputTracing.detailedFeedback && (
-                    <div className={styles.detailedFeedback}>
+                    <div className="detailedFeedback">
                       {challengeStates.outputTracing.detailedFeedback}
                     </div>
                   )}
-                  {challenges.outputTracing.challenge_data.explanation && (
-                    <div className={styles.explanation}>
-                      <strong>Explanation:</strong> {challenges.outputTracing.challenge_data.explanation}
+                  {/* Solution Code Section - Show after completion (correct OR 3 attempts) */}
+                  {challengeStates.outputTracing.isCompleted && challenges.outputTracing.challenge_data.solution_code && (
+                    <div className="solutionCode">
+                      <h3>Solution Code:</h3>
+                      <div className="codeBlock">
+                        <pre>{challenges.outputTracing.challenge_data.solution_code}</pre>
+                      </div>
                     </div>
                   )}
+
+                  {/* Explanation Section - Show after completion (correct OR 3 attempts) */}
+                  {challengeStates.outputTracing.isCompleted && challenges.outputTracing.challenge_data.explanation && (
+                    <div className="explanation">
+                      <h3>Explanation:</h3>
+                      <div className="explanationText">
+                        {challenges.outputTracing.challenge_data.explanation}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Try Again Button - Show after submission but before completion */}
+              {challengeStates.outputTracing.hasSubmittedCurrentAttempt && 
+               challengeStates.outputTracing.attempts < challengeStates.outputTracing.maxAttempts && 
+               !challengeStates.outputTracing.isCompleted && (
+                <div className="tryAgainButton">
+                  <button onClick={handleOutputTracingTryAgain}>
+                    Try Again
+                  </button>
                 </div>
               )}
             </div>
@@ -911,13 +1271,50 @@ const PracticePage = () => {
 
           {/* Code Completion Challenge */}
           {challenges.codeCompletion && (
-            <div className={styles.codeCompletionChallenge}>
-              <div className={styles.challengeTitle}>CODE COMPLETION CHALLENGE</div>
+            <div className="codeCompletionChallenge">
+              <div className="challengeTitle">CODE COMPLETION CHALLENGE</div>
+              
+              {/* Attempts Indicator - Top Right */}
+              {challengeStates.codeCompletion.attempts > 0 && !challengeStates.codeCompletion.isCompleted && (
+                <div className="attemptsIndicator">
+                  <span className="attemptsBadge">
+                    {challengeStates.codeCompletion.maxAttempts - challengeStates.codeCompletion.attempts} attempts left
+                  </span>
+                </div>
+              )}
+
+              {/* Instructions Section */}
+              <div className="instructionSection">
+                <h3 className="instructionTitle">
+                  Instruction:
+                </h3>
+                <p className="instructionDescription">
+                  {getModeInstructions('code_completion').description}
+                </p>
+                <ul className="instructionList">
+                  {getModeInstructions('code_completion').instructions.map((instruction, index) => (
+                    <li key={index} className="instructionItem">
+                      <span className="instructionIcon">
+                        {instruction.icon}
+                      </span>{" "}
+                      {instruction.text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
               
               {/* Choices Bar */}
               <div 
-                className={`${styles.choicesBar} ${challengeStates.codeCompletion.isDragging ? styles.dragOver : ''}`}
+                className={`choicesBar ${challengeStates.codeCompletion.isDragging ? 'dragOver' : ''}`}
                 onDragOver={(e) => {
+                  // Disable drag and drop after submission
+                  if (challengeStates.codeCompletion.hasSubmittedCurrentAttempt || challengeStates.codeCompletion.isCompleted) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.dataTransfer.dropEffect = 'none';
+                    return;
+                  }
+                  
                   e.preventDefault();
                   e.stopPropagation();
                   
@@ -945,7 +1342,14 @@ const PracticePage = () => {
                     codeCompletion: { ...prev.codeCompletion, isDragging: false }
                   }));
                 }}
-                onDrop={(e) => {
+                                  onDrop={(e) => {
+                    // Disable drop after submission
+                    if (challengeStates.codeCompletion.hasSubmittedCurrentAttempt || challengeStates.codeCompletion.isCompleted) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return;
+                    }
+                  
                   e.preventDefault();
                   e.stopPropagation();
                   
@@ -1011,12 +1415,12 @@ const PracticePage = () => {
                 {codeCompletionAvailableChoices.map((choice, idx) => (
                   <div
                     key={idx}
-                    className={`${styles.choiceItem} ${
-                      challengeStates.codeCompletion.currentDragItem?.value === choice ? styles.dragging : ''
+                    className={`choiceItem ${
+                      challengeStates.codeCompletion.currentDragItem?.value === choice ? 'dragging' : ''
                     }`}
-                    draggable={!challengeStates.codeCompletion.isCompleted}
+                    draggable={!challengeStates.codeCompletion.isCompleted && !challengeStates.codeCompletion.hasSubmittedCurrentAttempt}
                     onDragStart={(e) => {
-                      if (challengeStates.codeCompletion.isCompleted) return;
+                      if (challengeStates.codeCompletion.isCompleted || challengeStates.codeCompletion.hasSubmittedCurrentAttempt) return;
                       
                       setChallengeStates(prev => ({
                         ...prev,
@@ -1034,6 +1438,8 @@ const PracticePage = () => {
                       e.dataTransfer.setData('application/json', JSON.stringify(dragData));
                     }}
                     onDragEnd={() => {
+                      if (challengeStates.codeCompletion.isCompleted || challengeStates.codeCompletion.hasSubmittedCurrentAttempt) return;
+                      
                       setChallengeStates(prev => ({
                         ...prev,
                         codeCompletion: { ...prev.codeCompletion, isDragging: false }
@@ -1049,12 +1455,12 @@ const PracticePage = () => {
               </div>
               
               {/* Code Editor */}
-              <div className={styles.codeEditorContainer}>
+              <div className="codeEditorContainer">
                 <h3>COMPLETE THE CODE:</h3>
                 <div
                   onDragOver={(e) => {
-                    // Don't allow drag over when completed
-                    if (challengeStates.codeCompletion.isCompleted) {
+                    // Don't allow drag over when completed or submitted
+                    if (challengeStates.codeCompletion.isCompleted || challengeStates.codeCompletion.hasSubmittedCurrentAttempt) {
                       e.preventDefault();
                       return;
                     }
@@ -1063,7 +1469,7 @@ const PracticePage = () => {
                     e.dataTransfer.dropEffect = 'copy';
                   }}
                   onDrop={(e) => {
-                    if (challengeStates.codeCompletion.isCompleted) {
+                    if (challengeStates.codeCompletion.isCompleted || challengeStates.codeCompletion.hasSubmittedCurrentAttempt) {
                       e.preventDefault();
                       return;
                     }
@@ -1157,7 +1563,7 @@ const PracticePage = () => {
                     userChoices={challengeStates.codeCompletion.userChoices}
                     placedChoicePositions={processedCodeCompletion.finalChoicePositions}
                     timerState="active"
-                    disabled={challengeStates.codeCompletion.isCompleted}
+                    disabled={challengeStates.codeCompletion.isCompleted || challengeStates.codeCompletion.hasSubmittedCurrentAttempt}
                     isResumed={false}
                     onMount={(editor, monacoInstance) => {
                       editorRefs.current.codeCompletion = editor;
@@ -1165,7 +1571,7 @@ const PracticePage = () => {
                       
                       // Set up click-to-remove functionality for placed choices
                       const handleMouseDown = (e) => {
-                        if (challengeStates.codeCompletion.isCompleted) return;
+                        if (challengeStates.codeCompletion.isCompleted || challengeStates.codeCompletion.hasSubmittedCurrentAttempt) return;
                         
                         const model = editor.getModel();
                         if (!model) return;
@@ -1241,17 +1647,17 @@ const PracticePage = () => {
               </div>
 
               {/* Expected Output Section */}
-              <div className={styles.expectedOutput}>
+              <div className="expectedOutput">
                 <h3>Expected Output:</h3>
-                <div className={styles.outputText}>
+                <div className="outputText">
                   {challenges.codeCompletion?.challenge_data?.expected_output?.[0] || 'No expected output available'}
                 </div>
               </div>
 
               {/* Feedback after validation */}
-              {challengeStates.codeCompletion.isCompleted && (
-                <div className={styles.feedback}>
-                  <div className={challengeStates.codeCompletion.allCorrect ? styles.feedbackCorrect : styles.feedbackWrong}>
+              {challengeStates.codeCompletion.hasSubmittedCurrentAttempt && (
+                <div className="feedback">
+                  <div className={challengeStates.codeCompletion.allCorrect ? "feedbackCorrect" : "feedbackWrong"}>
                     <strong>
                       {challengeStates.codeCompletion.allCorrect 
                         ? "✅ Perfect! All placeholders completed correctly!" 
@@ -1260,7 +1666,7 @@ const PracticePage = () => {
                     </strong>
                   </div>
                   {!challengeStates.codeCompletion.allCorrect && (
-                    <div className={styles.detailedFeedback}>
+                    <div className="detailedFeedback">
                       {(() => {
                         const completionSlots = challenges.codeCompletion?.challenge_data.completion_slots || [];
                         const userChoices = challengeStates.codeCompletion.userChoices || {};
@@ -1274,41 +1680,76 @@ const PracticePage = () => {
                       })()}
                     </div>
                   )}
+                  
+                  {/* Solution Code Section - Show after completion (correct OR 3 attempts) */}
+                  {challengeStates.codeCompletion.isCompleted && challengeStates.codeCompletion.solutionCode && (
+                    <div className="solutionCode">
+                      <h3>Solution Code:</h3>
+                      <div className="codeBlock">
+                        <pre>{challengeStates.codeCompletion.solutionCode}</pre>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Alternative Solution Code from challenge data if available */}
+                  {challengeStates.codeCompletion.isCompleted && 
+                   !challengeStates.codeCompletion.solutionCode && 
+                   challenges.codeCompletion?.challenge_data?.solution_code && (
+                    <div className="solutionCode">
+                      <h3>Solution Code:</h3>
+                      <div className="codeBlock">
+                        <pre>{challenges.codeCompletion.challenge_data.solution_code}</pre>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Explanation Section - Show after completion (correct OR 3 attempts) */}
+                  {challengeStates.codeCompletion.isCompleted && challengeStates.codeCompletion.explanation && (
+                    <div className="explanation">
+                      <h3>Explanation:</h3>
+                      <div className="explanationText">
+                        {challengeStates.codeCompletion.explanation}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Alternative Explanation from challenge data if available */}
+                  {challengeStates.codeCompletion.isCompleted && 
+                   !challengeStates.codeCompletion.explanation && 
+                   challenges.codeCompletion?.challenge_data?.explanation && (
+                    <div className="explanation">
+                      <h3>Explanation:</h3>
+                      <div className="explanationText">
+                        {challenges.codeCompletion.challenge_data.explanation}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
 
-              {/* Solution Code Section - Only show after submission */}
-              {challengeStates.codeCompletion.isCompleted && challengeStates.codeCompletion.solutionCode && (
-                <div className={styles.solutionCode}>
-                  <h3>Solution Code:</h3>
-                  <div className={styles.codeBlock}>
-                    <pre>{challengeStates.codeCompletion.solutionCode}</pre>
-                  </div>
-                </div>
-              )}
 
 
-              {/* Explanation Section - Only show after submission */}
-              {challengeStates.codeCompletion.isCompleted && challengeStates.codeCompletion.explanation && (
-                <div className={styles.explanation}>
-                  <h3>Explanation:</h3>
-                  <div className={styles.explanationText}>
-                    {challengeStates.codeCompletion.explanation}
-                  </div>
-                </div>
-              )}
-
-
-              {/* Submit Button - Only show when not completed */}
-              {!challengeStates.codeCompletion.isCompleted && (
-                <div className={styles.submitButton}>
+              {/* Submit Button - Only show when not submitted and not completed */}
+              {!challengeStates.codeCompletion.hasSubmittedCurrentAttempt && !challengeStates.codeCompletion.isCompleted && (
+                <div className="submitButton">
                   <button
                     onClick={checkCodeCompletionSolution}
-                    disabled={challengeStates.codeCompletion.isCompleted}
-                    className={challengeStates.codeCompletion.isCompleted ? styles.submitted : ''}
+                    disabled={challengeStates.codeCompletion.isCompleted || challengeStates.codeCompletion.hasSubmittedCurrentAttempt}
+                    className={challengeStates.codeCompletion.isCompleted ? 'submitted' : ''}
                   >
-                    {challengeStates.codeCompletion.isCompleted ? "Submitted" : "Submit"}
+                    Submit
+                  </button>
+                </div>
+              )}
+
+              {/* Try Again Button - Show after submission but before completion */}
+              {challengeStates.codeCompletion.hasSubmittedCurrentAttempt && 
+               challengeStates.codeCompletion.attempts < challengeStates.codeCompletion.maxAttempts && 
+               !challengeStates.codeCompletion.isCompleted && (
+                <div className="tryAgainButton">
+                  <button onClick={handleCodeCompletionTryAgain}>
+                    Try Again
                   </button>
                 </div>
               )}
@@ -1321,30 +1762,51 @@ const PracticePage = () => {
 
         {/* Completion Button - Shows when all challenges are completed */}
         {allChallengesCompleted && showCompletionPopup && (
-          <div className={styles.completionSection}>
-            <div className={styles.completionMessage}>
+          <div className="completionSection">
+            <div className="completionMessage">
               <button 
-                className={styles.closeButton}
+                className="closeButton"
                 onClick={handleCloseCompletionPopup}
                 aria-label="Close popup"
               >
                 ×
               </button>
               <h3>🎯 Practice Attempted!</h3>
-              <p>You've attempted all practice challenges. Ready to take on the real challenges?</p>
+              <p>You've attempted all practice challenges. Ready to learn about the challenge format?</p>
             </div>
-            <div className={styles.completionActions}>
+            <div className="completionActions">
               <button
-                className={styles.proceedButton}
+                className="proceedButton"
                 onClick={handleProceedToChallenges}
               >
-                🚀 Proceed to Challenges
+                📚 Take Challenge 
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Skip Button - Shows when topic progress is at least 33% */}
+        {showSkipSnackbar && (
+          <div className="skipSnackbar">
+            <button 
+              className="snackbarCloseButton"
+              onClick={handleCloseSkipSnackbar}
+              aria-label="Close notification"
+            >
+              ×
+            </button>
+            <div className="snackbarContent">
+              <span>Want to skip practice and go straight to challenge?</span>
+              <button 
+                className="snackbarButton"
+                onClick={handleSkipToChallenges}
+              >
+                Skip to Challenge
               </button>
             </div>
           </div>
         )}
       </div>
-    </LessonThemeProvider>
   );
 };
 

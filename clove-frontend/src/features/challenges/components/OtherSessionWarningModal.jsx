@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './OtherSessionWarningModal.module.scss';
+import styles from '../styles/OtherSessionWarningModal.module.scss';
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const OtherSessionWarningModal = ({ 

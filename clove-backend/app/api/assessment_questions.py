@@ -4,6 +4,7 @@ from enum import Enum
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession 
 from app.schemas.assessment_question import AssessmentQuestionRead, AssessmentQuestionCreate, AssessmentQuestionUpdate
+from app.schemas.retention_test import RetentionTestSubmission
 from app.crud.assessment_question import (
     get_by_id, 
     list_for_subtopic, 
@@ -11,7 +12,9 @@ from app.crud.assessment_question import (
     update, 
     delete,
     get_randomized_questions_for_topic,
-    get_randomized_questions_summary
+    get_randomized_questions_summary,
+    get_retention_test_questions,
+    submit_retention_test_answer
 )
 from app.db.session import get_db
 from app.api.auth import get_current_user, get_current_superuser
@@ -123,3 +126,96 @@ async def delete_question(
         raise HTTPException(status_code=404, detail="Question not found")
     await delete(db, ques_obj)
     return
+
+@router.get("/topic/{topic_id}/retention-test/status")
+async def get_retention_test_status_endpoint(
+    topic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get retention test status for a specific topic.
+    Returns completion status, progress, and score.
+    Requires user authentication.
+    """
+    try:
+        from app.crud.assessment_question import get_retention_test_status
+        status = await get_retention_test_status(
+            db, 
+            topic_id=topic_id, 
+            user_id=current_user.id
+        )
+        return status
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/topic/{topic_id}/retention-test/results")
+async def get_retention_test_results_endpoint(
+    topic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get comprehensive retention test results for a specific topic.
+    Returns questions, user answers, and detailed results.
+    Requires user authentication and completion of the test.
+    """
+    try:
+        from app.crud.assessment_question import get_retention_test_results
+        results = await get_retention_test_results(
+            db, 
+            topic_id=topic_id, 
+            user_id=current_user.id
+        )
+        return results
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/topic/{topic_id}/retention-test", response_model=List[AssessmentQuestionRead])
+async def get_retention_test_questions_endpoint(
+    topic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get retention test questions for a specific topic.
+    Returns 15 questions (5 per subtopic) with varying difficulty.
+    Mixes familiar questions (from pre/post assessments) with new questions.
+    Requires user authentication and completion of pre/post assessments.
+    """
+    try:
+        questions = await get_retention_test_questions(
+            db, 
+            topic_id=topic_id, 
+            user_id=current_user.id
+        )
+        return questions
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/topic/{topic_id}/retention-test/submit-answer")
+async def submit_retention_test_answer_endpoint(
+    topic_id: int,
+    submission: RetentionTestSubmission,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Submit a single answer for retention test and update progress.
+    Requires user authentication.
+    """
+    # Users can only submit answers for themselves
+    if submission.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to submit answers for this user")
+    
+    try:
+        result = await submit_retention_test_answer(
+            db,
+            submission.user_id,
+            topic_id,  # Use the topic_id parameter
+            submission.question_id,
+            submission.user_answer
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

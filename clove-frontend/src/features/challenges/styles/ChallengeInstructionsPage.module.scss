@@ -1,0 +1,435 @@
+// Challenge Instructions Page Styles
+// Theme-aware with responsive design
+
+.container {
+  min-height: 100vh;
+  background: var(--theme-bg, #0a0a1a);
+  color: var(--theme-text, #ffffff);
+  padding: 2rem 1rem;
+  font-family: var(--font-primary, 'Inter', sans-serif);
+  transition: all 0.3s ease;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Header Section
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  border-bottom: 2px solid var(--accent-primary, #6c5ce7);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--accent-primary, #6c5ce7), var(--accent-secondary, #a8a5e6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(108, 92, 231, 0.3);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary, #a0a0a0);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+// Section Styles
+.section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--card-bg, rgba(26, 26, 26, 0.95));
+  border-radius: 16px;
+  border: 1px solid var(--accent-primary, #6c5ce7);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--accent-primary, #6c5ce7);
+  text-align: center;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-primary, #6c5ce7), var(--accent-secondary, #a8a5e6));
+    border-radius: 2px;
+  }
+}
+
+// Layout Grid
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.layoutItem {
+  padding: 1.5rem;
+  background: var(--bg-secondary, rgba(15, 15, 15, 0.8));
+  border-radius: 12px;
+  border: 1px solid var(--accent-secondary, #a8a5e6);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(108, 92, 231, 0.2);
+    border-color: var(--accent-primary, #6c5ce7);
+  }
+}
+
+.layoutIcon {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.layoutItem h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--accent-secondary, #a8a5e6);
+  text-align: center;
+}
+
+.layoutDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detailItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-tertiary, rgba(30, 30, 30, 0.6));
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-primary, #6c5ce7);
+}
+
+.detailIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.detailItem div {
+  flex: 1;
+  
+  strong {
+    color: var(--accent-primary, #6c5ce7);
+    font-weight: 600;
+  }
+  
+  p {
+    margin: 0;
+    line-height: 1.5;
+    color: var(--text-secondary, #a0a0a0);
+  }
+}
+
+// Challenge Modes
+.modesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.modeCard {
+  padding: 1.5rem;
+  background: var(--bg-secondary, rgba(15, 15, 15, 0.8));
+  border-radius: 12px;
+  border: 1px solid var(--accent-secondary, #a8a5e6);
+  text-align: center;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(108, 92, 231, 0.2);
+    border-color: var(--accent-primary, #6c5ce7);
+  }
+}
+
+.modeIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.modeCard h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--accent-primary, #6c5ce7);
+}
+
+.modeCard p {
+  color: var(--text-secondary, #a0a0a0);
+  line-height: 1.5;
+  margin: 0;
+}
+
+// Rules List
+.rulesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ruleItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary, rgba(15, 15, 15, 0.8));
+  border-radius: 12px;
+  border: 1px solid var(--accent-warning, #ffa726);
+  border-left: 4px solid var(--accent-warning, #ffa726);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 32px rgba(255, 167, 38, 0.2);
+  }
+}
+
+.ruleIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.ruleContent h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--accent-warning, #ffa726);
+}
+
+.ruleContent p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text-secondary, #a0a0a0);
+  
+  strong {
+    color: var(--accent-danger, #ff6b6b);
+    font-weight: 600;
+  }
+}
+
+// Tips Grid
+.tipsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.tipCard {
+  padding: 1.5rem;
+  background: var(--bg-secondary, rgba(15, 15, 15, 0.8));
+  border-radius: 12px;
+  border: 1px solid var(--accent-success, #6EE7B7);
+  text-align: center;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(110, 231, 183, 0.2);
+    border-color: var(--accent-success, #6EE7B7);
+  }
+}
+
+.tipIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.tipCard p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text-secondary, #a0a0a0);
+}
+
+// Navigation
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--card-bg, rgba(26, 26, 26, 0.95));
+  border-radius: 16px;
+  border: 1px solid var(--accent-primary, #6c5ce7);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.backButton, .startButton {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.backButton {
+  background: var(--bg-secondary, rgba(15, 15, 15, 0.8));
+  color: var(--accent-secondary, #a8a5e6);
+  border: 2px solid var(--accent-secondary, #a8a5e6);
+  
+  &:hover {
+    background: var(--accent-secondary, #a8a5e6);
+    color: var(--bg, #0a0a1a);
+    border-color: var(--accent-secondary, #a8a5e6);
+  }
+}
+
+.startButton {
+  background: linear-gradient(135deg, var(--accent-primary, #6c5ce7), var(--accent-secondary, #a8a5e6));
+  color: white;
+  border: 2px solid var(--accent-primary, #6c5ce7);
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--accent-secondary, #a8a5e6), var(--accent-primary, #6c5ce7));
+    border-color: var(--accent-secondary, #a8a5e6);
+    box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .content {
+    padding: 0 0.5rem;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0.25rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+  
+  .layoutGrid {
+    gap: 1rem;
+  }
+  
+  .layoutItem {
+    padding: 1rem;
+  }
+  
+  .modesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tipsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.75rem;
+  }
+  
+  .section {
+    padding: 0.75rem;
+  }
+  
+  .layoutItem {
+    padding: 0.75rem;
+  }
+  
+  .detailItem {
+    padding: 0.5rem;
+  }
+  
+  .ruleItem {
+    padding: 1rem;
+  }
+  
+  .tipCard {
+    padding: 1rem;
+  }
+  
+  .navigation {
+    padding: 1rem;
+  }
+  
+  .backButton, .startButton {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}

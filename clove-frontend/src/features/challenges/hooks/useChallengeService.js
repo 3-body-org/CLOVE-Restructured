@@ -26,7 +26,7 @@ export const useChallengeService = (userId, paramSubtopicId) => {
   const { closeSidebar } = useSidebar();
   const challengeApi = useChallengeApi();
   const { post } = useApi();
-  const { topicId: contextTopicId, subtopicId: contextSubtopicId } = useContext(MyDeckContext);
+  const { topicId: contextTopicId, subtopicId: contextSubtopicId, completeSubtopicComponent } = useContext(MyDeckContext);
   
   const fullTopicId = location.pathname.split('/')[2] || '1-data-types-and-variables';
   
@@ -204,7 +204,7 @@ export const useChallengeService = (userId, paramSubtopicId) => {
     }
     
     try {
-      await memoizedApi.completeSubtopicChallenge(userId, subtopicId);
+      await completeSubtopicComponent(subtopicId, 'challenge');
     } catch (error) {
       // Don't set error state - we still want to navigate to results
     }

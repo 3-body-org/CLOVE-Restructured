@@ -3,7 +3,7 @@
  * @description Provides theme context and manages theme switching for MyDeck.
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import ThemeContext from "contexts/ThemeContext";
 import { THEMES, DEFAULT_THEME } from "features/mydeck/styles";
@@ -65,8 +65,8 @@ const ThemeProvider = ({ children }) => {
     [currentTheme, applyTheme]
   );
 
-  // Initialize theme on mount and when currentTheme changes
-  useEffect(() => {
+  // Initialize theme on mount and when currentTheme changes (before first paint)
+  useLayoutEffect(() => {
     applyTheme(currentTheme);
   }, [currentTheme, applyTheme]);
 

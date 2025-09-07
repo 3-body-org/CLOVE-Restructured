@@ -417,17 +417,8 @@ export default function SubtopicSelectionPage() {
           <div className={styles.introductionButtonContainer}>
             <button
               onClick={() => {
-                // Temporarily clear introduction_seen flag to allow revisiting
-                if (topicCache && topicCache[numericTopicId]) {
-                  setTopicCache(prev => ({
-                    ...prev,
-                    [numericTopicId]: {
-                      ...(prev[numericTopicId] || {}),
-                      introduction_seen: false
-                    }
-                  }));
-                }
-                navigate(`/my-deck/${topicId}/introduction`);
+                // Navigate to introduction with source parameter to prevent redirect
+                navigate(`/my-deck/${topicId}/introduction?from=subtopic`);
               }}
               className={`${styles.introductionButton} ${
                 isWizardTheme ? styles.wizardTheme : 

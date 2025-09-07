@@ -12,44 +12,45 @@ import LessonMonacoEditor from "../components/LessonMonacoEditor";
 import LessonThemeProvider from "features/lessons/components/LessonThemeProvider";
 //hooks
 import { useLessonData } from "../hooks/useLessonData";
-import { useLessonService } from '../services/lessonService';
 import { useChallengeService } from '../services/challengeService';
 //loading and error components
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
+//security
+import DOMPurify from 'dompurify';
 
 //scss
-import styles from "features/lessons/styles/LessonsPage.module.scss";
+import "../../../styles/components/lesson.scss";
 
 // Content Block Components
 const HeadingBlock = ({ heading }) => (
-  <h2 className={styles.sectionTitle}>{heading}</h2>
+  <h2 className="sectionTitle">{heading}</h2>
 );
 
 const IntroTextBlock = ({ introText }) => (
-  <div className={styles.conceptText}>
-    <p className={styles.introText}>{introText}</p>
+  <div className="conceptText">
+    <p className="introText">{introText}</p>
   </div>
 );
 
 const ContentBlock = ({ content }) => (
-  <div className={styles.conceptText}>
+  <div className="conceptText">
     {content.split('\n').map((paragraph, pIndex) => (
       <p key={pIndex} dangerouslySetInnerHTML={{
-        __html: paragraph.trim().replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        __html: DOMPurify.sanitize(paragraph.trim().replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
       }} />
     ))}
   </div>
 );
 
 const BulletPointsBlock = ({ bulletPoints }) => (
-  <div className={styles.bulletContainer}>
-    <ul className={styles.bulletList}>
+  <div className="bulletContainer">
+    <ul className="bulletList">
       {bulletPoints.map((point, index) => (
-        <li key={index} className={styles.bulletItem}>
-          <span className={styles.bulletIcon}></span>
+        <li key={index} className="bulletItem">
+          <span className="bulletIcon"></span>
           <span dangerouslySetInnerHTML={{
-            __html: point.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            __html: DOMPurify.sanitize(point.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
           }} />
         </li>
       ))}
@@ -58,8 +59,8 @@ const BulletPointsBlock = ({ bulletPoints }) => (
 );
 
 const CodeSnippetBlock = ({ codeSnippet, extractCodeFromBulletPoints, extractOutputFromBulletPoints, calculateMonacoHeight }) => (
-  <div className={styles.codeExampleContainer}>
-    <div className={styles.codeEditorWrapper}>
+  <div className="codeExampleContainer">
+    <div className="codeEditorWrapper">
       <LessonMonacoEditor
         value={extractCodeFromBulletPoints(codeSnippet)}
         language="java"
@@ -75,11 +76,11 @@ const CodeSnippetBlock = ({ codeSnippet, extractCodeFromBulletPoints, extractOut
     </div>
     
     {extractOutputFromBulletPoints(codeSnippet) && (
-      <div className={styles.outputContainer}>
-        <div className={styles.outputHeader}>
-          <span className={styles.outputLabel}>Output</span>
+      <div className="outputContainer">
+        <div className="outputHeader">
+          <span className="outputLabel">Output</span>
         </div>
-        <pre className={styles.outputContent}>
+        <pre className="outputContent">
           <code>
             {extractOutputFromBulletPoints(codeSnippet)}
           </code>
@@ -90,13 +91,13 @@ const CodeSnippetBlock = ({ codeSnippet, extractCodeFromBulletPoints, extractOut
 );
 
 const RealWorldBulletPointsBlock = ({ bulletPoints }) => (
-  <div className={styles.bulletContainer}>
-    <ul className={styles.bulletList}>
+  <div className="bulletContainer">
+    <ul className="bulletList">
       {bulletPoints.map((point, index) => (
-        <li key={index} className={styles.bulletItem}>
-          <span className={styles.bulletIcon}></span>
+        <li key={index} className="bulletItem">
+          <span className="bulletIcon"></span>
           <span dangerouslySetInnerHTML={{
-            __html: point.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            __html: DOMPurify.sanitize(point.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
           }} />
         </li>
       ))}
@@ -105,13 +106,13 @@ const RealWorldBulletPointsBlock = ({ bulletPoints }) => (
 );
 
 const HowItWorksBlock = ({ bulletPoints }) => (
-  <div className={styles.bulletContainer}>
-    <ul className={styles.bulletList}>
+  <div className="bulletContainer">
+    <ul className="bulletList">
       {bulletPoints.map((point, index) => (
-        <li key={index} className={styles.bulletItem}>
-          <span className={styles.bulletIcon}></span>
+        <li key={index} className="bulletItem">
+          <span className="bulletIcon"></span>
           <span dangerouslySetInnerHTML={{
-            __html: point.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            __html: DOMPurify.sanitize(point.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
           }} />
         </li>
       ))}
@@ -120,9 +121,9 @@ const HowItWorksBlock = ({ bulletPoints }) => (
 );
 
 const SummaryBlock = ({ summary }) => (
-  <div className={styles.summaryBox}>
-    <h3 className={styles.summaryTitle}>Key Takeaways</h3>
-    <ul className={styles.summaryList}>
+  <div className="summaryBox">
+    <h3 className="summaryTitle">Key Takeaways</h3>
+    <ul className="summaryList">
       {summary.map((point, index) => (
         <li key={index}>{point}</li>
       ))}
@@ -131,13 +132,13 @@ const SummaryBlock = ({ summary }) => (
 );
 
 const ObjectivesBlock = ({ objectives }) => (
-  <div className={styles.objectivesBox}>
-    <h3 className={styles.objectivesTitle}>Learning Objectives</h3>
-    <div className={styles.bulletContainer}>
-      <ul className={styles.bulletList}>
+  <div className="objectivesBox">
+    <h3 className="objectivesTitle">Learning Objectives</h3>
+    <div className="bulletContainer">
+      <ul className="bulletList">
         {objectives.map((objective, index) => (
-          <li key={index} className={styles.bulletItem}>
-            <span className={styles.bulletIcon}></span>
+          <li key={index} className="bulletItem">
+            <span className="bulletIcon"></span>
             {objective}
           </li>
         ))}
@@ -147,12 +148,12 @@ const ObjectivesBlock = ({ objectives }) => (
 );
 
 const LessonTitleBlock = ({ lessonTitle }) => (
-  <h1 className={styles.lessonTitle}>{lessonTitle}</h1>
+  <h1 className="lessonTitle">{lessonTitle}</h1>
 );
 
 const LessonIntroBlock = ({ lessonIntro }) => (
-  <div className={styles.conceptText}>
-    <p className={styles.introText}>{lessonIntro}</p>
+  <div className="conceptText">
+    <p className="introText">{lessonIntro}</p>
   </div>
 );
 
@@ -218,7 +219,7 @@ const ContentRenderer = ({ section, extractCodeFromBulletPoints, extractOutputFr
     }
   });
 
-  return <div className={styles.sectionContent}>{blocks}</div>;
+  return <div className="sectionContent">{blocks}</div>;
 };
 
 // Contents Sidebar Component
@@ -232,9 +233,9 @@ const ContentsSidebar = ({ sections, currentSection, onSectionClick }) => {
   };
 
   return (
-    <div className={styles.contentsSidebar}>
-      <h3 className={styles.contentsTitle}>Contents</h3>
-      <div className={styles.contentsList}>
+    <div className="contentsSidebar">
+      <h3 className="contentsTitle">Contents</h3>
+      <div className="contentsList">
         {sections.map((section, index) => {
           const title = getSectionTitle(section);
           const isActive = currentSection === index;
@@ -242,11 +243,11 @@ const ContentsSidebar = ({ sections, currentSection, onSectionClick }) => {
           return (
             <div 
               key={index} 
-              className={`${styles.contentsItem} ${isActive ? styles.activeItem : ''}`}
+              className={`contentsItem ${isActive ? 'activeItem' : ''}`}
               onClick={() => onSectionClick(index)}
             >
-              <div className={styles.contentsNumber}>{index + 1}</div>
-              <div className={styles.contentsText}>{title}</div>
+              <div className="contentsNumber">{index + 1}</div>
+              <div className="contentsText">{title}</div>
             </div>
           );
         })}
@@ -277,7 +278,7 @@ const LessonsPage = () => {
   
   const { lessonData, loading, error } = useLessonData(subtopicId);
   
-  const { completeLesson } = useLessonService();
+  const { completeSubtopicComponent } = useContext(MyDeckContext);
   
   const { getUserSubtopic } = useChallengeService();
   
@@ -291,7 +292,7 @@ const LessonsPage = () => {
       if (!isLessonCompleted) {
         const markLessonAsCompleted = async () => {
           try {
-            await completeLesson(user.id, parseInt(subtopicId));
+            await completeSubtopicComponent(parseInt(subtopicId), 'lesson');
             
             localStorage.setItem(lessonCompletionKey, 'true');
           } catch (error) {
@@ -355,7 +356,7 @@ const LessonsPage = () => {
 
   const handleSkipToChallenges = () => {
     setShowSkipSnackbar(false);
-    navigate(`/lesson/${topicId}/${subtopicId}/challenges`);
+    navigate(`/lesson/${topicId}/${subtopicId}/challenge-instructions`);
   };
 
   const handleCloseSkipSnackbar = () => {
@@ -563,32 +564,32 @@ const LessonsPage = () => {
 
   return (
     <LessonThemeProvider>
-    <div className={styles.lessonLayout}>
+    <div className="lessonLayout">
       
       <div 
-        className={styles.lessonCard}
+        className="lessonCard"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className={styles.documentContainer}>
-          <div className={styles.documentHeader}>
-            <div className={styles.documentTitle}>
-              <div className={styles.titleWrapper}>
+        <div className="lessonsPageDocumentContainer">
+          <div className="documentHeader">
+            <div className="documentTitle">
+              <div className="titleWrapper">
                 <h1 ref={titleRef}>{lessonTitle}</h1>
-                <div className={styles.titleAccent} ref={accentRef}></div>
+                <div className="titleAccent" ref={accentRef}></div>
               </div>
             </div>
           </div>
 
-          <div className={styles.documentContent}>
+          <div className="documentContent">
             {Array.isArray(lessonData) && lessonData.map((section, index) => (
               <section 
                 key={index} 
-                className={styles.contentSection}
+                className="contentSection"
                 data-section={index}
               >
-                <div className={styles.conceptBlock}>
-                  <div className={styles.conceptContent}>
+                <div className="conceptBlock">
+                  <div className="conceptContent">
                     <ContentRenderer 
                       section={section}
                       extractCodeFromBulletPoints={extractCodeFromBulletPoints}
@@ -601,17 +602,17 @@ const LessonsPage = () => {
             ))}
           </div>
 
-          <div className={styles.documentFooter}>
-            <div className={styles.navigationButtons}>
+          <div className="documentFooter">
+            <div className="navigationButtons">
               <Button 
-                className={`${styles.navButton} ${styles.backButton}`}
+                className="lessonsBackButton"
                 onClick={() => navigate(`/my-deck/${topicId}`)}
               >
                 ← Back to Topics
               </Button>
               
               <Button
-                className={`${styles.navButton} ${styles.startButton}`}
+                className="lessonsStartButton"
                 onClick={handleStartChallenges}
               >
                 Start Practice →
@@ -631,21 +632,21 @@ const LessonsPage = () => {
     </div>
 
       {showSkipSnackbar && (
-        <div className={styles.skipSnackbar}>
+        <div className="skipSnackbar">
           <button 
-            className={styles.snackbarCloseButton}
+            className="snackbarCloseButton"
             onClick={handleCloseSkipSnackbar}
             aria-label="Close notification"
           >
             ×
           </button>
-          <div className={styles.snackbarContent}>
-            <span>Want to skip practice and go straight to challenges?</span>
+          <div className="snackbarContent">
+            <span>Want to skip lesson & practice, and go straight to challenge?</span>
             <button 
-              className={styles.snackbarButton}
+              className="snackbarButton"
               onClick={handleSkipToChallenges}
             >
-              Skip to Challenges
+              Skip to Challenge 
             </button>
           </div>
         </div>

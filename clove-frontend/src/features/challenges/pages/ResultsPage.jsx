@@ -14,13 +14,15 @@ import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
 import { useChallengeApi } from '../services/challengeService';
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 import { useApi } from '../../../hooks/useApi';
-import styles from '../styles/Results.module.scss';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWrench, faSearch, faCheck, faTimes, faStop, faClock, faCodeBranch } from "@fortawesome/free-solid-svg-icons";
+import "../../../styles/components/challenge.scss";
 
 // Icons for different challenge modes
 const ModeIcons = {
-  code_fixer: '🔧',
-  output_tracing: '🔍',
-  code_completion: '</>'
+  code_fixer: faWrench,
+  output_tracing: faSearch,
+  code_completion: faCodeBranch
 };
 
 // Difficulty colors
@@ -208,7 +210,7 @@ const ResultsPage = () => {
       return {
         shouldHighlight: true,
         reason: 'cancelled',
-        icon: '⏹️',
+        icon: faStop,
         text: 'Cancelled'
       };
     }
@@ -217,7 +219,7 @@ const ResultsPage = () => {
       return {
         shouldHighlight: true,
         reason: 'timeout',
-        icon: '⏰',
+        icon: faClock,
         text: 'Time Out'
       };
     }
@@ -273,19 +275,19 @@ const ResultsPage = () => {
 
   return (
     <ChallengeThemeProvider>
-      <div className={styles.resultsPageContainer}>
-        <div className={styles.resultsSummary}>
-          <h2 className={styles.resultsTitle}>Challenge Results</h2>
-          <p className={styles.resultsDescription}>
+      <div className="resultsPageContainer">
+        <div className="resultsPageSummary">
+          <h2 className="resultsPageTitle">Challenge Results</h2>
+          <p className="resultsPageDescription">
             Here's how you performed on your challenges:
           </p>
 
           {attempts.length > 0 ? (
-            <div className={styles.resultsContainer} style={themeStyles}>
+            <div className="resultsPageResultsContainer" style={themeStyles}>
               {/* Filter Tabs */}
-              <div className={styles.filterTabs}>
+              <div className="resultsPageFilterTabs">
                 <button
-                  className={`${styles.filterTab} ${activeFilter === 'all' ? styles.active : ''}`}
+                  className={`resultsPageFilterTab ${activeFilter === 'all' ? 'resultsPageActive' : ''}`}
                   onClick={() => setActiveFilter('all')}
                 >
                   All ({getFilterCount('all')})
@@ -293,7 +295,7 @@ const ResultsPage = () => {
                 
                 {availableModes.includes('code_fixer') && (
                   <button
-                    className={`${styles.filterTab} ${activeFilter === 'code_fixer' ? styles.active : ''}`}
+                    className={`resultsPageFilterTab ${activeFilter === 'code_fixer' ? 'resultsPageActive' : ''}`}
                     onClick={() => setActiveFilter('code_fixer')}
                   >
                     Code Fixer ({getFilterCount('code_fixer')})
@@ -302,7 +304,7 @@ const ResultsPage = () => {
                 
                 {availableModes.includes('output_tracing') && (
                   <button
-                    className={`${styles.filterTab} ${activeFilter === 'output_tracing' ? styles.active : ''}`}
+                    className={`resultsPageFilterTab ${activeFilter === 'output_tracing' ? 'resultsPageActive' : ''}`}
                     onClick={() => setActiveFilter('output_tracing')}
                   >
                     Output Tracing ({getFilterCount('output_tracing')})
@@ -311,7 +313,7 @@ const ResultsPage = () => {
                 
                 {availableModes.includes('code_completion') && (
                   <button
-                    className={`${styles.filterTab} ${activeFilter === 'code_completion' ? styles.active : ''}`}
+                    className={`resultsPageFilterTab ${activeFilter === 'code_completion' ? 'resultsPageActive' : ''}`}
                     onClick={() => setActiveFilter('code_completion')}
                   >
                     Code Completion ({getFilterCount('code_completion')})
@@ -319,14 +321,14 @@ const ResultsPage = () => {
                 )}
                 
                 <button
-                  className={`${styles.filterTab} ${activeFilter === 'successful' ? styles.active : ''}`}
+                  className={`resultsPageFilterTab ${activeFilter === 'successful' ? 'resultsPageActive' : ''}`}
                   onClick={() => setActiveFilter('successful')}
                 >
                   Successful ({getFilterCount('successful')})
                 </button>
                 
                 <button
-                  className={`${styles.filterTab} ${activeFilter === 'needs_work' ? styles.active : ''}`}
+                  className={`resultsPageFilterTab ${activeFilter === 'needs_work' ? 'resultsPageActive' : ''}`}
                   onClick={() => setActiveFilter('needs_work')}
                 >
                   Needs Work ({getFilterCount('needs_work')})
@@ -334,19 +336,19 @@ const ResultsPage = () => {
           </div>
 
               {/* Results Table */}
-              <div className={styles.tableContainer}>
+              <div className="resultsPageTableContainer">
                 {filteredAttempts.length > 0 ? (
-                  <table className={styles.resultsTable}>
-                    <thead>
-                      <tr>
-                        <th>Challenge</th>
-                        <th>Game Mode</th>
-                        <th>Difficulty</th>
-                        <th>Result</th>
-                        <th>Time Spent</th>
-                        <th>Hints Used</th>
-                      </tr>
-                    </thead>
+                  <table className="resultsPageResultsTable">
+                     <thead>
+                       <tr>
+                         <th className="resultsPageHeaderCell">Challenge</th>
+                         <th className="resultsPageHeaderCell">Game Mode</th>
+                         <th className="resultsPageHeaderCell">Difficulty</th>
+                         <th className="resultsPageHeaderCell">Result</th>
+                         <th className="resultsPageHeaderCell">Time Spent</th>
+                         <th className="resultsPageHeaderCell">Hints Used</th>
+                       </tr>
+                     </thead>
                     <tbody>
                       {filteredAttempts.slice().reverse().map((attempt, index) => {
                         const mode = attempt.challenge_type;
@@ -357,20 +359,24 @@ const ResultsPage = () => {
                         return (
                           <tr 
                             key={attempt.id || index}
-                            className={highlightInfo.shouldHighlight ? styles.highlightedRow : ''}
+                            className={highlightInfo.shouldHighlight ? 'resultsPageHighlightedRow' : ''}
                           >
                             <td>
                               {index + 1}
                               {highlightInfo.shouldHighlight && (
-                                <span className={styles.highlightIndicator}>
-                                  <span className={styles.indicatorIcon}>{highlightInfo.icon}</span>
+                                <span className="resultsPageHighlightIndicator">
+                                  <span className="resultsPageIndicatorIcon">
+                                    <FontAwesomeIcon icon={highlightInfo.icon} />
+                                  </span>
                                   <span>{highlightInfo.text}</span>
                                 </span>
                               )}
                             </td>
-                            <td className={styles.modeCell}>
-                              <span className={styles.modeIcon}>{ModeIcons[mode] || '❓'}</span>
-                              <span className={styles.modeText}>
+                            <td className="resultsPageModeCell">
+                              <span className="resultsPageModeIcon">
+                                <FontAwesomeIcon icon={ModeIcons[mode] || faCodeBranch} />
+                              </span>
+                              <span className="resultsPageModeText">
                                 {mode === 'code_fixer' ? 'Code Fixer' :
                                  mode === 'output_tracing' ? 'Output Tracing' :
                                  mode === 'code_completion' ? 'Code Completion' : 'Unknown'}
@@ -378,17 +384,17 @@ const ResultsPage = () => {
                             </td>
                             <td>
                               <span 
-                                className={styles.difficultyBadge}
+                                className="resultsPageDifficultyBadge"
                                 style={{ backgroundColor: getDifficultyColor(difficulty).background, color: getDifficultyColor(difficulty).color }}
                               >
                                 {difficulty || 'Unknown'}
                               </span>
                             </td>
-                            <td className={styles.resultCell}>
-                              <span className={styles.resultIcon}>
-                                {isSuccessful ? '✅' : '❌'}
+                            <td className="resultsPageResultCell">
+                              <span className="resultsPageResultIcon">
+                                <FontAwesomeIcon icon={isSuccessful ? faCheck : faTimes} />
                               </span>
-                              <span className={`${styles.resultText} ${isSuccessful ? styles.success : styles.failed}`}>
+                              <span className={`resultsPageResultText ${isSuccessful ? 'resultsPageSuccess' : 'resultsPageFailed'}`}>
                                 {isSuccessful ? 'Success' : 'Failed'}
                               </span>
                             </td>
@@ -400,20 +406,20 @@ const ResultsPage = () => {
                     </tbody>
                   </table>
                 ) : (
-                  <div className={styles.noResults}>
+                  <div className="resultsPageNoResults">
                     <p>No {activeFilter === 'all' ? '' : activeFilter.replace('_', ' ')} attempts found.</p>
                   </div>
                 )}
               </div>
             </div>
           ) : (
-            <div className={styles.scoreSummary}>
-              <p className={styles.scoreText}>No challenge attempts found.</p>
+            <div className="resultsPageScoreSummary">
+              <p className="resultsPageScoreText">No challenge attempts found.</p>
             </div>
           )}
 
-          <div className={styles.goBackButtonContainer}>
-            <button className={styles.goBackButton} onClick={handleGoBack}>
+          <div className="resultsPageGoBackButtonContainer">
+            <button className="resultsPageGoBackButton" onClick={handleGoBack}>
               ← Back to Lesson
             </button>
           </div>

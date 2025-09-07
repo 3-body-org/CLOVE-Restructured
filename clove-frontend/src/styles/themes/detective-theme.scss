@@ -1,0 +1,182 @@
+// ============================================================================
+// DETECTIVE THEME - Noir Investigation (Centralized)
+// ============================================================================
+// Single source of truth for all detective theme colors
+// Based on CLOVE_LESSONS_COLOR_PALETTE.txt
+// This file replaces all duplicate detective theme definitions across the app
+
+$detective-theme: (
+  // ============================================================================
+  // 1. BACKGROUND COLORS
+  // ============================================================================
+  "theme-bg": #0a0a0a, // Deeper noir black - Main theme background
+  "card-bg": rgba(26, 26, 26, 0.95), // Darker gunmetal - Card backgrounds
+  "code-bg": #1a1a1a, // Darker code background - Code backgrounds
+  "code-bg-secondary": #2a2a2a, // Dark grey - Secondary code backgrounds
+  "code-bg-tertiary": #2a2a2a, // Dark grey - Output headers
+  "sidebar-bg": rgba(26, 26, 26, 0.95), // Darker gunmetal - Sidebar background
+  "bullet-container-bg": rgba(26, 26, 26, 0.95), // Darker gunmetal - Bullet container background
+  "objectives-bg": rgba(26, 26, 26, 0.95), // Darker gunmetal - Objectives background
+  "summary-bg": rgba(110, 231, 183, 0.1), // Faerie Green with opacity - Summary section background
+  "output-bg": #1a1a1a, // Darker code background - Output background
+  "output-header-bg": #2a2a2a, // Dark grey - Output header background
+
+  // ============================================================================
+  // 2. TEXT COLORS
+  // ============================================================================
+  "theme-text": #e0e0e0, // Brighter light grey - Primary text, code text, output text, bullet text
+  "text-primary": #e0e0e0, // Brighter light grey - Primary text
+  "text-secondary": #b4a287, // Sepia brown - Secondary text, intro text, sidebar text
+  "intro-text": #b4a287, // Sepia brown - Intro text
+  "bullet-text": #e0e0e0, // Brighter light grey - Bullet text
+  "code-text": #e0e0e0, // Brighter light grey - Code text
+  "output-text": #e0e0e0, // Brighter light grey - Output text
+  "sidebar-text": #b4a287, // Sepia brown - Sidebar text
+  "sidebar-active-text": #e0e0e0, // Brighter light grey - Active sidebar text
+
+  // ============================================================================
+  // 3. HEADING COLORS
+  // ============================================================================
+  "heading-primary": #d1b773, // Gold - Main headings, lesson titles, section titles, contents title
+  "lesson-title": #d1b773, // Gold - Lesson titles
+  "section-title": #d1b773, // Gold - Section titles
+  "contents-title": #d1b773, // Gold - Contents title
+  "objectives-title": #7a9e7e, // Olive green - Objectives title
+  "summary-title": #6EE7B7, // Flickering Faerie Green - Summary title
+
+  // ============================================================================
+  // 4. ACCENT & HIGHLIGHT COLORS
+  // ============================================================================
+  "accent-primary": #d1b773, // Gold - Primary accent, card borders, code borders, bullet borders
+  "accent-secondary": #7a9e7e, // Olive green - Secondary accent, contents numbers, objective icons
+  "gold-accent": #d1b773, // Gold - Gold accent, bullet icons, strong text
+  "success-color": #6EE7B7, // Flickering Faerie Green - Success color, summary border, footer border
+  "warning-color": #f57c00, // Orange-red - Warning color
+  "danger-color": #d32f2f, // Dark red - Danger accent
+  "tertiary-accent": #b4a287, // Sepia - Tertiary accent
+  "quaternary-accent": #8a8a8a, // Muted grey - Quaternary accent, hover borders
+  "active-accent": #2a2a2a, // Darker active items - Active accent
+
+  // ============================================================================
+  // 5. BUTTON COLORS
+  // ============================================================================
+  "button-primary-bg": #d1b773, // Gold - Primary button background
+  "button-primary-text": #0a0a0a, // Deeper noir black - Primary button text
+  "button-secondary-bg": #2a2a2a, // Dark grey - Secondary button background
+  "button-secondary-text": #e0e0e0, // Brighter light grey - Secondary button text
+  "button-secondary-border": #d1b773, // Gold - Secondary button border
+
+  // ============================================================================
+  // 6. BORDER COLORS
+  // ============================================================================
+  "card-border": #d1b773, // Gold - Card borders
+  "code-border": #d1b773, // Gold - Code borders
+  "bullet-border": #d1b773, // Gold - Bullet borders
+  "summary-border": #6EE7B7, // Flickering Faerie Green - Summary border
+  "footer-border": #d1b773, // Gold - Footer border
+
+  // ============================================================================
+  // 7. CODE SYNTAX COLORS
+  // ============================================================================
+  "code-keyword": #d1b773, // Gold - Keywords
+  "code-variable": #7a9e7e, // Olive green - Variables, inline code
+  "code-string": #cdaa7d, // Brass - Strings, numbers
+  "code-number": #cdaa7d, // Brass - Numbers
+  "code-comment": #8a8a8a, // Muted grey - Comments
+  "code-inline": #7a9e7e, // Olive green - Inline code
+
+  // ============================================================================
+  // 8. ASSESSMENT & CHALLENGE SPECIFIC
+  // ============================================================================
+  "correct": #6EE7B7, // Flickering Faerie Green - Correct answers
+  "wrong": #d32f2f, // Dark red - Wrong answers
+  "pending": #f57c00, // Orange-red - Pending state
+  "timer": #d1b773, // Gold - Timer
+  "hint": #8a8a8a, // Muted grey - Hints
+  "bug": #d32f2f, // Dark red - Bug indicators
+
+  // ============================================================================
+  // 9. RGB VALUES FOR GRADIENTS AND OPACITY
+  // ============================================================================
+  "accent-primary-rgb": "209, 183, 115", // Gold
+  "accent-secondary-rgb": "122, 158, 126", // Olive green
+  "correct-rgb": "110, 231, 183", // Flickering Faerie Green
+  "wrong-rgb": "211, 47, 47", // Dark red
+  "pending-rgb": "245, 124, 0", // Orange-red
+  "primary-rgb": "156, 163, 175", // Ancient Stone Grey
+  "secondary-rgb": "107, 114, 128", // Ancient Stone Light
+
+  // ============================================================================
+  // 10. SHADOWS AND EFFECTS
+  // ============================================================================
+  "shadow-sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  "shadow-md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+  "shadow-lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+  "shadow-glow": "0 0 20px rgba(156, 163, 175, 0.3)", // Ancient Stone glow
+  "shadow-xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+
+  // ============================================================================
+  // 11. GRADIENTS
+  // ============================================================================
+  "gradient-primary": "linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)", // Ancient Stone gradient
+  "gradient-secondary": "linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)", // Enchanted Gold gradient
+  "gradient-success": "linear-gradient(135deg, #6EE7B7 0%, #10B981 100%)", // Faerie Green gradient
+
+  // ============================================================================
+  // 12. LEGACY VARIABLES (for backward compatibility)
+  // ============================================================================
+  "text": #e0e0e0, // Light Grey - Legacy text
+  "button-text": #e0e0e0, // Light Grey - Legacy button text
+  "text-muted": #9CA3AF, // Ancient Stone Grey - Legacy muted text
+  "primary": #d1b773, // Gold - Legacy primary
+  "secondary": #7a9e7e, // Olive green - Legacy secondary
+  "accent": #FBBF24, // Enchanted Gold Bright - Legacy accent
+  "transition-speed": "0.3s",
+  "transition-easing": "ease",
+  "progress-bar": "rgba(255, 255, 255, 0.1)", // Legacy progress bar
+
+  // ============================================================================
+  // 13. FONTS
+  // ============================================================================
+  "font-primary": '"Lora", serif',
+  "font-heading": '"Playfair Display", serif',
+  "font-mono": '"IBM Plex Mono", monospace',
+
+  // ============================================================================
+  // 14. LEGACY SUPPORT (for backward compatibility)
+  // ============================================================================
+  "bg": #0a0a0a, // Deeper noir black - Legacy background
+  "bg-secondary": rgba(26, 26, 26, 0.95), // Darker gunmetal - Legacy secondary background
+  "bg-tertiary": #2a2a2a, // Dark grey - Legacy tertiary background
+  "heading-secondary": #7a9e7e, // Olive green - Legacy secondary heading
+  "heading-tertiary": #6EE7B7, // Flickering Faerie Green - Legacy tertiary heading
+  "success": #6EE7B7, // Flickering Faerie Green - Legacy success
+  "warning": #f57c00, // Orange-red - Legacy warning
+  "error": #d32f2f, // Dark red - Legacy error
+  "muted": #8a8a8a, // Muted grey - Legacy muted
+  "border": #d1b773, // Gold - Legacy border
+  "shadow": "rgba(209, 183, 115, 0.2)", // Gold with opacity - Legacy shadow
+  "glow-color": "rgba(209, 183, 115, 0.4)", // Gold glow - Legacy glow
+  "incorrect-rgb": "255, 107, 107" // Red - Legacy incorrect RGB
+);
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+// Export for SCSS modules
+:export {
+  @each $key, $value in $detective-theme {
+    #{$key}: $value;
+  }
+}
+
+// Global theme class
+:global(body.theme-detective) {
+  @each $var, $value in $detective-theme {
+    --#{$var}: #{$value};
+  }
+  
+  background-color: var(--theme-bg);
+  transition: background-color 0.3s ease;
+} 

@@ -2,9 +2,11 @@
 
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
 from datetime import date, datetime, timezone
 import re
 import random
+from passlib.context import CryptContext
 
 from app.db.models.users             import User
 from app.db.models.topics            import Topic
@@ -15,6 +17,9 @@ from app.db.models.user_subtopics   import UserSubtopic
 from app.db.models.pre_assessments  import PreAssessment
 from app.db.models.post_assessments import PostAssessment
 from app.db.models.statistics       import Statistic
+
+# Password context for verification
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def generate_username(first_name: str, last_name: str, email: str) -> str:
     """
@@ -235,7 +240,43 @@ async def init_user_data(db: AsyncSession, user_id: int, login_days_this_week=No
 
 async def delete_user(
     db: AsyncSession,
-    user_obj: User
-) -> None:
-    await db.delete(user_obj)
-    await db.commit()
+    user_obj: User,
+    password: str
+) -> dict:
+    """
+    Delete a user account with password verification.
+    Returns a dict with success status and message.
+    """
+    try:
+        # Verify password before deletion
+        if not pwd_context.verify(password, user_obj.password_hash):
+            return {
+                "success": False,
+                "message": "Invalid password"
+            }
+        
+        # Check if user is a superuser (prevent deletion of superusers)
+        if user_obj.is_superuser:
+            return {
+                "success": False,
+                "message": "Cannot delete superuser accounts"
+            }
+        
+        # Store username for success message
+        username = user_obj.username
+        
+        # Delete user (cascade will handle all related data)
+        await db.delete(user_obj)
+        await db.commit()
+        
+        return {
+            "success": True,
+            "message": f"Account '{username}' has been permanently deleted"
+        }
+        
+    except Exception as e:
+        await db.rollback()
+        return {
+            "success": False,
+            "message": f"Failed to delete account: {str(e)}"
+        }

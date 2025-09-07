@@ -31,7 +31,7 @@ const DonutChart = ({ percentage, label, description }) => {
       <div 
         className={styles.donutChart}
         style={{
-          background: `conic-gradient(${styles.lightPurple || '#8b5cf6'} 0deg ${degrees}deg, ${styles.lighterBlack || '#1f2937'} ${degrees}deg 360deg)`
+          background: `conic-gradient(#a6aafb 0deg ${degrees}deg, #2e2e3a ${degrees}deg 360deg)`
         }}
       >
         <div className={styles.donutCenter}>

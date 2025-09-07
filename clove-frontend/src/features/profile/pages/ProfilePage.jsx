@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSave, faTimes, faEnvelope, faBirthdayCake, faIdBadge, faCamera, faBolt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faSave, faTimes, faEnvelope, faBirthdayCake, faIdBadge, faCamera, faBolt, faEye, faEyeSlash, faTrash, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/profile/styles/ProfilePage.module.scss";
 import TitleAndProfile from "components/layout/Navbar/TitleAndProfile";
 import { useAuth } from "contexts/AuthContext";
@@ -10,8 +10,8 @@ import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 
 const ProfilePage = () => {
-  const { user, refreshUser, loading: authLoading } = useAuth();
-  const { put } = useApi();
+  const { user, refreshUser, loading: authLoading, logout } = useAuth();
+  const { put, delete: del } = useApi();
   const [formData, setFormData] = useState({
     username: user?.username || "",
     first_name: user?.first_name || "",
@@ -32,6 +32,12 @@ const ProfilePage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [editingSection, setEditingSection] = useState(null); // 'profile', 'about', 'info', 'account'
   const [minTimePassed, setMinTimePassed] = useState(false);
+  
+  // Delete account states
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [showDeletePassword, setShowDeletePassword] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   
   // Minimum loading time effect
   useEffect(() => {
@@ -205,6 +211,56 @@ const ProfilePage = () => {
       );
     }
     return false;
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!deletePassword.trim()) {
+      showErrorNotification("Please enter your password to confirm deletion");
+      return;
+    }
+
+    setDeleting(true);
+    try {
+      const userId = String(user.id).split(':')[0];
+      if (!userId || isNaN(Number(userId))) {
+        showErrorNotification("Invalid user ID. Please reload the page and try again.");
+        return;
+      }
+
+      const response = await del(`/users/${userId}`, { password: deletePassword });
+      
+      if (response.ok) {
+        showSuccessNotification("Account deleted successfully. You will be logged out.");
+        // Logout immediately (this will handle the redirect)
+        logout();
+      } else {
+        let errorMsg = response.statusText;
+        try {
+          const text = await response.text();
+          if (text) {
+            const errorData = JSON.parse(text);
+            errorMsg = errorData.detail || errorData.message || errorMsg;
+          }
+        } catch (e) {}
+        showErrorNotification(errorMsg);
+      }
+    } catch (error) {
+      showErrorNotification("Failed to delete account. Please try again.");
+    } finally {
+      setDeleting(false);
+      setShowDeleteConfirm(false);
+      setDeletePassword("");
+    }
+  };
+
+  const openDeleteConfirm = () => {
+    setShowDeleteConfirm(true);
+    setDeletePassword("");
+  };
+
+  const closeDeleteConfirm = () => {
+    setShowDeleteConfirm(false);
+    setDeletePassword("");
   };
 
   if (authLoading || !user || !minTimePassed) return <LoadingScreen message="Loading profile..." />;
@@ -460,10 +516,91 @@ const ProfilePage = () => {
                 </div>
               )}
               </div>
+              <div className={styles.infoSection}>
+                <h3 className={styles.sectionTitle}>
+                  Danger Zone
+                  <span className={styles.dangerZoneBadge}>⚠️</span>
+                </h3>
+                <div className={styles.dangerZoneContent}>
+                  <div className={styles.dangerZoneWarning}>
+                    <FontAwesomeIcon icon={faExclamationTriangle} className={styles.warningIcon} />
+                    <div className={styles.warningText}>
+                      <h4>Delete Account</h4>
+                      <p>This action cannot be undone. This will permanently delete your account and remove all your data from our servers.</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={openDeleteConfirm} 
+                    className={styles.deleteAccountButton}
+                    disabled={deleting}
+                  >
+                    <FontAwesomeIcon icon={faTrash} /> Delete Account
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </main>
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.deleteModal}>
+            <div className={styles.modalHeader}>
+              <FontAwesomeIcon icon={faExclamationTriangle} className={styles.modalWarningIcon} />
+              <h3>Delete Account</h3>
+            </div>
+            <div className={styles.modalContent}>
+              <p className={styles.modalWarning}>
+                <strong>Warning:</strong> This action cannot be undone. All your data including:
+              </p>
+              <ul className={styles.modalWarningList}>
+                <li>Progress and achievements</li>
+                <li>Lesson completions</li>
+                <li>Assessment results</li>
+                <li>Profile information</li>
+                <li>All other account data</li>
+              </ul>
+              <p className={styles.modalWarning}>
+                <strong>Will be permanently deleted.</strong>
+              </p>
+              <div className={styles.passwordInputGroup}>
+                <label htmlFor="deletePassword">Enter your password to confirm:</label>
+                <div className={styles.passwordInputWrapper}>
+                  <input
+                    id="deletePassword"
+                    type={showDeletePassword ? "text" : "password"}
+                    value={deletePassword}
+                    onChange={(e) => setDeletePassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className={styles.deletePasswordInput}
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setShowDeletePassword(v => !v)} 
+                    className={styles.passwordToggleBtn}
+                  >
+                    <FontAwesomeIcon icon={showDeletePassword ? faEyeSlash : faEye} />
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={closeDeleteConfirm} className={styles.cancelButton} disabled={deleting}>
+                Cancel
+              </button>
+              <button 
+                onClick={handleDeleteAccount} 
+                className={styles.confirmDeleteButton}
+                disabled={deleting || !deletePassword.trim()}
+              >
+                {deleting ? "Deleting..." : "Delete Account Permanently"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

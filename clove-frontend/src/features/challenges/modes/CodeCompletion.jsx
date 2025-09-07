@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import MonacoCodeBlock from '../components/MonacoCodeBlock';
 import ChoicesBar from '../components/ChoicesBar';
 import ProgressIndicator from '../components/ProgressIndicator';
-import styles from '../styles/CodeCompletion.module.scss';
+import "../../../styles/components/challenge.scss";
 
 const CodeCompletion = ({
   challengeData,
@@ -513,7 +513,7 @@ const CodeCompletion = ({
   }, [isSubmitted, userChoices, onAnswerSubmit, isSubmitting, disabled]);
 
   return (
-        <div className={styles.challengeArea}>
+        <div className="challengeArea">
           {/* Progress Indicator at the very top */}
           <ProgressIndicator
             challengeIndex={challengeIndex}
@@ -521,13 +521,13 @@ const CodeCompletion = ({
           />
 
           {/* Challenge Title */}
-          <div className={styles.challengeTitle}>
+          <div className="challengeTitle">
             <h2>CODE COMPLETION CHALLENGE</h2>
           </div>
           
           {/* Choices Bar */}
           <div 
-            className={`${styles.choicesBar} ${isDragging ? styles.dragOver : ''} ${(disabled || isSubmitted || timerState === 'expired' || isResumed) ? styles.disabled : ''}`}
+            className={`codeCompletionChoicesBar ${isDragging ? 'dragOver' : ''} ${(disabled || isSubmitted || timerState === 'expired' || isResumed) ? 'disabled' : ''}`}
             onDragOver={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -556,9 +556,9 @@ const CodeCompletion = ({
               !usedChoices.has(choice) && (
               <div
                 key={index}
-                  className={`${styles.choiceItem} ${
-                    currentDragItem === choice ? styles.dragging : ''
-                  } ${(disabled || isSubmitted || timerState === 'expired' || isResumed) ? styles.disabled : ''}`}
+                  className={`codeCompletionChoiceItem ${
+                    currentDragItem === choice ? 'dragging' : ''
+                  } ${(disabled || isSubmitted || timerState === 'expired' || isResumed) ? 'disabled' : ''}`}
                   draggable={!disabled && !isSubmitted && timerState !== 'expired' && !isResumed}
                 onDragStart={(e) => handleDragStartWithTimeout(e, choice)}
                 onDragEnd={handleDragEnd}
@@ -570,7 +570,7 @@ const CodeCompletion = ({
             ))}
           </div>
           
-          <div className={`${styles.codeEditorContainer} ${isDragging ? styles.dragOver : ''}`}>
+          <div className={`codeCompletionCodeEditorContainer ${isDragging ? 'dragOver' : ''}`}>
             <h3>COMPLETE THE CODE:</h3>
             {code ? (
               <div
@@ -658,7 +658,7 @@ const CodeCompletion = ({
 
               </div>
             ) : (
-              <div className={styles.noCodeMessage}>
+              <div className="codeCompletionNoCodeMessage">
                 <p>No code available for this challenge.</p>
               </div>
             )}
@@ -666,9 +666,9 @@ const CodeCompletion = ({
 
           {/* Expected Output */}
           {expectedOutput && (
-            <div className={styles.expectedOutput}>
+            <div className="codeCompletionExpectedOutput">
               <h3>Expected Output:</h3>
-              <div className={styles.outputText}>
+              <div className="codeCompletionOutputText">
                 {Array.isArray(expectedOutput) 
                   ? expectedOutput.map((output, index) => (
                       <div key={index}>{output}</div>
@@ -679,24 +679,24 @@ const CodeCompletion = ({
             </div>
           )}
 
-          <div className={styles.submitButton}>
+          <div className="submitButton">
             <button
               onClick={() => {
                 handleSubmit();
               }}
               disabled={isSubmitted || isSubmitting}
-              className={`${isSubmitted ? styles.submitted : ''} ${isSubmitting ? styles.submitting : ''}`}
+              className={`${isSubmitted ? 'submitted' : ''} ${isSubmitting ? 'submitting' : ''}`}
               title={isSubmitting ? "Submitting..." : "Submit your answer (empty submissions allowed)"}
             >
               {isSubmitting ? 'Submitting...' : isSubmitted ? 'Submitted' : 'Submit'}
             </button>
             {isResumed && (
-              <p className={styles.submitHint}>
+              <p className="submitHint">
                 This challenge was cancelled earlier. Your answers will be counted as wrong regardless of your progress.
               </p>
             )}
             {timerState === 'expired' && (
-              <p className={styles.submitHint}>
+              <p className="submitHint">
                 Time's up! Your answers will be counted as wrong regardless of your progress.
               </p>
             )}

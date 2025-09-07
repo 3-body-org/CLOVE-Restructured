@@ -1,4 +1,4 @@
-import detectiveBg from 'assets/images/noir/illustration-detective-background.svg';
+import detectiveBg from 'assets/images/noir/illustration-detective-background.webp';
 import ImageThemeBackground from './ImageThemeBackground';
 
 const DetectiveBackground = () => (

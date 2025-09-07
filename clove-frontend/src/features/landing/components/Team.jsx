@@ -32,10 +32,9 @@ export default function Team() {
               className={styles.teamPhoto}
             />
             <h3 className={styles.teamName}>Kerzania Macalde</h3>
-            <p className={styles.teamRole}>Game Designer</p>
+            <p className={styles.teamRole}>Researcher</p>
             <p className={styles.teamDesc}>
-              Passionate about creating engaging learning experiences through
-              innovative game design.
+              Focused on enhancing user experience through research and testing.
             </p>
             <div className={styles.teamIcons}>
               <a
@@ -73,10 +72,10 @@ export default function Team() {
               className={styles.teamPhoto}
             />
             <h3 className={styles.teamName}>Rexie Ryl Nadela</h3>
-            <p className={styles.teamRole}>Lead Developer</p>
+            <p className={styles.teamRole}>Project Leader</p>
             <p className={styles.teamDesc}>
-              Expert in coding and developing adaptive learning technologies for
-              education.
+              Passionate about creating engaging learning experiences through
+              innovative game design.
             </p>
             <div className={styles.teamIcons}>
               <a
@@ -114,9 +113,10 @@ export default function Team() {
               className={styles.teamPhoto}
             />
             <h3 className={styles.teamName}>Michael Saymo</h3>
-            <p className={styles.teamRole}>UX Researcher</p>
+            <p className={styles.teamRole}>Lead Developer</p>
             <p className={styles.teamDesc}>
-              Focused on enhancing user experience through research and testing.
+              Expert in coding and developing adaptive learning technologies for
+              education.
             </p>
             <div className={styles.teamIcons}>
               <a

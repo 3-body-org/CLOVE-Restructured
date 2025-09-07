@@ -1,0 +1,165 @@
+// ============================================================================
+// SPACE THEME - Cosmic Variables Initiative (Centralized)
+// ============================================================================
+// Single source of truth for all space theme colors
+// Based on CLOVE_LESSONS_COLOR_PALETTE.txt
+// This file replaces all duplicate space theme definitions across the app
+
+$space-theme: (
+  // ============================================================================
+  // 1. BACKGROUND COLORS
+  // ============================================================================
+  "theme-bg": #0a0a1a, // Deep space blue - Main theme background
+  "card-bg": rgba(26, 26, 46, 0.8), // Dark blue - Card backgrounds
+  "code-bg": #252540, // Dark code background - Code backgrounds
+  "code-bg-secondary": #3e3e5e, // Dark purple - Secondary code backgrounds
+  "code-bg-tertiary": #3e3e5e, // Dark purple - Output headers
+  "sidebar-bg": rgba(26, 26, 46, 0.8), // Dark blue - Sidebar background
+  "bullet-container-bg": rgba(26, 26, 46, 0.8), // Dark blue - Bullet container background
+  "objectives-bg": rgba(26, 26, 46, 0.8), // Dark blue - Objectives background
+  "summary-bg": rgba(110, 231, 183, 0.1), // Faerie Green with opacity - Summary section background
+  "output-bg": #252540, // Dark code background - Output background
+  "output-header-bg": #3e3e5e, // Dark purple - Output header background
+
+  // ============================================================================
+  // 2. TEXT COLORS
+  // ============================================================================
+  "theme-text": #ffffff, // White - Primary text, code text, output text, bullet text
+  "text-primary": #ffffff, // White - Primary text
+  "text-secondary": #a8a5e6, // Light purple - Secondary text, intro text, sidebar text
+  "intro-text": #a8a5e6, // Light purple - Intro text
+  "bullet-text": #ffffff, // White - Bullet text
+  "code-text": #ffffff, // White - Code text
+  "output-text": #ffffff, // White - Output text
+  "sidebar-text": #a8a5e6, // Light purple - Sidebar text
+  "sidebar-active-text": #ffffff, // White - Active sidebar text
+
+  // ============================================================================
+  // 3. HEADING COLORS
+  // ============================================================================
+  "heading-primary": #a6aafb, // Light blue - Main headings, lesson titles, section titles, contents title
+  "lesson-title": #a6aafb, // Light blue - Lesson titles
+  "section-title": #a6aafb, // Light blue - Section titles
+  "contents-title": #a6aafb, // Light blue - Contents title
+  "objectives-title": #ff7675, // Pink - Objectives title
+  "summary-title": #6EE7B7, // Flickering Faerie Green - Summary title
+
+  // ============================================================================
+  // 4. ACCENT & HIGHLIGHT COLORS
+  // ============================================================================
+  "accent-primary": #a6aafb, // Light blue - Primary accent, card borders, code borders, bullet borders
+  "accent-secondary": #ff7675, // Pink - Secondary accent, contents numbers, objective icons
+  "gold-accent": #ff7675, // Pink - Gold accent, bullet icons, strong text
+  "success-color": #6EE7B7, // Flickering Faerie Green - Success color, summary border, footer border
+  "warning-color": #ffa726, // Orange - Warning color
+  "danger-color": #ff6b6b, // Red - Danger accent
+  "tertiary-accent": #a8a5e6, // Light purple - Quaternary accent
+  "quaternary-accent": #a8a5e6, // Light purple - Quaternary accent
+  "active-accent": #3e3e5e, // Dark purple - Active accent
+
+  // ============================================================================
+  // 5. BUTTON COLORS
+  // ============================================================================
+  "button-primary-bg": #ff6b6b, // Red - Primary button background
+  "button-primary-text": #ffffff, // White - Primary button text
+  "button-secondary-bg": #252540, // Dark blue - Secondary button background
+  "button-secondary-text": #ffffff, // White - Secondary button text
+  "button-secondary-border": #a6aafb, // Light blue - Secondary button border
+
+  // ============================================================================
+  // 6. BORDER COLORS
+  // ============================================================================
+  "card-border": #a6aafb, // Light blue - Card borders
+  "code-border": #a6aafb, // Light blue - Code borders
+  "bullet-border": #a6aafb, // Light blue - Bullet borders
+  "summary-border": #6EE7B7, // Flickering Faerie Green - Summary border
+  "footer-border": #a6aafb, // Light blue - Footer border
+
+  // ============================================================================
+  // 7. CODE SYNTAX COLORS
+  // ============================================================================
+  "code-keyword": #6c5ce7, // Purple - Keywords
+  "code-variable": #a6aafb, // Light blue - Variables, numbers, inline code
+  "code-string": #ff7675, // Pink - Strings
+  "code-number": #a6aafb, // Light blue - Numbers
+  "code-comment": #a8a5e6, // Light purple - Comments
+  "code-inline": #a6aafb, // Light blue - Inline code
+
+  // ============================================================================
+  // 8. ASSESSMENT & CHALLENGE SPECIFIC
+  // ============================================================================
+  "correct": #6EE7B7, // Flickering Faerie Green - Correct answers
+  "wrong": #ff6b6b, // Red - Wrong answers
+  "pending": #ffa726, // Orange - Pending state
+  "timer": #a6aafb, // Light blue - Timer
+  "hint": #a8a5e6, // Light purple - Hints
+  "bug": #ff6b6b, // Red - Bug indicators
+
+  // ============================================================================
+  // 9. RGB VALUES FOR GRADIENTS AND OPACITY
+  // ============================================================================
+  "accent-primary-rgb": "166, 170, 251", // Light blue
+  "accent-secondary-rgb": "255, 118, 117", // Pink
+  "correct-rgb": "110, 231, 183", // Flickering Faerie Green
+  "wrong-rgb": "255, 107, 107", // Red
+  "pending-rgb": "255, 167, 38", // Orange
+  "primary-rgb": "139, 92, 246", // Cosmic Purple
+  "secondary-rgb": "168, 85, 247", // Cosmic Purple Light
+
+  // ============================================================================
+  // 10. SHADOWS AND EFFECTS
+  // ============================================================================
+  "shadow-sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  "shadow-md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+  "shadow-lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+  "shadow-glow": "0 0 20px rgba(139, 92, 246, 0.3)", // Cosmic Purple glow
+  "shadow-xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+
+  // ============================================================================
+  // 11. GRADIENTS
+  // ============================================================================
+  "gradient-primary": "linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%)", // Cosmic Purple gradient
+  "gradient-secondary": "linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)", // Enchanted Gold gradient
+  "gradient-success": "linear-gradient(135deg, #6EE7B7 0%, #10B981 100%)", // Faerie Green gradient
+
+  // ============================================================================
+  // 12. LEGACY VARIABLES (for backward compatibility)
+  // ============================================================================
+  "text": #ffffff, // White - Legacy text
+  "button-text": #ffffff, // White - Legacy button text
+  "text-muted": #a6aafb, // Light blue - Legacy muted text
+  "primary": #a6aafb, // Light blue - Legacy primary
+  "secondary": #ff7676, // Pink - Legacy secondary
+  "accent": #FBBF24, // Enchanted Gold Bright - Legacy accent
+  "transition-speed": "0.3s",
+  "transition-easing": "ease",
+  "progress-bar": "rgba(255, 255, 255, 0.1)", // Legacy progress bar
+
+  // ============================================================================
+  // 13. FONTS
+  // ============================================================================
+  "font-primary": '"Space Grotesk", sans-serif',
+  "font-heading": '"Orbitron", sans-serif',
+  "font-mono": '"Fira Code", monospace',
+);
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+// Export for SCSS modules
+:export {
+  @each $key, $value in $space-theme {
+    #{$key}: $value;
+  }
+}
+
+// Global theme class
+:global(body.theme-space) {
+  @each $var, $value in $space-theme {
+    --#{$var}: #{$value};
+  }
+  
+  background-color: var(--theme-bg);
+  transition: background-color 0.3s ease;
+} 

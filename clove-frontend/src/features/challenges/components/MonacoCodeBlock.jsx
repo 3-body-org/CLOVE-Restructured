@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
+import '../../../styles/components/challenge.scss';
 
 const getMonacoThemeName = (appTheme) => {
   switch (appTheme) {
@@ -297,6 +298,39 @@ const MonacoCodeBlock = ({
         background: ${shouldBeVisuallyDisabled ? 'rgba(255, 215, 0, 0.25)' : 'rgba(255, 215, 0, 0.35)'} !important;
         cursor: ${shouldBeVisuallyDisabled ? 'not-allowed' : 'grabbing'} !important;
       }
+      
+      /* Bug placeholder styles for Monaco editor */
+      .monaco-editor .bug-placeholder {
+        background: rgba(255, 99, 71, 0.4) !important;
+        color: inherit !important;
+        padding: 2px 4px !important;
+        border-radius: 3px !important;
+        border-bottom: 1px dashed #ff6347 !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      .monaco-editor .bug-placeholder:active {
+        background: rgba(255, 99, 71, 0.6) !important;
+        transform: scale(0.98) !important;
+      }
+      
+      .monaco-editor .bug-placeholder-highlight {
+        background: rgba(255, 99, 71, 0.7) !important;
+        color: inherit !important;
+        padding: 2px 4px !important;
+        border-radius: 3px !important;
+        border: 2px solid #ff6347 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 0 12px rgba(255, 99, 71, 0.8) !important;
+        animation: pulse 1s infinite !important;
+      }
+      
+      @keyframes pulse {
+        0% { box-shadow: 0 0 12px rgba(255, 99, 71, 0.8); }
+        50% { box-shadow: 0 0 20px rgba(255, 99, 71, 1); }
+        100% { box-shadow: 0 0 12px rgba(255, 99, 71, 0.8); }
+      }
     `;
     document.head.appendChild(styleElement);
     
@@ -354,7 +388,7 @@ const MonacoCodeBlock = ({
   } : {};
 
   return (
-    <div style={containerStyle}>
+    <div className={`monaco-code-block theme-${currentTheme}`} style={containerStyle}>
       <Editor
         height={height}
         defaultLanguage={language}

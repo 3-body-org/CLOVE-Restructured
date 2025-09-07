@@ -76,7 +76,7 @@ export function AuthProvider({ children }) {
     );
     challengeKeys.forEach(key => localStorage.removeItem(key));
     
-    navigate("/login-signup", { replace: true });
+    navigate("/", { replace: true });
   };
 
   // --- Handle logout warning modal actions ---

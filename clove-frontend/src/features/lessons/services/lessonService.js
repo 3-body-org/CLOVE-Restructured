@@ -26,31 +26,8 @@ export const useLessonService = () => {
     }
   };
 
-  const completeLesson = async (userId, subtopicId) => {
-    try {
-      const response = await post(`/user_subtopics/user/${userId}/subtopic/${subtopicId}/complete-lesson`);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      showErrorNotification('Failed to mark lesson as completed');
-      throw error;
-    }
-  };
-
-  const completePractice = async (userId, subtopicId) => {
-    try {
-      const response = await post(`/user_subtopics/user/${userId}/subtopic/${subtopicId}/complete-practice`);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      showErrorNotification('Failed to mark practice as completed');
-      throw error;
-    }
-  };
 
   return {
-    getLessonBySubtopicId,
-    completeLesson,
-    completePractice
+    getLessonBySubtopicId
   };
 }; 

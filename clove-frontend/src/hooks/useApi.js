@@ -91,11 +91,25 @@ export const useApi = () => {
   /**
    * Make a DELETE request
    * @param {string} url - The API endpoint URL
+   * @param {Object} data - The data to send
    * @param {Object} options - Additional fetch options
    * @returns {Promise<Response>} The fetch response
    */
-  const del = async (url, options = {}) => {
-    return apiCall(url, { ...options, method: 'DELETE' });
+  const del = async (url, data = null, options = {}) => {
+    const requestOptions = {
+      ...options,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    };
+
+    if (data) {
+      requestOptions.body = JSON.stringify(data);
+    }
+
+    return apiCall(url, requestOptions);
   };
 
   /**

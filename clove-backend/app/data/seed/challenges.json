@@ -1799,7 +1799,7 @@
         "Final Potency: 100.0",
         "Stabilizer Needed: false",
         "Stabilizer Needed: true",
-        "Final Potency: 50.0"
+        "Final Potency: 500.0"
       ],
       "explanation": "1. `baseConcentration` is `100`, `dilutionFactor` is `0.5`, `stabilizerNeeded` is `true`.\n2. `double potencyValue = baseConcentration * dilutionFactor;` calculates `100 * 0.5 = 50.0`. So, `potencyValue` becomes `50.0`.\n3. `if (potencyValue < 60.0)`: `50.0 < 60.0` is `true`.\n    * `stabilizerNeeded = false;` updates `stabilizerNeeded` to `false`.\n4. The first `System.out.println()` prints \"Final Potency: 50.0\".\n5. The second `System.out.println()` prints \"Stabilizer Needed: false\"."
     },
@@ -4524,7 +4524,7 @@
     "scenario": "A `FamiliarRegistry` creates an array `familiarNames` to store names of magical familiars. Complete the array declaration and the keyword to create a new array instance.",
     "story_context": "The FamiliarRegistry needs to create arrays for familiar names. Your task is to complete the array declaration and instantiation.",
     "challenge_data": {
-      "initial_code": "public class FamiliarRegistry {\n    public static void main(String[] args) {\n        ??? = ??? new String[4];\n        System.out.println(\"Array Size: \" + familiarNames.length);\n        System.out.println(\"First Slot: \" + familiarNames[0]);\n    }\n}",
+      "initial_code": "public class FamiliarRegistry {\n    public static void main(String[] args) {\n        ??? = ??? String[4];\n        System.out.println(\"Array Size: \" + familiarNames.length);\n        System.out.println(\"First Slot: \" + familiarNames[0]);\n    }\n}",
       "expected_output": [
         "Array Size: 4",
         "First Slot: null"

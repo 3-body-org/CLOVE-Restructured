@@ -1,7 +1,7 @@
-import bigRock from 'assets/icons/space/icon-big-rock.png';
-import exSmallRock from 'assets/icons/space/icon-exsmall-rock.png';
-import mediumRock from 'assets/icons/space/iconn-medium-rock.png';
-import smallRock from 'assets/icons/space/icon-small-rock.png';
+import bigRock from 'assets/icons/space/icon-big-rock.webp';
+import exSmallRock from 'assets/icons/space/icon-exsmall-rock.webp';
+import mediumRock from 'assets/icons/space/icon-medium-rock.webp';
+import smallRock from 'assets/icons/space/icon-small-rock.webp';
 
 export const spaceThemeConfig = {
   floatingElements: {

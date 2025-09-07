@@ -1,5 +1,5 @@
 
-import wizardBg from 'assets/images/wizard/illustration-wizard-background.svg';
+import wizardBg from 'assets/images/wizard/illustration-wizard-background.webp';
 import ImageThemeBackground from './ImageThemeBackground';
 
 const WizardBackground = () => (

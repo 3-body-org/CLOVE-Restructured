@@ -11,7 +11,7 @@ const ChallengeThemeProvider = ({ children, className = '', style = {} }) => {
     ...style
   };
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const body = document.body;
     
     body.classList.remove('theme-space', 'theme-wizard', 'theme-detective');

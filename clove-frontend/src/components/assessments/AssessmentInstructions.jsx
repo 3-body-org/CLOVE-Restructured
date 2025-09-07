@@ -1,22 +1,32 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './styles/AssessmentInstructions.module.scss';
+import '../../styles/components/assessment.scss';
+import { getSubtopicContent } from 'features/mydeck/content/subtopicContent';
 
 const AssessmentInstructions = ({ 
   isVisible, 
   onClose, 
   onStart, 
   assessmentType = 'pre',
-  topicId,
-  theme = 'space'
+  topicId
 }) => {
   const navigate = useNavigate();
+  // Handle both string (e.g., "1-3") and numeric (e.g., 1) topicId formats
+  const numericTopicId = topicId ? 
+    (typeof topicId === 'string' ? topicId.split('-')[0] : topicId.toString()) : 
+    null;
+  const frontendContent = getSubtopicContent(numericTopicId);
+  const topicTheme = frontendContent ? frontendContent.theme : 'space';
 
   if (!isVisible) return null;
 
   const handleStart = () => {
     onStart();
-    navigate(`/my-deck/${topicId}/assessment/${assessmentType}`);
+    if (assessmentType === 'retention-test') {
+      navigate(`/my-deck/${topicId}/retention-test`);
+    } else {
+      navigate(`/my-deck/${topicId}/assessment/${assessmentType}`);
+    }
   };
 
   const handleCancel = () => {
@@ -24,28 +34,32 @@ const AssessmentInstructions = ({
   };
 
   const getAssessmentTitle = () => {
+    if (assessmentType === 'retention-test') return 'Retention Test';
     return assessmentType === 'pre' ? 'Pre-Assessment' : 'Post-Assessment';
   };
 
   return (
-    <div className={styles.instructionOverlay}>
-      <div className={styles.instructionModal} data-theme={theme}>
-        <div className={styles.instructionHeader}>
+    <div className="assessment-instructions-overlay">
+      <div className={`assessment-instructions-modal theme-${topicTheme}`}>
+        <div className="instructions-header">
           <h2>{getAssessmentTitle()} Instructions</h2>
           <p>Please read carefully before starting</p>
         </div>
         
-        <div className={styles.instructionContent}>
-          <div className={styles.instructionSection}>
-            <h3>📋 Assessment Overview</h3>
+        <div className="instructions-content">
+          <div className="instructions-section">
+            <h3>📋 {assessmentType === 'retention-test' ? 'Retention Test' : 'Assessment'} Overview</h3>
             <ul>
-              <li>This assessment contains <strong>15 questions</strong></li>
-              <li>You must complete all 15 questions to finish the assessment</li>
-              <li>Once completed, you cannot retake this assessment</li>
+              <li>This {assessmentType === 'retention-test' ? 'retention test' : 'assessment'} contains <strong>15 questions</strong></li>
+              <li>You must complete all 15 questions to finish the {assessmentType === 'retention-test' ? 'retention test' : 'assessment'}</li>
+              <li>Once completed, you cannot retake this {assessmentType === 'retention-test' ? 'retention test' : 'assessment'}</li>
+              {assessmentType === 'retention-test' && (
+                <li>This test measures how well you've retained knowledge from this topic</li>
+              )}
             </ul>
           </div>
 
-          <div className={styles.instructionSection}>
+          <div className="instructions-section">
             <h3>⚠️ Important Rules</h3>
             <ul>
               <li><strong>Be careful with your choices!</strong> Once you click an option, it's automatically recorded as your answer</li>
@@ -55,7 +69,7 @@ const AssessmentInstructions = ({
             </ul>
           </div>
 
-          <div className={styles.instructionSection}>
+          <div className="instructions-section">
             <h3>🎯 How to Proceed</h3>
             <ul>
               <li>Read each question carefully</li>
@@ -65,7 +79,7 @@ const AssessmentInstructions = ({
             </ul>
           </div>
 
-          <div className={styles.instructionSection}>
+          <div className="instructions-section">
             <h3>📊 After Completion</h3>
             <ul>
               <li>You'll see detailed results with explanations</li>
@@ -75,15 +89,15 @@ const AssessmentInstructions = ({
           </div>
         </div>
 
-        <div className={styles.instructionActions}>
+        <div className="instructions-buttons">
           <button 
-            className={styles.startButton}
+            className="start-button"
             onClick={handleStart}
           >
-            I Understand - Start Assessment
+            I Understand - Start {assessmentType === 'retention-test' ? 'Retention Test' : 'Assessment'}
           </button>
           <button 
-            className={styles.cancelButton}
+            className="cancel-button"
             onClick={handleCancel}
           >
             Cancel - Return to Topic

@@ -10,7 +10,10 @@ import TitleAndProfile from "../../../components/layout/Navbar/TitleAndProfile";
 import TopicCard from "../components/TopicCard";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
+import AssessmentInstructions from "components/assessments/AssessmentInstructions";
 import { useMyDeckService } from "../hooks/useMydeckService";
+import { useApi } from "../../../hooks/useApi";
+import { useAuth } from "../../../contexts/AuthContext";
 import styles from "../styles/TopicPage.module.scss";
 import spaceTheme from "../themes/spaceTheme.module.scss";
 import wizardTheme from "../themes/wizardTheme.module.scss";
@@ -36,11 +39,21 @@ const THEMES = {
 const TopicPage = () => {
   const navigate = useNavigate();
   const { getTopicsWithProgress, getTopicById, updateRecentTopic } = useMyDeckService();
-  const { topics, setTopics } = useContext(MyDeckContext);
+  const { topics, setTopics, loadTopicOverview, topicCache } = useContext(MyDeckContext);
   const { closeSidebar } = useSidebar();
+  const { get } = useApi();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [minTimePassed, setMinTimePassed] = useState(false);
+  const [retentionTestStatus, setRetentionTestStatus] = useState([]);
+  
+  // Simple retention test state
+  const [isProcessingRetentionTests, setIsProcessingRetentionTests] = useState(false);
+  
+  // Retention test instructions modal state
+  const [showRetentionTestInstructions, setShowRetentionTestInstructions] = useState(false);
+  const [selectedTopicForRetentionTest, setSelectedTopicForRetentionTest] = useState(null);
 
   // Minimum loading time effect for consistent UX
   useEffect(() => {
@@ -48,6 +61,192 @@ const TopicPage = () => {
     const timer = setTimeout(() => setMinTimePassed(true), 200);
     return () => clearTimeout(timer);
   }, []); // Only on mount
+
+    // Check retention test availability using detailed topic overview from MyDeckContext
+  const checkRetentionTestAvailability = useCallback(async () => {
+    if (!user?.id || !topics || topics.length === 0) {
+      return;
+    }
+    
+    try {
+      const availableTests = [];
+      
+      for (const topic of topics) {
+        // Load detailed topic overview to get accurate completion status
+        let topicOverview = null;
+        try {
+          topicOverview = await loadTopicOverview(topic.id);
+          
+          // Check if loadTopicOverview is actually a function
+          if (typeof loadTopicOverview !== 'function') {
+            continue;
+          }
+          
+        } catch (error) {
+          continue; // Skip this topic if we can't load its overview
+        }
+        
+        let isTopicCompleted = false;
+        let completionTimestamp = null;
+        
+        if (!topicOverview) {
+          // Use progress-based completion check since topic overview failed
+          isTopicCompleted = topic.progress === 1 || topic.progress === 100;
+          
+          if (isTopicCompleted) {
+            // Check if topic has completion time, otherwise use 6 minutes ago
+            if (topic.completed_at) {
+              completionTimestamp = topic.completed_at;
+            } else {
+              // Assume topic was completed recently (6 minutes ago to make it eligible)
+              completionTimestamp = new Date(Date.now() - 6 * 60 * 1000).toISOString();
+            }
+          } else {
+            continue;
+          }
+        } else {
+          // Use detailed topic overview completion status
+          const { pre_assessment, subtopics, post_assessment } = topicOverview;
+          
+          // Topic is completed if ALL components are completed
+          const isPreAssessmentCompleted = pre_assessment?.is_completed || false;
+          const areAllSubtopicsCompleted = subtopics?.every(subtopic => subtopic.is_completed) || false;
+          const isPostAssessmentCompleted = post_assessment?.is_completed || false;
+          
+          isTopicCompleted = isPreAssessmentCompleted && areAllSubtopicsCompleted && isPostAssessmentCompleted;
+          
+          if (!isTopicCompleted) {
+            continue;
+          }
+          
+          // Get completion timestamp from the most recent completed component
+          if (post_assessment?.completed_at) {
+            completionTimestamp = post_assessment.completed_at;
+          }
+          // Check subtopics completion time
+          else if (subtopics?.length > 0) {
+            const lastCompletedSubtopic = subtopics
+              .filter(subtopic => subtopic.completed_at)
+              .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at))[0];
+            if (lastCompletedSubtopic) {
+              completionTimestamp = lastCompletedSubtopic.completed_at;
+            }
+          }
+          // Check pre-assessment completion time (earliest)
+          else if (pre_assessment?.completed_at) {
+            completionTimestamp = pre_assessment.completed_at;
+          }
+        }
+        
+        if (isTopicCompleted) {
+          // Calculate time since completion
+          let minutesSinceCompletion = 10; // Default for testing
+          
+          if (completionTimestamp) {
+            // Fix timezone issue: convert both times to UTC for accurate comparison
+            const completionDate = new Date(completionTimestamp);
+            const currentDate = new Date();
+            
+            // Get UTC timestamps to avoid timezone conversion issues
+            const completionUTC = Date.UTC(
+              completionDate.getUTCFullYear(),
+              completionDate.getUTCMonth(),
+              completionDate.getUTCDate(),
+              completionDate.getUTCHours(),
+              completionDate.getUTCMinutes(),
+              completionDate.getUTCSeconds()
+            );
+            const currentUTC = Date.UTC(
+              currentDate.getUTCFullYear(),
+              currentDate.getUTCMonth(),
+              currentDate.getUTCDate(),
+              currentDate.getUTCHours(),
+              currentDate.getUTCMinutes(),
+              currentDate.getUTCSeconds()
+            );
+            
+            minutesSinceCompletion = Math.floor((currentUTC - completionUTC) / (1000 * 60));
+          }
+          
+          // Check if topic is eligible based on 5-minute delay
+          const isEligible = minutesSinceCompletion >= 5;
+          
+          if (isEligible) {
+            // Check if retention test is not already completed
+            try {
+              const response = await get(`/assessment_questions/topic/${topic.id}/retention-test/status`);
+              if (response.ok) {
+                const data = await response.json();
+                if (!data.is_completed) {
+                  availableTests.push({
+                    topicId: topic.id,
+                    topicName: topic.name,
+                    minutesSinceCompletion: minutesSinceCompletion,
+                    isAvailable: true,
+                    is_completed: false
+                  });
+                } else {
+                  // Retention test completed
+                  availableTests.push({
+                    topicId: topic.id,
+                    topicName: topic.name,
+                    minutesSinceCompletion: minutesSinceCompletion,
+                    isAvailable: false,
+                    is_completed: true
+                  });
+                }
+              }
+            } catch (error) {
+              // If error, assume retention test is available
+              availableTests.push({
+                topicId: topic.id,
+                topicName: topic.name,
+                minutesSinceCompletion: minutesSinceCompletion,
+                isAvailable: true,
+                is_completed: false
+              });
+            }
+          } else {
+            // Topic completed but waiting for 5-minute delay
+            availableTests.push({
+              topicId: topic.id,
+              topicName: topic.name,
+              minutesSinceCompletion: minutesSinceCompletion,
+              isAvailable: false,
+              is_completed: false
+            });
+          }
+        }
+      }
+      
+      setRetentionTestStatus(availableTests);
+    } catch (error) {
+      // Silent error handling for production
+    }
+  }, [user, topics, loadTopicOverview, get]);
+
+  // Function to handle starting retention test
+  const handleStartRetentionTest = useCallback((topic) => {
+    setSelectedTopicForRetentionTest(topic);
+    setShowRetentionTestInstructions(true);
+  }, []);
+  
+  // Function to proceed to retention test after instructions
+  const handleProceedToRetentionTest = useCallback(() => {
+    if (selectedTopicForRetentionTest) {
+      setShowRetentionTestInstructions(false);
+      setSelectedTopicForRetentionTest(null);
+      navigate(`/my-deck/${selectedTopicForRetentionTest.id}/retention-test`);
+    }
+  }, [selectedTopicForRetentionTest, navigate]);
+
+  // Trigger retention test check when topics are loaded (ONCE only)
+  useEffect(() => {
+    if (user?.id && topics && topics.length > 0 && retentionTestStatus.length === 0 && !isProcessingRetentionTests) {
+      // Call checkRetentionTestAvailability directly to avoid dependency issues
+      checkRetentionTestAvailability();
+    }
+  }, [user?.id, topics, retentionTestStatus.length, isProcessingRetentionTests]);
 
   // Load topics with user progress only if not already in context
   useEffect(() => {
@@ -60,6 +259,7 @@ const TopicPage = () => {
         .then((topicsData) => {
           if (mounted) {
             setTopics(topicsData);
+            // Topics are now loaded, retention test check will happen via useEffect dependency
           }
         })
         .catch((error) => {
@@ -79,7 +279,9 @@ const TopicPage = () => {
     return () => {
       mounted = false;
     };
-  }, [setTopics, getTopicsWithProgress]); // Removed 'topics' from dependency array
+  }, [setTopics, getTopicsWithProgress, user?.id]); // Removed checkRetentionTestAvailability to prevent infinite loop
+
+
 
   /**
    * Get theme styles based on topic theme name.
@@ -138,6 +340,43 @@ const TopicPage = () => {
           "Master concepts one card at a time with built-in practice ✨"
         }
       />
+      
+      {/* Retention Test Status Section - Only show available tests (not completed ones) */}
+      {retentionTestStatus.filter(test => test.isAvailable).length > 0 && (
+        <div className={`${styles.retentionTestSection} mt-3 mb-4`}>
+          <div className={styles.retentionTestHeader}>
+            <h3>RETENTION TESTS AVAILABLE!</h3>
+            <p>You have retention tests ready to take</p>
+          </div>
+          
+          <div className={styles.retentionTestList}>
+            {retentionTestStatus
+              .filter(test => test.isAvailable) // Only show available tests
+              .map((test) => (
+                <div key={test.topicId} className={styles.retentionTestItem}>
+                  <div className={styles.retentionTestInfo}>
+                    <span className={styles.topicName}>{test.topicName}</span>
+                    <span className={styles.availability}>
+                      Available
+                    </span>
+                  </div>
+                  <button
+                    className={styles.startRetentionTestBtn}
+                    onClick={() => {
+                      const topic = topics.find(t => t.id === test.topicId);
+                      if (topic) {
+                        handleStartRetentionTest(topic);
+                      }
+                    }}
+                  >
+                    Start Retention Test
+                  </button>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+      
       <div
         className={`${styles.floatContainer} mt-3 p-0 d-flex flex-wrap justify-content-center`}
       >
@@ -150,15 +389,23 @@ const TopicPage = () => {
           </div>
         ) : (
           [
-            ...topics.map(topic => ({ type: "topic", topic, theme: topic.theme })),
+            ...topics.map(topic => ({ 
+              type: "topic", 
+              topic, 
+              theme: topic.theme,
+              retentionTestStatus: retentionTestStatus.find(rt => rt.topicId === topic.id) || null
+            })),
             { type: "comingSoon" }
           ].map((card, idx) => {
+
             return card.type === "topic" ? (
               <TopicCard
                 key={card.topic.id}
                 topic={card.topic}
                 onClick={handleTopicClick}
                 themeStyles={getThemeStyles(card.theme)}
+                retentionTestStatus={card.retentionTestStatus}
+                onRetentionTestClick={handleStartRetentionTest}
               />
             ) : (
               <TopicCard
@@ -170,6 +417,18 @@ const TopicPage = () => {
           })
         )}
       </div>
+      
+      {/* Retention Test Instructions Modal */}
+      {showRetentionTestInstructions && selectedTopicForRetentionTest && (
+        <AssessmentInstructions
+          isVisible={showRetentionTestInstructions}
+          onClose={() => setShowRetentionTestInstructions(false)}
+          onStart={handleProceedToRetentionTest}
+          assessmentType="retention-test"
+          topicId={selectedTopicForRetentionTest.id}
+          theme={selectedTopicForRetentionTest.theme || 'space'}
+        />
+      )}
     </Container>
   );
 };

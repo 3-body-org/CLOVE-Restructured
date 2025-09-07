@@ -1,0 +1,447 @@
+// ============================================================================
+// THEME MIXINS - Reusable Theme Patterns
+// ============================================================================
+// This file contains mixins for common theme patterns used across the app
+// Import this file in component-specific SCSS files
+
+// ============================================================================
+// 1. THEME VARIABLE MIXINS
+// ============================================================================
+
+// Apply theme variables to an element
+@mixin apply-theme-variables($theme-map) {
+  @each $var, $value in $theme-map {
+    --#{$var}: #{$value};
+  }
+}
+
+// Get theme value with fallback
+@mixin theme-value($property, $theme-var, $fallback: null) {
+  #{$property}: var(--#{$theme-var}, $fallback);
+}
+
+// ============================================================================
+// 2. BACKGROUND MIXINS
+// ============================================================================
+
+// Apply theme background
+@mixin theme-background($theme-var: 'theme-bg') {
+  background-color: var(--#{$theme-var});
+}
+
+// Apply theme text
+@mixin theme-text($theme-var: 'theme-text') {
+  color: var(--#{$theme-var});
+}
+
+// Apply theme heading primary
+@mixin theme-heading-primary($theme-var: 'heading-primary') {
+  color: var(--#{$theme-var});
+}
+
+// Apply theme heading secondary
+@mixin theme-heading-secondary($theme-var: 'heading-secondary') {
+  color: var(--#{$theme-var});
+}
+
+// Apply theme heading tertiary
+@mixin theme-heading-tertiary {
+  color: var(--heading-tertiary);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+// Apply theme text secondary
+@mixin theme-text-secondary($theme-var: 'text-secondary') {
+  color: var(--#{$theme-var});
+}
+
+// Apply theme button
+@mixin theme-button {
+  background: var(--button-primary-bg, var(--primary));
+  color: var(--button-primary-text, var(--text));
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+// Apply theme button hover
+@mixin theme-button-hover {
+  &:hover {
+    background: var(--button-primary-bg-hover, var(--primary));
+    transform: translateY(-1px);
+  }
+}
+
+// Apply theme code
+@mixin theme-code {
+  background-color: var(--code-bg);
+  color: var(--code-text, var(--text));
+  font-family: var(--font-mono);
+}
+
+// Apply theme code block
+@mixin theme-code-block {
+  @include theme-code;
+  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid var(--code-border, var(--border));
+}
+
+// Apply card background
+@mixin card-background($theme-var: 'card-bg') {
+  background-color: var(--#{$theme-var});
+}
+
+// Apply code background
+@mixin code-background($theme-var: 'code-bg') {
+  background-color: var(--#{$theme-var});
+}
+
+// ============================================================================
+// 3. TEXT MIXINS
+// ============================================================================
+
+// Apply primary text color
+@mixin primary-text($theme-var: 'text-primary') {
+  color: var(--#{$theme-var});
+}
+
+// Apply secondary text color
+@mixin secondary-text($theme-var: 'text-secondary') {
+  color: var(--#{$theme-var});
+}
+
+// Apply heading color
+@mixin heading-text($theme-var: 'heading-primary') {
+  color: var(--#{$theme-var});
+}
+
+// ============================================================================
+// 4. BORDER MIXINS
+// ============================================================================
+
+// Apply theme border
+@mixin theme-border($theme-var: 'card-border', $width: 1px, $style: solid) {
+  border: $width $style var(--#{$theme-var});
+}
+
+// Apply accent border
+@mixin accent-border($theme-var: 'accent-primary', $width: 1px, $style: solid) {
+  border: $width $style var(--#{$theme-var});
+}
+
+// ============================================================================
+// 5. BUTTON MIXINS
+// ============================================================================
+
+// Primary button styling
+@mixin primary-button {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--button-primary-bg-hover, var(--button-primary-bg));
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Secondary button styling
+@mixin secondary-button {
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 1px solid var(--button-secondary-border);
+  transition: all var(--transition-speed, 0.3s) var(--transition-easing, ease);
+  
+  &:hover {
+    background-color: var(--accent-primary);
+    color: var(--text-primary);
+  }
+}
+
+// Theme button styling (for smaller buttons)
+@mixin theme-button {
+  background: var(--button-secondary-bg, var(--card-bg));
+  color: var(--button-secondary-text, var(--text-primary));
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--button-secondary-bg-hover, var(--accent-primary));
+    color: var(--button-secondary-text-hover, var(--text-primary));
+    border-color: var(--accent-primary);
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// ============================================================================
+// 6. CARD MIXINS
+// ============================================================================
+
+// Theme card styling
+@mixin theme-card($border-radius: 8px, $padding: 16px) {
+  @include card-background;
+  @include theme-border;
+  border-radius: $border-radius;
+  padding: $padding;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all var(--transition-speed, 0.3s) var(--transition-easing, ease);
+  
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+}
+
+// ============================================================================
+// 7. CODE EDITOR MIXINS
+// ============================================================================
+
+// Code block styling
+@mixin code-block {
+  @include code-background;
+  @include theme-border('code-border');
+  border-radius: 4px;
+  padding: 12px;
+  font-family: var(--font-mono);
+  @include primary-text('code-text');
+}
+
+// Inline code styling
+@mixin inline-code {
+  background-color: var(--code-bg);
+  color: var(--code-inline);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+// ============================================================================
+// 8. ASSESSMENT & CHALLENGE MIXINS
+// ============================================================================
+
+// Correct answer styling
+@mixin correct-answer {
+  background-color: rgba(var(--correct-rgb), 0.15);
+  border: 1px solid var(--correct);
+  box-shadow: 0 0 10px rgba(var(--correct-rgb), 0.2);
+}
+
+// Incorrect answer styling
+@mixin incorrect-answer {
+  background-color: rgba(var(--wrong-rgb), 0.15);
+  border: 1px solid var(--wrong);
+  box-shadow: 0 0 10px rgba(var(--wrong-rgb), 0.2);
+}
+
+// Progress bar styling
+@mixin progress-bar($theme-var: 'progress-bar') {
+  background-color: var(--#{$theme-var});
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+// ============================================================================
+// 9. ANIMATION MIXINS
+// ============================================================================
+
+// Smooth transition
+@mixin smooth-transition($properties: all) {
+  transition: $properties var(--transition-speed, 0.3s) var(--transition-easing, ease);
+}
+
+// Hover lift effect
+@mixin hover-lift($distance: 2px) {
+  transition: transform var(--transition-speed, 0.3s) var(--transition-easing, ease);
+  
+  &:hover {
+    transform: translateY(-#{$distance});
+  }
+}
+
+// Glow effect
+@mixin glow-effect($theme-var: 'glow-color') {
+  box-shadow: 0 0 20px var(--#{$theme-var});
+}
+
+// ============================================================================
+// 10. RESPONSIVE MIXINS
+// ============================================================================
+
+// Mobile-first responsive breakpoint
+@mixin mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+// ============================================================================
+// 11. ACCESSIBILITY MIXINS
+// ============================================================================
+
+// Focus styles
+@mixin focus-styles($theme-var: 'accent-primary') {
+  &:focus {
+    outline: 2px solid var(--#{$theme-var});
+    outline-offset: 2px;
+  }
+  
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// Screen reader only text
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ============================================================================
+// 12. UTILITY MIXINS
+// ============================================================================
+
+// Clearfix
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+// Truncate text
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Center element
+@mixin center-element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ============================================================================
+// 13. THEME-SPECIFIC MIXINS
+// ============================================================================
+
+// Wizard theme specific styles
+@mixin wizard-theme {
+  body.theme-wizard & {
+    @content;
+  }
+}
+
+// Detective theme specific styles
+@mixin detective-theme {
+  body.theme-detective & {
+    @content;
+  }
+}
+
+// Space theme specific styles
+@mixin space-theme {
+  body.theme-space & {
+    @content;
+  }
+}
+
+// ============================================================================
+// 14. EXPORT MIXINS FOR JAVASCRIPT
+// ============================================================================
+
+// Export mixin names for potential JavaScript usage
+:export {
+  mixins: (
+    "apply-theme-variables",
+    "theme-background",
+    "card-background",
+    "code-background",
+    "primary-text",
+    "secondary-text",
+    "heading-text",
+    "theme-border",
+    "accent-border",
+    "primary-button",
+    "secondary-button",
+    "theme-card",
+    "code-block",
+    "inline-code",
+    "correct-answer",
+    "incorrect-answer",
+    "progress-bar",
+    "smooth-transition",
+    "hover-lift",
+    "glow-effect",
+    "mobile",
+    "tablet",
+    "desktop",
+    "focus-styles",
+    "sr-only",
+    "clearfix",
+    "truncate",
+    "center-element",
+    "wizard-theme",
+    "detective-theme",
+    "space-theme"
+  );
+} 

@@ -43,7 +43,7 @@ export default function TermsAndConditions({ onClose, onAccept, onDecline }) {
           <div className={styles.termsSection}>
             <div className={styles.termsSectionTitle}>Need Help?</div>
             <div className={styles.termsHelpText}>
-              If you have questions, contact us at <a href="mailto:support@clove.com">support@clove.com</a>.
+              If you have questions, contact us at <a href="mailto:cloveconnect@gmail.com">cloveconnect@gmail.com</a>.
             </div>
           </div>
           <div className={styles.termsActions}>
