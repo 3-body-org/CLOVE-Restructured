@@ -1,4 +1,5 @@
 @use "/variables" as *; /* import the global variable from _variables.scss */
+@use "sass:color"; /* import color functions */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
@@ -609,5 +610,245 @@
   
   .dashboard {
     padding: 1.5rem;
+  }
+} 
+
+/* Danger Zone Styles */
+.dangerZoneBadge {
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.dangerZoneContent {
+  background: rgba($danger, 0.05);
+  border: 1px solid rgba($danger, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.dangerZoneWarning {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.warningIcon {
+  color: $danger;
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.warningText h4 {
+  color: $danger;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.warningText p {
+  margin: 0;
+  color: $dark-white;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.deleteAccountButton {
+  background: linear-gradient(135deg, $danger, color.adjust($danger, $lightness: -10%));
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+ align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba($danger, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Delete Account Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($black, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.deleteModal {
+  background: $lighter-black;
+  border: 1px solid rgba($danger, 0.3);
+  border-radius: 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba($black, 0.5);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid rgba($danger, 0.2);
+}
+
+.modalWarningIcon {
+  color: $danger;
+  font-size: 1.5rem;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  color: $danger;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modalContent {
+  padding: 1.5rem 2rem;
+}
+
+.modalWarning {
+  color: $dark-white;
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.modalWarningList {
+  color: $dark-white;
+  margin: 0 0 1.5rem 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.passwordInputGroup {
+  margin-top: 1.5rem;
+}
+
+.passwordInputGroup label {
+  display: block;
+  color: $white;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.passwordInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.deletePasswordInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: $light-black;
+  border: 1px solid rgba($light-purple, 0.3);
+  border-radius: 0.75rem;
+  color: $white;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $light-purple;
+    box-shadow: 0 0 0 3px rgba($light-purple, 0.1);
+  }
+
+  &::placeholder {
+    color: $gray;
+  }
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: $gray;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $light-purple;
+  }
+}
+
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem 2rem 2rem;
+  border-top: 1px solid rgba($danger, 0.2);
+}
+
+.modalActions .cancelButton {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1px solid $gray;
+  color: $white;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background: $gray;
+    border-color: $gray;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.confirmDeleteButton {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, $danger, color.adjust($danger, $lightness: -10%));
+  border: none;
+  color: white;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba($danger, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 } 

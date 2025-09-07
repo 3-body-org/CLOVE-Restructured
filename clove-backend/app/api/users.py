@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 
-from app.schemas.user import UserRead, UserUpdate
+from app.schemas.user import UserRead, UserUpdate, UserDelete
 from app.crud.user import (
     get_by_id,
     update_user,
@@ -116,13 +116,14 @@ async def update_user_endpoint(
     updated_user = await update_user(db, user, update_data)
     return updated_user
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{user_id}")
 async def delete_user_endpoint(
     user_id: int,
+    delete_data: UserDelete,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Delete a user. Users can only delete their own account."""
+    """Delete a user account. Users can only delete their own account."""
     if current_user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -136,5 +137,13 @@ async def delete_user_endpoint(
             detail="User not found"
         )
 
-    await delete_user(db, user)
-    return None  
+    # Delete user with password verification
+    result = await delete_user(db, user, delete_data.password)
+    
+    if not result["success"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=result["message"]
+        )
+    
+    return {"message": result["message"]}  

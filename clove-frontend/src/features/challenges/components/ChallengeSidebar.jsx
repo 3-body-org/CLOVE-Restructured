@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/ChallengeSidebar.module.scss";
+import "../../../styles/components/challenge.scss";
 import { useChallengeTheme } from "../hooks/useChallengeTheme";
 import { useSidebar } from "../../../components/layout/Sidebar/Layout";
 import { MyDeckContext } from "../../../contexts/MyDeckContext";
 import ChallengeTimer from "./ChallengeTimer";
 import ChallengeHints from "./ChallengeHints";
+import DOMPurify from 'dompurify';
 
 const ChallengeSidebar = ({
   mode,
@@ -27,7 +28,7 @@ const ChallengeSidebar = ({
   disableHints = false,
   timerState = "active",
 }) => {
-  const { getThemeStyles, topicTheme } = useChallengeTheme();
+  const { topicTheme } = useChallengeTheme();
   const navigate = useNavigate();
   const { closeSidebar } = useSidebar();
   const { topicId, subtopicId } = useContext(MyDeckContext);
@@ -126,18 +127,18 @@ const ChallengeSidebar = ({
   };
 
   return (
-    <div className={styles.sidebarContainer} style={getThemeStyles()}>
-      <div className={styles.missionDetails}>
-        <div className={styles.instructionBox}>
-          <h3 className={styles.instructionTitle}>{modeInfo.title}</h3>
-          <p className={styles.instructionDescription}>
+    <div className={`sidebar-container theme-${topicTheme || 'space'}`}>
+      <div className="mission-details">
+        <div className="instruction-box">
+          <h3 className="instruction-title">{modeInfo.title}</h3>
+          <p className="instruction-description">
             {modeInfo.description}
           </p>
           {modeInfo.instructions && (
-            <ul className={styles.instructionList}>
+            <ul className="instruction-list">
               {modeInfo.instructions.map((instruction, index) => (
-                <li key={index} className={styles.instructionItem}>
-                  <span className={styles.instructionIcon}>
+                <li key={index} className="instruction-item">
+                  <span className="instruction-icon">
                     {instruction.icon}
                   </span>{" "}
                   {instruction.text}
@@ -150,16 +151,16 @@ const ChallengeSidebar = ({
         {children}
       </div>
 
-      <div className={styles.controlsPanel}>
+      <div className="controls-panel">
         {scenario && (
-          <div className={styles.scenarioBox}>
-            <h3 className={styles.scenarioTitle}>SCENARIO:</h3>
+          <div className="scenario-box">
+            <h3 className="scenario-title">SCENARIO:</h3>
             <p 
-              className={styles.scenarioDescription}
+              className="scenario-description"
               dangerouslySetInnerHTML={{
-                __html: scenario
+                __html: DOMPurify.sanitize(scenario
                   .replace(/`([^`]+)`/g, '<code>$1</code>')
-                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))
               }}
             />
           </div>
@@ -183,7 +184,7 @@ const ChallengeSidebar = ({
         />
 
         <button
-          className={styles.backButton}
+          className="back-button"
           onClick={() =>
             handleNavigation(`/lesson/${topicId}/${subtopicId}/practice`)
           }

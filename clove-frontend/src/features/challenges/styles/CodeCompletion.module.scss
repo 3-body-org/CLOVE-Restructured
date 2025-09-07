@@ -267,12 +267,6 @@
   }
 }
 
-
-
-
-
-
-
 .expectedOutput {
   margin-top: 20px;
   margin-bottom: 15px;
@@ -599,33 +593,7 @@
   100% { opacity: 1; }
 }
 
-// Theme-specific styling
-.terminalWindow {
-  background: var(--code-bg, #252540);
-  border: 1px solid var(--accent-primary, #6c5ce7);
-  border-radius: 8px;
-  overflow: hidden;
-  font-family: var(--font-mono, 'Courier New', monospace);
-  color: var(--text, #ffffff);
-  
-  &.theme-wizard {
-    background: var(--code-bg, #1A2B3C);
-    color: var(--text, #E8DBC3);
-    font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  }
-  
-  &.theme-detective {
-    background: var(--code-bg, #1a1a1a);
-    color: var(--text, #e0e0e0);
-    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
-  }
-  
-  &.theme-space {
-    background: var(--code-bg, #252540);
-    color: var(--text, #ffffff);
-    font-family: var(--font-mono, 'Fira Code', monospace);
-  }
-}
+
 
 .progressInfo {
   margin-top: 10px;

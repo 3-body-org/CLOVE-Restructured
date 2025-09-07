@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './CustomExitWarningModal.module.scss';
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
+import "../../../styles/components/challenge.scss";
 
 const CustomExitWarningModal = ({ 
   isVisible, 
@@ -55,21 +55,21 @@ const CustomExitWarningModal = ({
   const content = getModalContent();
 
   return (
-    <div className={`${styles.modalOverlay} theme-${currentTheme || 'space'}`} style={themeStyles}>
-      <div className={styles.modalContent}>
-        <div className={styles.warningIcon}>
+    <div className={`customExitWarningModalOverlay theme-${currentTheme || 'space'}`} style={themeStyles}>
+      <div className="customExitWarningModalContent">
+        <div className="customExitWarningModalWarningIcon">
           {content.icon}
         </div>
         
-        <h2 className={styles.title}>{content.title}</h2>
+        <h2 className="customExitWarningModalTitle">{content.title}</h2>
         
-        <p className={styles.message}>
+        <p className="customExitWarningModalMessage">
           {content.message}
         </p>
         
-        <div className={styles.buttonContainer}>
+        <div className="customExitWarningModalButtonContainer">
           <button
-            className={`${styles.button} ${styles.continueButton}`}
+            className="customExitWarningModalButton customExitWarningModalContinueButton"
             onClick={onContinueChallenge}
             disabled={isLoading}
           >
@@ -77,7 +77,7 @@ const CustomExitWarningModal = ({
           </button>
           
           <button
-            className={`${styles.button} ${styles.leaveButton}`}
+            className="customExitWarningModalButton customExitWarningModalLeaveButton"
             onClick={onLeaveAnyway}
             disabled={isLoading}
           >

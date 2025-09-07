@@ -20,6 +20,7 @@ const MyDeckProvider = ({ children }) => {
   const [unlockStatus, setUnlockStatus] = useState(null);
   const [overviewLoading, setOverviewLoading] = useState(false);
   const [completionLoading, setCompletionLoading] = useState({});
+  const [topicsRefreshing, setTopicsRefreshing] = useState(false);
 
   // Assessment questions tracking
   const [assessmentQuestions, setAssessmentQuestions] = useState({});
@@ -38,6 +39,7 @@ const MyDeckProvider = ({ children }) => {
       setUnlockStatus(null);
       setOverviewLoading(false);
       setCompletionLoading({});
+      setTopicsRefreshing(false);
       setAssessmentQuestions({});
     });
   }, []);
@@ -79,7 +81,7 @@ const MyDeckProvider = ({ children }) => {
     } finally {
       setOverviewLoading(false);
     }
-  }, [myDeckService, overviewLoading, topicOverview]);
+  }, [myDeckService]);
 
   // Get unlock status from overview data - aligned with backend structure
   const getUnlockStatus = (overviewData) => {
@@ -117,6 +119,25 @@ const MyDeckProvider = ({ children }) => {
     };
   };
 
+  // Refresh topics list with latest progress data
+  const refreshTopics = useCallback(async () => {
+    // Prevent multiple simultaneous calls
+    if (topicsRefreshing) {
+      return;
+    }
+    
+    setTopicsRefreshing(true);
+    try {
+      const updatedTopics = await myDeckService.getTopicsWithProgress();
+      setTopics(updatedTopics);
+      return updatedTopics;
+    } catch (error) {
+      throw error;
+    } finally {
+      setTopicsRefreshing(false);
+    }
+  }, [myDeckService]);
+
   // Complete subtopic component using service layer (memoized)
   const completeSubtopicComponent = useCallback(async (subtopicId, component) => {
     if (!subtopicId || !component) {
@@ -131,12 +152,15 @@ const MyDeckProvider = ({ children }) => {
       if (topicId) {
         await loadTopicOverview(topicId);
       }
+      
+      // Refresh topics list to update progress bars on Topic Page
+      await refreshTopics();
     } catch (error) {
       // Failed to complete subtopic component
     } finally {
       setCompletionLoading(prev => ({ ...prev, [`${subtopicId}-${component}`]: false }));
     }
-  }, [myDeckService, topicId, loadTopicOverview]);
+  }, [myDeckService, topicId, loadTopicOverview, refreshTopics]);
 
   // Submit assessment answer using service layer (memoized)
   const submitAssessmentAnswer = useCallback(async (topicId, type, questionId, answer) => {
@@ -152,22 +176,14 @@ const MyDeckProvider = ({ children }) => {
         await loadTopicOverview(topicId);
       }
       
+      // Refresh topics list to update progress bars on Topic Page
+      await refreshTopics();
+      
       return result;
     } catch (error) {
       throw error;
     }
-  }, [myDeckService, loadTopicOverview]);
-
-  // Refresh topics list with latest progress data
-  const refreshTopics = useCallback(async () => {
-    try {
-      const updatedTopics = await myDeckService.getTopicsWithProgress();
-      setTopics(updatedTopics);
-      return updatedTopics;
-    } catch (error) {
-      throw error;
-    }
-  }, [myDeckService, setTopics]);
+  }, [myDeckService, loadTopicOverview, refreshTopics]);
 
   // Get and store assessment questions summary
   const getAssessmentQuestionsSummary = useCallback(async (topicId, assessmentType) => {
@@ -229,3 +245,5 @@ const MyDeckProvider = ({ children }) => {
 };
 
 export { MyDeckContext, MyDeckProvider };
+
+

@@ -12,3 +12,4 @@ from .statistics import Statistic
 from .q_values import QValue
 from .pre_assessments import PreAssessment
 from .post_assessments import PostAssessment
+from .retention_tests import RetentionTest

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookOpen,
@@ -16,17 +16,17 @@ import { useNavigate } from "react-router-dom";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 import { useSidebar } from "../../../components/layout/Sidebar/Layout";
-import { MyDeckContext } from "contexts/MyDeckContext";
+import { useMyDeckService } from "../../mydeck/hooks/useMydeckService";
 
 // Reusable components
 const CompletedTopicItem = ({ topicNumber, date, badgeText }) => {
   const getBadgeClass = (badgeText) => {
     switch (badgeText) {
-      case 'Mastered': return styles.badgeMastered || 'badge-mastered';
-      case 'Proficient': return styles.badgeProficient || 'badge-proficient';
-      case 'Learned': return styles.badgeLearned || 'badge-learned';
-      case 'Completed': return styles.badgeCompleted || 'badge-completed';
-      default: return styles.badgeCompleted || 'badge-completed';
+      case 'Mastered': return styles.badgeMastered;
+      case 'Proficient': return styles.badgeProficient;
+      case 'Learned': return styles.badgeLearned;
+      case 'Completed': return styles.badgeCompleted;
+      default: return styles.badgeCompleted;
     }
   };
 
@@ -59,79 +59,74 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { closeSidebar } = useSidebar();
   
-  // Get MyDeckContext to access pre-assessment subtopic data
-  const { topicOverview } = useContext(MyDeckContext);
-
-  // Function to calculate knowledge level from assessment scores
-  const calculateKnowledgeLevelFromAssessment = (topicId) => {
-    // Check if we have topic overview data for this topic
-    if (topicOverview && topicOverview.topicId === topicId) {
-      // Check post-assessment scores
-      if (topicOverview.post_assessment && topicOverview.post_assessment.subtopic_scores) {
-        const subtopicScores = topicOverview.post_assessment.subtopic_scores;
-        const scores = Object.values(subtopicScores);
-        
-        if (scores.length > 0) {
-          const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-          console.log(`🔍 Topic ${topicId} post-assessment scores:`, subtopicScores, 'Average:', averageScore);
-          return averageScore;
-        }
-      }
-      // Fallback to pre-assessment scores
-      if (topicOverview.pre_assessment && topicOverview.pre_assessment.subtopic_scores) {
-        const subtopicScores = topicOverview.pre_assessment.subtopic_scores;
-        const scores = Object.values(subtopicScores);
-        
-        if (scores.length > 0) {
-          const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-          console.log(`🔍 Topic ${topicId} pre-assessment scores:`, subtopicScores, 'Average:', averageScore);
-          return averageScore;
-        }
-      }
+  // Get MyDeckService for consistent topic data
+  const { getTopicsWithProgress } = useMyDeckService();
+  
+  // Function to calculate knowledge level from subtopic knowledge level scores
+  const calculateTopicKnowledgeLevel = (subtopics) => {
+    if (!subtopics || subtopics.length === 0) return 0;
+    
+    // Filter subtopics that have knowledge level scores
+    const subtopicsWithScores = subtopics.filter(st => 
+      st.knowledge_level !== undefined && st.knowledge_level > 0
+    );
+    
+    if (subtopicsWithScores.length === 0) {
+      return 0;
     }
-    return 0.8; // Default to "Learned" level
+    
+    // Calculate average knowledge level from individual subtopic scores
+    const totalScore = subtopicsWithScores.reduce((sum, st) => sum + st.knowledge_level, 0);
+    const averageKnowledgeLevel = totalScore / subtopicsWithScores.length;
+    
+    return averageKnowledgeLevel;
   };
 
   // Update streak on dashboard load, then fetch stats
   React.useEffect(() => {
     let mounted = true;
     if (!user) return;
-    setLoading(true);
-    // Now fetch stats and topic progress
-    Promise.all([
-      get('/statistics/me'),
-      get(`/user_topics/user/${user.id}`)
-    ])
-      .then(async ([statsRes, topicsRes]) => {
+    
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        // Fetch stats and topic progress using consistent service
+        const [statsRes, topicsData] = await Promise.all([
+          get('/statistics/me'),
+          getTopicsWithProgress()
+        ]);
+        
         if (!mounted) return;
+        
         if (statsRes.ok) {
           const statsData = await statsRes.json();
           setStats(statsData);
         } else {
           setError("Failed to load dashboard stats");
         }
-        if (topicsRes.ok) {
-          const topics = await topicsRes.json();
-          setTopicProgress(topics);
-        } else {
-          setTopicProgress([]);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
+        
+        // Use the properly mapped topic data from service
+        setTopicProgress(topicsData);
+      } catch (error) {
         if (mounted) {
           setError("Failed to load dashboard stats");
+        }
+      } finally {
+        if (mounted) {
           setLoading(false);
         }
-      });
+      }
+    };
+    
+    fetchDashboardData();
     return () => { mounted = false; };
   }, [user]);
 
   // Progress Overview Data
   const progressData = topicProgress.length > 0
     ? topicProgress.map(tp => ({
-        topic: tp.topic?.title || `Topic ${tp.topic_id}`,
-        percentage: Math.round((tp.progress_percent || 0) * 100),
+        topic: tp.name || `Topic ${tp.id}`,
+        percentage: Math.round((tp.progress || 0) * 100),
       }))
     : [
         { topic: "Topic 1 – Data Types and Variables", percentage: 0 },
@@ -142,7 +137,7 @@ const Dashboard = () => {
   // Challenges Solved Data
   const challengesSolved = stats?.total_challenges_solved || 0;
   const totalChallenges = 405; // Total available challenges in database
-  const challengePercent = totalChallenges ? ((challengesSolved / totalChallenges) * 100).toFixed(1) : 0;
+  const challengePercent = totalChallenges ? parseFloat(((challengesSolved / totalChallenges) * 100).toFixed(1)) : 0;
   
   // Determine challenge description based on completion status
   let challengeDescription;
@@ -167,39 +162,31 @@ const Dashboard = () => {
 
   // Completed Topics with Badge
   const completedTopics = topicProgress
-    .filter(tp => tp.is_completed)
+    .filter(tp => tp.progress === 1) // Only show completed topics
     .map(tp => {
-      let badgeText = "";
-      
-      // Calculate knowledge level from pre-assessment subtopic scores
-      // The scores are stored in the assessment data, not in the topic itself
-      let averageKnowledgeLevel = 0;
-      
-      // try to calculate from assessment scores
-      averageKnowledgeLevel = calculateKnowledgeLevelFromAssessment(tp.topic_id);
+      // Calculate knowledge level from subtopic completion data
+      const averageKnowledgeLevel = calculateTopicKnowledgeLevel(tp.subtopics);
       
       // Determine badge based on knowledge level
+      let badgeText = "";
       if (averageKnowledgeLevel >= 0.95) badgeText = "Mastered";
       else if (averageKnowledgeLevel >= 0.85) badgeText = "Proficient";
       else if (averageKnowledgeLevel >= 0.75) badgeText = "Learned";
       else badgeText = "Completed";
       
-      // Handle completion date - if completed_at is null but topic is completed,
-      // use current date or a fallback
+      // Handle completion date
       let completionDate = "Unknown";
       if (tp.completed_at) {
         completionDate = new Date(tp.completed_at).toLocaleDateString();
-      } else if (tp.is_completed) {
-        // If topic is completed but no completion date, use a fallback
-        // This handles cases where topics are completed through assessments
+      } else if (tp.progress === 1) {
         completionDate = "Recently completed";
       }
       
       return {
-        topicNumber: tp.topic?.title || `Topic ${tp.topic_id}`,
+        topicNumber: tp.name || `Topic ${tp.id}`,
         date: completionDate,
         badgeText,
-        averageKnowledgeLevel: averageKnowledgeLevel.toFixed(2) 
+        averageKnowledgeLevel: averageKnowledgeLevel.toFixed(2)
       };
     });
 

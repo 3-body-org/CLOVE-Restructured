@@ -3,9 +3,7 @@ import Editor from "@monaco-editor/react";
 import { useParams } from 'react-router-dom';
 import { useMemo, useEffect } from 'react';
 import { subtopicContent } from '../../mydeck/content/subtopicContent';
-import wizardTheme from '../themes/wizardTheme.module.scss';
-import detectiveTheme from '../themes/detectiveTheme.module.scss';
-import spaceTheme from '../themes/spaceTheme.module.scss';
+// Theme imports removed - using centralized theme system
 
 const getMonacoThemeName = (appTheme) => {
   switch (appTheme) {

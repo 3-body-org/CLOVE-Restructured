@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import MonacoCodeBlock from '../components/MonacoCodeBlock';
 import ProgressIndicator from '../components/ProgressIndicator';
-import styles from '../styles/CodeFixer.module.scss';
+import "../../../styles/components/challenge.scss";
 
 const CodeFixer = ({
   challengeData,
@@ -79,7 +79,7 @@ const CodeFixer = ({
   };
 
   return (
-        <div className={styles.challengeArea}>
+        <div className="challengeArea">
           {/* Progress Indicator at the very top */}
           <ProgressIndicator
             challengeIndex={challengeIndex}
@@ -87,9 +87,9 @@ const CodeFixer = ({
           />
 
           {/* Challenge Title */}
-          <h1 className={styles.challengeTitle}>CODE FIXER CHALLENGE</h1>
+          <h1 className="challengeTitle">CODE FIXER CHALLENGE</h1>
           
-          <div className={styles.codeEditorContainer}>
+          <div className="codeFixerCodeEditorContainer">
             <h3>EDIT THE CODE:</h3>
             <MonacoCodeBlock
               key={`${isResumed}-${disabled}-${timerState}`} // Force re-render when readOnly state changes
@@ -107,9 +107,9 @@ const CodeFixer = ({
             />
           </div>
 
-          <div className={styles.expectedOutput}>
+          <div className="codeFixerExpectedOutput">
             <h3>Expected Output:</h3>
-            <div className={styles.outputText}>
+            <div className="codeFixerOutputText">
               {Array.isArray(expectedOutput) 
                 ? expectedOutput.map((output, index) => (
                     <div key={index}>{output}</div>
@@ -119,22 +119,22 @@ const CodeFixer = ({
             </div>
           </div>
 
-          <div className={styles.submitButton}>
+          <div className="codeFixerSubmitButton">
             <button
               onClick={handleSubmit}
               disabled={isSubmitted || isSubmitting}
-              className={`${isSubmitted ? styles.submitted : ''} ${isSubmitting ? styles.submitting : ''}`}
+              className={`${isSubmitted ? 'submitted' : ''} ${isSubmitting ? 'submitting' : ''}`}
               title={isSubmitting ? "Submitting..." : "Submit your answer (empty submissions allowed)"}
             >
               {isSubmitting ? 'Submitting...' : isSubmitted ? 'Submitted' : 'Submit'}
             </button>
             {isResumed && (
-              <p className={styles.submitHint}>
+              <p className="submitHint">
                 This challenge was cancelled earlier. Your answers will be counted as wrong regardless of your progress.
               </p>
             )}
             {timerState === 'expired' && (
-              <p className={styles.submitHint}>
+              <p className="submitHint">
                 Time's up! Your answers will be counted as wrong regardless of your progress.
               </p>
             )}

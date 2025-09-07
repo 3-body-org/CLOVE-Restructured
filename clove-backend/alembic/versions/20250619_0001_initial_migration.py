@@ -160,6 +160,21 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('pre_assessment_id')
     )
     op.create_index(op.f('ix_pre_assessments_pre_assessment_id'), 'pre_assessments', ['pre_assessment_id'], unique=False)
+    op.create_table('retention_tests',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('topic_id', sa.Integer(), nullable=False),
+    sa.Column('questions_answers', sa.JSON(), nullable=False),
+    sa.Column('total_score', sa.Float(), nullable=False),
+    sa.Column('total_items', sa.Integer(), nullable=True),
+    sa.Column('is_completed', sa.Boolean(), nullable=True, server_default='false'),
+    sa.Column('completed_at', sa.TIMESTAMP(timezone=True), nullable=True),
+    sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.ForeignKeyConstraint(['topic_id'], ['topics.topic_id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_retention_tests_id'), 'retention_tests', ['id'], unique=False)
     op.create_table('user_subtopics',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -247,6 +262,8 @@ def downgrade() -> None:
     op.drop_table('user_subtopics')
     op.drop_index(op.f('ix_pre_assessments_pre_assessment_id'), table_name='pre_assessments')
     op.drop_table('pre_assessments')
+    op.drop_index(op.f('ix_retention_tests_id'), table_name='retention_tests')
+    op.drop_table('retention_tests')
     op.drop_index(op.f('ix_post_assessments_post_assessment_id'), table_name='post_assessments')
     op.drop_table('post_assessments')
     op.drop_index(op.f('ix_challenges_id'), table_name='challenges')

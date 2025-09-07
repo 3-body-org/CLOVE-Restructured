@@ -66,3 +66,6 @@ class PasswordResetConfirm(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+class UserDelete(BaseModel):
+    password: str = Field(..., description="Current password required for account deletion")

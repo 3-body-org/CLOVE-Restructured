@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import styles from "../styles/ChallengeSidebar.module.scss";
+import "../../../styles/components/challenge.scss";
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const ChallengeTimer = ({
@@ -43,35 +43,35 @@ const ChallengeTimer = ({
     if (timerState === 'paused') {
       return (
         <>
-          <span className={styles.timerValue}>{formatTime(timeRemaining)}</span>
-          <span className={`${styles.timerStatus} ${styles.timerPaused}`}>PAUSED</span>
+          <span className="timer-value">{formatTime(timeRemaining)}</span>
+          <span className="timer-status timer-paused">PAUSED</span>
         </>
       );
     } else if (timerState === 'expired') {
       return (
         <>
-          <span className={styles.timerValue}>00:00</span>
-          <span className={`${styles.timerStatus} ${styles.timerExpired}`}>EXPIRED</span>
+          <span className="timer-value">00:00</span>
+          <span className="timer-status timer-expired">EXPIRED</span>
         </>
       );
     } else {
-      return <span className={styles.timerValue}>{formatTime(timeRemaining)}</span>;
+      return <span className="timer-value">{formatTime(timeRemaining)}</span>;
     }
   };
   
   return (
-    <div className={styles.timerIntegrityContainer} data-theme={topicTheme}>
-      <div className={styles.timerTitle}>{getTimerTitle(topicTheme)}</div>
-      <div className={styles.timerDisplay}>
+    <div className="timer-integrity-container" data-theme={topicTheme}>
+      <div className="timer-title">{getTimerTitle(topicTheme)}</div>
+      <div className="timer-display">
         {getTimerDisplay()}
       </div>
-      <div className={styles.timerBar}>
+      <div className="timer-bar">
         <div
-          className={styles.timerFill}
+          className="timer-fill"
           data-theme={topicTheme}
           style={{ width: `${timerPercent}%` }}
         />
-        <span className={styles.timerPercentage}>{timerPercent}%</span>
+        <span className="timer-percentage">{timerPercent}%</span>
       </div>
     </div>
   );

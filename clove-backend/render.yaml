@@ -16,7 +16,7 @@ services:
       - key: JWT_ALGORITHM
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
-        value: 10080
+        value: 240
       - key: REFRESH_TOKEN_EXPIRE_DAYS
         value: 30
       - key: CORS_ORIGINS
@@ -32,7 +32,7 @@ services:
       - key: DB_POOL_RECYCLE
         value: 1800
       - key: RATE_LIMIT_PER_MINUTE
-        value: 1000
+        value: 500
       - key: LOG_LEVEL
         value: INFO
       - key: ALLOWED_HOSTS

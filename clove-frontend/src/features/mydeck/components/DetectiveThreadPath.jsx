@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import pinSvg from 'assets/icons/noir/icon-pin.svg'; // Pin SVG for detective theme
+import pinSvg from 'assets/icons/noir/icon-pin.webp'; // Pin SVG for detective theme
 
 // Helper to get the center of a node
 function getCenter(ref, containerRef) {

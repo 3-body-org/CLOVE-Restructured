@@ -201,18 +201,6 @@ export const useChallengeApi = () => {
     return false;
   };
 
-  /**
-   * Complete subtopic challenge run
-   * @param {number} userId - User ID
-   * @param {number} subtopicId - Subtopic ID
-   * @returns {Promise<Object>} Completion result
-   */
-  const completeSubtopicChallenge = async (userId, subtopicId) => {
-    return makeApiCall(
-      () => api.post(`/user_subtopics/user/${userId}/subtopic/${subtopicId}/complete-challenge`),
-      'Failed to complete subtopic challenge'
-    );
-  };
 
   /**
    * Get challenge attempt count for a user and subtopic
@@ -274,7 +262,6 @@ export const useChallengeApi = () => {
     validateChallengeSession,
     deactivateChallengeSession,
     forceDeactivateAllSessions,
-    completeSubtopicChallenge,
     getChallengeAttemptCount,
     deleteAllChallengeAttemptsForSubtopic,
     getAllChallengeAttemptsForResults,

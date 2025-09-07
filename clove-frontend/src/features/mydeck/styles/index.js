@@ -1,6 +1,4 @@
-import "../themes/spaceTheme.module.scss";
-import "../themes/wizardTheme.module.scss";
-import "../themes/detectiveTheme.module.scss";
+import "../../../styles/themes/index.scss";
 
 export const THEMES = {
   SPACE: "space",

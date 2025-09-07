@@ -308,23 +308,23 @@
   
   // Different colors for different mastery levels
   &.badgeMastered {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: $danger;
+    background-color: rgba(16, 185, 129, 0.1);  
+    color: $success;                              
   }
   
   &.badgeProficient {
-    background-color: rgba(245, 158, 11, 0.1);
-    color: $warning;
+    background-color: rgba(245, 158, 11, 0.1);  
+    color: $warning;                              
   }
   
   &.badgeLearned {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: $success;
+    background-color: rgba(239, 68, 68, 0.1);   
+    color: $danger;                               
   }
   
   &.badgeCompleted {
-    background-color: rgba(139, 92, 246, 0.1);
-    color: $light-purple;
+    background-color: rgba(139, 92, 246, 0.1);  
+    color: $light-purple;                         
   }
 }
 

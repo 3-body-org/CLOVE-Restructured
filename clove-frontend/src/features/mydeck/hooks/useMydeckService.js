@@ -5,6 +5,7 @@
 
 import { useApi } from '../../../hooks/useApi';
 import { useAuth } from 'contexts/AuthContext';
+import { useCallback } from 'react';
 
 /**
  * @typedef {Object} MyDeckService
@@ -30,7 +31,7 @@ export const useMyDeckService = () => {
    * Get all topics with user progress for MyDeck.
    * @returns {Promise<Array>} Array of topic objects with progress.
    */
-  const getTopicsWithProgress = async () => {
+  const getTopicsWithProgress = useCallback(async () => {
     if (!user) throw new Error('User not authenticated');
     const response = await get(`/user_topics/user/${user.id}`);
     if (!response.ok) throw new Error('Failed to fetch topics');
@@ -44,21 +45,23 @@ export const useMyDeckService = () => {
       theme: ut.topic?.theme || 'space',
       progress: ut.progress_percent || 0,
       is_unlocked: ut.is_unlocked,
+      completed_at: ut.completed_at, 
       subtopics: (ut.subtopics || []).map(st => ({
         id: st.subtopic?.subtopic_id,
         slug: st.subtopic?.title?.toLowerCase().replace(/\s+/g, '-') || `subtopic-${st.subtopic_id}`,
         name: st.subtopic?.title || `Subtopic ${st.subtopic_id}`,
-        completed: st.is_completed || false
+        completed: st.is_completed || false,
+        knowledge_level: st.knowledge_level || 0
       }))
     }));
-  };
+  }, [user, get]);
 
   /**
    * Get specific topic by ID.
    * @param {number|string} topicId
    * @returns {Promise<Object>} Topic object with progress and subtopics.
    */
-  const getTopicById = async (topicId) => {
+  const getTopicById = useCallback(async (topicId) => {
     if (!user) throw new Error('User not authenticated');
     const response = await get(`/user_topics/user/${user.id}/topic/${topicId}`);
     if (!response.ok) throw new Error('Topic not found');
@@ -77,21 +80,21 @@ export const useMyDeckService = () => {
         completed: st.is_completed || false
       }))
     };
-  };
+  }, [user, get]);
 
   /**
    * Get complete topic overview including assessments and subtopics.
    * @param {number|string} topicId
    * @returns {Promise<Object>} Complete topic overview with backend data.
    */
-  const getTopicOverview = async (topicId, timestamp = Date.now()) => {
+  const getTopicOverview = useCallback(async (topicId, timestamp = Date.now()) => {
     try {
       const response = await get(`/user_topics/user/${user.id}/topic/${topicId}/overview?t=${timestamp}`);
       return response.json();
     } catch (error) {
       throw error;
     }
-  };
+  }, [user, get]);
 
   /**
    * Submit assessment answer.

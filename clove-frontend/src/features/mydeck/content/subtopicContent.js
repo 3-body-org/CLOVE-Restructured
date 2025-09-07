@@ -6,23 +6,23 @@
 
 // --- Icon Imports ---
 // Noir (Detective)
-import noirPreAss from 'assets/icons/noir/icon-pre-ass.svg';
-import noirSubtopic1 from 'assets/icons/noir/icon-subtopic1.svg';
-import noirSubtopic2 from 'assets/icons/noir/icon-subtopic2.svg';
-import noirSubtopic3 from 'assets/icons/noir/icon-subtopic3.svg';
-import noirPostAss from 'assets/icons/noir/icon-post-ass.svg';
+import noirPreAss from 'assets/icons/noir/icon-pre-ass.webp';
+import noirSubtopic1 from 'assets/icons/noir/icon-subtopic1.webp';
+import noirSubtopic2 from 'assets/icons/noir/icon-subtopic2.webp';
+import noirSubtopic3 from 'assets/icons/noir/icon-subtopic3.webp';
+import noirPostAss from 'assets/icons/noir/icon-post-ass.webp';
 // Wizard
-import wizardPreAss from 'assets/icons/wizard/icon-pre-ass.svg';
-import wizardSubtopic1 from 'assets/icons/wizard/icon-subtopic1.svg';
-import wizardSubtopic2 from 'assets/icons/wizard/icon-subtopic2.svg';
-import wizardSubtopic3 from 'assets/icons/wizard/icon-subtopic3.svg';
-import wizardPostAss from 'assets/icons/wizard/icon-post-ass.svg';
+import wizardPreAss from 'assets/icons/wizard/icon-pre-ass.webp';
+import wizardSubtopic1 from 'assets/icons/wizard/icon-subtopic1.webp';
+import wizardSubtopic2 from 'assets/icons/wizard/icon-subtopic2.webp';
+import wizardSubtopic3 from 'assets/icons/wizard/icon-subtopic3.webp';
+import wizardPostAss from 'assets/icons/wizard/icon-post-ass.webp';
 // Space
-import spacePreAss from 'assets/icons/space/icon-pre-ass.svg';
-import spaceSubtopic1 from 'assets/icons/space/icon-subtopic1.svg';
-import spaceSubtopic2 from 'assets/icons/space/icon-subtopic2.svg';
-import spaceSubtopic3 from 'assets/icons/space/icon-subtopic3.svg';
-import spacePostAss from 'assets/icons/space/icon-post-ass.svg';
+import spacePreAss from 'assets/icons/space/icon-pre-ass.webp';
+import spaceSubtopic1 from 'assets/icons/space/icon-subtopic1.webp';
+import spaceSubtopic2 from 'assets/icons/space/icon-subtopic2.webp';
+import spaceSubtopic3 from 'assets/icons/space/icon-subtopic3.webp';
+import spacePostAss from 'assets/icons/space/icon-post-ass.webp';
 
 /**
  * @typedef {Object} UIContent

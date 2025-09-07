@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styles from '../styles/ChallengeFeedback.module.scss';
+import '../../../styles/components/challenge.scss';
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const ChallengeFeedback = ({ 
@@ -20,10 +20,7 @@ const ChallengeFeedback = ({
   challengeCode,
   explanation
 }) => {
-  const { getThemeValue, getThemeStyles, currentTheme } = useChallengeTheme();
-  
-  // Get theme-specific styles
-  const themeStyles = getThemeStyles();
+  const { currentTheme } = useChallengeTheme();
   
   // Format time spent
   const formatTimeSpent = (seconds, timerEnabled) => {
@@ -57,8 +54,8 @@ const ChallengeFeedback = ({
   };
 
   const getFeedbackColor = () => {
-    if (isTimeExpired || isCancelledChallenge) return styles.cancelled;
-    return isCorrect ? styles.correct : styles.incorrect;
+    if (isTimeExpired || isCancelledChallenge) return 'cancelled';
+    return isCorrect ? 'correct' : 'incorrect';
   };
 
   const formatAnswer = (answer, mode) => {
@@ -97,79 +94,78 @@ const ChallengeFeedback = ({
 
   return (
     <div 
-      className={`${styles.feedbackContainer} ${getFeedbackColor()} theme-${currentTheme}`}
-      style={themeStyles}
+      className={`feedback-container ${getFeedbackColor()} theme-${currentTheme}`}
     >
-      <div className={styles.feedbackHeader}>
-        <div className={styles.feedbackIcon}>
+      <div className="feedback-header">
+        <div className="feedback-icon">
           {getFeedbackIcon()}
         </div>
-        <h2 className={styles.feedbackTitle}>{getFeedbackTitle()}</h2>
+        <h2 className="feedback-title">{getFeedbackTitle()}</h2>
       </div>
 
       {/* Points and Stats - Moved to top */}
-      <div className={styles.statsContainer}>
-        <div className={styles.stat}>
-          <span className={styles.statLabel}>Points:</span>
-          <span className={styles.statValue}>{isCorrect ? points : 0}</span>
+      <div className="stats-container">
+        {/* <div className="stat">
+          <span className="stat-label">Points:</span>
+          <span className="stat-value">{isCorrect ? points : 0}</span>
+        </div> */}
+        <div className="stat">
+          <span className="stat-label">Time:</span>
+          <span className="stat-value">{formatTimeSpent(timeSpent, timerEnabled)}</span>
         </div>
-        <div className={styles.stat}>
-          <span className={styles.statLabel}>Time:</span>
-          <span className={styles.statValue}>{formatTimeSpent(timeSpent, timerEnabled)}</span>
-        </div>
-        <div className={styles.stat}>
-          <span className={styles.statLabel}>Hints Used:</span>
-          <span className={styles.statValue}>{formatHintsUsed(hintsUsed, hintsEnabled)}</span>
+        <div className="stat">
+          <span className="stat-label">Hints Used:</span>
+          <span className="stat-value">{formatHintsUsed(hintsUsed, hintsEnabled)}</span>
         </div>
       </div>
 
-      <div className={styles.feedbackContent}>
+      <div className="feedback-content">
         {/* User's Answer */}
-        <div className={styles.answerSection}>
+        <div className="answer-section">
           <h3>Your Answer:</h3>
-          <div className={styles.answerBox}>
+          <div className="answer-box">
             <pre>{formatAnswer(userAnswer, challengeMode)}</pre>
           </div>
         </div>
 
         {/* Correct Answer (always show for learning) */}
         {correctAnswer && (
-          <div className={styles.answerSection}>
+          <div className="answer-section">
             <h3>Correct Answer:</h3>
-            <div className={styles.answerBox}>
+            <div className="answer-box">
               <pre>{formatAnswer(correctAnswer, challengeMode)}</pre>
             </div>
           </div>
         )}
 
         {/* Feedback (always present) */}
-        <div className={styles.feedbackSection}>
+        <div className="feedback-section">
           <h3>Feedback:</h3>
-          <div className={styles.feedbackBox}>
+          <div className="feedback-box">
             <p>{feedback || "No feedback available for this challenge."}</p>
           </div>
         </div>
 
         {/* Challenge Code (always present) */}
-        <div className={styles.codeSection}>
+        <div className="code-section">
           <h3>Challenge Code:</h3>
-          <div className={styles.codeBox}>
+          <div className="code-box">
             <pre>{challengeCode || "No challenge code available."}</pre>
           </div>
         </div>
 
         {/* Explanation (always present) */}
-        <div className={styles.explanationSection}>
+        <div className="explanation-section">
           <h3>Explanation:</h3>
-          <div className={styles.explanationBox}>
+          <div className="explanation-box">
             <p>{explanation || "No detailed explanation available for this challenge."}</p>
           </div>
         </div>
       </div>
 
-      <div className={styles.feedbackActions}>
+      <div className="feedback-actions">
         <button 
-          className={styles.continueButton}
+          className="continue-button"
           onClick={onContinue}
         >
           Continue

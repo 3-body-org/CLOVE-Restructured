@@ -6,6 +6,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import styles from "features/mydeck/styles/TopicCard.module.scss";
 
 /**
@@ -16,8 +17,11 @@ import styles from "features/mydeck/styles/TopicCard.module.scss";
  * @param {Function} props.onClick - Click handler for the card.
  * @param {Object} [props.themeStyles] - Optional theme style classes.
  * @param {boolean} [props.comingSoon] - If true, renders a "Coming Soon" card.
+ * @param {Object} [props.retentionTestStatus] - Retention test status for this topic.
+ * @param {Function} [props.onRetentionTestClick] - Handler for retention test button clicks.
  */
-const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = false }) => {
+const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = false, retentionTestStatus = null, onRetentionTestClick = null }) => {
+  const navigate = useNavigate();
   if (comingSoon) {
     return (
       <Col
@@ -43,10 +47,23 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
   // Convert decimal progress (0.0-1.0) to percentage (0-100)
   const progressPercentage = Math.round(progress * 100);
 
+  // Determine button label and behavior based on topic state
   let buttonLabel = "Start Learning";
-  if (isLocked) buttonLabel = "Locked";
-  else if (progressPercentage === 100) buttonLabel = "Review Topic";
-  else if (progressPercentage > 0) buttonLabel = "Continue Learning";
+  let buttonAction = () => onClick(topic);
+  let showRetentionTestButton = false;
+  let retentionTestButtonAction = null;
+
+  if (isLocked) {
+    buttonLabel = "Locked";
+    buttonAction = null;
+  } else if (progressPercentage === 100) {
+    // Topic completed - always show "Review Topic" button
+    buttonLabel = "Review Topic";
+    buttonAction = () => onClick(topic);
+  } else if (progressPercentage > 0) {
+    buttonLabel = "Continue Learning";
+    buttonAction = () => onClick(topic);
+  }
 
   return (
     <Col
@@ -71,10 +88,26 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
         <button
           className={`${styles.startButton} ${isLocked ? styles.lockedButton : ""}`}
           disabled={isLocked}
-          onClick={() => onClick(topic)}
+          onClick={buttonAction}
         >
           {buttonLabel}
         </button>
+        
+        {/* Retention Test Results Icon - Only show when retention test is completed */}
+        {retentionTestStatus && retentionTestStatus.is_completed && (
+          <div className={styles.iconContainer}>
+            <button
+              className={styles.retentionResultsIcon}
+              onClick={() => navigate(`/my-deck/${topic.id}-${topic.name.toLowerCase().replace(/\s+/g, '-')}/retention-test/result`)}
+              aria-label="View Retention Test Results"
+            >
+              📊
+            </button>
+            <div className={styles.tooltip}>View Retention Test Results</div>
+          </div>
+        )}
+        
+
       </div>
       {isLocked && <div className={styles.lockedIcon}>🔒</div>}
     </Col>
@@ -91,6 +124,11 @@ TopicCard.propTypes = {
   onClick: PropTypes.func.isRequired,
   themeStyles: PropTypes.object,
   comingSoon: PropTypes.bool,
+  retentionTestStatus: PropTypes.shape({
+    is_completed: PropTypes.bool,
+    isAvailable: PropTypes.bool,
+  }),
+  onRetentionTestClick: PropTypes.func,
 };
 
 export default TopicCard;

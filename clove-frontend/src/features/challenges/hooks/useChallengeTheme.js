@@ -1,4 +1,4 @@
-import { useContext, useMemo, useEffect } from 'react';
+import { useContext, useMemo, useEffect, useLayoutEffect } from 'react';
 import ThemeContext from '../../../contexts/ThemeContext';
 import { useParams } from 'react-router-dom';
 import spaceTheme from '../themes/spaceTheme.module.scss';
@@ -41,8 +41,8 @@ export const useChallengeTheme = () => {
     return currentTheme || 'space';
   }, [topicId, currentTheme]);
 
-  // Set theme automatically based on topic (useEffect, not useMemo!)
-  useEffect(() => {
+  // Set theme automatically based on topic BEFORE first paint to avoid flash
+  useLayoutEffect(() => {
     if (topicId && topicTheme !== currentTheme && setTheme) {
       try {
         setTheme(topicTheme);
@@ -108,7 +108,16 @@ export const useChallengeTheme = () => {
       '--accent-secondary': getThemeValue('accent-secondary'),
       '--glow-color': getThemeValue('glow-color'),
       '--transition-speed': getThemeValue('transition-speed'),
-      '--transition-easing': getThemeValue('transition-easing')
+      '--transition-easing': getThemeValue('transition-easing'),
+      // Additional variables for the instructions page
+      '--theme-bg': getThemeValue('bg'),
+      '--theme-text': getThemeValue('text'),
+      '--text-secondary': getThemeValue('text-secondary') || getThemeValue('muted'),
+      '--bg-secondary': getThemeValue('bg-secondary') || getThemeValue('bg-tertiary'),
+      '--bg-tertiary': getThemeValue('bg-tertiary') || getThemeValue('code-bg'),
+      '--accent-success': getThemeValue('success') || getThemeValue('correct'),
+      '--accent-warning': getThemeValue('warning') || getThemeValue('pending'),
+      '--accent-danger': getThemeValue('error') || getThemeValue('wrong')
     };
   };
 

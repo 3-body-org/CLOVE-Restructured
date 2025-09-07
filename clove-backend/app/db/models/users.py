@@ -56,6 +56,11 @@ class User(Base):
         uselist=False,
         cascade="all, delete-orphan"
     )
+    retention_tests = relationship(
+        "RetentionTest",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<User {self.username}>"

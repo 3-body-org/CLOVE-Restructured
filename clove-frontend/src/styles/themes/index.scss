@@ -1,0 +1,242 @@
+// ============================================================================
+// THEME ORCHESTRATOR - Centralized Theme Management
+// ============================================================================
+// This file orchestrates all centralized themes and provides a unified interface
+// Import this file in your main App.scss or index.scss
+
+// Use and forward the centralized theme and mixin files
+@use './wizard-theme.scss' as wizard;
+@use './detective-theme.scss' as detective;
+@use './space-theme.scss' as space;
+@use './theme-mixins.scss' as mixins;
+
+@forward './wizard-theme.scss';
+@forward './detective-theme.scss';
+@forward './space-theme.scss';
+@forward './theme-mixins.scss';
+
+// Import component-specific styles
+@use '../components/lesson.scss';
+
+
+
+// ============================================================================
+// THEME MAP - Centralized Theme Registry
+// ============================================================================
+
+$themes: (
+  'wizard': wizard.$wizard-theme,
+  'detective': detective.$detective-theme,
+  'space': space.$space-theme
+);
+
+// ============================================================================
+// THEME UTILITIES
+// ============================================================================
+
+// Get theme by name
+@function get-theme($theme-name) {
+  @if map-has-key($themes, $theme-name) {
+    @return map-get($themes, $theme-name);
+  }
+  @warn "Theme '#{$theme-name}' not found. Falling back to space theme.";
+  @return map-get($themes, 'space');
+}
+
+// Get theme value by name and key
+@function get-theme-value($theme-name, $key) {
+  $theme: get-theme($theme-name);
+  @if map-has-key($theme, $key) {
+    @return map-get($theme, $key);
+  }
+  @warn "Key '#{$key}' not found in theme '#{$theme-name}'.";
+  @return null;
+}
+
+// ============================================================================
+// GLOBAL THEME CLASSES
+// ============================================================================
+
+// Base theme styles
+.theme-base {
+  transition: all 0.3s ease;
+  
+  // Apply common theme variables
+  --transition-speed: 0.3s;
+  --transition-easing: ease;
+}
+
+// Wizard theme
+.theme-wizard {
+  @extend .theme-base;
+  @include mixins.apply-theme-variables(wizard.$wizard-theme);
+  
+  // Apply wizard-specific global styles
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-primary);
+}
+
+// Detective theme
+.theme-detective {
+  @extend .theme-base;
+  @include mixins.apply-theme-variables(detective.$detective-theme);
+  
+  // Apply detective-specific global styles
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-primary);
+}
+
+// Space theme
+.theme-space {
+  @extend .theme-base;
+  @include mixins.apply-theme-variables(space.$space-theme);
+  
+  // Apply space-specific global styles
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-primary);
+}
+
+// ============================================================================
+// BODY THEME CLASSES (for global application)
+// ============================================================================
+
+body.theme-wizard {
+  @include mixins.apply-theme-variables(wizard.$wizard-theme);
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.theme-detective {
+  @include mixins.apply-theme-variables(detective.$detective-theme);
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.theme-space {
+  @include mixins.apply-theme-variables(space.$space-theme);
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// ============================================================================
+// THEME TRANSITION UTILITIES
+// ============================================================================
+
+// Smooth theme transition
+.theme-transition {
+  transition: 
+    background-color var(--transition-speed, 0.3s) var(--transition-easing, ease),
+    color var(--transition-speed, 0.3s) var(--transition-easing, ease),
+    border-color var(--transition-speed, 0.3s) var(--transition-easing, ease),
+    box-shadow var(--transition-speed, 0.3s) var(--transition-easing, ease);
+}
+
+// ============================================================================
+// THEME DEBUG UTILITIES (Development Only)
+// ============================================================================
+
+// Debug theme variables
+@mixin debug-theme-variables($theme-name) {
+  $theme: get-theme($theme-name);
+  
+  &::before {
+    content: "Theme: #{$theme-name}";
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 9999;
+    pointer-events: none;
+  }
+}
+
+// ============================================================================
+// EXPORTS FOR JAVASCRIPT
+// ============================================================================
+
+:export {
+  // Theme names
+  themes: "wizard, detective, space";
+  
+  // Default theme
+  defaultTheme: "space";
+  
+  // Available theme keys (for validation)
+  themeKeys: "theme-bg, card-bg, code-bg, text-primary, text-secondary, heading-primary, accent-primary, accent-secondary, button-primary-bg, button-primary-text, correct, wrong, font-primary, font-heading, font-mono";
+}
+
+// ============================================================================
+// LEGACY SUPPORT (for backward compatibility)
+// ============================================================================
+
+// Legacy theme class support
+[data-theme="wizard"] {
+  @extend .theme-wizard;
+}
+
+[data-theme="detective"] {
+  @extend .theme-detective;
+}
+
+[data-theme="space"] {
+  @extend .theme-space;
+}
+
+// ============================================================================
+// RESPONSIVE THEME ADJUSTMENTS
+// ============================================================================
+
+// Mobile theme adjustments
+@include mixins.mobile {
+  .theme-wizard,
+  .theme-detective,
+  .theme-space {
+    // Reduce transition speed on mobile for better performance
+    --transition-speed: 0.2s;
+  }
+}
+
+// ============================================================================
+// ACCESSIBILITY ENHANCEMENTS
+// ============================================================================
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .theme-wizard,
+  .theme-detective,
+  .theme-space {
+    // Increase contrast for accessibility
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --card-border: #ffffff;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .theme-wizard,
+  .theme-detective,
+  .theme-space {
+    // Disable animations for users who prefer reduced motion
+    --transition-speed: 0s;
+    
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+} 

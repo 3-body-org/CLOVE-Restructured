@@ -1,69 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-// Theme-aware CSS variables
-:root {
-    // Base colors
-    --primary: #6c5ce7;
-    --secondary: #a8a5e6;
-    --accent: #ff7675;
-    --bg: #0f0f1a;
-    --card-bg: #1e1e2e;
-    --text: #ffffff;
-    --text-secondary: #a0a0a0;
-    --correct: #00d4aa;
-    --incorrect: #ff6b6b;
-    --progress-bar: rgba(255, 255, 255, 0.1);
-    --button-text: white;
-    
-    // Gradients
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    
-    // Shadows
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 0 20px rgba(108, 92, 231, 0.3);
-    
-    // Animations
-    --transition-fast: 0.2s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
-}
+/* Assessment Instructions Styles - Uses dynamic theme variables */
 
-// Theme-specific overrides
-[data-theme="space"] {
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --accent: #00d4aa;
-    --primary: #667eea;
-    --secondary: #4facfe;
-    --text-secondary: #a0a0a0;
-    --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.3);
-}
-
-[data-theme="wizard"] {
-    --gradient-primary: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    --gradient-secondary: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    --accent: #ff9a9e;
-    --primary: #fa709a;
-    --secondary: #a8edea;
-    --text-secondary: #e0e0e0;
-    --shadow-glow: 0 0 20px rgba(250, 112, 154, 0.3);
-}
-
-[data-theme="detective"] {
-    --gradient-primary: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-    --gradient-secondary: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
-    --accent: #e74c3c;
-    --primary: #2c3e50;
-    --secondary: #95a5a6;
-    --text-secondary: #b0b0b0;
-    --shadow-glow: 0 0 20px rgba(44, 62, 80, 0.3);
-}
+// Theme-specific overrides - These will be overridden by the theme provider
+// The theme provider will set these values dynamically based on the current theme
 
 .instructionOverlay {
     position: fixed;
@@ -96,17 +37,16 @@
 }
 
 .instructionModal {
-    background: rgba(15, 15, 26, 0.98);
+    background: var(--card-bg);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 40px;
     max-width: 800px;
     width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
+    height: auto;
     color: var(--text);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-lg);
     animation: slideIn 0.6s ease-out;
     position: relative;
     
@@ -262,16 +202,21 @@
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
     
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        box-shadow: var(--shadow-lg);
+        border: 2px solid var(--primary);
         
         &::before {
             transform: translateX(100%);
+        }
+        
+        & + .cancelButton {
+            border: none;
         }
     }
     
@@ -312,8 +257,8 @@
         background: rgba(255, 255, 255, 0.1);
         color: var(--text);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: var(--shadow-md);
+        border: 2px solid var(--primary);
     }
     
     &::before {

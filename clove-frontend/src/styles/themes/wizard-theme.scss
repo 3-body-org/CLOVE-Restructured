@@ -1,0 +1,177 @@
+// ============================================================================
+// WIZARD THEME - Arcane Academy (Centralized)
+// ============================================================================
+// Single source of truth for all wizard theme colors
+// Based on CLOVE_LESSONS_COLOR_PALETTE.txt
+// This file replaces all duplicate wizard theme definitions across the app
+
+$wizard-theme: (
+  // ============================================================================
+  // 1. BACKGROUND COLORS
+  // ============================================================================
+  "theme-bg": #0F172A, // Deep Twilight Blue - Main theme background
+  "card-bg": #1A2B3C, // Deep Navy - Card backgrounds, code backgrounds, sidebar
+  "code-bg": #1A2B3C, // Deep Navy - Code backgrounds
+  "code-bg-secondary": #4A5568, // Ancient Stone Grey - Secondary code backgrounds
+  "code-bg-tertiary": #4A5568, // Ancient Stone Grey - Output headers
+  "sidebar-bg": #1A2B3C, // Deep Navy - Sidebar background
+  "bullet-container-bg": #1A2B3C, // Deep Navy - Bullet container background
+  "objectives-bg": #1A2B3C, // Deep Navy - Objectives background
+  "summary-bg": rgba(110, 231, 183, 0.1), // Faerie Green with opacity - Summary section background
+  "output-bg": #1A2B3C, // Deep Navy - Output background
+  "output-header-bg": #4A5568, // Ancient Stone Grey - Output header background
+
+  // ============================================================================
+  // 2. TEXT COLORS
+  // ============================================================================
+  "theme-text": #E8DBC3, // Aged Parchment - Primary text, code text, output text, bullet text
+  "text-primary": #E8DBC3, // Aged Parchment - Primary text
+  "text-secondary": #6B7280, // Ancient Stone Light - Secondary text, intro text, sidebar text
+  "intro-text": #6B7280, // Ancient Stone Light - Intro text
+  "bullet-text": #E8DBC3, // Aged Parchment - Bullet text
+  "code-text": #E8DBC3, // Aged Parchment - Code text
+  "output-text": #E8DBC3, // Aged Parchment - Output text
+  "sidebar-text": #6B7280, // Ancient Stone Light - Sidebar text
+  "sidebar-active-text": #E8DBC3, // Aged Parchment - Active sidebar text
+
+  // ============================================================================
+  // 3. HEADING COLORS
+  // ============================================================================
+  "heading-primary": #FBBF24, // Enchanted Gold Bright - Main headings, lesson titles, section titles, contents title
+  "lesson-title": #FBBF24, // Enchanted Gold Bright - Lesson titles
+  "section-title": #FBBF24, // Enchanted Gold Bright - Section titles
+  "contents-title": #FBBF24, // Enchanted Gold Bright - Contents title
+  "objectives-title": #0EA5E9, // Arcane Turquoise Bright - Objectives title
+  "summary-title": #6EE7B7, // Flickering Faerie Green - Summary title
+
+  // ============================================================================
+  // 4. ACCENT & HIGHLIGHT COLORS
+  // ============================================================================
+  "accent-primary": #0EA5E9, // Arcane Turquoise Bright - Primary accent, card borders, code borders, bullet borders
+  "accent-secondary": #06B6D4, // Arcane Turquoise Deep - Secondary accent, contents numbers, objective icons
+  "gold-accent": #FBBF24, // Enchanted Gold Bright - Gold accent, bullet icons, strong text
+  "success-color": #6EE7B7, // Flickering Faerie Green - Success color, summary border, footer border
+  "warning-color": #FBBF24, // Enchanted Gold Bright - Warning color
+
+  // ============================================================================
+  // 5. BUTTON COLORS
+  // ============================================================================
+  "button-primary-bg": #0EA5E9, // Arcane Turquoise Bright - Primary button background
+  "button-primary-text": #E8DBC3, // Aged Parchment - Primary button text
+  "button-secondary-bg": #1A2B3C, // Deep Navy - Secondary button background
+  "button-secondary-text": #E8DBC3, // Aged Parchment - Secondary button text
+  "button-secondary-border": #0EA5E9, // Arcane Turquoise Bright - Secondary button border
+
+  // ============================================================================
+  // 6. BORDER COLORS
+  // ============================================================================
+  "card-border": #0EA5E9, // Arcane Turquoise Bright - Card borders
+  "code-border": #0EA5E9, // Arcane Turquoise Bright - Code borders
+  "bullet-border": #0EA5E9, // Arcane Turquoise Bright - Bullet borders
+  "summary-border": #6EE7B7, // Flickering Faerie Green - Summary border
+  "footer-border": #0EA5E9, // Arcane Turquoise Bright - Footer border
+
+  // ============================================================================
+  // 7. CODE SYNTAX COLORS
+  // ============================================================================
+  "code-keyword": #FBBF24, // Enchanted Gold Bright - Keywords
+  "code-variable": #0EA5E9, // Arcane Turquoise Bright - Variables, inline code
+  "code-string": #E8DBC3, // Aged Parchment - Strings, comments
+  "code-number": #06B6D4, // Arcane Turquoise Deep - Numbers
+  "code-comment": #E8DBC3, // Aged Parchment - Comments
+  "code-inline": #0EA5E9, // Arcane Turquoise Bright - Inline code
+
+  // ============================================================================
+  // 8. ASSESSMENT & CHALLENGE SPECIFIC
+  // ============================================================================
+  "correct": #6EE7B7, // Flickering Faerie Green - Correct answers
+  "wrong": #ff6464, // Red - Wrong answers
+  "pending": #FBBF24, // Enchanted Gold Bright - Pending state
+  "timer": #FBBF24, // Enchanted Gold Bright - Timer
+  "hint": #6B7280, // Ancient Stone Light - Hints
+  "bug": #ff6464, // Red - Bug indicators
+
+  // ============================================================================
+  // 9. RGB VALUES FOR GRADIENTS AND OPACITY
+  // ============================================================================
+  "accent-primary-rgb": "14, 165, 233", // Arcane Turquoise Bright
+  "accent-secondary-rgb": "6, 182, 212", // Arcane Turquoise Deep
+  "correct-rgb": "110, 231, 183", // Flickering Faerie Green
+  "wrong-rgb": "255, 100, 100", // Red
+  "incorrect-rgb": "255, 107, 107", // Red
+  "primary-rgb": "14, 165, 233", // Arcane Turquoise Bright
+  "secondary-rgb": "6, 182, 212", // Arcane Turquoise Deep
+  "pending-rgb": "251, 191, 36", // Enchanted Gold Bright
+
+  // ============================================================================
+  // 10. SHADOWS AND EFFECTS
+  // ============================================================================
+  "shadow-sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  "shadow-md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+  "shadow-lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+  "shadow-glow": "0 0 20px rgba(14, 165, 233, 0.3)", // Arcane Turquoise glow
+  "shadow-xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+
+  // ============================================================================
+  // 11. GRADIENTS
+  // ============================================================================
+  "gradient-primary": "linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%)", // Arcane Turquoise gradient
+  "gradient-secondary": "linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)", // Enchanted Gold gradient
+  "gradient-success": "linear-gradient(135deg, #6EE7B7 0%, #10B981 100%)", // Faerie Green gradient
+
+  // ============================================================================
+  // 12. LEGACY VARIABLES (for backward compatibility)
+  // ============================================================================
+  "text": #E8DBC3, // Aged Parchment - Legacy text
+  "button-text": #E8DBC3, // Aged Parchment - Legacy button text
+  "text-muted": #6B7280, // Ancient Stone Light - Legacy muted text
+  "primary": #0EA5E9, // Arcane Turquoise Bright - Legacy primary
+  "secondary": #06B6D4, // Arcane Turquoise Deep - Legacy secondary
+  "accent": #FBBF24, // Enchanted Gold Bright - Legacy accent
+  "transition-speed": "0.3s",
+  "transition-easing": "ease",
+  "progress-bar": "rgba(255, 255, 255, 0.1)", // Legacy progress bar
+
+  // ============================================================================
+  // 10. FONTS
+  // ============================================================================
+  "font-primary": '"Crimson Text", serif',
+  "font-heading": '"Cinzel", serif',
+  "font-mono": '"JetBrains Mono", "Fira Code", monospace',
+
+  // ============================================================================
+  // 13. LEGACY SUPPORT (for backward compatibility)
+  // ============================================================================
+  "bg-secondary": #1A2B3C, // Deep Navy - Legacy secondary background
+  "bg-tertiary": #4A5568, // Ancient Stone Grey - Legacy tertiary background
+  "heading-secondary": #0EA5E9, // Arcane Turquoise Bright - Legacy secondary heading
+  "heading-tertiary": #6EE7B7, // Flickering Faerie Green - Legacy tertiary heading
+  "success": #6EE7B7, // Flickering Faerie Green - Legacy success
+  "warning": #FBBF24, // Enchanted Gold Bright - Legacy warning
+  "error": #ff6464, // Red - Legacy error
+  "muted": #6B7280, // Ancient Stone Light - Legacy muted
+  "border": #0EA5E9, // Arcane Turquoise Bright - Legacy border
+  "shadow": "rgba(14, 165, 233, 0.2)", // Arcane Turquoise Bright with opacity - Legacy shadow
+  "glow-color": "rgba(14, 165, 233, 0.4)", // Arcane Turquoise Bright glow - Legacy glow
+);
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+// Export for SCSS modules
+:export {
+  @each $key, $value in $wizard-theme {
+    #{$key}: $value;
+  }
+}
+
+// Global theme class
+:global(body.theme-wizard) {
+  @each $var, $value in $wizard-theme {
+    --#{$var}: #{$value};
+  }
+  
+  background-color: var(--theme-bg);
+  transition: background-color 0.3s ease;
+} 

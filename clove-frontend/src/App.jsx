@@ -1,5 +1,6 @@
 //router
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
 //bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,43 +9,46 @@ import { Container } from "react-bootstrap";
 // Theme styles - imported through themes/index.js
 import "features/mydeck/styles";
 
-//src/features/auth/...
-import Authform from "features/auth/pages/AuthFormPage";
-import EmailVerificationPage from "features/auth/pages/EmailVerificationPage";
-import ForgotPasswordPage from "features/auth/pages/ForgotPasswordPage";
-import PasswordResetPage from "features/auth/pages/PasswordResetPage";
-
-//src/features/challenges/...
-import ChallengesPage from "features/challenges/pages/ChallengesPage";
-import ResultsPage from "features/challenges/pages/ResultsPage";
-
-//src/features/dashboard/...
-import DashboardPage from "features/dashboard/pages/DashboardPage";
-
-//src/features/landing/...
-import LandingPage from "features/landing/pages/LandingPage";
-
-//src/features/lessons/...
-import LessonsPage from "features/lessons/pages/LessonsPage";
-import PracticePage from "features/lessons/pages/PracticePage";
-
-//src/features/mydeck/...
-import IntroductionPage from "features/mydeck/pages/IntroductionPage";
-import SubtopicPage from "features/mydeck/pages/SubtopicPage";
-import MyDeckPage from "features/mydeck/pages/TopicPage";
-
-// Protected route component
+// Core components (loaded immediately)
 import ProtectedTopicRoute from "components/error_fallback/ProtectedTopicRoute";
 
-//src/features/progress/...
-import ProgressPage from "features/progress/pages/ProgressPage";
+// Lazy-loaded feature components
+// Auth Feature
+const Authform = lazy(() => import("features/auth/pages/AuthFormPage"));
+const EmailVerificationPage = lazy(() => import("features/auth/pages/EmailVerificationPage"));
+const ForgotPasswordPage = lazy(() => import("features/auth/pages/ForgotPasswordPage"));
+const PasswordResetPage = lazy(() => import("features/auth/pages/PasswordResetPage"));
 
-//src/features/profile/...
-import ProfilePage from "features/profile/pages/ProfilePage";
+// Challenges Feature
+const ChallengesPage = lazy(() => import("features/challenges/pages/ChallengesPage"));
+const ChallengeInstructionsPage = lazy(() => import("features/challenges/pages/ChallengeInstructionsPage"));
+const ResultsPage = lazy(() => import("features/challenges/pages/ResultsPage"));
 
-//src/components/assessments/...
-import AssessmentPage from "components/assessments/Assessment";
-import AssessmentResultPage from "components/assessments/AssessmentResult";
+// Dashboard Feature
+const DashboardPage = lazy(() => import("features/dashboard/pages/DashboardPage"));
+
+// Landing Feature
+const LandingPage = lazy(() => import("features/landing/pages/LandingPage"));
+
+// Lessons Feature
+const LessonsPage = lazy(() => import("features/lessons/pages/LessonsPage"));
+const PracticePage = lazy(() => import("features/lessons/pages/PracticePage"));
+
+// MyDeck Feature
+const IntroductionPage = lazy(() => import("features/mydeck/pages/IntroductionPage"));
+const SubtopicPage = lazy(() => import("features/mydeck/pages/SubtopicPage"));
+const MyDeckPage = lazy(() => import("features/mydeck/pages/TopicPage"));
+
+// Progress Feature
+const ProgressPage = lazy(() => import("features/progress/pages/ProgressPage"));
+
+// Profile Feature
+const ProfilePage = lazy(() => import("features/profile/pages/ProfilePage"));
+
+// Assessment Components
+const AssessmentPage = lazy(() => import("components/assessments/Assessment"));
+const AssessmentResultPage = lazy(() => import("components/assessments/AssessmentResult"));
+const AssessmentInstructions = lazy(() => import("components/assessments/AssessmentInstructions"));
 
 //components
 import Layout from "components/layout/Sidebar/Layout";
@@ -141,10 +145,14 @@ const protectedRoutes = [
   { path: "/my-deck", element: <MyDeckPage /> },
   { path: "/my-deck/:topicId/assessment/:assessmentType", element: <ProtectedTopicRoute><AssessmentPage /></ProtectedTopicRoute> },
   { path: "/my-deck/:topicId/assessment/:assessmentType/result", element: <ProtectedTopicRoute><AssessmentResultPage /></ProtectedTopicRoute> },
+  { path: "/my-deck/:topicId/retention-test/instructions", element: <ProtectedTopicRoute><AssessmentInstructions assessmentType="retention-test" /></ProtectedTopicRoute> },
+  { path: "/my-deck/:topicId/retention-test", element: <ProtectedTopicRoute><AssessmentPage /></ProtectedTopicRoute> },
+  { path: "/my-deck/:topicId/retention-test/result", element: <ProtectedTopicRoute><AssessmentResultPage /></ProtectedTopicRoute> },
   { path: "/my-deck/:topicId", element: <ProtectedTopicRoute><SubtopicPage /></ProtectedTopicRoute> },
   { path: "/my-deck/:topicId/introduction", element: <ProtectedTopicRoute><IntroductionPage /></ProtectedTopicRoute> },
   { path: "/lesson/:topicId/:subtopicId", element: <ProtectedTopicRoute><LessonsPage /></ProtectedTopicRoute> },
   { path: "/lesson/:topicId/:subtopicId/practice", element: <ProtectedTopicRoute><PracticePage /></ProtectedTopicRoute> },
+  { path: "/lesson/:topicId/:subtopicId/challenge-instructions", element: <ProtectedTopicRoute><ChallengeInstructionsPage /></ProtectedTopicRoute> },
   { path: "/lesson/:topicId/:subtopicId/challenges", element: <ProtectedTopicRoute><ChallengesPage /></ProtectedTopicRoute> },
   { path: "/lesson/:topicId/:subtopicId/challenges/results", element: <ProtectedTopicRoute><ResultsPage /></ProtectedTopicRoute> },
 ];
@@ -180,36 +188,38 @@ function AppContent() {
           <MyDeckProvider>
             <ThemeProvider>
               <Container fluid className="app-container p-0 m-0">
-                <Routes>
-                  {/* Public Pages (No Sidebar) */}
-                  {publicRoutes.map(({ path, element }) => (
-                    <Route 
-                      key={path}
-                      path={path} 
-                      element={
-                        path === "/" ? element : (
-                          <PublicRoute>{element}</PublicRoute>
-                        )
-                      } 
-                    />
-                  ))}
-                  
-                  {/* Protected Pages (With Sidebar) */}
-                  {protectedRoutes.map(({ path, element }) => (
-                    <Route
-                      key={path}
-                      path={path}
-                      element={
-                        <ProtectedRoute>
-                          {element}
-                        </ProtectedRoute>
-                      }
-                    />
-                  ))}
-                  
-                  {/* Catch-all route for unmatched URLs */}
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
+                <Suspense fallback={<LoadingSpinner message="Loading page..." />}>
+                  <Routes>
+                    {/* Public Pages (No Sidebar) */}
+                    {publicRoutes.map(({ path, element }) => (
+                      <Route 
+                        key={path}
+                        path={path} 
+                        element={
+                          path === "/" ? element : (
+                            <PublicRoute>{element}</PublicRoute>
+                          )
+                        } 
+                      />
+                    ))}
+                    
+                    {/* Protected Pages (With Sidebar) */}
+                    {protectedRoutes.map(({ path, element }) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        element={
+                          <ProtectedRoute>
+                            {element}
+                          </ProtectedRoute>
+                        }
+                      />
+                    ))}
+                    
+                    {/* Catch-all route for unmatched URLs */}
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </Suspense>
               </Container>
             </ThemeProvider>
           </MyDeckProvider>

@@ -1,57 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-// Theme-aware CSS variables
-:root {
-    // Base colors
-    --primary: #6c5ce7;
-    --secondary: #a8a5e6;
-    --accent: #ff7675;
-    --bg: #0f0f1a;
-    --card-bg: #1e1e2e;
-    --text: #ffffff;
-    --text-secondary: #a0a0a0;
-    --correct: #00d4aa;
-    --incorrect: #ff6b6b;
-    --progress-bar: rgba(255, 255, 255, 0.1);
-    --button-text: white;
-    
-    // Gradients
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    
-    // Shadows
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 0 20px rgba(108, 92, 231, 0.3);
-    
-    // Animations
-    --transition-fast: 0.2s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
-}
+/* Assessment Styles - Uses dynamic theme variables */
 
-// Theme-specific overrides
-[data-theme="space"] {
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --accent: #00d4aa;
-}
-
-[data-theme="wizard"] {
-    --gradient-primary: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    --gradient-secondary: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    --accent: #ff9a9e;
-}
-
-[data-theme="detective"] {
-    --gradient-primary: linear-gradient(135deg, #0e467e 0%, #416e9b 100%);
-    --gradient-secondary: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
-    --accent: #e74c3c;
-}
+// Theme-specific overrides - These will be overridden by the theme provider
+// The theme provider will set these values dynamically based on the current theme
 
 .pageContainer {
     display: flex;
@@ -72,7 +25,7 @@
         right: 0;
         bottom: 0;
         background: 
-            radial-gradient(circle at 20% 80%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 20% 80%, rgba(var(--primary-rgb, 108, 92, 231), 0.1) 0%, transparent 50%),
             radial-gradient(circle at 80% 20%, rgba(168, 165, 230, 0.1) 0%, transparent 50%),
             radial-gradient(circle at 40% 40%, rgba(255, 118, 117, 0.05) 0%, transparent 50%);
         animation: float 20s ease-in-out infinite;
@@ -92,7 +45,7 @@
 }
 
 .testContainer {
-    background: rgba(30, 30, 46, 0.95);
+    background: var(--card-bg);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
@@ -159,14 +112,14 @@
 
 .progressFill {
     height: 100%;
-    background: var(--gradient-primary);
+    background: var(--primary);
     width: 0%;
     border-radius: 8px;
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: absolute;
     left: 0;
     top: 0;
-    box-shadow: 0 0 20px rgba(108, 92, 231, 0.4);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb, 209, 183, 115), 0.4);
     
     &::after {
         content: '';
@@ -202,7 +155,7 @@
         transform: translateX(-50%);
         width: 40px;
         height: 2px;
-        background: var(--gradient-primary);
+        background: var(--primary);
         border-radius: 1px;
     }
     
@@ -221,12 +174,6 @@
     color: var(--text);
     position: relative;
     animation: fadeInUp 0.6s ease-out;
-    
-    // Gradient text effect
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     
     @media (max-width: 768px) {
         font-size: 1.5rem;
@@ -266,7 +213,7 @@
 
 .option {
     position: relative;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
@@ -283,9 +230,9 @@
     // Hover effect with gradient border
     &:hover {
         background: rgba(255, 255, 255, 0.12);
-        border-color: rgba(108, 92, 231, 0.5);
+        border-color: var(--primary);
         transform: translateY(-2px);
-        box-shadow: var(--shadow-md), 0 0 20px rgba(108, 92, 231, 0.2);
+        box-shadow: var(--shadow-md), 0 0 20px rgba(var(--primary-rgb, 108, 92, 231), 0.2);
         
         &::before {
             opacity: 1;
@@ -307,9 +254,9 @@
     }
 
     &.correct {
-        background: rgba(0, 212, 170, 0.15);
+        background: rgba(var(--correct-rgb, 0, 212, 170), 0.15);
         border-color: var(--correct);
-        box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+        box-shadow: 0 0 20px rgba(var(--correct-rgb, 0, 212, 170), 0.3);
         animation: correctPulse 0.6s ease;
         
         &::after {
@@ -326,9 +273,9 @@
     }
 
     &.incorrect {
-        background: rgba(255, 107, 107, 0.15);
+        background: rgba(var(--incorrect-rgb, 255, 107, 107), 0.15);
         border-color: var(--incorrect);
-        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        box-shadow: 0 0 20px rgba(var(--incorrect-rgb, 255, 107, 107), 0.3);
         animation: incorrectShake 0.6s ease;
         
         &::after {
@@ -411,10 +358,10 @@
     margin-top: 1rem;
     font-weight: 500;
     font-size: 0.9rem;
-    background: rgba(255, 107, 107, 0.1);
+    background: rgba(var(--incorrect-rgb, 255, 107, 107), 0.1);
     padding: 12px 20px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 107, 107, 0.3);
+    border: 1px solid rgba(var(--incorrect-rgb, 255, 107, 107), 0.3);
     animation: fadeInUp 0.4s ease-out;
     
     @media (max-width: 480px) {
@@ -425,8 +372,8 @@
 
 .nextBtn {
     background: var(--gradient-primary);
-    color: var(--button-text);
-    border: none;
+    color: var(--text);
+    border: 2px solid var(--primary);
     padding: 20px 50px;
     border-radius: 16px;
     font-weight: 600;
@@ -442,7 +389,7 @@
     // Hover effect
     &:hover {
         transform: translateY(-3px);
-        box-shadow: var(--shadow-lg), 0 0 30px rgba(108, 92, 231, 0.4);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(var(--primary-rgb, 108, 92, 231), 0.4);
         
         &::before {
             transform: translateX(100%);
@@ -480,14 +427,6 @@
     
     width: 100%;
     max-width: 300px;
-    
-    &:hover {
-        transform: translateY(-3px);
-    }
-    
-    &:active {
-        transform: translateY(0);
-    }
     
     @media (max-width: 768px) {
         padding: 15px 30px;

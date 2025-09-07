@@ -12,7 +12,6 @@ import { useSidebar } from '../../../components/layout/Sidebar/Layout';
 import CodeFixer from '../modes/CodeFixer';
 import CodeCompletion from '../modes/CodeCompletion';
 import OutputTracing from '../modes/OutputTracing';
-import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
 import ChallengeSidebar from '../components/ChallengeSidebar';
 import ProgressIndicator from '../components/ProgressIndicator';
 import ChallengeFeedback from '../components/ChallengeFeedback';
@@ -20,9 +19,12 @@ import LoadingScreen from '../../../components/layout/StatusScreen/LoadingScreen
 import ErrorScreen from '../../../components/layout/StatusScreen/ErrorScreen';
 import CustomExitWarningModal from '../components/CustomExitWarningModal';
 import OtherSessionWarningModal from '../components/OtherSessionWarningModal';
-import styles from '../styles/ChallengesPage.module.scss';
+import '../../../styles/components/challenge.scss';
+import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const ChallengesPage = () => {
+  // Ensure correct theme class is applied before first paint for this route
+  const { topicTheme } = useChallengeTheme();
   const navigate = useNavigate();
   const { subtopicId } = useParams();
   const { user: currentUser } = useAuth();
@@ -76,6 +78,7 @@ const ChallengesPage = () => {
     handleLeaveAnyway,
     // Option 2: Other session warning modal
     showOtherSessionWarning,
+    setShowOtherSessionWarning,
     otherSessions,
     forceDeactivateAllSessions,
     // Feedback
@@ -202,131 +205,129 @@ const ChallengesPage = () => {
     revealedHints,
     resetChallengeState,
     isSubmitting,
-    getCurrentProgress,
     isResumed,
     userAnswer,
     handleAnswerUpdate,
+    handleChallengeComplete,
     isTimerEnabled,
     isHintsEnabled
   ]);
 
-  // Loading state
-  if ((loading || adaptiveLoading) && !currentChallenge) {
-    return <LoadingScreen message="Loading challenge..." />;
+  // Close sidebar when component mounts
+  useEffect(() => {
+    closeSidebar();
+  }, [closeSidebar]);
+
+  // Show loading screen
+  if (loading) {
+    return <LoadingScreen />;
   }
 
-  // Loading state during challenge transitions
-  if (loading && currentChallenge) {
-    return <LoadingScreen message="Loading challenge..." />;
+  // Show error screen
+  if (error) {
+    return <ErrorScreen error={error} />;
   }
 
-  // Error state
-  if (error && !currentChallenge && !loading) {
-    return <ErrorScreen message={error} />;
-  }
-
-  // No challenge available - only show if not loading
-  if (!currentChallenge && !loading) {
-    return <ErrorScreen message="No challenge available" />;
+  // Show progress indicator if no current challenge
+  if (!currentChallenge) {
+    return <ProgressIndicator />;
   }
 
   return (
-    <ChallengeThemeProvider>
-      <div className={styles.challengesContainer}>
-        {/* Custom Exit Warning Modal - Option 1 */}
-        <CustomExitWarningModal
-          isVisible={showCustomExitWarning}
-          onContinueChallenge={handleContinueChallenge}
-          onLeaveAnyway={handleLeaveAnyway}
-          isLoading={isProcessingExit}
-          challengeState={challengeState}
-        />
+    <div className={`challenges-container theme-${topicTheme || 'space'}`}>
+      {/* Custom Exit Warning Modal - Option 1 */}
+      <CustomExitWarningModal
+        isVisible={showCustomExitWarning}
+        onContinueChallenge={handleContinueChallenge}
+        onLeaveAnyway={handleLeaveAnyway}
+        isLoading={isProcessingExit}
+        challengeState={challengeState}
+      />
 
-        {/* Other Session Warning Modal - Option 2 */}
-        <OtherSessionWarningModal
-          isVisible={showOtherSessionWarning}
-          otherSessions={otherSessions}
-          onCloseOtherTabs={forceDeactivateAllSessions}
-          onCancel={() => setShowOtherSessionWarning(false)}
-          isLoading={false}
-        />
+      {/* Other Session Warning Modal - Option 2 */}
+      <OtherSessionWarningModal
+        isVisible={showOtherSessionWarning}
+        otherSessions={otherSessions}
+        onCloseOtherTabs={forceDeactivateAllSessions}
+        onCancel={() => setShowOtherSessionWarning(false)}
+        isLoading={false}
+      />
 
-        {/* Resume Warning Modal */}
-        {resumeWarning && (
-          <div className={styles.resumeWarning}>
-            <div className={styles.warningContent}>
-              <h3>⚠️ Warning</h3>
-              <p>If you leave now, the current challenge will be counted as wrong.</p>
-              <div className={styles.warningActions}>
-                <button onClick={handleResumeConfirm}>Continue Challenge</button>
-                <button onClick={handleResumeCancel}>Leave Anyway</button>
-              </div>
+      {/* Resume Warning Modal */}
+      {resumeWarning && (
+        <div className="resume-warning">
+          <div className="warning-content">
+            <h3>⚠️ Warning</h3>
+            <p>If you leave now, the current challenge will be counted as wrong.</p>
+            <div className="warning-actions">
+              <button onClick={handleResumeConfirm}>Continue Challenge</button>
+              <button onClick={handleResumeCancel}>Leave Anyway</button>
             </div>
-          </div>
-        )}
-
-        {/* Timer Expired Warning Modal - Only show when not on feedback page */}
-        {timerExpiredWarning && !showFeedback && (
-          <div className={styles.timerExpiredWarning}>
-            <div className={styles.warningContent}>
-              <h3>⏰ Time's Up!</h3>
-              <p>You ran out of time! Your answer will be counted as wrong regardless of what you submit.</p>
-              <div className={styles.warningActions}>
-                <button onClick={() => setTimerExpiredWarning(false)}>Continue</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Left Sidebar */}
-        {!showFeedback && currentChallenge && (
-          <ChallengeSidebar
-            mode={currentChallenge.mode}
-            scenario={currentChallenge.scenario}
-            timeRemaining={timeRemaining}
-            hintsUsed={hintsUsed}
-            hintsAvailable={hintsAvailable}
-            onHint={useHint}
-            disabled={challengeState !== 'active' || timerState === 'expired'}
-            challengeIndex={getCurrentProgress()}
-            totalChallenges={totalChallenges}
-            revealedHints={revealedHints}
-            initialTimerDuration={initialTimerDuration}
-            showTimer={isTimerEnabled}
-            showHints={isHintsEnabled}
-            timerState={timerState}
-          />
-        )}
-
-        {/* Right Challenge Area */}
-        <div className={styles.challengeWrapper}>
-          <div className={styles.fullWidthChallenge}>
-            {showFeedback && feedbackData ? (
-              <ChallengeFeedback
-                isCorrect={feedbackData.isCorrect}
-                feedback={feedbackData.feedback}
-                userAnswer={feedbackData.userAnswer}
-                correctAnswer={feedbackData.correctAnswer}
-                challengeMode={feedbackData.challengeMode}
-                onContinue={handleContinueAfterFeedback}
-                points={feedbackData.points}
-                timeSpent={feedbackData.timeSpent}
-                hintsUsed={feedbackData.hintsUsed}
-                timerEnabled={feedbackData.timerEnabled}
-                hintsEnabled={feedbackData.hintsEnabled}
-                isCancelled={feedbackData.isCancelled}
-                isTimeExpired={feedbackData.isTimeExpired}
-                isCancelledChallenge={feedbackData.isCancelledChallenge}
-                challengeCode={feedbackData.challengeCode}
-                explanation={feedbackData.explanation}
-              />
-            ) : (
-              challengeComponent
-            )}
           </div>
         </div>
+      )}
+
+      {/* Timer Expired Warning Modal - Only show when not on feedback page */}
+      {timerExpiredWarning && !showFeedback && (
+        <div className="timer-expired-warning">
+          <div className="warning-content">
+            <h3>⏰ Time's Up!</h3>
+            <p>You ran out of time! Your answer will be counted as wrong regardless of what you submit.</p>
+            <div className="warning-actions">
+              <button onClick={() => setTimerExpiredWarning(false)}>Continue</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Left Sidebar */}
+      {!showFeedback && currentChallenge && (
+        <ChallengeSidebar
+          mode={currentChallenge.mode}
+          scenario={currentChallenge.scenario}
+          timeRemaining={timeRemaining}
+          hintsUsed={hintsUsed}
+          hintsAvailable={hintsAvailable}
+          onHint={useHint}
+          disabled={challengeState !== 'active' || timerState === 'expired'}
+          challengeIndex={getCurrentProgress()}
+          totalChallenges={totalChallenges}
+          revealedHints={revealedHints}
+          initialTimerDuration={initialTimerDuration}
+          showTimer={isTimerEnabled}
+          showHints={isHintsEnabled}
+          timerState={timerState}
+        />
+      )}
+
+      {/* Right Challenge Area */}
+      <div className="challenge-wrapper">
+        <div className="full-width-challenge">
+          {showFeedback && feedbackData ? (
+            <ChallengeFeedback
+              isCorrect={feedbackData.isCorrect}
+              feedback={feedbackData.feedback}
+              userAnswer={feedbackData.userAnswer}
+              correctAnswer={feedbackData.correctAnswer}
+              challengeMode={feedbackData.challengeMode}
+              onContinue={handleContinueAfterFeedback}
+              points={feedbackData.points}
+              timeSpent={feedbackData.timeSpent}
+              hintsUsed={feedbackData.hintsUsed}
+              timerEnabled={feedbackData.timerEnabled}
+              hintsEnabled={feedbackData.hintsEnabled}
+              isCancelled={feedbackData.isCancelled}
+              isTimeExpired={feedbackData.isTimeExpired}
+              isCancelledChallenge={feedbackData.isCancelledChallenge}
+              challengeCode={feedbackData.challengeCode}
+              explanation={feedbackData.explanation}
+            />
+          ) : (
+            challengeComponent
+          )}
+        </div>
       </div>
-    </ChallengeThemeProvider>
+    </div>
   );
 };
 

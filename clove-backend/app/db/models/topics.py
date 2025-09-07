@@ -22,3 +22,8 @@ class Topic(Base):
         back_populates="topic",
         cascade="all, delete-orphan"
     )
+    retention_tests = relationship(
+        "RetentionTest",
+        back_populates="topic",
+        cascade="all, delete-orphan"
+    )

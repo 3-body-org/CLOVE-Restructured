@@ -10,9 +10,25 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Icons from "@fortawesome/free-solid-svg-icons";
+import {
+  faHatWizard,
+  faScroll,
+  faCircleNodes,
+  faWandSparkles,
+  faGem,
+  faBookTanakh,
+  faFingerprint,
+  faMagnifyingGlass,
+  faFolderOpen,
+  faRocket,
+  faCode,
+  faDatabase,
+  faDna,
+  faSatellite,
+  faPlay
+} from "@fortawesome/free-solid-svg-icons";
 import { MyDeckContext } from "contexts/MyDeckContext";
 import useTheme from "features/mydeck/hooks/useTheme";
 import TypeCard from "features/mydeck/components/TypeCard";
@@ -22,10 +38,30 @@ import SpaceBackground from "features/mydeck/components/SpaceBackground";
 import { useMyDeckService } from "features/mydeck/hooks/useMydeckService";
 import { getIntroductionContent, iconMap } from "features/mydeck/content/introductionContent";
 import styles from "features/mydeck/styles/IntroductionPage.module.scss";
+
+// Icon mapping object for FontAwesome icons
+const iconMapping = {
+  faHatWizard,
+  faScroll,
+  faCircleNodes,
+  faWandSparkles,
+  faGem,
+  faBookTanakh,
+  faFingerprint,
+  faMagnifyingGlass,
+  faFolderOpen,
+  faRocket,
+  faCode,
+  faDatabase,
+  faDna,
+  faSatellite,
+  faPlay
+};
 import { useApi } from "../../../hooks/useApi";
 import { useAuth } from "contexts/AuthContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
+import DOMPurify from 'dompurify';
 
 /**
  * IntroductionPage
@@ -35,6 +71,7 @@ import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 const IntroductionPage = () => {
   const navigate = useNavigate();
   const { topicId } = useParams();
+  const location = useLocation();
   const { setTopicId, topicCache, setTopicCache } = useContext(MyDeckContext);
   const { getTopicById, updateRecentTopic } = useMyDeckService();
   const { patch } = useApi();
@@ -48,6 +85,9 @@ const IntroductionPage = () => {
   const isSpaceTheme = currentTheme === 'space';
   const isWizardTheme = currentTheme === 'wizard';
   const isDetectiveTheme = currentTheme === 'detective';
+
+  // Check if user is coming from subtopic page
+  const isFromSubtopic = new URLSearchParams(location.search).get('from') === 'subtopic';
 
   // Load topic data and update recent topic
   useEffect(() => {
@@ -64,7 +104,8 @@ const IntroductionPage = () => {
       setTopic(cachedTopic);
       setTheme(cachedTopic.theme);
       setLoading(false);
-      if (cachedTopic.introduction_seen) {
+      // Only redirect if user hasn't seen introduction AND is not coming from subtopic page
+      if (cachedTopic.introduction_seen && !isFromSubtopic) {
         navigate(`/my-deck/${topicId}`);
         return;
       }
@@ -79,7 +120,8 @@ const IntroductionPage = () => {
           setTopic(topicData);
           setTheme(topicData.theme);
           setTopicCache(prev => ({ ...(prev || {}), [numericTopicId]: topicData }));
-          if (topicData.introduction_seen) {
+          // Only redirect if user hasn't seen introduction AND is not coming from subtopic page
+          if (topicData.introduction_seen && !isFromSubtopic) {
             navigate(`/my-deck/${topicId}`);
           }
         }
@@ -117,8 +159,8 @@ const IntroductionPage = () => {
 
   // Map icon names to actual icon components
   const getIcon = useCallback((iconName) => {
-    const iconKey = iconMap[iconName] || "code";
-    return Icons[iconKey] || Icons.faCode;
+    const iconKey = iconMap[iconName] || "faCode";
+    return iconMapping[iconKey] || iconMapping.faCode;
   }, []);
 
   // Set topic ID on mount and when it changes
@@ -216,7 +258,7 @@ const IntroductionPage = () => {
               {introductionContent.story.paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
-                  dangerouslySetInnerHTML={{ __html: paragraph }}
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(paragraph) }}
                 />
               ))}
             </div>

@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import styles from "../styles/ProgressIndicator.module.scss";
+import "../../../styles/components/challenge.scss";
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 
 const ProgressIndicator = ({
@@ -19,13 +19,13 @@ const ProgressIndicator = ({
   const progressPercentage = ((challengeIndex + 1) / totalChallenges) * 100;
 
   return (
-    <div className={`${styles.progressIndicator} ${className} theme-${currentTheme || 'space'}`} style={themeStyles}>
-      <span className={styles.progressText}>
+    <div className={`progress-indicator ${className} theme-${currentTheme || 'space'}`} style={themeStyles}>
+      <span className="progress-text">
         Challenge {challengeIndex + 1} of {totalChallenges}
       </span>
-      <div className={styles.progressBar}>
+      <div className="progress-bar">
         <div 
-          className={styles.progressFill} 
+          className="challenge-progress-fill" 
           style={{ width: `${progressPercentage}%` }}
         />
       </div>

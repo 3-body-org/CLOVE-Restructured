@@ -4,9 +4,9 @@
  */
 
 import PropTypes from 'prop-types';
-import path1 from 'assets/icons/wizard/icon-path1.svg';
-import path2 from 'assets/icons/wizard/icon-path2.svg';
-import path3 from 'assets/icons/wizard/icon-path3.svg';
+import path1 from 'assets/icons/wizard/icon-path1.webp';
+import path2 from 'assets/icons/wizard/icon-path2.webp';
+import path3 from 'assets/icons/wizard/icon-path3.webp';
 
 const PATHS = [path1, path2, path3];
 const SVG_NATURAL_WIDTH = 80; // px
