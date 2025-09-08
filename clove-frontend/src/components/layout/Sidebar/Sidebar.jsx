@@ -1,5 +1,4 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -48,8 +47,7 @@ export default function Sidebar({ expanded = true, onToggle }) {
       {/* Navigation Links */}
       <nav className={styles.navContainer}>
         {navItems.map(({ to, icon, label }) => (
-          <Nav.Link
-            as={Link}
+          <Link
             to={to}
             key={to}
             className={`${styles.navItem} ${
@@ -58,7 +56,7 @@ export default function Sidebar({ expanded = true, onToggle }) {
           >
             <FontAwesomeIcon icon={icon} className={styles.navIcon} />
             {expanded && <span className={styles.navLabel}>{label}</span>}
-          </Nav.Link>
+          </Link>
         ))}
       </nav>
 
