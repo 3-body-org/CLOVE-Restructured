@@ -252,14 +252,14 @@ const ResultsPage = () => {
 
   const handleGoBack = async () => {
     try {
-      // Reset challenge fields before going back to lesson
+      // Reset challenge fields before going back to my-deck
       await resetChallengeFields();
     } catch (error) {
       // Continue anyway - don't block the user from going back
     }
     
-    // Navigate back to lesson page
-    navigate(`/lesson/${topicId}/${subtopicId}`);
+    // Navigate back to my-deck page
+    navigate(`/my-deck/${topicId}`);
     closeSidebar(); // Close sidebar after navigation
   };
 
@@ -420,7 +420,7 @@ const ResultsPage = () => {
 
           <div className="resultsPageGoBackButtonContainer">
             <button className="resultsPageGoBackButton" onClick={handleGoBack}>
-              ← Back to Lesson
+              ← Back to Topics
             </button>
           </div>
         </div>

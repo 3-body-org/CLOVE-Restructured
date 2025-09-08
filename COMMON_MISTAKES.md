@@ -216,6 +216,18 @@
 - **Lesson**: Production builds need all dependencies in regular dependencies, not devDependencies
 - **Prevention**: Move build-time dependencies to regular dependencies or make them optional in config
 
+### 2025-01-19: Missing SCSS Alias in Production Build
+- **Mistake**: Removed 'variables' alias from vite.config.js but 21 SCSS files still imported using that alias
+- **Impact**: Sidebar styling broke in production because SCSS variables couldn't be imported, causing text and colors to appear wrong
+- **Lesson**: Always check for SCSS import dependencies when modifying vite.config.js aliases - affects multiple components
+- **Prevention**: Before removing aliases, search for all files using them: `grep -r "variables" src/` - found 21 files affected
+
+### 2025-01-19: Bootstrap CSS Conflicts with Custom Navigation Styles
+- **Mistake**: Used React Bootstrap Nav.Link component which applies its own CSS that overrides custom styles in production builds
+- **Impact**: Navigation links (Dashboard, Progress, My Deck) appeared with wrong fonts and colors in production due to Bootstrap CSS specificity
+- **Lesson**: React Bootstrap components can override custom CSS in production builds due to CSS loading order and specificity
+- **Prevention**: Use regular HTML elements or React Router Link instead of Bootstrap Nav components when custom styling is critical
+
 ### [FUTURE MISTAKE LOG ENTRY]
 - **Date**: [Date when mistake was made]
 - **Mistake**: [Description of the mistake]
