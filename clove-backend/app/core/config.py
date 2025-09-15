@@ -63,10 +63,8 @@ class Settings(BaseSettings):
             raise ValueError("ALLOWED_HOSTS must be set")
         # Email validation only for production
         if self.ENV == "production":
-            if not self.SMTP_USER:
-                raise ValueError("SMTP_USER must be set for email functionality")
-            if not self.SMTP_PASSWORD:
-                raise ValueError("SMTP_PASSWORD must be set for email functionality")
+            if not self.BREVO_API_KEY:
+                raise ValueError("BREVO_API_KEY must be set for email functionality")
             if not self.EMAILS_FROM_EMAIL:
                 raise ValueError("EMAILS_FROM_EMAIL must be set for email functionality")
 
