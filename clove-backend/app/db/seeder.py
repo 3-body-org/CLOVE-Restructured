@@ -165,6 +165,45 @@ class DatabaseSeeder:
                     profile_photo_url=""
                 )
             )
+            
+        # 4. Create Additional Sample Users (4)
+        # 2 Adaptive Sample Users
+        for i in range(1, 3): # 1 to 2
+            users_to_seed.append(
+                User(
+                    id=i+45, 
+                    username=f"adaptive_sample{i}", 
+                    email=f"adaptive_sample{i}@clove.com", 
+                    password_hash=hashed_pw, 
+                    first_name="Adaptive",
+                    last_name="Sample",
+                    birthday=date(2000, 1, 1),
+                    is_adaptive=True,
+                    email_verified=True,  # Make verified
+                    is_active=True,       # Make active
+                    bio="",
+                    profile_photo_url=""
+                )
+            )
+            
+        # 2 Non-Adaptive Sample Users
+        for i in range(1, 3): # 1 to 2
+            users_to_seed.append(
+                User(
+                    id=i+47, 
+                    username=f"nonadaptive_sample{i}", 
+                    email=f"nonadaptive_sample{i}@clove.com", 
+                    password_hash=hashed_pw, 
+                    first_name="NonAdaptive",
+                    last_name="Sample",
+                    birthday=date(2000, 1, 1),
+                    is_adaptive=False,
+                    email_verified=True,  # Make verified
+                    is_active=True,       # Make active
+                    bio="",
+                    profile_photo_url=""
+                )
+            )
 
         for user in users_to_seed:
             await self.session.merge(user)
