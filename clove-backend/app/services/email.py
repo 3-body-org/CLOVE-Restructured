@@ -12,7 +12,7 @@ class EmailService:
         self.from_name = settings.EMAILS_FROM_NAME
         self.use_brevo = settings.USE_BREVO
         self.brevo_api_key = settings.BREVO_API_KEY
-        self.brevo_url = "https://api.brevo.com/v3/send/email"
+        self.brevo_url = "https://api.brevo.com/v3/smtp/email"
 
     async def send_email(
         self,
