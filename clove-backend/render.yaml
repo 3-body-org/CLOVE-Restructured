@@ -37,16 +37,12 @@ services:
         value: INFO
       - key: ALLOWED_HOSTS
         value: '["clove-backend.onrender.com", "localhost", "127.0.0.1"]'
-      - key: SMTP_HOST
-        value: smtp.gmail.com
-      - key: SMTP_PORT
-        value: 465
-      - key: SMTP_USER
-        sync: false  # You'll set this manually in Render dashboard
-      - key: SMTP_PASSWORD
+      - key: USE_BREVO
+        value: true
+      - key: BREVO_API_KEY
         sync: false  # You'll set this manually in Render dashboard
       - key: EMAILS_FROM_EMAIL
-        sync: false  # You'll set this manually in Render dashboard
+        value: saymomichael33@gmail.com
       - key: EMAILS_FROM_NAME
         value: "CLOVE Learning Platform"
       - key: EMAIL_RESET_TOKEN_EXPIRE_HOURS

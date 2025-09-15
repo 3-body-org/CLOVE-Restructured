@@ -40,13 +40,13 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
     # Email settings
-    SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp.gmail.com")
-    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
-    SMTP_USER: str = os.getenv("SMTP_USER", "")
-    SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
     EMAILS_FROM_EMAIL: str = os.getenv("EMAILS_FROM_EMAIL", "")
     EMAILS_FROM_NAME: str = os.getenv("EMAILS_FROM_NAME", "CLOVE Learning Platform")
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = int(os.getenv("EMAIL_RESET_TOKEN_EXPIRE_HOURS", "6"))
+    
+    # Brevo settings
+    BREVO_API_KEY: str = os.getenv("BREVO_API_KEY", "")
+    USE_BREVO: bool = os.getenv("USE_BREVO", "true").lower() == "true"
 
     class Config:
         env_file = ".env"
