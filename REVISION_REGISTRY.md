@@ -211,6 +211,31 @@ BACKEND:
 - **Current Version**: 1.0.0+2024.04.018.001
 - **Purpose**: Challenge theme hook
 
+#### 04-019: MonacoCodeBlock
+- **File**: `src/features/challenges/components/MonacoCodeBlock.jsx`
+- **Current Version**: 1.0.0+2024.04.019.001
+- **Purpose**: Read-only Monaco code viewer for challenges
+
+#### 04-020: OtherSessionWarningModal
+- **File**: `src/features/challenges/components/OtherSessionWarningModal.jsx`
+- **Current Version**: 1.0.0+2024.04.020.001
+- **Purpose**: Warns when user has another active session
+
+#### 04-021: ProgressIndicator
+- **File**: `src/features/challenges/components/ProgressIndicator.jsx`
+- **Current Version**: 1.0.0+2024.04.021.001
+- **Purpose**: Visual progress indicator within challenges
+
+#### 04-022: Challenge Utils - Error Handling
+- **File**: `src/features/challenges/utils/errorHandling.js`
+- **Current Version**: 1.0.0+2024.04.022.001
+- **Purpose**: Centralized error handling helpers for challenge flows
+
+#### 04-023: Challenge Utils - Monaco Themes
+- **File**: `src/features/challenges/utils/monacoThemes.js`
+- **Current Version**: 1.0.0+2024.04.023.001
+- **Purpose**: Monaco editor theme definitions for challenge modes
+
 ### MyDeck (05)
 #### 05-001: TopicPage
 - **File**: `src/features/mydeck/pages/TopicPage.jsx`
@@ -284,6 +309,71 @@ BACKEND:
 - **Current Version**: 1.0.0+2024.05.012.001
 - **Purpose**: Theme hook for MyDeck
 
+#### 05-013: FloatingRocks
+- **File**: `src/features/mydeck/components/FloatingRocks.jsx`
+- **Current Version**: 1.0.0+2024.05.013.001
+- **Purpose**: Floating rocks background effect (wizard theme)
+
+#### 05-014: LightningEffect
+- **File**: `src/features/mydeck/components/LightningEffect.jsx`
+- **Current Version**: 1.0.0+2024.05.014.001
+- **Purpose**: Lightning visual effect overlay
+
+#### 05-015: RainfallBackground
+- **File**: `src/features/mydeck/components/RainfallBackground.jsx`
+- **Current Version**: 1.0.0+2024.05.015.001
+- **Purpose**: Rainfall background (detective theme)
+
+#### 05-016: RuneBackground
+- **File**: `src/features/mydeck/components/RuneBackground.jsx`
+- **Current Version**: 1.0.0+2024.05.016.001
+- **Purpose**: Animated runes background (wizard theme)
+
+#### 05-017: SpaceBackground
+- **File**: `src/features/mydeck/components/SpaceBackground.jsx`
+- **Current Version**: 1.0.0+2024.05.017.001
+- **Purpose**: Parallax space background (space theme)
+
+#### 05-018: ImageThemeBackground
+- **File**: `src/features/mydeck/components/ImageThemeBackground.jsx`
+- **Current Version**: 1.0.0+2024.05.018.001
+- **Purpose**: Image-based theme background wrapper
+
+#### 05-019: SubtopicLayout
+- **File**: `src/features/mydeck/components/SubtopicLayout.jsx`
+- **Current Version**: 1.0.0+2024.05.019.001
+- **Purpose**: Layout wrapper for subtopic detail pages
+
+#### 05-020: SubtopicNode
+- **File**: `src/features/mydeck/components/SubtopicNode.jsx`
+- **Current Version**: 1.0.0+2024.05.020.001
+- **Purpose**: Node component representing a subtopic
+
+#### 05-021: TopicCard
+- **File**: `src/features/mydeck/components/TopicCard.jsx`
+- **Current Version**: 1.0.0+2024.05.021.001
+- **Purpose**: Topic card UI component
+
+#### 05-022: TypeCard
+- **File**: `src/features/mydeck/components/TypeCard.jsx`
+- **Current Version**: 1.0.0+2024.05.022.001
+- **Purpose**: Content type card UI component
+
+#### 05-023: WizardBackground
+- **File**: `src/features/mydeck/components/WizardBackground.jsx`
+- **Current Version**: 1.0.0+2024.05.023.001
+- **Purpose**: Wizard theme background component
+
+#### 05-024: WizardThreadPath
+- **File**: `src/features/mydeck/components/WizardThreadPath.jsx`
+- **Current Version**: 1.0.0+2024.05.024.001
+- **Purpose**: Wizard theme thread navigation path
+
+#### 05-025: Space Theme Provider
+- **File**: `src/features/mydeck/providers/ThemeProvider.jsx`
+- **Current Version**: 1.0.0+2024.05.025.001
+- **Purpose**: Theme provider for MyDeck pages
+
 ### Progress (06)
 #### 06-001: ProgressPage
 - **File**: `src/features/progress/pages/ProgressPage.jsx`
@@ -328,7 +418,7 @@ BACKEND:
 
 ### Layout & Navigation (08)
 #### 08-001: Layout
-- **File**: `src/components/layout/Layout.jsx`
+- **File**: `src/components/layout/Sidebar/Layout.jsx`
 - **Current Version**: 1.0.0+2024.08.001.001
 - **Purpose**: Main layout wrapper
 
@@ -372,6 +462,26 @@ BACKEND:
 - **File**: `src/features/landing/components/Footer.jsx`
 - **Current Version**: 1.0.0+2024.09.004.001
 - **Purpose**: Landing page footer
+
+#### 09-005: Heading
+- **File**: `src/features/landing/components/Heading.jsx`
+- **Current Version**: 1.0.0+2024.09.005.001
+- **Purpose**: Hero heading component
+
+#### 09-006: ImageCarousel
+- **File**: `src/features/landing/components/ImageCarousel.jsx`
+- **Current Version**: 1.0.0+2024.09.006.001
+- **Purpose**: Landing page image carousel
+
+#### 09-007: ScrollIndicator
+- **File**: `src/features/landing/components/ScrollIndicator.jsx`
+- **Current Version**: 1.0.0+2024.09.007.001
+- **Purpose**: Scroll hint/indicator
+
+#### 09-008: Team
+- **File**: `src/features/landing/components/Team.jsx`
+- **Current Version**: 1.0.0+2024.09.008.001
+- **Purpose**: Team members showcase
 
 ### Core (10)
 #### 10-001: App
@@ -741,6 +851,11 @@ BACKEND:
 - **Current Version**: 1.0.0+2024.15.004.001
 - **Purpose**: Security utilities
 
+#### 15-009: Cache Utils
+- **File**: `app/utils/cache.py`
+- **Current Version**: 1.0.0+2024.15.009.001
+- **Purpose**: Simple caching and memoization utilities
+
 #### 15-005: Main App
 - **File**: `app/main.py`
 - **Current Version**: 1.0.0+2024.15.005.001
@@ -865,5 +980,5 @@ BACKEND:
 
 ---
 
-**Last Updated**: 2024-01-15  
+**Last Updated**: 2025-09-11  
 **Registry Version**: 1.0.0+2024.00.000.001
