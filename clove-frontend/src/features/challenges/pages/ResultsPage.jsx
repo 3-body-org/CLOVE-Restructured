@@ -60,7 +60,7 @@ const ResultsPage = () => {
   const { topicId: topicIdParam } = useParams();
   const { user: currentUser } = useAuth();
   const { closeSidebar } = useSidebar();
-  const { topicId: contextTopicId, subtopicId: contextSubtopicId } = useContext(MyDeckContext);
+  const { topicId: contextTopicId, subtopicId: contextSubtopicId, loadTopicOverview, refreshTopics } = useContext(MyDeckContext);
   const { getAllChallengeAttemptsForResults } = useChallengeApi();
   const { getThemeStyles } = useChallengeTheme();
   const { post } = useApi();
@@ -254,6 +254,12 @@ const ResultsPage = () => {
     try {
       // Reset challenge fields before going back to my-deck
       await resetChallengeFields();
+      
+      // Refresh topics and topic overview to show updated unlock status
+      await refreshTopics();
+      if (loadTopicOverview) {
+        await loadTopicOverview(topicId, true); // Force refresh
+      }
     } catch (error) {
       // Continue anyway - don't block the user from going back
     }
