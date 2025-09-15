@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/landing/styles/ImageCarousel.module.scss";
 
-// Import the 4 specific GIFs for the carousel
-import showcaseGif from "assets/GIF/landing/gif-showcase.gif";
+// Import the 3 specific GIFs for the carousel
 import wizardGif from "assets/GIF/landing/gif-wizardsubtopics.gif";
 import detectiveGif from "assets/GIF/landing/gif-detectivesubtopics.gif";
 import spaceGif from "assets/GIF/landing/gif-spacesubtopics.gif";
@@ -12,16 +11,6 @@ import spaceGif from "assets/GIF/landing/gif-spacesubtopics.gif";
 const carouselData = [
   {
     id: 1,
-    theme: 'showcase',
-    image: showcaseGif,
-    title: 'Interactive Learning Experience',
-    description: 'Discover how Clove adapts to your learning style with real-time feedback and personalized challenges',
-    color: '#8b5cf6', // Purple for showcase
-    dotColor: '#8b5cf6',
-    transition: 'slide-fade'
-  },
-  {
-    id: 2,
     theme: 'wizard',
     image: wizardGif,
     title: 'Wizard Academy',
@@ -31,7 +20,7 @@ const carouselData = [
     transition: 'magical-sparkle'
   },
   {
-    id: 3,
+    id: 2,
     theme: 'detective',
     image: detectiveGif,
     title: 'Noir Investigations',
@@ -41,7 +30,7 @@ const carouselData = [
     transition: 'film-reel'
   },
   {
-    id: 4,
+    id: 3,
     theme: 'space',
     image: spaceGif,
     title: 'Space Exploration',
