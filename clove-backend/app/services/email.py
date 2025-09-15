@@ -1,22 +1,18 @@
-import asyncio
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from typing import List, Optional
-import aiosmtplib
+from typing import Optional
 from jinja2 import Template
+import requests
+import json
 
 from app.core.config import settings
 
 
 class EmailService:
     def __init__(self):
-        self.smtp_host = settings.SMTP_HOST
-        self.smtp_port = settings.SMTP_PORT
-        self.smtp_user = settings.SMTP_USER
-        self.smtp_password = settings.SMTP_PASSWORD
         self.from_email = settings.EMAILS_FROM_EMAIL
         self.from_name = settings.EMAILS_FROM_NAME
+        self.use_brevo = settings.USE_BREVO
+        self.brevo_api_key = settings.BREVO_API_KEY
+        self.brevo_url = "https://api.brevo.com/v3/send/email"
 
     async def send_email(
         self,
@@ -25,34 +21,44 @@ class EmailService:
         html_content: str,
         text_content: Optional[str] = None
     ) -> bool:
-        """Send an email using aiosmtplib (async)"""
+        """Send an email using Brevo API"""
         try:
-            # Create message
-            message = MIMEMultipart("alternative")
-            message["Subject"] = subject
-            message["From"] = f"{self.from_name} <{self.from_email}>"
-            message["To"] = to_email
-
-            # Add text and HTML parts
-            if text_content:
-                text_part = MIMEText(text_content, "plain")
-                message.attach(text_part)
-            
-            html_part = MIMEText(html_content, "html")
-            message.attach(html_part)
-
-            # Send email
-            await aiosmtplib.send(
-                message,
-                hostname=self.smtp_host,
-                port=self.smtp_port,
-                start_tls=True,
-                username=self.smtp_user,
-                password=self.smtp_password,
-            )
-            
-            print(f"Email sent successfully to {to_email}")
-            return True
+            if self.use_brevo and self.brevo_api_key:
+                # Use Brevo API
+                headers = {
+                    "accept": "application/json",
+                    "api-key": self.brevo_api_key,
+                    "content-type": "application/json"
+                }
+                
+                data = {
+                    "sender": {
+                        "name": self.from_name,
+                        "email": self.from_email
+                    },
+                    "to": [
+                        {
+                            "email": to_email
+                        }
+                    ],
+                    "subject": subject,
+                    "htmlContent": html_content
+                }
+                
+                if text_content:
+                    data["textContent"] = text_content
+                
+                response = requests.post(self.brevo_url, headers=headers, data=json.dumps(data))
+                
+                if response.status_code == 201:
+                    print(f"Email sent successfully to {to_email} via Brevo")
+                    return True
+                else:
+                    print(f"Brevo API error: {response.status_code} - {response.text}")
+                    return False
+            else:
+                print(f"Brevo not configured, email sending disabled for {to_email}")
+                return False
             
         except Exception as e:
             print(f"Failed to send email to {to_email}: {e}")
