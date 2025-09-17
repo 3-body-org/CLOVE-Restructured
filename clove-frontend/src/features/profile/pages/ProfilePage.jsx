@@ -66,6 +66,26 @@ const ProfilePage = () => {
     setError("");
     setSaving(true);
     try {
+      if (formData.first_name.length < 1) {
+        showErrorNotification("First name is required");
+        setSaving(false);
+        return;
+      }
+      if (formData.first_name.length > 30) {
+        showErrorNotification("First name must be less than 30 characters");
+        setSaving(false);
+        return;
+      }
+      if (formData.last_name.length < 1) {
+        showErrorNotification("Last name is required");
+        setSaving(false);
+        return;
+      }
+      if (formData.last_name.length > 30) {
+        showErrorNotification("Last name must be less than 30 characters");
+        setSaving(false);
+        return;
+      }
       if (formData.username.length < 3) {
         showErrorNotification("Username must be at least 3 characters long");
         setSaving(false);
@@ -298,25 +318,39 @@ const ProfilePage = () => {
                   )}
                 </div>
                 <div className={styles.heroInfo}>
-                  <h1 className={styles.heroName}>
+                  <h1 className={`${styles.heroName} ${editingSection === 'profile' ? styles.editing : ''}`}>
                     {editingSection === 'profile' ? (
                       <>
-                        <input
-                          type="text"
-                          name="first_name"
-                          value={formData.first_name}
-                          onChange={handleInputChange}
-                          placeholder="First Name"
-                          className={styles.heroNameInput}
-                        />
-                        <input
-                          type="text"
-                          name="last_name"
-                          value={formData.last_name}
-                          onChange={handleInputChange}
-                          placeholder="Last Name"
-                          className={styles.heroNameInput}
-                        />
+                        <div className={styles.nameInputContainer}>
+                          <input
+                            type="text"
+                            name="first_name"
+                            value={formData.first_name}
+                            onChange={handleInputChange}
+                            placeholder="First Name"
+                            className={styles.heroNameInput}
+                            maxLength={30}
+                            minLength={1}
+                          />
+                          <span className={styles.characterCount}>
+                            {formData.first_name.length}/30
+                          </span>
+                        </div>
+                        <div className={styles.nameInputContainer}>
+                          <input
+                            type="text"
+                            name="last_name"
+                            value={formData.last_name}
+                            onChange={handleInputChange}
+                            placeholder="Last Name"
+                            className={styles.heroNameInput}
+                            maxLength={30}
+                            minLength={1}
+                          />
+                          <span className={styles.characterCount}>
+                            {formData.last_name.length}/30
+                          </span>
+                        </div>
                       </>
                     ) : (
                       <>{user?.first_name} {user?.last_name}</>
@@ -466,39 +500,45 @@ const ProfilePage = () => {
                     </div>
                     {editingSection === 'account' ? (
                       <>
-                        <input
-                          type={showNewPassword ? "text" : "password"}
-                          name="password"
-                          value={formData.password}
-                          onChange={handleInputChange}
-                          className={styles.infoInput}
-                          placeholder="New Password"
-                        />
-                        <button type="button" onClick={() => setShowNewPassword(v => !v)} className={styles.passwordToggleBtn}>
-                          <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
-                        </button>
-                        <input
-                          type={showConfirmPassword ? "text" : "password"}
-                          name="confirm_password"
-                          value={formData.confirm_password}
-                          onChange={handleInputChange}
-                          className={styles.infoInput}
-                          placeholder="Confirm New Password"
-                        />
-                        <button type="button" onClick={() => setShowConfirmPassword(v => !v)} className={styles.passwordToggleBtn}>
-                          <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
-                        </button>
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          name="current_password"
-                          value={formData.current_password}
-                          onChange={handleInputChange}
-                          className={styles.infoInput}
-                          placeholder="Current Password (required for changes)"
-                        />
-                        <button type="button" onClick={() => setShowPassword(v => !v)} className={styles.passwordToggleBtn}>
-                          <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                        </button>
+                        <div className={styles.passwordInputWrapper}>
+                          <input
+                            type={showNewPassword ? "text" : "password"}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            className={styles.infoInput}
+                            placeholder="New Password"
+                          />
+                          <button type="button" onClick={() => setShowNewPassword(v => !v)} className={styles.passwordToggleBtn}>
+                            <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
+                          </button>
+                        </div>
+                        <div className={styles.passwordInputWrapper}>
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            name="confirm_password"
+                            value={formData.confirm_password}
+                            onChange={handleInputChange}
+                            className={styles.infoInput}
+                            placeholder="Confirm New Password"
+                          />
+                          <button type="button" onClick={() => setShowConfirmPassword(v => !v)} className={styles.passwordToggleBtn}>
+                            <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                          </button>
+                        </div>
+                        <div className={styles.passwordInputWrapper}>
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            name="current_password"
+                            value={formData.current_password}
+                            onChange={handleInputChange}
+                            className={styles.infoInput}
+                            placeholder="Current Password (required for changes)"
+                          />
+                          <button type="button" onClick={() => setShowPassword(v => !v)} className={styles.passwordToggleBtn}>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                          </button>
+                        </div>
                       </>
                     ) : (
                       <div className={styles.infoValue}>********</div>

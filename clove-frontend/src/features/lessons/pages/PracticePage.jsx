@@ -54,7 +54,7 @@ const PracticePage = () => {
 
             const hideTimer = setTimeout(() => {
               setShowSkipSnackbar(false);
-            }, 10000); // Hide after 10 seconds
+            }, 20000); // Hide after 10 seconds
 
             return () => {
               clearTimeout(timer);

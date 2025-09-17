@@ -332,7 +332,7 @@ const LessonsPage = () => {
 
         const hideTimer = setTimeout(() => {
           setShowSkipSnackbar(false);
-        }, 7000);
+        }, 10000);
 
         return () => {
           clearTimeout(timer);
