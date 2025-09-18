@@ -284,25 +284,7 @@ const LessonsPage = () => {
   
   const lessonTitle = lessonData?.[0]?.lessonTitle || "Loading...";
 
-  useEffect(() => {
-    if (lessonData && lessonData.length > 0 && user && subtopicId) {
-      const lessonCompletionKey = `lesson_completed_${subtopicId}_${user.id}`;
-      const isLessonCompleted = localStorage.getItem(lessonCompletionKey);
-      
-      if (!isLessonCompleted) {
-        const markLessonAsCompleted = async () => {
-          try {
-            await completeSubtopicComponent(parseInt(subtopicId), 'lesson');
-            
-            localStorage.setItem(lessonCompletionKey, 'true');
-          } catch (error) {
-            // Handle error silently
-          }
-        };
-        markLessonAsCompleted();
-      }
-    }
-      }, [lessonData, user, subtopicId]);
+  // Removed automatic lesson completion - now happens on "Start Practice" button click
 
   useEffect(() => {
     const fetchUserSubtopicData = async () => {
@@ -350,7 +332,24 @@ const LessonsPage = () => {
     }
   }, [lessonData?.title, isHovered]);
 
-  const handleStartChallenges = () => {
+  const handleStartChallenges = async () => {
+    // Mark lesson as completed when user clicks "Start Practice"
+    if (user && subtopicId) {
+      const lessonCompletionKey = `lesson_completed_${subtopicId}_${user.id}`;
+      const isLessonCompleted = localStorage.getItem(lessonCompletionKey);
+      
+      if (!isLessonCompleted) {
+        try {
+          await completeSubtopicComponent(parseInt(subtopicId), 'lesson');
+          localStorage.setItem(lessonCompletionKey, 'true');
+        } catch (error) {
+          // Handle error silently - don't block navigation
+          console.warn('Failed to mark lesson as completed:', error);
+        }
+      }
+    }
+    
+    // Navigate to practice page
     navigate(`/lesson/${topicId}/${subtopicId}/practice`);
   };
 

@@ -1,0 +1,157 @@
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  
+  &__content {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  &__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+  }
+  
+  &__number {
+    font-weight: 700;
+    color: #2563eb;
+    line-height: 1;
+  }
+  
+  &__label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+  
+  &__text {
+    font-weight: 600;
+    color: #059669;
+    font-size: 1.125rem;
+  }
+  
+  // Size variants
+  &--small {
+    .countdown-timer__number {
+      font-size: 1.5rem;
+    }
+    
+    .countdown-timer__label {
+      font-size: 0.625rem;
+    }
+    
+    .countdown-timer__unit {
+      min-width: 40px;
+    }
+    
+    .countdown-timer__content {
+      gap: 0.75rem;
+    }
+  }
+  
+  &--medium {
+    .countdown-timer__number {
+      font-size: 2rem;
+    }
+    
+    .countdown-timer__label {
+      font-size: 0.75rem;
+    }
+    
+    .countdown-timer__unit {
+      min-width: 60px;
+    }
+  }
+  
+  &--large {
+    .countdown-timer__number {
+      font-size: 2.5rem;
+    }
+    
+    .countdown-timer__label {
+      font-size: 0.875rem;
+    }
+    
+    .countdown-timer__unit {
+      min-width: 80px;
+    }
+    
+    .countdown-timer__content {
+      gap: 1.5rem;
+    }
+  }
+  
+  // Expired state
+  &--expired {
+    .countdown-timer__text {
+      animation: pulse 2s infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// Dark theme support
+.theme-dark {
+  .countdown-timer {
+    &__number {
+      color: #60a5fa;
+    }
+    
+    &__label {
+      color: #9ca3af;
+    }
+    
+    &__text {
+      color: #10b981;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 640px) {
+  .countdown-timer {
+    &--large {
+      .countdown-timer__number {
+        font-size: 2rem;
+      }
+      
+      .countdown-timer__unit {
+        min-width: 60px;
+      }
+      
+      .countdown-timer__content {
+        gap: 1rem;
+      }
+    }
+    
+    &--medium {
+      .countdown-timer__number {
+        font-size: 1.75rem;
+      }
+      
+      .countdown-timer__unit {
+        min-width: 50px;
+      }
+      
+      .countdown-timer__content {
+        gap: 0.75rem;
+      }
+    }
+  }
+}

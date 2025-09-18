@@ -71,7 +71,12 @@ const AssessmentResult = ({ topicId: topicIdFromProps, assessmentType: assessmen
         
         if (actualAssessmentType === 'retention-test') {
           // For retention tests, fetch comprehensive results from the new endpoint
-          const response = await get(`/assessment_questions/topic/${numericTopicId}/retention-test/results`);
+          // Get stage from URL params if available
+          const urlParams = new URLSearchParams(window.location.search);
+          const stage = urlParams.get('stage');
+          const stageParam = stage ? `?stage=${stage}` : '';
+          
+          const response = await get(`/assessment_questions/topic/${numericTopicId}/retention-test/results${stageParam}`);
           if (!response.ok) {
             throw new Error(`Failed to fetch retention test results: ${response.status}`);
           }

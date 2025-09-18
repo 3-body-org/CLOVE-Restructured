@@ -93,17 +93,19 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
           {buttonLabel}
         </button>
         
-        {/* Retention Test Results Icon - Only show when retention test is completed */}
-        {retentionTestStatus && retentionTestStatus.is_completed && (
-          <div className={styles.iconContainer}>
-            <button
-              className={styles.retentionResultsIcon}
-              onClick={() => navigate(`/my-deck/${topic.id}-${topic.name.toLowerCase().replace(/\s+/g, '-')}/retention-test/result`)}
-              aria-label="View Retention Test Results"
-            >
-              📊
-            </button>
-            <div className={styles.tooltip}>View Retention Test Results</div>
+        {/* Retention Test Results Icon - Show if any stage is completed */}
+        {retentionTestStatus && retentionTestStatus.availability && (retentionTestStatus.availability.first_stage_completed || retentionTestStatus.availability.second_stage_completed) && (
+          <div className={styles.retentionTestContainer}>
+            <div className={styles.iconContainer}>
+              <button
+                className={styles.retentionResultsIcon}
+                onClick={() => onRetentionTestClick && onRetentionTestClick(topic, true)}
+                aria-label="View Retention Test Results"
+              >
+                📊
+              </button>
+              <div className={styles.tooltip}>View Retention Test Results</div>
+            </div>
           </div>
         )}
         

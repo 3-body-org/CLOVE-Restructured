@@ -1,6 +1,6 @@
 // Assessment.js
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import "../../styles/components/assessment.scss";
 
@@ -29,7 +29,26 @@ const Assessment = () => {
   const { get, post } = useApi();
   const { user } = useAuth();
   const { topicId, assessmentType } = useParams(); // assessmentType: 'pre', 'post', or 'retention-test'
+  const [searchParams] = useSearchParams();
   const numericTopicId = topicId ? topicId.split('-')[0] : null;
+  
+  // More robust way to get stage parameter
+  const getRetentionTestStage = () => {
+    const stageFromParams = searchParams.get('stage');
+    if (stageFromParams) {
+      return parseInt(stageFromParams);
+    }
+    // Fallback: try to get from URL directly
+    const urlParams = new URLSearchParams(window.location.search);
+    const stageFromURL = urlParams.get('stage');
+    if (stageFromURL) {
+      return parseInt(stageFromURL);
+    }
+    return 1; // Default to stage 1
+  };
+  
+  const retentionTestStage = getRetentionTestStage();
+  
   const navigate = useNavigate();
   const { getTopicsWithProgress } = useMyDeckService();
   const { setTopics, loadTopicOverview, refreshTopics } = useContext(MyDeckContext);
@@ -48,7 +67,7 @@ const Assessment = () => {
         try {
           let endpoint;
           if (isRetentionTest) {
-            endpoint = `/assessment_questions/topic/${numericTopicId}/retention-test/status`;
+            endpoint = `/assessment_questions/topic/${numericTopicId}/retention-test/status?stage=${retentionTestStage}`;
           } else {
             endpoint = assessmentType === 'post' 
               ? `/post_assessments/user/${user.id}/topic/${numericTopicId}`
@@ -64,7 +83,7 @@ const Assessment = () => {
                 setAssessmentCompleted(true);
                 setIsRedirecting(true);
                 setTimeout(() => {
-                  navigate(`/my-deck/${topicId}/retention-test/result`);
+                  navigate(`/my-deck/${topicId}/retention-test/result?stage=${retentionTestStage}`);
                 }, 1500);
               } else {
                 // Restore progress for retention test
@@ -111,7 +130,7 @@ const Assessment = () => {
       }
     };
     checkCompletedAndRestoreProgress();
-  }, [assessmentType, user, numericTopicId, get, navigate, topicId, isRetentionTest]);
+  }, [assessmentType, user, numericTopicId, get, navigate, topicId, isRetentionTest, retentionTestStage]);
 
   useEffect(() => {
     if (assessmentCompleted || isCheckingCompletion) return;
@@ -129,7 +148,7 @@ const Assessment = () => {
       try {
         let response;
         if (isRetentionTest) {
-          response = await get(`/assessment_questions/topic/${numericTopicId}/retention-test`);
+          response = await get(`/assessment_questions/topic/${numericTopicId}/retention-test?stage=${retentionTestStage}`);
         } else {
           response = await get(`/assessment_questions/topic/${numericTopicId}/randomized?assessment_type=${assessmentType}`);
         }
@@ -170,11 +189,11 @@ const Assessment = () => {
       }
     };
     fetchQuestions();
-  }, [numericTopicId, assessmentType, assessmentCompleted, isCheckingCompletion, isRetentionTest]);
+  }, [numericTopicId, assessmentType, assessmentCompleted, isCheckingCompletion, isRetentionTest, retentionTestStage]);
 
   useEffect(() => {
     if (questionsToAsk.length > 0) {
-      // Calculate progress accounting for previously answered questions
+      // Use the same logic for both retention tests and regular assessments
       const baseProgressKey = `assessment_base_progress_${numericTopicId}_${assessmentType}`;
       const baseProgress = parseInt(sessionStorage.getItem(baseProgressKey) || '0');
       const currentQuestionNumber = baseProgress + questionIndex + 1;
@@ -229,7 +248,7 @@ const Assessment = () => {
     let submissionData;
     
     if (isRetentionTest) {
-      endpoint = `/assessment_questions/topic/${numericTopicId}/retention-test/submit-answer`;
+      endpoint = `/assessment_questions/topic/${numericTopicId}/retention-test/submit-answer?stage=${retentionTestStage}`;
       submissionData = {
         user_id: user?.id,
         topic_id: parseInt(numericTopicId),
@@ -274,8 +293,8 @@ const Assessment = () => {
       
       try {
         if (isRetentionTest) {
-          // For retention test, just show completion message
-          showSuccessNotification('Retention test completed! Viewing your results...');
+          // For retention test, show stage-specific completion message
+          showSuccessNotification(`Retention test - Stage ${retentionTestStage} completed! Viewing your results...`);
         } else {
           // For regular assessments, refresh topics to unlock subtopics
           showSuccessNotification('Assessment completed! Viewing your results...');
@@ -299,7 +318,7 @@ const Assessment = () => {
       
       // Navigate to result page
       if (isRetentionTest) {
-        navigate(`/my-deck/${topicId}/retention-test/result`);
+        navigate(`/my-deck/${topicId}/retention-test/result?stage=${retentionTestStage}`);
       } else {
         navigate(`/my-deck/${topicId}/assessment/${assessmentType}/result`);
       }
@@ -316,14 +335,19 @@ const Assessment = () => {
           ></div>
         </div>
 
-        <div className="assessment-question-count">
-          {(() => {
-            const baseProgressKey = `assessment_base_progress_${numericTopicId}_${assessmentType}`;
-            const baseProgress = parseInt(sessionStorage.getItem(baseProgressKey) || '0');
-            const currentQuestionNumber = baseProgress + questionIndex + 1;
-            return `${isRetentionTest ? 'Retention Test' : 'Assessment'} - Question ${currentQuestionNumber} of 15`;
-          })()}
-        </div>
+         <div className="assessment-question-count">
+           {(() => {
+             // Use the same logic for both retention tests and regular assessments
+             const baseProgressKey = `assessment_base_progress_${numericTopicId}_${assessmentType}`;
+             const baseProgress = parseInt(sessionStorage.getItem(baseProgressKey) || '0');
+             const currentQuestionNumber = baseProgress + questionIndex + 1;
+             
+             if (isRetentionTest) {
+               return `Retention Test - Stage ${retentionTestStage} - Question ${currentQuestionNumber} of 15`;
+             }
+             return `Assessment - Question ${currentQuestionNumber} of 15`;
+           })()}
+         </div>
 
         <div
           className="assessment-question-text"

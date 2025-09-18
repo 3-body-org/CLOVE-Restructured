@@ -11,6 +11,7 @@ import TopicCard from "../components/TopicCard";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 import AssessmentInstructions from "components/assessments/AssessmentInstructions";
+import RetentionTestPopup from "components/assessments/RetentionTestPopup";
 import { useMyDeckService } from "../hooks/useMydeckService";
 import { useApi } from "../../../hooks/useApi";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -51,9 +52,10 @@ const TopicPage = () => {
   // Simple retention test state
   const [isProcessingRetentionTests, setIsProcessingRetentionTests] = useState(false);
   
-  // Retention test instructions modal state
-  const [showRetentionTestInstructions, setShowRetentionTestInstructions] = useState(false);
+  // Retention test popup state
+  const [showRetentionTestPopup, setShowRetentionTestPopup] = useState(false);
   const [selectedTopicForRetentionTest, setSelectedTopicForRetentionTest] = useState(null);
+  const [showRetentionTestResults, setShowRetentionTestResults] = useState(false);
 
   // Minimum loading time effect for consistent UX
   useEffect(() => {
@@ -62,7 +64,7 @@ const TopicPage = () => {
     return () => clearTimeout(timer);
   }, []); // Only on mount
 
-    // Check retention test availability using detailed topic overview from MyDeckContext
+    // Check retention test availability using the new two-stage system
   const checkRetentionTestAvailability = useCallback(async () => {
     if (!user?.id || !topics || topics.length === 0) {
       return;
@@ -87,23 +89,10 @@ const TopicPage = () => {
         }
         
         let isTopicCompleted = false;
-        let completionTimestamp = null;
         
         if (!topicOverview) {
           // Use progress-based completion check since topic overview failed
           isTopicCompleted = topic.progress === 1 || topic.progress === 100;
-          
-          if (isTopicCompleted) {
-            // Check if topic has completion time, otherwise use 6 minutes ago
-            if (topic.completed_at) {
-              completionTimestamp = topic.completed_at;
-            } else {
-              // Assume topic was completed recently (6 minutes ago to make it eligible)
-              completionTimestamp = new Date(Date.now() - 6 * 60 * 1000).toISOString();
-            }
-          } else {
-            continue;
-          }
         } else {
           // Use detailed topic overview completion status
           const { pre_assessment, subtopics, post_assessment } = topicOverview;
@@ -114,106 +103,33 @@ const TopicPage = () => {
           const isPostAssessmentCompleted = post_assessment?.is_completed || false;
           
           isTopicCompleted = isPreAssessmentCompleted && areAllSubtopicsCompleted && isPostAssessmentCompleted;
-          
-          if (!isTopicCompleted) {
-            continue;
-          }
-          
-          // Get completion timestamp from the most recent completed component
-          if (post_assessment?.completed_at) {
-            completionTimestamp = post_assessment.completed_at;
-          }
-          // Check subtopics completion time
-          else if (subtopics?.length > 0) {
-            const lastCompletedSubtopic = subtopics
-              .filter(subtopic => subtopic.completed_at)
-              .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at))[0];
-            if (lastCompletedSubtopic) {
-              completionTimestamp = lastCompletedSubtopic.completed_at;
-            }
-          }
-          // Check pre-assessment completion time (earliest)
-          else if (pre_assessment?.completed_at) {
-            completionTimestamp = pre_assessment.completed_at;
-          }
         }
         
         if (isTopicCompleted) {
-          // Calculate time since completion
-          let minutesSinceCompletion = 10; // Default for testing
-          
-          if (completionTimestamp) {
-            // Fix timezone issue: convert both times to UTC for accurate comparison
-            const completionDate = new Date(completionTimestamp);
-            const currentDate = new Date();
-            
-            // Get UTC timestamps to avoid timezone conversion issues
-            const completionUTC = Date.UTC(
-              completionDate.getUTCFullYear(),
-              completionDate.getUTCMonth(),
-              completionDate.getUTCDate(),
-              completionDate.getUTCHours(),
-              completionDate.getUTCMinutes(),
-              completionDate.getUTCSeconds()
-            );
-            const currentUTC = Date.UTC(
-              currentDate.getUTCFullYear(),
-              currentDate.getUTCMonth(),
-              currentDate.getUTCDate(),
-              currentDate.getUTCHours(),
-              currentDate.getUTCMinutes(),
-              currentDate.getUTCSeconds()
-            );
-            
-            minutesSinceCompletion = Math.floor((currentUTC - completionUTC) / (1000 * 60));
-          }
-          
-          // Check if topic is eligible based on 5-minute delay
-          const isEligible = minutesSinceCompletion >= 5;
-          
-          if (isEligible) {
-            // Check if retention test is not already completed
-            try {
-              const response = await get(`/assessment_questions/topic/${topic.id}/retention-test/status`);
-              if (response.ok) {
-                const data = await response.json();
-                if (!data.is_completed) {
-                  availableTests.push({
-                    topicId: topic.id,
-                    topicName: topic.name,
-                    minutesSinceCompletion: minutesSinceCompletion,
-                    isAvailable: true,
-                    is_completed: false
-                  });
-                } else {
-                  // Retention test completed
-                  availableTests.push({
-                    topicId: topic.id,
-                    topicName: topic.name,
-                    minutesSinceCompletion: minutesSinceCompletion,
-                    isAvailable: false,
-                    is_completed: true
-                  });
-                }
-              }
-            } catch (error) {
-              // If error, assume retention test is available
+          // Check retention test availability using the new API
+          try {
+            const response = await get(`/assessment_questions/topic/${topic.id}/retention-test/availability`);
+            if (response.ok) {
+              const data = await response.json();
+              const hasAvailableTests = data.first_stage_available || data.second_stage_available;
+              const hasCompletedTests = data.first_stage_completed || data.second_stage_completed;
+              
               availableTests.push({
                 topicId: topic.id,
                 topicName: topic.name,
-                minutesSinceCompletion: minutesSinceCompletion,
-                isAvailable: true,
-                is_completed: false
+                isAvailable: hasAvailableTests,
+                is_completed: hasCompletedTests && !hasAvailableTests,
+                availability: data
               });
             }
-          } else {
-            // Topic completed but waiting for 5-minute delay
+          } catch (error) {
+            // If error, assume no retention test is available
             availableTests.push({
               topicId: topic.id,
               topicName: topic.name,
-              minutesSinceCompletion: minutesSinceCompletion,
               isAvailable: false,
-              is_completed: false
+              is_completed: false,
+              availability: null
             });
           }
         }
@@ -225,20 +141,19 @@ const TopicPage = () => {
     }
   }, [user, topics, loadTopicOverview, get]);
 
-  // Function to handle starting retention test
-  const handleStartRetentionTest = useCallback((topic) => {
+  // Function to handle starting retention test popup
+  const handleStartRetentionTest = useCallback((topic, showResults = false) => {
     setSelectedTopicForRetentionTest(topic);
-    setShowRetentionTestInstructions(true);
+    setShowRetentionTestPopup(true);
+    setShowRetentionTestResults(showResults);
   }, []);
   
-  // Function to proceed to retention test after instructions
-  const handleProceedToRetentionTest = useCallback(() => {
-    if (selectedTopicForRetentionTest) {
-      setShowRetentionTestInstructions(false);
-      setSelectedTopicForRetentionTest(null);
-      navigate(`/my-deck/${selectedTopicForRetentionTest.id}/retention-test`);
-    }
-  }, [selectedTopicForRetentionTest, navigate]);
+  // Function to close retention test popup
+  const handleCloseRetentionTestPopup = useCallback(() => {
+    setShowRetentionTestPopup(false);
+    setSelectedTopicForRetentionTest(null);
+    setShowRetentionTestResults(false);
+  }, []);
 
   // Trigger retention test check when topics are loaded (ONCE only)
   useEffect(() => {
@@ -418,15 +333,13 @@ const TopicPage = () => {
         )}
       </div>
       
-      {/* Retention Test Instructions Modal */}
-      {showRetentionTestInstructions && selectedTopicForRetentionTest && (
-        <AssessmentInstructions
-          isVisible={showRetentionTestInstructions}
-          onClose={() => setShowRetentionTestInstructions(false)}
-          onStart={handleProceedToRetentionTest}
-          assessmentType="retention-test"
+      {/* Retention Test Popup */}
+      {showRetentionTestPopup && selectedTopicForRetentionTest && (
+        <RetentionTestPopup
           topicId={selectedTopicForRetentionTest.id}
-          theme={selectedTopicForRetentionTest.theme || 'space'}
+          isOpen={showRetentionTestPopup}
+          onClose={handleCloseRetentionTestPopup}
+          showResults={showRetentionTestResults}
         />
       )}
     </Container>

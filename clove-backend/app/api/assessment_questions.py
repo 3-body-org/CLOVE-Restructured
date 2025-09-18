@@ -14,7 +14,8 @@ from app.crud.assessment_question import (
     get_randomized_questions_for_topic,
     get_randomized_questions_summary,
     get_retention_test_questions,
-    submit_retention_test_answer
+    submit_retention_test_answer,
+    check_retention_test_availability
 )
 from app.db.session import get_db
 from app.api.auth import get_current_user, get_current_superuser
@@ -130,6 +131,7 @@ async def delete_question(
 @router.get("/topic/{topic_id}/retention-test/status")
 async def get_retention_test_status_endpoint(
     topic_id: int,
+    stage: int = Query(1, description="Retention test stage (1 or 2)"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -143,7 +145,8 @@ async def get_retention_test_status_endpoint(
         status = await get_retention_test_status(
             db, 
             topic_id=topic_id, 
-            user_id=current_user.id
+            user_id=current_user.id,
+            stage=stage
         )
         return status
     except ValueError as e:
@@ -152,6 +155,7 @@ async def get_retention_test_status_endpoint(
 @router.get("/topic/{topic_id}/retention-test/results")
 async def get_retention_test_results_endpoint(
     topic_id: int,
+    stage: int = Query(None, description="Retention test stage (1 or 2). If not provided, returns latest completed stage."),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -165,7 +169,8 @@ async def get_retention_test_results_endpoint(
         results = await get_retention_test_results(
             db, 
             topic_id=topic_id, 
-            user_id=current_user.id
+            user_id=current_user.id,
+            stage=stage
         )
         return results
     except ValueError as e:
@@ -174,20 +179,22 @@ async def get_retention_test_results_endpoint(
 @router.get("/topic/{topic_id}/retention-test", response_model=List[AssessmentQuestionRead])
 async def get_retention_test_questions_endpoint(
     topic_id: int,
+    stage: int = Query(1, description="Retention test stage (1 for 10 hours, 2 for 5 days)"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """
-    Get retention test questions for a specific topic.
-    Returns 15 questions (5 per subtopic) with varying difficulty.
-    Mixes familiar questions (from pre/post assessments) with new questions.
+    Get retention test questions for a specific topic and stage.
+    Stage 1 (12 hours): Questions with IDs 136-150 (15 questions)
+    Stage 2 (5 days): Questions with IDs 151-165 (15 questions)
     Requires user authentication and completion of pre/post assessments.
     """
     try:
         questions = await get_retention_test_questions(
             db, 
             topic_id=topic_id, 
-            user_id=current_user.id
+            user_id=current_user.id,
+            stage=stage
         )
         return questions
     except ValueError as e:
@@ -197,6 +204,7 @@ async def get_retention_test_questions_endpoint(
 async def submit_retention_test_answer_endpoint(
     topic_id: int,
     submission: RetentionTestSubmission,
+    stage: int = Query(1, description="Retention test stage (1 for 10 hours, 2 for 5 days)"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -214,8 +222,29 @@ async def submit_retention_test_answer_endpoint(
             submission.user_id,
             topic_id,  # Use the topic_id parameter
             submission.question_id,
-            submission.user_answer
+            submission.user_answer,
+            stage=stage
         )
         return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/topic/{topic_id}/retention-test/availability")
+async def check_retention_test_availability_endpoint(
+    topic_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Check which retention test stages are available based on timing.
+    Returns availability status and countdown timers.
+    """
+    try:
+        availability = await check_retention_test_availability(
+            db,
+            current_user.id,
+            topic_id
+        )
+        return availability
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
