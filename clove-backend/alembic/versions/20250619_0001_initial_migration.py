@@ -170,6 +170,10 @@ def upgrade() -> None:
     sa.Column('is_completed', sa.Boolean(), nullable=True, server_default='false'),
     sa.Column('completed_at', sa.TIMESTAMP(timezone=True), nullable=True),
     sa.Column('created_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
+    # New fields for two-stage retention test system
+    sa.Column('stage', sa.Integer(), nullable=False, server_default='1'),
+    sa.Column('first_stage_completed', sa.Boolean(), nullable=False, server_default='false'),
+    sa.Column('second_stage_completed', sa.Boolean(), nullable=False, server_default='false'),
     sa.ForeignKeyConstraint(['topic_id'], ['topics.topic_id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')

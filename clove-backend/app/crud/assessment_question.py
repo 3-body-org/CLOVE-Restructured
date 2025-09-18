@@ -7,6 +7,7 @@ import random
 from typing import List, Dict, Any, Optional
 from app.db.models.assessment_questions import AssessmentQuestion
 from app.db.models.subtopics import Subtopic
+from app.db.models.user_topics import UserTopic
 from app.schemas.assessment_question import AssessmentQuestionCreate, AssessmentQuestionUpdate
 from app.crud.pre_assessment import list_for_user_topic as get_pre_assessment_for_user_topic
 from app.crud.post_assessment import list_for_user_topic as get_post_assessment_for_user_topic
@@ -237,12 +238,12 @@ async def get_retention_test_questions(
     db: AsyncSession, 
     topic_id: int, 
     user_id: int,
-    questions_per_subtopic: int = 5
+    stage: int = 1
 ) -> List[AssessmentQuestion]:
     """
-    Get retention test questions for a specific topic.
-    Returns remaining questions (5 per subtopic) with varying difficulty.
-    Mixes familiar questions (from pre/post assessments) with new questions.
+    Get retention test questions for a specific topic and stage.
+    Stage 1 (10 hours): Questions with IDs 136-150 (15 questions)
+    Stage 2 (5 days): Questions with IDs 151-165 (15 questions)
     """
     
     # Verify user has completed pre and post assessments for this topic
@@ -258,213 +259,170 @@ async def get_retention_test_questions(
     if not pre_assessment.is_completed or not post_assessment.is_completed:
         raise ValueError("User must complete both pre and post assessments before taking retention test")
     
-    # Check if user has existing retention test progress
+    # Check if user has existing retention test progress for this stage
     result = await db.execute(
         select(RetentionTest).where(
             RetentionTest.user_id == user_id,
-            RetentionTest.topic_id == topic_id
+            RetentionTest.topic_id == topic_id,
+            RetentionTest.stage == stage
         )
     )
     existing_retention_test = result.scalar_one_or_none()
     
+    # Define question ID ranges for each topic and stage
+    # Topic 1: 136-150 (stage 1), 181-195 (stage 2)
+    # Topic 2: 151-165 (stage 1), 196-210 (stage 2)  
+    # Topic 3: 166-180 (stage 1), 211-225 (stage 2)
+    if stage == 1:
+        if topic_id == 1:
+            question_id_range = range(136, 151)  # IDs 136-150
+        elif topic_id == 2:
+            question_id_range = range(151, 166)  # IDs 151-165
+        elif topic_id == 3:
+            question_id_range = range(166, 181)  # IDs 166-180
+        else:
+            raise ValueError(f"Retention test not available for topic {topic_id}")
+    elif stage == 2:
+        if topic_id == 1:
+            question_id_range = range(181, 196)  # IDs 181-195
+        elif topic_id == 2:
+            question_id_range = range(196, 211)  # IDs 196-210
+        elif topic_id == 3:
+            question_id_range = range(211, 226)  # IDs 211-225
+        else:
+            raise ValueError(f"Retention test not available for topic {topic_id}")
+    else:
+        raise ValueError("Invalid retention test stage. Must be 1 or 2.")
+    
+    # Get questions by specific ID range
+    result = await db.execute(
+        select(AssessmentQuestion).where(
+            AssessmentQuestion.id.in_(question_id_range)
+        )
+    )
+    all_stage_questions = result.scalars().all()
+    
+    if len(all_stage_questions) != 15:
+        raise ValueError(f"Expected 15 questions for stage {stage}, but found {len(all_stage_questions)}")
+    
     # If user has partial progress, return only remaining questions
     if existing_retention_test and existing_retention_test.questions_answers:
         answered_question_ids = set(int(qid) for qid in existing_retention_test.questions_answers.keys())
-        questions_already_answered = len(answered_question_ids)
-        questions_still_needed = 15 - questions_already_answered
-        
-        # Get all subtopics for this topic
-        subtopics = await get_subtopics_for_topic(db, topic_id)
-        if not subtopics:
-            raise ValueError(f"No subtopics found for topic_id {topic_id}")
-        
-        # Get all questions for this topic
-        all_questions = await get_questions_for_subtopics(db, subtopic_ids=[s.subtopic_id for s in subtopics])
-        
-        # Filter out already answered questions
-        available_questions = [q for q in all_questions if q.id not in answered_question_ids]
-        
-        # Group available questions by subtopic
-        questions_by_subtopic = {}
-        for question in available_questions:
-            subtopic_id = question.subtopic_id
-            if subtopic_id not in questions_by_subtopic:
-                questions_by_subtopic[subtopic_id] = []
-            questions_by_subtopic[subtopic_id].append(question)
-        
-        # Get questions user has already answered in pre/post assessments (familiar questions)
-        familiar_question_ids = set()
-        if pre_assessment.questions_answers_iscorrect:
-            familiar_question_ids.update(int(qid) for qid in pre_assessment.questions_answers_iscorrect.keys())
-        if post_assessment.questions_answers_iscorrect:
-            familiar_question_ids.update(int(qid) for qid in post_assessment.questions_answers_iscorrect.keys())
-        
-        # Separate available questions into familiar and new by subtopic
-        familiar_by_subtopic = {}
-        new_by_subtopic = {}
-        
-        for subtopic in subtopics:
-            sid = subtopic.subtopic_id
-            familiar_by_subtopic[sid] = []
-            new_by_subtopic[sid] = []
-            
-            for question in questions_by_subtopic.get(sid, []):
-                if question.id in familiar_question_ids:
-                    familiar_by_subtopic[sid].append(question)
-                else:
-                    new_by_subtopic[sid].append(question)
-        
-        # Select remaining questions using the same logic as fresh selection
-        selected_questions = []
-        
-        # Calculate how many questions needed per subtopic to reach 5 total
-        questions_needed_per_subtopic = {}
-        for subtopic in subtopics:
-            sid = subtopic.subtopic_id
-            
-            # Count how many questions user already answered for this subtopic
-            answered_in_subtopic = 0
-            for question_id in answered_question_ids:
-                # Find which subtopic this answered question belongs to
-                for q in all_questions:
-                    if q.id == int(question_id) and q.subtopic_id == sid:
-                        answered_in_subtopic += 1
-                        break
-            
-            # Calculate how many more needed to reach 5
-            questions_needed_per_subtopic[sid] = 5 - answered_in_subtopic
-        
-        # Fill each subtopic to reach 5 questions total
-        for subtopic in subtopics:
-            sid = subtopic.subtopic_id
-            questions_needed = questions_needed_per_subtopic[sid]
-            
-            if questions_needed <= 0:
-                continue  # This subtopic already has 5 questions
-            
-            # Get available questions for this subtopic (excluding already answered)
-            available_familiar = [q for q in familiar_by_subtopic.get(sid, []) if q.id not in answered_question_ids]
-            available_new = [q for q in new_by_subtopic.get(sid, []) if q.id not in answered_question_ids]
-            
-            # Shuffle for randomness
-            random.shuffle(available_familiar)
-            random.shuffle(available_new)
-            
-            # Select questions maintaining familiar/new mix (same ratio as original)
-            # Original ratio: roughly 60% familiar, 40% new
-            familiar_needed = min(int(questions_needed * 0.6), len(available_familiar))
-            new_needed = questions_needed - familiar_needed
-            
-            # If we don't have enough familiar questions, fill with new ones
-            if familiar_needed < int(questions_needed * 0.6):
-                new_needed = questions_needed - familiar_needed
-            
-            # Select familiar questions
-            if familiar_needed > 0:
-                selected_familiar = available_familiar[:familiar_needed]
-                selected_questions.extend(selected_familiar)
-            
-            # Select new questions
-            if new_needed > 0:
-                selected_new = available_new[:new_needed]
-                selected_questions.extend(selected_new)
-            
-            # If we still don't have enough, fill with remaining available questions
-            remaining_needed = questions_needed - len([q for q in selected_questions if q.subtopic_id == sid])
-            if remaining_needed > 0:
-                # Get all remaining available questions for this subtopic
-                all_available_for_subtopic = [q for q in available_questions if q.subtopic_id == sid and q not in selected_questions]
-                if all_available_for_subtopic:
-                    additional = random.sample(all_available_for_subtopic, min(remaining_needed, len(all_available_for_subtopic)))
-                    selected_questions.extend(additional)
-        
-        # Shuffle final selection for randomness
-        random.shuffle(selected_questions)
-        
-        return selected_questions
+        remaining_questions = [q for q in all_stage_questions if q.id not in answered_question_ids]
+        random.shuffle(remaining_questions)
+        return remaining_questions
     
-    # No existing progress - return all 15 questions as before
-    # Get all subtopics for this topic
-    subtopics = await get_subtopics_for_topic(db, topic_id)
-    if not subtopics:
-        raise ValueError(f"No subtopics found for topic_id {topic_id}")
+    # No existing progress - return all questions for this stage
+    random.shuffle(all_stage_questions)
+    return all_stage_questions
+
+async def check_retention_test_availability(
+    db: AsyncSession,
+    user_id: int,
+    topic_id: int
+) -> Dict[str, Any]:
+    """
+    Check which retention test stages are available based on user_topics.completed_at timing.
+    First stage: Available after 10 hours
+    Second stage: Available after 5 days (120 hours)
+    Returns information about available stages and countdown timers.
+    """
+    from datetime import datetime, timezone, timedelta
     
-    # Get all questions for this topic
-    all_questions = await get_questions_for_subtopics(db, subtopic_ids=[s.subtopic_id for s in subtopics])
+    # Get user topic completion info
+    result = await db.execute(
+        select(UserTopic).where(
+            UserTopic.user_id == user_id,
+            UserTopic.topic_id == topic_id,
+            UserTopic.is_completed == True
+        )
+    )
+    user_topic = result.scalar_one_or_none()
     
-    # Group questions by subtopic
-    questions_by_subtopic = {}
-    for question in all_questions:
-        subtopic_id = question.subtopic_id
-        if subtopic_id not in questions_by_subtopic:
-            questions_by_subtopic[subtopic_id] = []
-        questions_by_subtopic[subtopic_id].append(question)
+    if not user_topic or not user_topic.completed_at:
+        return {
+            "first_stage_available": False,
+            "second_stage_available": False,
+            "first_stage_countdown": None,
+            "second_stage_countdown": None,
+            "message": "Topic not completed yet"
+        }
     
-    # Get questions user has already answered (familiar questions)
-    familiar_question_ids = set()
-    if pre_assessment.questions_answers_iscorrect:
-        familiar_question_ids.update(int(qid) for qid in pre_assessment.questions_answers_iscorrect.keys())
-    if post_assessment.questions_answers_iscorrect:
-        familiar_question_ids.update(int(qid) for qid in post_assessment.questions_answers_iscorrect.keys())
+    current_time = datetime.now(timezone.utc)
+    completed_at = user_topic.completed_at
     
-    # Separate familiar and new questions by subtopic
-    familiar_by_subtopic = {}
-    new_by_subtopic = {}
+    # Calculate time differences
+    time_since_completion = current_time - completed_at
+    hours_since_completion = time_since_completion.total_seconds() / 3600
+    days_since_completion = hours_since_completion / 24
     
-    for subtopic in subtopics:
-        sid = subtopic.subtopic_id
-        familiar_by_subtopic[sid] = []
-        new_by_subtopic[sid] = []
-        
-        for question in questions_by_subtopic.get(sid, []):
-            if question.id in familiar_question_ids:
-                familiar_by_subtopic[sid].append(question)
-            else:
-                new_by_subtopic[sid].append(question)
+    # Check first stage availability (10 hours)
+    first_stage_available = hours_since_completion >= 10  # 10 hours
+    first_stage_countdown = None
+    if not first_stage_available:
+        hours_remaining = 10 - hours_since_completion
+        first_stage_countdown = {
+            "hours": int(hours_remaining),
+            "minutes": int((hours_remaining % 1) * 60)
+        }
     
-    # Select questions for each subtopic (5 per subtopic)
-    selected_questions = []
+    # Check second stage availability (5 days = 120 hours)
+    second_stage_available = hours_since_completion >= 120  # 5 days = 120 hours
+    second_stage_countdown = None
+    if not second_stage_available:
+        hours_remaining = 120 - hours_since_completion
+        days_remaining = int(hours_remaining / 24)
+        hours_in_day = hours_remaining % 24
+        second_stage_countdown = {
+            "days": days_remaining,
+            "hours": int(hours_in_day),
+            "minutes": int((hours_in_day % 1) * 60)
+        }
     
-    for subtopic in subtopics:
-        sid = subtopic.subtopic_id
-        
-        # Get familiar questions (3 per subtopic = 60%)
-        familiar_count = min(3, len(familiar_by_subtopic[sid]))
-        familiar_selected = random.sample(familiar_by_subtopic[sid], familiar_count) if familiar_by_subtopic[sid] else []
-        
-        # Get new questions (2 per subtopic = 40%)
-        new_count = 5 - familiar_count  # Always 5 total per subtopic
-        new_selected = random.sample(new_by_subtopic[sid], new_count) if new_by_subtopic[sid] else []
-        
-        # Combine and add to selected questions
-        subtopic_questions = familiar_selected + new_selected
-        
-        # Ensure we have exactly 5 questions per subtopic
-        if len(subtopic_questions) < 5:
-            # If we don't have enough questions, fill with familiar questions
-            remaining_needed = 5 - len(subtopic_questions)
-            remaining_familiar = [q for q in familiar_by_subtopic[sid] if q not in familiar_selected]
-            if remaining_familiar:
-                additional_familiar = random.sample(remaining_familiar, min(remaining_needed, len(remaining_familiar)))
-                subtopic_questions.extend(additional_familiar)
-        
-        # Ensure we don't exceed 5 questions per subtopic
-        if len(subtopic_questions) > 5:
-            subtopic_questions = random.sample(subtopic_questions, 5)
-        
-        selected_questions.extend(subtopic_questions)
+    # Check if stages are completed
+    first_stage_completed = False
+    second_stage_completed = False
     
-    # Shuffle all questions for randomness
-    random.shuffle(selected_questions)
+    if first_stage_available:
+        result = await db.execute(
+            select(RetentionTest).where(
+                RetentionTest.user_id == user_id,
+                RetentionTest.topic_id == topic_id,
+                RetentionTest.stage == 1,
+                RetentionTest.is_completed == True
+            )
+        )
+        first_stage_completed = result.scalar_one_or_none() is not None
     
-    return selected_questions
+    if second_stage_available:
+        result = await db.execute(
+            select(RetentionTest).where(
+                RetentionTest.user_id == user_id,
+                RetentionTest.topic_id == topic_id,
+                RetentionTest.stage == 2,
+                RetentionTest.is_completed == True
+            )
+        )
+        second_stage_completed = result.scalar_one_or_none() is not None
+    
+    return {
+        "first_stage_available": first_stage_available and not first_stage_completed,
+        "second_stage_available": second_stage_available and not second_stage_completed,
+        "first_stage_completed": first_stage_completed,
+        "second_stage_completed": second_stage_completed,
+        "first_stage_countdown": first_stage_countdown,
+        "second_stage_countdown": second_stage_countdown,
+        "completed_at": completed_at.isoformat(),
+        "hours_since_completion": round(hours_since_completion, 2)
+    }
 
 async def submit_retention_test_answer(
     db: AsyncSession,
     user_id: int,
     topic_id: int,
     question_id: int,
-    user_answer: Any
+    user_answer: Any,
+    stage: int = 1
 ) -> RetentionTestResult:
     """
     Submit a single answer for retention test and update progress.
@@ -479,24 +437,28 @@ async def submit_retention_test_answer(
     correct_answer = question.question_choices_correctanswer.get('correct_answer')
     is_correct = user_answer == correct_answer
     
-    # Get or create retention test record
+    # Get or create retention test record for this stage
     result = await db.execute(
         select(RetentionTest).where(
             RetentionTest.user_id == user_id,
-            RetentionTest.topic_id == topic_id
+            RetentionTest.topic_id == topic_id,
+            RetentionTest.stage == stage
         )
     )
     retention_test = result.scalar_one_or_none()
     
     if not retention_test:
-        # Create new retention test record
+        # Create new retention test record for this stage
         retention_test = RetentionTest(
             user_id=user_id,
             topic_id=topic_id,
+            stage=stage,
             questions_answers={},
             total_score=0.0,
             total_items=0,
-            is_completed=False
+            is_completed=False,
+            first_stage_completed=stage == 1,
+            second_stage_completed=stage == 2
         )
         db.add(retention_test)
         await db.flush()
@@ -525,8 +487,13 @@ async def submit_retention_test_answer(
     retention_test.total_items = total_items
     retention_test.is_completed = is_completed
     
+    # Update stage completion flags
     if is_completed:
         retention_test.completed_at = func.now()
+        if stage == 1:
+            retention_test.first_stage_completed = True
+        elif stage == 2:
+            retention_test.second_stage_completed = True
     
     await db.commit()
     await db.refresh(retention_test)
@@ -547,17 +514,19 @@ async def submit_retention_test_answer(
 async def get_retention_test_status(
     db: AsyncSession,
     user_id: int,
-    topic_id: int
+    topic_id: int,
+    stage: int = 1
 ) -> Dict[str, Any]:
     """
-    Get retention test status for a user and topic.
+    Get retention test status for a user, topic, and stage.
     Returns completion status, progress, and score.
     """
-    # Get retention test record
+    # Get retention test record for this stage
     result = await db.execute(
         select(RetentionTest).where(
             RetentionTest.user_id == user_id,
-            RetentionTest.topic_id == topic_id
+            RetentionTest.topic_id == topic_id,
+            RetentionTest.stage == stage
         )
     )
     retention_test = result.scalar_one_or_none()
@@ -591,30 +560,82 @@ async def get_retention_test_status(
 async def get_retention_test_results(
     db: AsyncSession,
     user_id: int,
-    topic_id: int
+    topic_id: int,
+    stage: int = None
 ) -> Dict[str, Any]:
     """
     Get comprehensive retention test results for a user and topic.
     Returns questions, user answers, and detailed results.
     """
-    # Get retention test record
+    # Get retention test record for specific stage or latest completed stage
+    if stage:
+        result = await db.execute(
+            select(RetentionTest).where(
+                RetentionTest.user_id == user_id,
+                RetentionTest.topic_id == topic_id,
+                RetentionTest.stage == stage,
+                RetentionTest.is_completed == True
+            )
+        )
+        retention_test = result.scalar_one_or_none()
+        
+        if not retention_test:
+            raise ValueError(f"Retention test stage {stage} not found or not completed for this user and topic")
+    else:
+        # Get the latest completed retention test
+        result = await db.execute(
+            select(RetentionTest).where(
+                RetentionTest.user_id == user_id,
+                RetentionTest.topic_id == topic_id,
+                RetentionTest.is_completed == True
+            ).order_by(RetentionTest.stage.desc())
+        )
+        retention_test = result.scalar_one_or_none()
+        
+        if not retention_test:
+            raise ValueError("No completed retention test found for this user and topic")
+    
+    # Get the specific questions that were used in this retention test
+    # For retention tests, we use specific question ID ranges based on topic and stage
+    # Use the actual stage from the retention test record to ensure consistency
+    actual_stage = retention_test.stage
+    actual_topic_id = retention_test.topic_id
+    
+    # Topic 1: 136-150 (stage 1), 181-195 (stage 2)
+    # Topic 2: 151-165 (stage 1), 196-210 (stage 2)  
+    # Topic 3: 166-180 (stage 1), 211-225 (stage 2)
+    if actual_stage == 1:
+        if actual_topic_id == 1:
+            question_ids = list(range(136, 151))  # IDs 136-150
+        elif actual_topic_id == 2:
+            question_ids = list(range(151, 166))  # IDs 151-165
+        elif actual_topic_id == 3:
+            question_ids = list(range(166, 181))  # IDs 166-180
+        else:
+            raise ValueError(f"Retention test not available for topic {actual_topic_id}")
+    elif actual_stage == 2:
+        if actual_topic_id == 1:
+            question_ids = list(range(181, 196))  # IDs 181-195
+        elif actual_topic_id == 2:
+            question_ids = list(range(196, 211))  # IDs 196-210
+        elif actual_topic_id == 3:
+            question_ids = list(range(211, 226))  # IDs 211-225
+        else:
+            raise ValueError(f"Retention test not available for topic {actual_topic_id}")
+    else:
+        # Fallback to all retention test question ranges
+        question_ids = list(range(136, 226))
+    
+    # Get the specific questions used in this retention test
     result = await db.execute(
-        select(RetentionTest).where(
-            RetentionTest.user_id == user_id,
-            RetentionTest.topic_id == topic_id
+        select(AssessmentQuestion).where(
+            AssessmentQuestion.id.in_(question_ids)
         )
     )
-    retention_test = result.scalar_one_or_none()
+    all_questions = result.scalars().all()
     
-    if not retention_test:
-        raise ValueError("Retention test not found for this user and topic")
-    
-    if not retention_test.is_completed:
-        raise ValueError("Retention test not completed yet")
-    
-    # Get all questions for this topic to build comprehensive results
+    # Get subtopics for grouping (we'll group by the subtopics of the questions we actually used)
     subtopics = await get_subtopics_for_topic(db, topic_id)
-    all_questions = await get_questions_for_subtopics(db, subtopic_ids=[s.subtopic_id for s in subtopics])
     
     # Build results structure
     results = {
@@ -631,19 +652,45 @@ async def get_retention_test_results(
         "totalAnswered": len(retention_test.questions_answers)
     }
     
-    # Group questions by subtopic with user answers
-    for subtopic in subtopics:
-        subtopic_id = subtopic.subtopic_id
-        subtopic_name = subtopic.title
+    # Group questions by subtopic using static mapping for retention tests
+    # Questions 1-5 (IDs 136-140) → Subtopic 1
+    # Questions 6-10 (IDs 141-145) → Subtopic 2  
+    # Questions 11-15 (IDs 146-150) → Subtopic 3
+    
+    # Sort questions by ID to ensure correct order
+    all_questions.sort(key=lambda q: q.id)
+    
+    # Create static mapping for retention test questions
+    retention_test_mapping = [
+        {"start_idx": 0, "end_idx": 5, "subtopic_index": 0},   # Questions 1-5 → Subtopic 1
+        {"start_idx": 5, "end_idx": 10, "subtopic_index": 1},  # Questions 6-10 → Subtopic 2
+        {"start_idx": 10, "end_idx": 15, "subtopic_index": 2}  # Questions 11-15 → Subtopic 3
+    ]
+    
+    # Build results for each subtopic using static mapping
+    for mapping in retention_test_mapping:
+        subtopic_index = mapping["subtopic_index"]
+        start_idx = mapping["start_idx"]
+        end_idx = mapping["end_idx"]
         
-        # Get questions for this subtopic that were actually in the retention test
-        # Only include questions that have user answers
-        subtopic_questions = []
-        for q in all_questions:
-            if q.subtopic_id == subtopic_id:
-                # Check if this question was actually in the retention test
+        # Get subtopic info
+        if subtopic_index < len(subtopics):
+            subtopic = subtopics[subtopic_index]
+            subtopic_id = subtopic.subtopic_id
+            subtopic_name = subtopic.title
+        else:
+            # Fallback if not enough subtopics
+            subtopic_id = f"subtopic_{subtopic_index + 1}"
+            subtopic_name = f"Subtopic {subtopic_index + 1}"
+        
+        # Get questions for this subtopic range
+        subtopic_questions = all_questions[start_idx:end_idx]
+        
+        # Filter questions that were actually answered in the retention test
+        answered_questions = []
+        for q in subtopic_questions:
                 if str(q.id) in retention_test.questions_answers:
-                    subtopic_questions.append(q)
+                    answered_questions.append(q)
         
         # Build subtopic results
         subtopic_results = {
@@ -651,10 +698,10 @@ async def get_retention_test_results(
             "name": subtopic_name,
             "questions": [],
             "correctCount": 0,
-            "totalCount": len(subtopic_questions)
+            "totalCount": len(answered_questions)
         }
         
-        for question in subtopic_questions:
+        for question in answered_questions:
             # Get user's answer for this question
             user_answer_data = retention_test.questions_answers.get(str(question.id), {})
             user_answer = user_answer_data.get('user_answer')
@@ -678,6 +725,7 @@ async def get_retention_test_results(
             
             subtopic_results["questions"].append(question_result)
         
+        # Add subtopic results (even if no questions answered, to show structure)
         results["questionsBySubtopic"][subtopic_id] = subtopic_results
     
     return results

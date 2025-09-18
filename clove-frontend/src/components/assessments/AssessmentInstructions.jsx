@@ -8,7 +8,8 @@ const AssessmentInstructions = ({
   onClose, 
   onStart, 
   assessmentType = 'pre',
-  topicId
+  topicId,
+  stage = null
 }) => {
   const navigate = useNavigate();
   // Handle both string (e.g., "1-3") and numeric (e.g., 1) topicId formats
@@ -23,7 +24,8 @@ const AssessmentInstructions = ({
   const handleStart = () => {
     onStart();
     if (assessmentType === 'retention-test') {
-      navigate(`/my-deck/${topicId}/retention-test`);
+      const stageParam = stage ? `?stage=${stage}` : '';
+      navigate(`/my-deck/${topicId}/retention-test${stageParam}`);
     } else {
       navigate(`/my-deck/${topicId}/assessment/${assessmentType}`);
     }
