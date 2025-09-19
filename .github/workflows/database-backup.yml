@@ -1,0 +1,113 @@
+name: Database Backup
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC (adjust timezone as needed)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+    inputs:
+      backup_type:
+        description: 'Type of backup'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - schema_only
+          - data_only
+
+env:
+  # These will be set as GitHub Secrets
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+  GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2 psycopg2-binary
+
+    - name: Create backup directory
+      run: mkdir -p backups
+
+    - name: Generate backup filename
+      id: backup_name
+      run: |
+        TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+        BACKUP_TYPE="${{ github.event.inputs.backup_type || 'full' }}"
+        echo "filename=clove_db_backup_${BACKUP_TYPE}_${TIMESTAMP}.sql" >> $GITHUB_OUTPUT
+
+    - name: Create database backup
+      id: backup
+      run: |
+        BACKUP_FILE="backups/${{ steps.backup_name.outputs.filename }}"
+        
+        case "${{ github.event.inputs.backup_type || 'full' }}" in
+          "full")
+            echo "Creating full database backup..."
+            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --file="$BACKUP_FILE"
+            ;;
+          "schema_only")
+            echo "Creating schema-only backup..."
+            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --schema-only --file="$BACKUP_FILE"
+            ;;
+          "data_only")
+            echo "Creating data-only backup..."
+            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --data-only --file="$BACKUP_FILE"
+            ;;
+        esac
+        
+        # Get file size
+        FILE_SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
+        echo "file_size=$FILE_SIZE" >> $GITHUB_OUTPUT
+        echo "file_path=$BACKUP_FILE" >> $GITHUB_OUTPUT
+
+    - name: Compress backup
+      run: |
+        BACKUP_FILE="${{ steps.backup.outputs.file_path }}"
+        COMPRESSED_FILE="${BACKUP_FILE}.gz"
+        gzip "$BACKUP_FILE"
+        echo "file_path=$COMPRESSED_FILE" >> $GITHUB_OUTPUT
+        echo "file_size=$(du -h "$COMPRESSED_FILE" | cut -f1)" >> $GITHUB_OUTPUT
+
+    - name: Upload to Google Drive
+      run: |
+        python scripts/upload_backup_gdrive.py \
+          --file "${{ steps.backup.outputs.file_path }}.gz" \
+          --folder-id "$GOOGLE_DRIVE_FOLDER_ID" \
+          --filename "${{ steps.backup_name.outputs.filename }}.gz"
+
+    - name: Clean up old backups (keep last 30 days)
+      run: |
+        python scripts/cleanup_old_backups_gdrive.py \
+          --folder-id "$GOOGLE_DRIVE_FOLDER_ID" \
+          --keep-days 30
+
+    - name: Backup Summary
+      run: |
+        echo "✅ Database backup completed successfully!"
+        echo "📁 File: ${{ steps.backup_name.outputs.filename }}.gz"
+        echo "📊 Size: ${{ steps.backup.outputs.file_size }}"
+        echo "🕒 Time: $(date)"
+        echo "☁️  Location: Google Drive folder $GOOGLE_DRIVE_FOLDER_ID"
+
+    - name: Upload backup as artifact (for debugging)
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: database-backup-failed
+        path: backups/
+        retention-days: 7
