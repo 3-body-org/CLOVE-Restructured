@@ -20,7 +20,10 @@ async def get_by_id(db: AsyncSession, question_id: int) -> AssessmentQuestion | 
 
 async def list_for_subtopic(db: AsyncSession, subtopic_id: int, skip: int = 0, limit: int = 100) -> list[AssessmentQuestion]:
     result = await db.execute(
-        select(AssessmentQuestion).where(AssessmentQuestion.subtopic_id == subtopic_id).offset(skip).limit(limit)
+        select(AssessmentQuestion)
+        .where(AssessmentQuestion.subtopic_id == subtopic_id)
+        .where(AssessmentQuestion.id < 136)  # Exclude retention test questions (IDs 136+)
+        .offset(skip).limit(limit)
     )
     return result.scalars().all()
 
@@ -68,6 +71,7 @@ async def get_questions_for_subtopics(db: AsyncSession, subtopic_ids: List[int])
     result = await db.execute(
         select(AssessmentQuestion)
         .where(AssessmentQuestion.subtopic_id.in_(subtopic_ids))
+        .where(AssessmentQuestion.id < 136)  # Exclude retention test questions (IDs 136+)
         .options(selectinload(AssessmentQuestion.subtopic))
     )
     return result.scalars().all()
