@@ -193,6 +193,26 @@ const PracticePage = () => {
     navigate(`/lesson/${topicId}/${subtopicId}/challenge-instructions`);
   }, [navigate, topicId, subtopicId, completeSubtopicComponent, user?.id]);
 
+  // Handle go to challenges (persistent button)
+  const handleGoToChallenges = useCallback(async () => {
+    // Mark practice as completed when going to challenges (only once for efficiency)
+    const practiceCompletionKey = `practice_completed_${subtopicId}_${user?.id}`;
+    const isPracticeAlreadyCompleted = localStorage.getItem(practiceCompletionKey);
+    
+    if (!isPracticeAlreadyCompleted) {
+      try {
+        await completeSubtopicComponent(parseInt(subtopicId), 'practice');
+        // Mark as completed in localStorage to prevent duplicate calls
+        localStorage.setItem(practiceCompletionKey, 'true');
+      } catch (error) {
+        // Silent error handling - don't show error to user
+        console.warn('Failed to mark practice as completed:', error);
+      }
+    }
+    
+    navigate(`/lesson/${topicId}/${subtopicId}/challenge-instructions`);
+  }, [navigate, topicId, subtopicId, completeSubtopicComponent, user?.id]);
+
   // Handle closing the skip snackbar
   const handleCloseSkipSnackbar = useCallback(() => {
     setShowSkipSnackbar(false);
@@ -929,9 +949,19 @@ const PracticePage = () => {
           </div>
         </div>
 
-        <button className="backButton" onClick={() => navigate(`/lesson/${topicId}/${subtopicId}`)}>
-          ← Back to Lessons
-        </button>
+        <div className="sidebarButtons">
+          <button className="backButton" onClick={() => navigate(`/lesson/${topicId}/${subtopicId}`)}>
+            ← Back to Lessons
+          </button>
+          
+          <button 
+            className="challengeButton" 
+            onClick={handleGoToChallenges}
+            title="Go to Challenge Instructions"
+          >
+            🎯 Go to Challenge
+          </button>
+        </div>
       </div>
 
       <div className="practicePageContainer">

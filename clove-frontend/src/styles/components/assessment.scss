@@ -433,6 +433,18 @@
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  overflow-y: auto;
+  
+  // Mobile-first responsive padding
+  @media (max-width: 480px) {
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
 }
 
 .assessment-instructions-modal {
@@ -443,8 +455,24 @@
   max-width: 700px;
   width: 100%;
   height: auto;
+  max-height: 90vh;
   box-shadow: var(--shadow-lg);
   position: relative;
+  overflow-y: auto;
+  
+  // Responsive padding and sizing
+  @media (max-width: 768px) {
+    padding: 24px;
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 20px;
+    max-height: 98vh;
+    border-radius: 8px;
+  }
   
   // Subtle theme accent
   &::before {
@@ -456,21 +484,51 @@
     height: 3px;
     background: var(--gradient-primary);
     border-radius: 16px 16px 0 0;
+    
+    @media (max-width: 768px) {
+      border-radius: 12px 12px 0 0;
+    }
+    
+    @media (max-width: 480px) {
+      border-radius: 8px 8px 0 0;
+    }
   }
   
   .instructions-header {
     text-align: center;
     margin-bottom: 24px;
     
+    @media (max-width: 768px) {
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 480px) {
+      margin-bottom: 16px;
+    }
+    
     h2 {
       color: var(--heading-primary);
       font-size: 24px;
       font-weight: 700;
       margin-bottom: 8px;
+      
+      @media (max-width: 768px) {
+        font-size: 22px;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
     }
     
     p {
       color: var(--text-secondary);
+      font-size: 16px;
+      
+      @media (max-width: 480px) {
+        font-size: 14px;
+      }
     }
   }
   
@@ -479,22 +537,65 @@
     line-height: 1.6;
     margin-bottom: 24px;
     
+    @media (max-width: 768px) {
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    @media (max-width: 480px) {
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    
     .instructions-section {
       margin-bottom: 20px;
+      
+      @media (max-width: 768px) {
+        margin-bottom: 18px;
+      }
+      
+      @media (max-width: 480px) {
+        margin-bottom: 16px;
+      }
       
       h3 {
         color: var(--heading-primary);
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 12px;
+        
+        @media (max-width: 768px) {
+          font-size: 17px;
+          margin-bottom: 10px;
+        }
+        
+        @media (max-width: 480px) {
+          font-size: 16px;
+          margin-bottom: 8px;
+        }
       }
       
       ul {
         color: var(--text-primary);
         padding-left: 20px;
         
+        @media (max-width: 480px) {
+          padding-left: 16px;
+        }
+        
         li {
           margin-bottom: 8px;
+          font-size: 15px;
+          
+          @media (max-width: 768px) {
+            margin-bottom: 6px;
+            font-size: 14px;
+          }
+          
+          @media (max-width: 480px) {
+            margin-bottom: 5px;
+            font-size: 13px;
+          }
         }
       }
     }
@@ -504,6 +605,15 @@
     display: flex;
     gap: 16px;
     justify-content: center;
+    
+    @media (max-width: 768px) {
+      gap: 12px;
+      flex-direction: column;
+    }
+    
+    @media (max-width: 480px) {
+      gap: 10px;
+    }
     
     &:has(.cancel-button:hover) .start-button {
       background: transparent;
@@ -524,11 +634,27 @@
       position: relative;
       overflow: hidden;
       
+      @media (max-width: 768px) {
+        padding: 14px 24px;
+        font-size: 15px;
+        width: 100%;
+      }
+      
+      @media (max-width: 480px) {
+        padding: 12px 20px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+      
       &:hover {
         background: rgba(255, 255, 255, 0.1);
         transform: translateY(-2px);
         box-shadow: var(--shadow-md);
         border: 2px solid var(--primary);
+        
+        @media (max-width: 768px) {
+          transform: translateY(-1px);
+        }
       }
       
       &::before {
@@ -557,11 +683,27 @@
       position: relative;
       overflow: hidden;
       
+      @media (max-width: 768px) {
+        padding: 14px 24px;
+        font-size: 15px;
+        width: 100%;
+      }
+      
+      @media (max-width: 480px) {
+        padding: 12px 20px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+      
       &:hover {
         background: rgba(255, 255, 255, 0.1);
         color: var(--text);
         transform: translateY(-2px);
         box-shadow: var(--shadow-md);
+        
+        @media (max-width: 768px) {
+          transform: translateY(-1px);
+        }
         border: 2px solid var(--primary);
       }
       
@@ -948,21 +1090,38 @@
     font-size: 16px;
   }
   
+  // Additional mobile-specific improvements
   .assessment-instructions-modal {
-    margin: 16px;
-    padding: 20px;
-    
-    .instructions-title {
-      font-size: 20px;
+    // Ensure proper scrolling on very small screens
+    @media (max-width: 360px) {
+      padding: 16px;
+      max-height: 99vh;
     }
     
+    // Improve touch targets for mobile
     .instructions-buttons {
-      flex-direction: column;
-      
       .start-button,
       .cancel-button {
-        width: 100%;
+        // Ensure minimum touch target size (44px)
+        min-height: 44px;
+        
+        @media (max-width: 480px) {
+          min-height: 48px; // Slightly larger for better touch interaction
+        }
       }
+    }
+  }
+  
+  // Landscape orientation adjustments for mobile
+  @media (max-width: 768px) and (orientation: landscape) {
+    .assessment-instructions-overlay {
+      align-items: flex-start;
+      padding-top: 10px;
+    }
+    
+    .assessment-instructions-modal {
+      max-height: 90vh;
+      margin: 0 10px;
     }
   }
   
