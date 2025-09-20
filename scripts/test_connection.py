@@ -67,7 +67,7 @@ def test_google_drive_access():
         # Create credentials
         credentials = service_account.Credentials.from_service_account_info(
             service_account_info,
-            scopes=['https://www.googleapis.com/auth/drive.file']
+            scopes=['https://www.googleapis.com/auth/drive']
         )
         
         # Build service
