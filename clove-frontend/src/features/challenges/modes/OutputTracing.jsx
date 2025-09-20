@@ -79,7 +79,7 @@ const OutputTracing = ({
   };
 
   return (
-        <div className="outputTracingChallengeArea">
+        <div className="outputTracingChallengeArea outputTracingContainer">
           {/* Progress Indicator at the very top */}
           <ProgressIndicator
             challengeIndex={challengeIndex}

@@ -866,6 +866,11 @@ export const useChallengeService = (userId, paramSubtopicId) => {
                                  button.closest('.codeFixerContainer') ||
                                  button.closest('.codeCompletionContainer') ||
                                  button.closest('.outputTracingContainer') ||
+                                 button.closest('.outputTracingChoicesContainer') ||
+                                 button.closest('.outputTracingChoiceButton') ||
+                                 button.closest('.outputTracingSubmitButton') ||
+                                 button.closest('.outputTracingCodeDisplayContainer') ||
+                                 button.closest('.outputTracingQuestionContainer') ||
                                  button.closest('.choicesContainer') ||
                                  button.closest('.submitButton') ||
                                  button.closest('.hintButton') ||
