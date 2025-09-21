@@ -106,7 +106,7 @@ jobs:
     - name: Upload to Google Drive
       run: |
         # Create OAuth credentials file
-        echo '${{ secrets.GOOGLE_OAUTH_CREDENTIALS }}' > credentials.json
+        echo '${{ secrets.GOOGLE_OAUTH_CREDENTIALS }}' > token.json
         
         # Upload using OAuth
         python scripts/upload_backup_oauth.py \
