@@ -35,12 +35,14 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install PostgreSQL 17.x client
+    - name: Use Docker for PostgreSQL 17.x backup
       run: |
-        # Download and install PostgreSQL 17.x client directly
-        wget https://repo.postgresql.org/apt/pool/main/p/postgresql-17/postgresql-client-17_17.6-1.pgdg120+1_amd64.deb
-        sudo dpkg -i postgresql-client-17_17.6-1.pgdg120+1_amd64.deb || sudo apt-get install -f -y
-        pg_dump --version
+        # Install Docker and use PostgreSQL 17.x container for backup
+        sudo apt-get update
+        sudo apt-get install -y docker.io
+        sudo systemctl start docker
+        sudo docker pull postgres:17.6
+        echo "Docker PostgreSQL 17.6 ready for backup"
 
     - name: Install Python dependencies
       run: |
@@ -66,18 +68,26 @@ jobs:
       run: |
         BACKUP_FILE="backups/${{ steps.backup_name.outputs.filename }}"
         
+        # Extract database connection details from DATABASE_URL
+        DB_URL="$DATABASE_URL"
+        DB_HOST=$(echo $DB_URL | sed 's/.*@\([^:]*\):.*/\1/')
+        DB_PORT=$(echo $DB_URL | sed 's/.*:\([0-9]*\)\/.*/\1/')
+        DB_USER=$(echo $DB_URL | sed 's/.*:\/\/\([^:]*\):.*/\1/')
+        DB_PASS=$(echo $DB_URL | sed 's/.*:\/\/[^:]*:\([^@]*\)@.*/\1/')
+        DB_NAME=$(echo $DB_URL | sed 's/.*\/\([^?]*\).*/\1/')
+        
         case "${{ github.event.inputs.backup_type || 'full' }}" in
           "full")
-            echo "Creating full database backup using PostgreSQL 17.x..."
-            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --file="$BACKUP_FILE"
+            echo "Creating full database backup using PostgreSQL 17.6 Docker..."
+            sudo docker run --rm -v $PWD/backups:/backups -e PGPASSWORD="$DB_PASS" postgres:17.6 pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" --verbose --format=plain --file="/backups/${{ steps.backup_name.outputs.filename }}"
             ;;
           "schema_only")
-            echo "Creating schema-only backup using PostgreSQL 17.x..."
-            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --schema-only --file="$BACKUP_FILE"
+            echo "Creating schema-only backup using PostgreSQL 17.6 Docker..."
+            sudo docker run --rm -v $PWD/backups:/backups -e PGPASSWORD="$DB_PASS" postgres:17.6 pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" --verbose --format=plain --schema-only --file="/backups/${{ steps.backup_name.outputs.filename }}"
             ;;
           "data_only")
-            echo "Creating data-only backup using PostgreSQL 17.x..."
-            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --data-only --file="$BACKUP_FILE"
+            echo "Creating data-only backup using PostgreSQL 17.6 Docker..."
+            sudo docker run --rm -v $PWD/backups:/backups -e PGPASSWORD="$DB_PASS" postgres:17.6 pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" --verbose --format=plain --data-only --file="/backups/${{ steps.backup_name.outputs.filename }}"
             ;;
         esac
         
