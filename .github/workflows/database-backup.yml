@@ -60,10 +60,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2 psycopg2-binary
 
-    - name: Test configuration
-      run: |
-        python scripts/test_connection.py
-
     - name: Create backup directory
       run: mkdir -p backups
 
@@ -120,7 +116,7 @@ jobs:
 
     - name: Clean up old backups (keep last 30 days)
       run: |
-        python scripts/cleanup_old_backups_gdrive.py \
+        python scripts/cleanup_old_backups_oauth.py \
           --folder-id "$GOOGLE_DRIVE_FOLDER_ID" \
           --keep-days 30
 
