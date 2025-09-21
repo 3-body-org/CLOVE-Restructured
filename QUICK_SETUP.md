@@ -1,45 +1,41 @@
-# 🚀 Quick Google Drive Backup Setup
+# 🚀 Quick Google Drive Backup Setup (OAuth 2.0)
 
-Follow these simple steps to set up automated database backups in 5 minutes!
+Follow these simple steps to set up automated database backups in 10 minutes!
 
 ## Step 1: Create Google Drive Folder (1 minute)
 
 1. Go to [Google Drive](https://drive.google.com/)
 2. Click "New" → "Folder"
 3. Name it: `CLOVE Database Backups`
-4. Right-click the folder → "Share" → "Advanced"
-5. Change to "Anyone with the link can view"
-6. **Copy the folder ID** from the URL (the long string after `/folders/`)
+4. **Copy the folder ID** from the URL (the long string after `/folders/`)
 
-## Step 2: Create Google Service Account (2 minutes)
+## Step 2: Create OAuth 2.0 Credentials (3 minutes)
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project: "CLOVE Backups"
+2. Select your existing project: "CLOVE Backups"
 3. Enable Google Drive API:
    - Go to "APIs & Services" → "Library"
    - Search "Google Drive API" → Enable
-4. Create Service Account:
+4. Create OAuth 2.0 Credentials:
    - Go to "APIs & Services" → "Credentials"
-   - Click "Create Credentials" → "Service Account"
-   - Name: `clove-backup-service`
-   - Click "Create and Continue" → "Done"
-5. Create Key:
-   - Click on your service account
-   - Go to "Keys" tab → "Add Key" → "Create new key"
-   - Choose "JSON" → Download the file
-   - **Keep this file secure!**
+   - Click "Create Credentials" → "OAuth client ID"
+   - Choose "Desktop application"
+   - Name: `CLOVE Backup OAuth`
+   - Click "Create"
+5. Download the JSON file and save as `credentials.json`
 
-## Step 3: Share Folder with Service Account (1 minute)
+## Step 3: Setup OAuth Authentication (3 minutes)
 
-1. Open the downloaded JSON file
-2. Copy the `client_email` (looks like `clove-backup-service@your-project.iam.gserviceaccount.com`)
-3. Go back to your Google Drive folder
-4. Right-click → "Share"
-5. Add the service account email
-6. Give it "Editor" permissions
-7. Click "Send"
+1. **Put `credentials.json` in the `scripts/` folder**
+2. **Run the setup script:**
+   ```bash
+   cd scripts
+   python setup_oauth.py
+   ```
+3. **This will open a browser** for you to authenticate with your Google account
+4. **After authentication, you'll get a `token.json` file**
 
-## Step 4: Add GitHub Secrets (1 minute)
+## Step 4: Add GitHub Secrets (2 minutes)
 
 1. Go to your GitHub repository
 2. Click "Settings" → "Secrets and variables" → "Actions"
@@ -53,9 +49,9 @@ Follow these simple steps to set up automated database backups in 5 minutes!
 - Name: `GOOGLE_DRIVE_FOLDER_ID`
 - Value: The folder ID you copied in Step 1
 
-### Secret 3: GOOGLE_SERVICE_ACCOUNT_KEY
-- Name: `GOOGLE_SERVICE_ACCOUNT_KEY`
-- Value: The entire JSON file content from Step 2
+### Secret 3: GOOGLE_OAUTH_CREDENTIALS
+- Name: `GOOGLE_OAUTH_CREDENTIALS`
+- Value: The entire contents of `token.json` file
 
 ## Step 5: Test the Backup (1 minute)
 
@@ -73,7 +69,7 @@ Your database will now be automatically backed up every day at 2 AM UTC to your 
 
 - **Backup failed?** Check the Actions logs for error messages
 - **Can't find folder ID?** Look in the URL: `drive.google.com/drive/folders/FOLDER_ID_HERE`
-- **Service account issues?** Make sure you shared the folder with the service account email
+- **OAuth issues?** Make sure you completed the browser authentication step
 
 ## 📱 View Your Backups
 
@@ -81,6 +77,6 @@ Just go to your Google Drive folder "CLOVE Database Backups" and you'll see all 
 
 ---
 
-**Total setup time: 5 minutes** ⏱️  
+**Total setup time: 10 minutes** ⏱️  
 **Monthly cost: $0** 💰  
 **Storage: 15GB free** 📦
