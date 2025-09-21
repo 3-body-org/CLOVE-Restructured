@@ -19,11 +19,6 @@ on:
 env:
   # These will be set as GitHub Secrets
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-  DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-  DATABASE_USER: ${{ secrets.DATABASE_USER }}
-  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
   GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
   GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
 
@@ -40,12 +35,14 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install Docker
+    - name: Install PostgreSQL 17.x client
       run: |
+        # Add PostgreSQL official repository
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
         sudo apt-get update
-        sudo apt-get install -y docker.io
-        sudo systemctl start docker
-        sudo usermod -aG docker $USER
+        sudo apt-get install -y postgresql-client-17
+        pg_dump --version
 
     - name: Install Python dependencies
       run: |
@@ -73,16 +70,16 @@ jobs:
         
         case "${{ github.event.inputs.backup_type || 'full' }}" in
           "full")
-            echo "Creating full database backup using PostgreSQL 17.6..."
-            docker run --rm -v $PWD/backups:/backups -e PGPASSWORD="${{ secrets.DATABASE_PASSWORD }}" postgres:17.6 pg_dump -h ${{ secrets.DATABASE_HOST }} -p ${{ secrets.DATABASE_PORT }} -U ${{ secrets.DATABASE_USER }} -d ${{ secrets.DATABASE_NAME }} --verbose --format=plain --file=/backups/${{ steps.backup_name.outputs.filename }}
+            echo "Creating full database backup using PostgreSQL 17.x..."
+            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --file="$BACKUP_FILE"
             ;;
           "schema_only")
-            echo "Creating schema-only backup using PostgreSQL 17.6..."
-            docker run --rm -v $PWD/backups:/backups -e PGPASSWORD="${{ secrets.DATABASE_PASSWORD }}" postgres:17.6 pg_dump -h ${{ secrets.DATABASE_HOST }} -p ${{ secrets.DATABASE_PORT }} -U ${{ secrets.DATABASE_USER }} -d ${{ secrets.DATABASE_NAME }} --verbose --format=plain --schema-only --file=/backups/${{ steps.backup_name.outputs.filename }}
+            echo "Creating schema-only backup using PostgreSQL 17.x..."
+            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --schema-only --file="$BACKUP_FILE"
             ;;
           "data_only")
-            echo "Creating data-only backup using PostgreSQL 17.6..."
-            docker run --rm -v $PWD/backups:/backups -e PGPASSWORD="${{ secrets.DATABASE_PASSWORD }}" postgres:17.6 pg_dump -h ${{ secrets.DATABASE_HOST }} -p ${{ secrets.DATABASE_PORT }} -U ${{ secrets.DATABASE_USER }} -d ${{ secrets.DATABASE_NAME }} --verbose --format=plain --data-only --file=/backups/${{ steps.backup_name.outputs.filename }}
+            echo "Creating data-only backup using PostgreSQL 17.x..."
+            pg_dump "$DATABASE_URL" --verbose --no-password --format=plain --data-only --file="$BACKUP_FILE"
             ;;
         esac
         
