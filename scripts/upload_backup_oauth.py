@@ -1,40 +1,41 @@
 #!/usr/bin/env python3
 """
-Upload database backup to Google Drive
+Upload database backup to Google Drive using OAuth 2.0
 """
 import argparse
 import os
 import sys
 import json
 from datetime import datetime
-from google.oauth2 import service_account
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.errors import HttpError
 
+# Scopes for Google Drive access
+SCOPES = ['https://www.googleapis.com/auth/drive.file']
+
 def get_drive_service():
     """
-    Initialize Google Drive service using service account
+    Initialize Google Drive service using OAuth 2.0
     """
     try:
-        # Get service account key from environment variable
-        service_account_info = json.loads(os.getenv('GOOGLE_SERVICE_ACCOUNT_KEY'))
+        # For GitHub Actions, we'll use a pre-authorized token
+        # This requires manual setup but works in CI/CD
+        token_file = 'token.json'
         
-        # Define the scopes
-        scopes = ['https://www.googleapis.com/auth/drive']
+        if not os.path.exists(token_file):
+            print("❌ Error: token.json not found. Please run the setup script first.")
+            return None
         
-        # Create credentials
-        credentials = service_account.Credentials.from_service_account_info(
-            service_account_info, scopes=scopes
-        )
+        # Load credentials from token file
+        creds = Credentials.from_authorized_user_file(token_file, SCOPES)
         
         # Build the service
-        service = build('drive', 'v3', credentials=credentials)
+        service = build('drive', 'v3', credentials=creds)
         return service
         
-    except json.JSONDecodeError:
-        print("❌ Error: Invalid JSON in GOOGLE_SERVICE_ACCOUNT_KEY")
-        return None
     except Exception as e:
         print(f"❌ Error initializing Google Drive service: {e}")
         return None
@@ -89,7 +90,7 @@ def upload_to_drive(file_path, folder_id, filename, service):
         return False
 
 def main():
-    parser = argparse.ArgumentParser(description='Upload database backup to Google Drive')
+    parser = argparse.ArgumentParser(description='Upload database backup to Google Drive using OAuth 2.0')
     parser.add_argument('--file', required=True, help='Path to backup file')
     parser.add_argument('--folder-id', required=True, help='Google Drive folder ID')
     parser.add_argument('--filename', required=True, help='Filename in Google Drive')
