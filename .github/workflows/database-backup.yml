@@ -37,12 +37,22 @@ jobs:
 
     - name: Install PostgreSQL 17.x client
       run: |
-        # Add PostgreSQL official repository
-        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-        echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+        # Remove any existing PostgreSQL packages
+        sudo apt-get remove -y postgresql-client postgresql-client-common || true
+        
+        # Add PostgreSQL official repository with proper key handling
+        curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+        
+        # Update package lists
         sudo apt-get update
+        
+        # Install PostgreSQL 17 client
         sudo apt-get install -y postgresql-client-17
+        
+        # Verify version
         pg_dump --version
+        echo "PostgreSQL client installed successfully!"
 
     - name: Install Python dependencies
       run: |
