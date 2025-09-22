@@ -114,11 +114,15 @@ jobs:
           --folder-id "$GOOGLE_DRIVE_FOLDER_ID" \
           --filename "${{ steps.backup_name.outputs.filename }}.gz"
 
-    - name: Clean up old backups (keep last 30 days)
+    - name: Clean up old backups (keep last 3 days)
       run: |
+        # Create OAuth credentials file for cleanup
+        echo '${{ secrets.GOOGLE_OAUTH_CREDENTIALS }}' > token.json
+        
+        # Run cleanup script
         python scripts/cleanup_old_backups_oauth.py \
           --folder-id "$GOOGLE_DRIVE_FOLDER_ID" \
-          --keep-days 30
+          --keep-days 3
 
     - name: Backup Summary
       run: |
