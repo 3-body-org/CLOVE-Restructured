@@ -13,10 +13,26 @@ logger = logging.getLogger(__name__)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    # Truncate password to 72 bytes to comply with bcrypt limit
+    password_bytes = password.encode('utf-8')
+    if len(password_bytes) > 72:
+        truncated_bytes = password_bytes[:72]
+        truncated_password = truncated_bytes.decode('utf-8', errors='ignore')
+        logger.warning(f"Password truncated from {len(password_bytes)} to 72 bytes during hashing")
+    else:
+        truncated_password = password
+    return pwd_context.hash(truncated_password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    # Truncate password to 72 bytes to comply with bcrypt limit
+    password_bytes = plain_password.encode('utf-8')
+    if len(password_bytes) > 72:
+        truncated_bytes = password_bytes[:72]
+        truncated_password = truncated_bytes.decode('utf-8', errors='ignore')
+        logger.warning(f"Password truncated from {len(password_bytes)} to 72 bytes during verification")
+    else:
+        truncated_password = plain_password
+    return pwd_context.verify(truncated_password, hashed_password)
 
 def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
