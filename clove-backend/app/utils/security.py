@@ -7,32 +7,35 @@ from app.core.config import settings
 import logging
 import secrets
 import string
+import bcrypt
 
 logger = logging.getLogger(__name__)
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-def get_password_hash(password: str) -> str:
-    # Truncate password to 72 bytes to comply with bcrypt limit
+# Use bcrypt directly to avoid passlib's internal bug detection issues
+def _hash_password(password: str) -> str:
+    """Hash password using bcrypt directly"""
     password_bytes = password.encode('utf-8')
     if len(password_bytes) > 72:
-        truncated_bytes = password_bytes[:72]
-        truncated_password = truncated_bytes.decode('utf-8', errors='ignore')
-        logger.warning(f"Password truncated from {len(password_bytes)} to 72 bytes during hashing")
-    else:
-        truncated_password = password
-    return pwd_context.hash(truncated_password)
+        password_bytes = password_bytes[:72]
+        logger.warning(f"Password truncated from {len(password.encode('utf-8'))} to 72 bytes during hashing")
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password_bytes, salt).decode('utf-8')
+
+def _verify_password(password: str, hashed: str) -> bool:
+    """Verify password using bcrypt directly"""
+    password_bytes = password.encode('utf-8')
+    if len(password_bytes) > 72:
+        password_bytes = password_bytes[:72]
+        logger.warning(f"Password truncated from {len(password.encode('utf-8'))} to 72 bytes during verification")
+    return bcrypt.checkpw(password_bytes, hashed.encode('utf-8'))
+
+def get_password_hash(password: str) -> str:
+    """Hash password using bcrypt directly to avoid passlib issues"""
+    return _hash_password(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    # Truncate password to 72 bytes to comply with bcrypt limit
-    password_bytes = plain_password.encode('utf-8')
-    if len(password_bytes) > 72:
-        truncated_bytes = password_bytes[:72]
-        truncated_password = truncated_bytes.decode('utf-8', errors='ignore')
-        logger.warning(f"Password truncated from {len(password_bytes)} to 72 bytes during verification")
-    else:
-        truncated_password = plain_password
-    return pwd_context.verify(truncated_password, hashed_password)
+    """Verify password using bcrypt directly to avoid passlib issues"""
+    return _verify_password(plain_password, hashed_password)
 
 def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
