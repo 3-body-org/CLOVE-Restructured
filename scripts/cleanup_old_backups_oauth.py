@@ -23,8 +23,8 @@ def load_oauth_credentials() -> Credentials:
         with open('token.json', 'r') as f:
             token_data = json.load(f)
         
-        # Create credentials object with scopes
-        SCOPES = ['https://www.googleapis.com/auth/drive']
+        # Create credentials object with scopes (must match token.json scope)
+        SCOPES = ['https://www.googleapis.com/auth/drive.file']
         creds = Credentials.from_authorized_user_info(token_data, SCOPES)
         
         # Refresh token if needed

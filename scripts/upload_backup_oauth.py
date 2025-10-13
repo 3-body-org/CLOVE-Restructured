@@ -14,7 +14,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.errors import HttpError
 
-# Scopes for Google Drive access
+# Scopes for Google Drive access (must match token.json scope)
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
 def get_drive_service():
