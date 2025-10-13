@@ -8,6 +8,7 @@ import sys
 import json
 from datetime import datetime
 from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
@@ -31,6 +32,20 @@ def get_drive_service():
         
         # Load credentials from token file
         creds = Credentials.from_authorized_user_file(token_file, SCOPES)
+        
+        # Check if token is expired and refresh if needed
+        if creds.expired and creds.refresh_token:
+            print("🔄 Token expired, refreshing...")
+            try:
+                creds.refresh(Request())
+                # Save the refreshed token
+                with open(token_file, 'w') as token:
+                    token.write(creds.to_json())
+                print("✅ Token refreshed successfully!")
+            except Exception as e:
+                print(f"❌ Error refreshing token: {e}")
+                print("💡 You may need to re-run the setup script to get a new token.")
+                return None
         
         # Build the service
         service = build('drive', 'v3', credentials=creds)
@@ -83,7 +98,11 @@ def upload_to_drive(file_path, folder_id, filename, service):
         return True
         
     except HttpError as e:
-        print(f"❌ Error uploading to Google Drive: {e}")
+        if e.resp.status == 401:
+            print("❌ Authentication error: Token may be expired or invalid")
+            print("💡 Please re-run the setup script to get a new token")
+        else:
+            print(f"❌ Google Drive API error: {e}")
         return False
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
