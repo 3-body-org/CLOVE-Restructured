@@ -28,7 +28,12 @@ def load_oauth_credentials() -> Credentials:
         
         # Refresh token if needed
         if creds.expired and creds.refresh_token:
+            print("🔄 Token expired, refreshing...")
             creds.refresh(Request())
+            # Save the refreshed token
+            with open('token.json', 'w') as f:
+                f.write(creds.to_json())
+            print("✅ Token refreshed successfully!")
             
         return creds
     except FileNotFoundError:
