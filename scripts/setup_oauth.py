@@ -33,13 +33,23 @@ def setup_oauth():
         print("🌐 Opening browser for OAuth authentication...")
         creds = flow.run_local_server(port=0)
         
-        # Save the credentials
+        # Save the credentials with all required fields
+        token_data = {
+            'token': creds.token,
+            'refresh_token': creds.refresh_token,
+            'token_uri': creds.token_uri,
+            'client_id': creds.client_id,
+            'client_secret': creds.client_secret,
+            'scopes': creds.scopes
+        }
+        
         with open('token.json', 'w') as token:
-            token.write(creds.to_json())
+            json.dump(token_data, token, indent=2)
         
         print("✅ OAuth setup complete!")
-        print("📁 token.json has been created")
+        print("📁 token.json has been created with all required fields")
         print("🔐 You can now use this token for automated backups")
+        print("📋 Token contains: access_token, refresh_token, client_secret, and scopes")
         
         return True
         
