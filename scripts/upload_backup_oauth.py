@@ -31,7 +31,10 @@ def get_drive_service():
             return None
         
         # Load credentials from token file
-        creds = Credentials.from_authorized_user_file(token_file, SCOPES)
+        with open(token_file, 'r') as f:
+            token_data = json.load(f)
+        
+        creds = Credentials.from_authorized_user_info(token_data, SCOPES)
         
         # Check if token is expired and refresh if needed
         if creds.expired and creds.refresh_token:
