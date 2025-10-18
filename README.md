@@ -159,16 +159,27 @@ pip install -r requirements.txt
 
 4. **Set up environment variables**:
 ```bash
-cp .env.example .env
+cp .env.template .env
 # Edit .env with your database and API keys
 ```
 
-5. **Run database migrations**:
+5. **Generate JWT Secret Key**:
+```bash
+python -m scripts.generate_key (creation of key)
+# Edit .env and add the generated key under JWT Secret Key
+```
+    5.1 **Populate the Database by Seeding**:
+    ```bash
+    •python -m app.db.seeder 
+    # If the Database has not been seeded yet
+    ```
+
+6. **Run database migrations**:
 ```bash
 alembic upgrade head
 ```
 
-6. **Start the server**:
+7. **Start the server**:
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -276,4 +287,5 @@ The system tracks comprehensive learning metrics:
 ## 📝 License
 
 This project is developed for educational purposes. Please refer to the license file for usage terms.
+
 
