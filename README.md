@@ -30,7 +30,6 @@
 - [Learning Metrics & Insights](#-learning-metrics--insights)
 - [Security](#-security)
 - [Deployment](#-deployment)
-  - [Production URLs](#production-urls)
   - [Deployment Architecture](#deployment-architecture)
 - [License](#-license)
 
@@ -335,5 +334,6 @@ The platform is deployed using cloud-based services for scalability and reliabil
 ## 📝 License
 This project is licensed under the MIT License.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
