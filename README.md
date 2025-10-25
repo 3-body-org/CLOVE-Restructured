@@ -24,17 +24,14 @@
   - [Backend Setup](#backend-setup)
   - [Database Access](#database-access)
 - [Usage](#-usage)
-  - [For Students](#for-students)
-  - [For Educators](#for-educators)
 - [Development](#-development)
   - [Project Structure](#project-structure)
   - [Key Technologies](#key-technologies)
-- [Performance & Analytics](#-performance--analytics)
+- [Learning Metrics & Insights](#-learning-metrics--insights)
 - [Security](#-security)
 - [Deployment](#-deployment)
   - [Production URLs](#production-urls)
   - [Deployment Architecture](#deployment-architecture)
-  - [Environment Configuration](#environment-configuration)
 - [License](#-license)
 
 
@@ -338,4 +335,5 @@ The platform is deployed using cloud-based services for scalability and reliabil
 ## 📝 License
 This project is licensed under the MIT License.  
 See the [LICENSE](./LICENSE) file for details.
+
 
