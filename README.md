@@ -1,8 +1,46 @@
-# CLOVE - Adaptive Java Learning Platform
+![plot](./CLOVE_banner.png)
+
+
+## 📘 Table of Contents
+- [About CLOVE](#-system-overview)
+- [Purpose](#purpose)
+- [Core Algorithms](#-core-algorithms)
+  - [Bayesian Knowledge Tracing (BKT)](#1-bayesian-knowledge-tracing-bkt)
+  - [Q-Learning (Reinforcement Learning)](#2-q-learning-reinforcement-learning)
+  - [Adaptive Challenge Selection](#3-adaptive-challenge-selection)
+  - [Learning Engine](#4-learning-engine)
+  - [Algorithm Utilities](#5-algorithm-utilities)
+- [System Architecture](#-system-architecture)
+  - [Frontend (React + Vite)](#frontend-react--vite)
+  - [Backend (FastAPI + PostgreSQL)](#backend-fastapi--postgresql)
+  - [Database Schema](#database-schema)
+- [Learning Features](#-learning-features)
+  - [Challenge Types](#challenge-types)
+  - [Thematic Environments](#thematic-environments)
+  - [Adaptive Features](#adaptive-features)
+- [Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Frontend Setup](#frontend-setup)
+  - [Backend Setup](#backend-setup)
+  - [Database Access](#database-access)
+- [Usage](#-usage)
+  - [For Students](#for-students)
+  - [For Educators](#for-educators)
+- [Development](#-development)
+  - [Project Structure](#project-structure)
+  - [Key Technologies](#key-technologies)
+- [Performance & Analytics](#-performance--analytics)
+- [Security](#-security)
+- [Deployment](#-deployment)
+  - [Production URLs](#production-urls)
+  - [Deployment Architecture](#deployment-architecture)
+  - [Environment Configuration](#environment-configuration)
+- [License](#-license)
+
 
 ## 🎯 System Overview
 
-**CLOVE** (Code Learning with Optimized Virtual Education) is an intelligent, adaptive learning platform designed to teach Java programming through immersive, game-inspired challenges. The system combines advanced educational algorithms with engaging thematic environments to create a personalized learning experience that adapts to each student's performance and learning patterns.
+**CLOVE** (Code, Logic, Overcome, Validate, Excel) is an intelligent, adaptive learning platform designed to teach Java programming through immersive, game-inspired challenges. The system combines advanced educational algorithms with engaging thematic environments to create a personalized learning experience that adapts to each student's performance and learning patterns.
 
 ### Purpose
 
@@ -105,8 +143,8 @@ Core entities include:
 
 ### Thematic Environments
 - **Wizard Academy**: Fantasy-themed learning with magical elements
-- **Space Mission**: Sci-fi themed challenges aboard a starship
 - **Noir Detective**: Mystery-themed problem-solving scenarios
+- **Space Mission**: Sci-fi themed challenges aboard a starship
 
 ### Adaptive Features
 - **Dynamic Difficulty**: Automatically adjusts based on performance
@@ -116,27 +154,35 @@ Core entities include:
 
 ## 🚀 Getting Started
 
+Before running **CLOVE**, both the frontend and backend need to be set up to ensure the system runs correctly.  
+
+Make sure the following prerequisites are already installed and properly configured on your machine before proceeding:
 ### Prerequisites
 - Node.js 18+ and npm
 - Python 3.11+
 - PostgreSQL database
 - Git
 
+Start by cloning the project repository, then follow the setup steps in order — beginning with the **frontend**, followed by the **backend**.  
+
 ### Frontend Setup
 
 1. **Navigate to frontend directory**:
 ```bash
 cd clove-frontend
+# Moves into the frontend project folder
 ```
 
 2. **Install dependencies**:
 ```bash
 npm install
+# Installs all required frontend packages
 ```
 
 3. **Start development server**:
 ```bash
 npm run dev
+# Launches the frontend on the local development server
 ```
 
 ### Backend Setup
@@ -144,33 +190,50 @@ npm run dev
 1. **Navigate to backend directory**:
 ```bash
 cd clove-backend
+# Moves into the backend project folder
 ```
 
 2. **Create virtual environment**:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Creates and activates an isolated Python environment
 ```
 
 3. **Install dependencies**:
 ```bash
 pip install -r requirements.txt
+# Installs all required backend packages
 ```
 
 4. **Set up environment variables**:
 ```bash
-cp .env.example .env
+cp .env.template .env
 # Edit .env with your database and API keys
 ```
 
-5. **Run database migrations**:
+5. **Generate JWT Secret Key**:
 ```bash
-alembic upgrade head
+python -m scripts.generate_key (creation of key)
+# Edit .env and add the generated key under JWT Secret Key
 ```
 
-6. **Start the server**:
+   5.1 **Populate the database by seeding**:
+   ```bash
+   python -m app.db.seeder
+   # Run this only if the database has not been seeded yet
+   ```
+
+6. **Run database migrations**:
+```bash
+alembic upgrade head
+# Applies all database schema migrations
+```
+
+7. **Start the server**:
 ```bash
 uvicorn app.main:app --reload
+# Starts the FastAPI backend server in development mode
 ```
 
 ### Database Access
@@ -193,18 +256,17 @@ psql -h YOUR_RENDER_DB_HOST -U YOUR_USERNAME -d YOUR_DB_NAME
 
 ## 📊 Usage
 
-### For Students
-1. **Register/Login**: Create an account or sign in
-2. **Choose Theme**: Select your preferred learning environment
-3. **Take Pre-Assessment**: Complete initial knowledge evaluation
-4. **Learn Through Challenges**: Engage with adaptive coding challenges
-5. **Track Progress**: Monitor your learning journey and mastery levels
-6. **Complete Post-Assessment**: Verify knowledge retention
+### How to Use CLOVE
+Follow these steps to navigate the platform and begin your learning journey:
 
-### For Educators
-1. **Monitor Student Progress**: View detailed analytics and performance metrics
-2. **Customize Content**: Modify challenges and learning materials
-3. **Analyze Learning Patterns**: Use data insights to improve curriculum
+1. **Access the Website** – Open the CLOVE platform in your browser.  
+2. **Sign Up or Log In** – Create an account or sign in to enter your learning dashboard.  
+3. **Open “My Deck”** – Go to the **My Deck** tab to browse and start available lessons.  
+4. **Start a Lesson** – Take the pre-assessment to unlock subtopics under the selected lesson.  
+5. **Study Each Subtopic** – Read the learning materials provided for every subtopic.  
+6. **Practice and Challenge** – Apply your knowledge through practice exercises or coding challenges.  
+7. **Track Progress** – Visit the **Progress** tab to monitor your overall improvement and completion across lessons.
+
 
 ## 🔧 Development
 
@@ -235,29 +297,33 @@ CLOVE-Restructured/
 - **Deployment**: Netlify (Frontend), Render.com (Backend + Database)
 - **Development**: Black, isort, ESLint
 
-## 📈 Performance & Analytics
+## 📊 Learning Metrics & Insights
 
-The system tracks comprehensive learning metrics:
-- Knowledge mastery progression
+The platform tracks detailed learning data to evaluate student progress and adapt challenges dynamically, including:
+- Mastery progression
 - Challenge completion rates
-- Time-to-mastery analytics
-- Learning efficiency measurements
-- Adaptive algorithm performance
+- Time-to-mastery
+- Learning efficiency
+- Adaptive model performance
 
 ## 🔒 Security
 
-- JWT-based authentication with refresh tokens
-- Password hashing with bcrypt
-- CORS protection and rate limiting
-- Input validation and sanitization
-- Secure database connections
+Multiple layers of security are implemented to protect user data and maintain application integrity, including:
+
+- **JWT-based authentication** with refresh tokens for secure session management  
+- **Password hashing** using bcrypt  
+- **CORS protection** and **rate limiting** to prevent unauthorized or excessive requests  
+- **Input validation** and **sanitization** to reduce injection risks  
+- **Secure database connections** using encrypted credentials
 
 ## 🌐 Deployment
 
-### Production URLs
+The platform is deployed using cloud-based services for scalability and reliability.
+
 - **Frontend**: Deployed on [Netlify](https://netlify.com)
 - **Backend API**: Deployed on [Render.com](https://render.com)
 - **Database**: PostgreSQL hosted on Render.com
+
 
 ### Deployment Architecture
 ```
@@ -268,12 +334,8 @@ The system tracks comprehensive learning metrics:
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-### Environment Configuration
-- **Frontend**: Environment variables configured in Netlify dashboard
-- **Backend**: Environment variables configured in Render dashboard
-- **Database**: Connection string managed by Render's PostgreSQL service
 
 ## 📝 License
-
-This project is developed for educational purposes. Please refer to the license file for usage terms.
+This project is licensed under the MIT License.  
+See the [LICENSE](./LICENSE) file for details.
 
