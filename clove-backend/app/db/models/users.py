@@ -1,5 +1,5 @@
 # app/db/models/user.py
-from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, func, DateTime, Date
+from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, func, DateTime, Date, JSON
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -33,6 +33,13 @@ class User(Base):
     # Password reset fields
     password_reset_token = Column(String(255), nullable=True)
     password_reset_expires = Column(DateTime(timezone=True), nullable=True)
+    
+    # Onboarding fields
+    onboarding_completed = Column(Boolean, nullable=False, default=False)
+    traveler_class = Column(String(50), nullable=True)
+    selected_realm = Column(String(50), nullable=True)
+    current_realm = Column(String(50), default='wizard-academy')
+    story_progress = Column(JSON, nullable=True)
 
     # Relationships
     user_topics     = relationship(

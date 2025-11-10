@@ -44,6 +44,7 @@ export default function TitleAndProfile({ nonColored, colored, description, show
           className={styles.profileButton}
           onClick={() => navigate("/profile")}
           aria-label="Go to profile"
+          data-joyride="profile-button"
           style={{ background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer" }}
         >
           {profilePhoto ? (

@@ -1,0 +1,552 @@
+// RealmSelection.scss
+@use './CosmicBackground.scss';
+
+.realm-selection {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  color: white;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.backgrounds-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.selection-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.selection-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  
+  h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  }
+  
+  p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.5rem;
+  }
+  
+  .character-greeting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    
+    .greeting-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      
+      strong {
+        color: #ffd700;
+      }
+    }
+    
+    .greeting-icon {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+.realm-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+  justify-items: center;
+  align-items: start;
+}
+
+.realm-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  backdrop-filter: blur(15px);
+  overflow: hidden;
+  min-height: 650px;
+  display: flex;
+  flex-direction: column;
+  transform-origin: center center;
+  
+  .realm-card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--realm-bg);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+  }
+  
+  &:hover:not(.selected) {
+    border-color: var(--realm-color);
+    box-shadow: 0 0 40px var(--realm-color);
+    background: rgba(255, 255, 255, 0.1);
+    
+    .realm-card-background {
+      opacity: 0.2;
+    }
+    
+    .realm-preview {
+      transform: scale(1.05);
+    }
+    
+    .realm-name {
+      text-shadow: 0 0 10px var(--realm-color);
+    }
+  }
+  
+  &.selected {
+    border-color: var(--realm-color) !important;
+    box-shadow: 0 0 40px var(--realm-color) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    
+    .realm-card-background {
+      opacity: 0.2 !important;
+    }
+    
+    .realm-selector {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+    
+    .realm-name {
+      text-shadow: 0 0 10px var(--realm-color) !important;
+    }
+    
+    .realm-preview {
+      transform: scale(1.05) !important;
+    }
+  }
+  
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.realm-preview {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  .wizard-tower,
+  .city-skyline,
+  .space-station {
+    font-size: 4rem;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  }
+  
+  .floating-spells,
+  .neon-lights,
+  .stars {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: float-preview 3s ease-in-out infinite;
+  }
+  
+  .floating-spells {
+    top: 10px;
+    right: 20px;
+    animation-delay: -1s;
+  }
+  
+  .neon-lights {
+    bottom: 10px;
+    left: 20px;
+    animation-delay: -2s;
+  }
+  
+  .stars {
+    top: 20px;
+    left: 30px;
+    animation-delay: -0.5s;
+  }
+  
+  .magic-circles,
+  .evidence-board,
+  .control-panel {
+    position: absolute;
+    font-size: 1.2rem;
+    bottom: 10px;
+    right: 15px;
+    opacity: 0.7;
+  }
+}
+
+.realm-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.realm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  
+  .realm-name {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--realm-color);
+  }
+  
+  .difficulty-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    &.difficulty-beginner {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10B981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    &.difficulty-intermediate {
+      background: rgba(245, 158, 11, 0.2);
+      color: #F59E0B;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    &.difficulty-advanced {
+      background: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+  }
+}
+
+.realm-description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.realm-story {
+  margin-bottom: 1.5rem;
+  
+  p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.realm-details {
+  margin-bottom: 1.5rem;
+  
+  .mentor-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    
+    .detail-label {
+      color: #ffd700;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .detail-value {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+  }
+  
+  .features-list {
+    .detail-label {
+      color: #ffd700;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .features-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    
+    .feature-tag {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+.realm-selector {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 35px;
+  height: 35px;
+  border: 2px solid var(--realm-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+  background: var(--realm-color);
+  
+  .selector-ring {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 2px solid var(--realm-color);
+    border-radius: 50%;
+    animation: pulse-selector 2s infinite;
+  }
+  
+  .selector-check {
+    color: white;
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+}
+
+.selection-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .back-btn {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+  
+  .continue-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &.enabled {
+      background: linear-gradient(45deg, #10B981, #059669);
+      color: white;
+      box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+      
+      &:hover {
+        background: linear-gradient(45deg, #059669, #047857);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      }
+    }
+    
+    &.disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.5);
+      cursor: not-allowed;
+    }
+    
+    .btn-icon {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.realm-hover-preview {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #ffd700;
+  border-radius: 15px;
+  padding: 1rem;
+  max-width: 300px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  
+  .hover-content {
+    h4 {
+      color: #ffd700;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Animations
+@keyframes float-preview {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes pulse-selector {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .realm-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    justify-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .selection-content {
+    padding: 1rem;
+  }
+  
+  .selection-header h2 {
+    font-size: 2.2rem;
+  }
+  
+  .realm-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    justify-items: center;
+  }
+  
+  .realm-card {
+    min-height: 450px;
+    padding: 1.5rem;
+  }
+  
+  .selection-actions {
+    flex-direction: column;
+    gap: 1rem;
+    
+    .back-btn,
+    .continue-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  .realm-hover-preview {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 1rem;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .selection-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .character-greeting {
+    flex-direction: column;
+    gap: 0.3rem;
+    text-align: center;
+  }
+  
+  .realm-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  
+  .realm-preview {
+    height: 100px;
+    
+    .wizard-tower,
+    .city-skyline,
+    .space-station {
+      font-size: 3rem;
+    }
+  }
+}

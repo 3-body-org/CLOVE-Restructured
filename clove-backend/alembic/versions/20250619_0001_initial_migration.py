@@ -55,6 +55,12 @@ def upgrade() -> None:
     # Password reset fields
     sa.Column('password_reset_token', sa.String(length=255), nullable=True),
     sa.Column('password_reset_expires', sa.DateTime(timezone=True), nullable=True),
+    # Onboarding fields
+    sa.Column('onboarding_completed', sa.Boolean(), nullable=False, server_default=sa.text('false')),
+    sa.Column('traveler_class', sa.String(length=50), nullable=True),
+    sa.Column('selected_realm', sa.String(length=50), nullable=True),
+    sa.Column('current_realm', sa.String(length=50), nullable=True, server_default='wizard-academy'),
+    sa.Column('story_progress', sa.JSON(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
@@ -68,6 +74,7 @@ def upgrade() -> None:
     sa.Column('current_streak', sa.Integer(), nullable=False),
     sa.Column('login_days_this_week', sa.JSON(), nullable=False, server_default=sa.text("'[]'")),
     sa.Column('total_challenges_solved', sa.Integer(), nullable=False),
+    sa.Column('total_points', sa.Integer(), nullable=False, server_default='0', comment='Total points earned from all challenges'),
     sa.Column('mode_stats', sa.JSON(), nullable=False),
     sa.Column('accuracy', sa.JSON(), nullable=False),
     sa.Column('hours_spent', sa.JSON(), nullable=False),

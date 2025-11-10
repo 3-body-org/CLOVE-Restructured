@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
@@ -8,6 +9,19 @@ import {
   faChevronDown,
   faChevronUp,
   faChartPie,
+  faRoute,
+  faMap,
+  faMountain,
+  faFire,
+  faStar,
+  faLightbulb,
+  faExclamationTriangle,
+  faCrown,
+  faGem,
+  faHistory,
+  faFlagCheckered,
+  faCompass,
+  faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/progress/styles/ProgressPage.module.scss";
 import TitleAndProfile from "components/layout/Navbar/TitleAndProfile";
@@ -15,13 +29,17 @@ import {
   ProgressAnalytics,
   SubtopicCard,
   ModeCard,
+  TopicProficiencyBadge,
   getMasteryLevel,
   getStrengthsWeaknesses,
   getCategory,
-  getAccuracyClass
+  getAccuracyClass,
+  calculateTopicProficiency
 } from "features/progress/components/ProgressAnalytics";
+import RealmCard from "features/progress/components/RealmCard";
 import { useApi } from "../../../hooks/useApi";
 import { useAuth } from "contexts/AuthContext";
+import { useJoyrideSafe } from "contexts/JoyrideContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 
@@ -44,6 +62,7 @@ const MODE_CONFIG = [
   },
 ];
 
+
 const ProgressPage = () => {
   const [expandedTopics, setExpandedTopics] = useState({});
   const [expandedStrengths, setExpandedStrengths] = useState({});
@@ -53,6 +72,9 @@ const ProgressPage = () => {
   const [error, setError] = useState("");
   const { get } = useApi();
   const { user } = useAuth();
+  
+  // Get joyride context safely (returns null if not available)
+  const joyrideContext = useJoyrideSafe();
 
   // Fetch stats and topic progress on mount/user change
   useEffect(() => {
@@ -83,6 +105,11 @@ const ProgressPage = () => {
             initial[topic.topic_id] = true;
           });
           setExpandedStrengths(initial);
+          
+          // Auto-expand first realm if joyride is running (for tour step)
+          if (joyrideContext?.run && topics.length > 0) {
+            setExpandedTopics({ [topics[0].topic_id]: true });
+          }
         } else {
           setTopicProgress([]);
           setError("Failed to load topic progress.");
@@ -100,13 +127,123 @@ const ProgressPage = () => {
     };
   }, [user]);
 
-  // Toggle topic accordion
-  const toggleTopic = (topicId) => {
+  // Toggle topic accordion - memoized with useCallback
+  const toggleTopic = useCallback((topicId) => {
     setExpandedTopics((prev) => ({
       ...prev,
       [topicId]: !prev[topicId],
     }));
-  };
+  }, []);
+
+  // Toggle strengths/weaknesses - memoized with useCallback
+  const toggleStrengths = useCallback((topicId) => {
+    setExpandedStrengths((prev) => ({
+      ...prev,
+      [topicId]: !prev[topicId],
+    }));
+  }, []);
+
+  // Helper function to format time ago
+  const formatTimeAgo = useCallback((dateString) => {
+    const now = new Date();
+    const activityDate = new Date(dateString);
+    const diffInSeconds = Math.floor((now - activityDate) / 1000);
+    
+    if (diffInSeconds < 60) return "Just now";
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} min ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 604800)} weeks ago`;
+    return activityDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: activityDate.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+    });
+  }, []);
+
+  // Memoized activity feed calculation
+  const activities = useMemo(() => {
+    const activitiesList = [];
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    topicProgress.forEach((topic) => {
+      const topicName = topic.topic?.title || topic.title || topic.topic?.topic_name || topic.topic_name || "Unknown Topic";
+      
+      if (topic.completed_at) {
+        const completedDate = new Date(topic.completed_at);
+        if (completedDate >= thirtyDaysAgo) {
+          activitiesList.push({
+            id: `topic-completed-${topic.topic_id}`,
+            date: topic.completed_at,
+            type: "topic_completed",
+            icon: faFlagCheckered,
+            iconColor: "#10b981",
+            title: topicName,
+            label: "Completed Realm",
+            badge: "🏆 Realm",
+          });
+        }
+      }
+      
+      if (!topic.completed_at && topic.last_accessed_at) {
+        const accessedDate = new Date(topic.last_accessed_at);
+        if (accessedDate >= thirtyDaysAgo) {
+          activitiesList.push({
+            id: `topic-visited-${topic.topic_id}`,
+            date: topic.last_accessed_at,
+            type: "topic_visited",
+            icon: faCompass,
+            iconColor: "#8b5cf6",
+            title: topicName,
+            label: "Recently Visited",
+            badge: "🗺️ Realm",
+          });
+        }
+      }
+
+      if (topic.subtopics) {
+        topic.subtopics.forEach((subtopic) => {
+          const subtopicName = subtopic.name || subtopic.title || subtopic.subtopic?.title || "Unknown Subtopic";
+          
+          if (subtopic.completed_at) {
+            const completedDate = new Date(subtopic.completed_at);
+            if (completedDate >= thirtyDaysAgo) {
+              activitiesList.push({
+                id: `subtopic-completed-${subtopic.subtopic_id}`,
+                date: subtopic.completed_at,
+                type: "subtopic_completed",
+                icon: faCheckCircle,
+                iconColor: "#6EE7B7",
+                title: subtopicName,
+                label: "Completed Subtopic",
+                badge: "✅ Subtopic",
+              });
+            }
+          }
+          if (subtopic.unlocked_at && subtopic.unlocked_at !== subtopic.completed_at && !subtopic.completed_at) {
+            const unlockedDate = new Date(subtopic.unlocked_at);
+            if (unlockedDate >= thirtyDaysAgo) {
+              activitiesList.push({
+                id: `subtopic-unlocked-${subtopic.subtopic_id}`,
+                date: subtopic.unlocked_at,
+                type: "subtopic_unlocked",
+                icon: faBookOpen,
+                iconColor: "#fbbf24",
+                title: subtopicName,
+                label: "Unlocked Subtopic",
+                badge: "📖 Subtopic",
+              });
+            }
+          }
+        });
+      }
+    });
+
+    return activitiesList
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 15);
+  }, [topicProgress]);
 
   // Memoized learning mode cards
   const learningModes = useMemo(
@@ -140,205 +277,157 @@ const ProgressPage = () => {
 
   return (
     <main className={styles.progressContent}>
+      {/* Animated Background - Reduced to 8 orbs for better performance */}
+      <div className={styles.backgroundPatterns}>
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={`bg-orb-${i}`}
+            className={styles.bgOrb}
+            style={{
+              left: `${(i * 12.5) % 100}%`,
+              top: `${(i * 15) % 100}%`,
+              width: `${150 + (i * 20)}px`,
+              height: `${150 + (i * 20)}px`,
+              animationDelay: `${i * 1.2}s`,
+            }}
+          />
+        ))}
+      </div>
+
       <TitleAndProfile
         nonColored={"Learning"}
-        colored={"Progress"}
-        description={"Detailed analysis of your learning performance "}
+        colored={"Journey"}
+        description={"Track your path to mastery"}
       />
 
-      <section className={styles.learningModesSection}>
-        <div className={styles.performanceCard}>
-          <h2 className={styles.sectionTitle}>
-            <FontAwesomeIcon icon={faTrophy} /> Learning Mode Performance
-          </h2>
-          <div className={styles.modePerformanceGrid}>
-            {learningModes.map((mode, index) => <ModeCard key={index} {...mode} />)}
+      {/* Recent Activity Feed */}
+      <motion.section
+        className={styles.activitySection}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionIcon}>
+            <FontAwesomeIcon icon={faHistory} />
+          </div>
+          <div>
+            <h2 className={styles.sectionTitle}>Recent Activity</h2>
+            <p className={styles.sectionSubtitle}>
+              Your learning milestones from the last 30 days
+            </p>
           </div>
         </div>
-      </section>
 
-      <section className={styles.topicSection}>
-        {topicProgress.length === 0 ? (
-          <div style={{ padding: "2rem", textAlign: "center" }}>No topics found.</div>
-        ) : (
-          topicProgress.map((topic) => {
-            const isExpanded = expandedTopics[topic.topic_id] || false;
-            const strengthsExpanded = expandedStrengths[topic.topic_id] || false;
-            // Use topic.progress_percent for donut
-            const overallProgress = Math.round((topic.progress_percent || 0) * 100);
-            // Get strengths/weaknesses for this topic
-            const { strengths, weaknesses } = getStrengthsWeaknesses(topic.subtopics || []);
-
-            return (
-              <div key={topic.topic_id} className={styles.topicCard}>
+        <div className={styles.activityFeed} data-joyride="activity-feed">
+          {activities.length === 0 ? (
+            <div className={styles.emptyState}>
+              <FontAwesomeIcon icon={faMap} className={styles.emptyIcon} />
+              <h3>No Activity Yet</h3>
+              <p>Start exploring realms to see your progress here!</p>
+            </div>
+          ) : (
+            activities.map((activity, index) => (
+              <div
+                key={activity.id}
+                className={styles.activityItem}
+                style={{
+                  animationDelay: `${index * 0.05}s`,
+                }}
+              >
                 <div
-                  className={styles.topicHeader}
-                  onClick={() => toggleTopic(topic.topic_id)}
-                  tabIndex={0}
-                  role="button"
-                  aria-expanded={isExpanded}
-                  aria-label={`Toggle details for ${topic.topic?.title || topic.title}`}
+                  className={styles.activityIcon}
+                  style={{ borderColor: activity.iconColor }}
                 >
-                  <div className={styles.topicHeaderContent}>
-                    <h2 className={styles.topicTitle}>
-                      <span>{topic.topic?.title || topic.title || "Untitled Topic"}</span>
-                    </h2>
-                    <div className={styles.topicStats}>
-                      <div className={styles.progressWrapper}>
-                        <div
-                          className={styles.progressCircle}
-                          style={{ "--progress": overallProgress }}
-                        >
-                          <div className={styles.progressText}>{overallProgress}%</div>
-                        </div>
-                        <span className={styles.progressLabel}>Overall Progress</span>
-                      </div>
-                      <FontAwesomeIcon
-                        icon={isExpanded ? faChevronUp : faChevronDown}
-                        className={styles.topicChevron}
-                      />
-                    </div>
-                  </div>
+                  <FontAwesomeIcon
+                    icon={activity.icon}
+                    style={{ color: activity.iconColor }}
+                  />
                 </div>
 
-                {isExpanded && (
-                  <div>
-                    {/* Performance Analysis Collapsible Section */}
-                    <div
-                      className={
-                        styles.performanceAnalysisCard +
-                        (!strengthsExpanded ? " " + styles.minimized : "")
-                      }
-                    >
-                      <div
-                        className={
-                          styles.performanceHeader +
-                          (!strengthsExpanded ? " " + styles.minimizedHeader : "")
-                        }
-                        onClick={() =>
-                          setExpandedStrengths((prev) => ({
-                            ...prev,
-                            [topic.topic_id]: !strengthsExpanded,
-                          }))
-                        }
-                        style={{
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          padding: strengthsExpanded ? "0 1rem" : "0 1.5rem",
-                        }}
-                        tabIndex={0}
-                        role="button"
-                        aria-expanded={strengthsExpanded}
-                        aria-label={`Toggle performance analysis for ${topic.topic?.title || topic.title}`}
-                      >
-                        <span className={styles.performanceTitle}>
-                          <FontAwesomeIcon
-                            icon={faChartPie}
-                            className={styles.performanceIcon}
-                          /> Performance Analysis
-                        </span>
-                        {!strengthsExpanded && (
-                          <span
-                            style={{ display: "flex", alignItems: "center", gap: "0.5em" }}
-                          >
-                            {strengths.length > 0 && (
-                              <span
-                                className={styles.swChip}
-                                style={{ padding: "0.2em 0.8em", fontSize: "13px" }}
-                              >
-                                <span className={styles.dotGreen}></span> {strengths.length} strength
-                                {strengths.length > 1 ? "s" : ""}
-                              </span>
-                            )}
-                            {weaknesses.length > 0 && (
-                              <span
-                                className={styles.swChip}
-                                style={{ padding: "0.2em 0.8em", fontSize: "13px" }}
-                              >
-                                <span className={styles.dotRed}></span> {weaknesses.length} weakness
-                                {weaknesses.length > 1 ? "es" : ""}
-                              </span>
-                            )}
-                          </span>
-                        )}
-                        <FontAwesomeIcon icon={strengthsExpanded ? faChevronUp : faChevronDown} />
-                      </div>
-                      {strengthsExpanded && (
-                        <div className={styles.strengthsWeaknessesRow}>
-                          <div className={styles.swCard + " " + styles.strengthCard}>
-                            <div className={styles.swHeader}>
-                              <FontAwesomeIcon
-                                icon={faCheckCircle}
-                                className={styles.swIcon}
-                              />
-                              <h5 className={styles.swTitle}>Strengths</h5>
-                            </div>
-                            <div className={styles.swList}>
-                              {strengths.length > 0 ? (
-                                strengths.map((st, idx) => {
-                                  const subtopicName = st.subtopic?.title || "Untitled Subtopic";
-                                  return (
-                                    <span key={idx} className={styles.swChip}>
-                                      <span className={styles.dotGreen}></span> {subtopicName}
-                                    </span>
-                                  );
-                                })
-                              ) : (
-                                <div className={styles.swItem}>No strengths identified yet</div>
-                              )}
-                            </div>
-                          </div>
-                          <div className={styles.swCard + " " + styles.weaknessCard}>
-                            <div className={styles.swHeader}>
-                              <FontAwesomeIcon
-                                icon={faQuestionCircle}
-                                className={styles.swIcon}
-                              />
-                              <h5 className={styles.swTitle}>Weaknesses</h5>
-                            </div>
-                            <div className={styles.swList}>
-                              {weaknesses.length > 0 ? (
-                                weaknesses.map((st, idx) => {
-                                  const subtopicName = st.subtopic?.title || "Untitled Subtopic";
-                                  return (
-                                    <span key={idx} className={styles.swChip}>
-                                      <span className={styles.dotRed}></span> {subtopicName}
-                                    </span>
-                                  );
-                                })
-                              ) : (
-                                <div className={styles.swItem}>No weaknesses identified yet</div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                <div className={styles.activityContent}>
+                  <div className={styles.activityHeader}>
+                    <div className={styles.activityTitleGroup}>
+                      <span className={styles.activityLabel}>{activity.label}</span>
+                      <h4 className={styles.activityTitle}>{activity.title}</h4>
                     </div>
-                    {/* Subtopics Accordion */}
-                    <div className={styles.subtopicsContainer}>
-                      {(topic.subtopics || []).map((subtopic) => (
-                        <SubtopicCard
-                          key={subtopic.id}
-                          name={subtopic.name || subtopic.title || subtopic.subtopic?.title || "Untitled Subtopic"}
-                          masteryLevel={getMasteryLevel(subtopic.knowledge_level || 0)}
-                          progress={Math.round((subtopic.progress_percent || 0) * 100)}
-                          knowledge={Math.round((subtopic.knowledge_level || 0) * 100)}
-                        />
-                      ))}
-                    </div>
+                    <span className={styles.activityTime}>{formatTimeAgo(activity.date)}</span>
                   </div>
-                )}
+                  <span className={styles.activityBadge}>{activity.badge}</span>
+                </div>
               </div>
-            );
-          })
+            ))
+          )}
+        </div>
+      </motion.section>
+
+      {/* Learning Mode Performance */}
+      <motion.section 
+        className={styles.modesSection}
+        data-joyride="learning-modes"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionIcon}>
+            <FontAwesomeIcon icon={faTrophy} />
+          </div>
+          <div>
+            <h2 className={styles.sectionTitle}>Learning Mode Performance</h2>
+            <p className={styles.sectionSubtitle}>Your mastery across different challenge types</p>
+          </div>
+        </div>
+        <div className={styles.modesGrid}>
+          {learningModes.map((mode, index) => (
+            <ModeCard key={index} {...mode} index={index} />
+          ))}
+        </div>
+      </motion.section>
+
+      {/* Learning Realms - Horizontal Card Design */}
+      <motion.section 
+        className={styles.realmsSection}
+        data-joyride="learning-realms"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionIcon}>
+            <FontAwesomeIcon icon={faGem} />
+          </div>
+          <div>
+            <h2 className={styles.sectionTitle}>Learning Realms</h2>
+            <p className={styles.sectionSubtitle}>Choose your path - master each realm independently</p>
+          </div>
+        </div>
+
+        {topicProgress.length === 0 ? (
+          <div className={styles.emptyState}>
+            <FontAwesomeIcon icon={faMap} className={styles.emptyIcon} />
+            <p>No realms found. Start your adventure!</p>
+          </div>
+        ) : (
+          <div className={styles.realmsContainer}>
+            {topicProgress.map((topic, index) => (
+              <RealmCard
+                key={topic.topic_id}
+                topic={topic}
+                index={index}
+                isExpanded={expandedTopics[topic.topic_id] || false}
+                strengthsExpanded={expandedStrengths[topic.topic_id] || false}
+                toggleTopic={toggleTopic}
+                toggleStrengths={toggleStrengths}
+                getStrengthsWeaknesses={getStrengthsWeaknesses}
+                calculateTopicProficiency={calculateTopicProficiency}
+              />
+            ))}
+          </div>
         )}
-      </section>
+      </motion.section>
     </main>
   );
 };
 
 export default ProgressPage;
-
-

@@ -33,21 +33,24 @@ async def update_login_streak(db: AsyncSession, user_id: int, today_date):
     if not stat:
         raise ValueError("Statistic not found")
 
+    # If already logged in today, just return current stats without updating
+    if stat.last_login_date == today_date:
+        return stat
+
     monday = today_date - timedelta(days=today_date.weekday())
     if not stat.last_login_date or stat.last_login_date < monday:
         stat.login_days_this_week = []
 
     today_weekday = today_date.weekday()
-    updated = False
+    
+    # Add today to the week's login days
     if today_weekday not in stat.login_days_this_week:
         stat.login_days_this_week.append(today_weekday)
         stat.login_days_this_week.sort()
         flag_modified(stat, "login_days_this_week")
-        updated = True
 
-    if stat.last_login_date != today_date:
-        stat.last_login_date = today_date
-        updated = True
+    # Update last login date
+    stat.last_login_date = today_date
 
     # Calculate streak: number of consecutive days ending today
     streak = 0
@@ -56,11 +59,12 @@ async def update_login_streak(db: AsyncSession, user_id: int, today_date):
             streak += 1
         else:
             break
+    
+    # Set the streak (minimum 1 for today)
     stat.current_streak = streak if streak > 0 else 1
 
-    if updated:
-        await db.commit()
-        await db.refresh(stat)
+    await db.commit()
+    await db.refresh(stat)
     return stat
 
 async def update_recent_topic(db: AsyncSession, user_id: int, topic_id: int):
@@ -77,7 +81,8 @@ async def increment_challenges_solved(
     challenge_type: str,
     is_correct: bool,
     time_spent: int,
-    completed_type: bool = False
+    completed_type: bool = False,
+    points: int = 0
 ):
     stat = await get_by_user_id(db, user_id)
     if not stat:
@@ -144,12 +149,16 @@ async def increment_challenges_solved(
     new_hours_spent[challenge_type] = hrs
     new_completion_rate[challenge_type] = comp
 
+    # Calculate new total points
+    new_total_points = (stat.total_points or 0) + points
+    
     # Use explicit UPDATE to ensure all fields are updated
     await db.execute(
         update(Statistic)
         .where(Statistic.id == stat.id)
         .values(
             total_challenges_solved=new_total_challenges,
+            total_points=new_total_points,
             mode_stats=new_mode_stats,
             accuracy=new_accuracy,
             hours_spent=new_hours_spent,

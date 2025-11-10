@@ -9,7 +9,7 @@ from app.api import (
     users, topics, subtopics, lessons, challenges, q_values,
     assessment_questions, pre_assessments, post_assessments,
     challenge_attempts, statistics, user_topics, user_subtopics,
-    user_challenges, auth
+    user_challenges, auth, onboarding
 )
 from app.db.base import Base
 from app.db.session import engine
@@ -133,6 +133,7 @@ app.include_router(statistics.router)
 app.include_router(user_topics.router)
 app.include_router(user_subtopics.router)
 app.include_router(user_challenges.router)
+app.include_router(onboarding.router)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):

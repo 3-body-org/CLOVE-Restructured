@@ -79,22 +79,15 @@ async def list_user_topics(
         for st in topic_subtopics:
             subtopic_data = UserSubtopicRead.model_validate(st).model_dump()
             
-            # Calculate knowledge level for this subtopic
-            knowledge_level = 0.0
+            # Start with the database knowledge_level (THIS is the BKT-updated value)
+            # The database stores the continuously updated knowledge from BKT
+            knowledge_level = st.knowledge_level
             
-            # Try to get post-assessment score first (more accurate)
-            if post_assessment and post_assessment.subtopic_scores:
-                subtopic_id_str = str(st.subtopic.subtopic_id)
-                if subtopic_id_str in post_assessment.subtopic_scores:
-                    knowledge_level = post_assessment.subtopic_scores[subtopic_id_str]
+            # Note: We no longer override with assessment scores since the database
+            # knowledge_level is continuously updated by the BKT system during challenges
+            # and is the most accurate representation of the user's current knowledge
             
-            # Fallback to pre-assessment score
-            elif pre_assessment and pre_assessment.subtopic_scores:
-                subtopic_id_str = str(st.subtopic.subtopic_id)
-                if subtopic_id_str in pre_assessment.subtopic_scores:
-                    knowledge_level = pre_assessment.subtopic_scores[subtopic_id_str]
-            
-            # Add knowledge level to subtopic data
+            # Explicitly ensure knowledge_level is in the response
             subtopic_data["knowledge_level"] = knowledge_level
             processed_subtopics.append(subtopic_data)
         

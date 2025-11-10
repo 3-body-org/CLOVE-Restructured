@@ -163,7 +163,7 @@ async def init_user_data(db: AsyncSession, user_id: int, login_days_this_week=No
             topic_id=topic.topic_id,
             pre_assessment_completed=False,
             post_assessment_completed=False, 
-            is_unlocked=True,  # Only first topic unlocked
+            is_unlocked=True,  # All topics unlocked from start
             is_completed=False,
             introduction_seen=False,  # New users haven't seen introduction
             completed_subtopics_count=0,
@@ -232,7 +232,11 @@ async def init_user_data(db: AsyncSession, user_id: int, login_days_this_week=No
     db.add_all(post_assessments)
 
     # 4. Create Statistic row
-    stat = Statistic(user_id=user_id, login_days_this_week=login_days_this_week)
+    stat = Statistic(
+        user_id=user_id, 
+        login_days_this_week=login_days_this_week,
+        total_points=0  # Initialize with 0 points
+    )
     db.add(stat)
 
     # Single commit for everything

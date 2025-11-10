@@ -14,7 +14,7 @@
 /* Base styles */
 .container {
   font-family: "Inter", sans-serif;
-  background-color: $light-black;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
   color: $white;
   display: flex;
   width: 100%;
@@ -25,13 +25,62 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
 }
+
+/* Static Background Orbs */
+.container::before,
+.container::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+  // Removed animation for static orbs (same as landing page)
+}
+
+.container::before {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, $dark-purple, transparent);
+  top: 10%;
+  left: -100px;
+}
+
+.container::after {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, $light-purple, transparent);
+  bottom: 10%;
+  right: -100px;
+}
+
+// Removed float animation - orbs are now static (same as landing page)
+// @keyframes float {
+//   0%, 100% { 
+//     transform: translateY(0px) translateX(0px) scale(1); 
+//   }
+//   25% { 
+//     transform: translateY(-30px) translateX(20px) scale(1.05); 
+//   }
+//   50% { 
+//     transform: translateY(-20px) translateX(-15px) scale(0.95); 
+//   }
+//   75% { 
+//     transform: translateY(25px) translateX(15px) scale(1.02); 
+//   }
+// }
 
 /* Main Dashboard */
 .dashboard {
   flex-grow: 1;
   padding: 2.5rem;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .mainContent {
@@ -59,11 +108,15 @@
 }
 
 .card {
-  background-color: $black;
+  background: rgba(30, 30, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.15);
   padding: 1.75rem;
   border-radius: 1.25rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
 }
@@ -75,17 +128,220 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, $dark-purple, $light-purple);
+  background: linear-gradient(90deg, #8b5cf6, #a855f7, #d946ef);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.2);
+// Removed shining animation (::after) and hover effects
+// .card::after {
+//   content: '';
+//   position: absolute;
+//   top: 0;
+//   left: -100%;
+//   width: 100%;
+//   height: 100%;
+//   background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+//   transition: left 0.7s ease;
+//   pointer-events: none;
+// }
+
+// Removed hover animation
+// .card:hover {
+//   transform: translateY(-5px);
+//   box-shadow: 
+//     0 20px 40px rgba(139, 92, 246, 0.25),
+//     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+//   border-color: rgba(139, 92, 246, 0.3);
+// }
+
+// .card:hover::after {
+//   left: 100%;
+// }
+
+/* Recent Topic Card Styling */
+.recentTopicCard {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
+  padding: 2rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.card.highlight {
-  background: linear-gradient(90deg, $dark-purple, $light-purple);
-  color: white;
+.recentTopicCard::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, #7c3aed, #a855f7, #d946ef, #f0abfc) !important;
+  box-shadow: 
+    0 0 20px rgba(139, 92, 246, 0.8),
+    0 0 40px rgba(168, 85, 247, 0.4) !important;
+}
+
+.recentTopicHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.iconWrapper {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, $dark-purple, $light-purple);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  box-shadow: 
+    0 8px 16px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.iconWrapper::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, $dark-purple, $light-purple);
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(8px);
+}
+
+.headerInfo {
+  flex: 1;
+}
+
+.recentTopicTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: $white;
+  margin: 0 0 0.25rem 0;
+  letter-spacing: 0.3px;
+}
+
+.recentTopicSubtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  margin-top: 0.5rem;
+  display: block;
+  margin-bottom: 0;
+}
+
+.recentTopicContent {
+  margin: 2rem 0;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.topicContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.topicBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 0.5rem 1rem;
+  border-radius: 24px;
+  margin-bottom: 0;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.topicBadge:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.topicBadgeIcon {
+  font-size: 13px;
+  color: $light-purple;
+}
+
+.topicBadgeText {
+  font-size: 12px;
+  font-weight: 700;
+  color: $light-purple;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.topicName {
+  font-size: 28px;
+  font-weight: 800;
+  color: $white;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.topicMessage {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.noTopicWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+.noTopicIcon {
+  font-size: 56px;
+  text-align: center;
+  margin: 0;
+  animation: bounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(139, 92, 246, 0.3));
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.noTopicMessage {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 500;
+  max-width: 280px;
+}
+
+.cardDecoration {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15), transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
 }
 
 .card.highlight::before {
@@ -175,25 +431,7 @@
   font-weight: bold;
 }
 
-/* Progress Bars */
-.barChart {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.barContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.barLabel {
-  display: flex;
-  justify-content: space-between;
-  font-size: 15px;
-  color: $dark-white;
-}
+/* Legacy styles removed - using DashboardAnalytics.module.scss now */
 
 .bar {
   height: 10px;
@@ -305,51 +543,116 @@
   border-radius: 50px;
   font-size: 13px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
   
   // Different colors for different mastery levels
   &.badgeMastered {
-    background-color: rgba(16, 185, 129, 0.1);  
-    color: $success;                              
+    background-color: rgba(16, 185, 129, 0.15);  
+    color: $success;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
   }
   
   &.badgeProficient {
-    background-color: rgba(245, 158, 11, 0.1);  
-    color: $warning;                              
+    background-color: rgba(245, 158, 11, 0.15);  
+    color: $warning;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
   }
   
   &.badgeLearned {
-    background-color: rgba(239, 68, 68, 0.1);   
-    color: $danger;                               
+    background-color: rgba(239, 68, 68, 0.15);   
+    color: $danger;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
   }
   
   &.badgeCompleted {
-    background-color: rgba(139, 92, 246, 0.1);  
-    color: $light-purple;                         
+    background-color: rgba(139, 92, 246, 0.15);  
+    color: $light-purple;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
   }
 }
 
+.badgeIcon {
+  font-size: 16px;
+  filter: drop-shadow(0 2px 4px currentColor);
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.resumeButtonWrapper {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(139, 92, 246, 0.15);
+}
+
 .resumeButton {
-  color: white;
-  font-weight: bold;
+  color: $white;
+  font-weight: 700;
   text-decoration: none;
-  margin-top: 1rem;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 0.5rem;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.125rem 2.25rem;
+  background: linear-gradient(135deg, $dark-purple, $light-purple);
   border: none;
-  transition: all 0.3s ease;
+  border-radius: 14px;
   cursor: pointer;
-  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 6px 20px rgba(139, 92, 246, 0.5),
+    0 2px 8px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.3px;
+  width: 100%;
+}
+
+.resumeButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.resumeButton:hover::before {
+  left: 100%;
 }
 
 .resumeButton:hover,
 .resumeButton:focus {
-  background-color: rgba(255, 255, 255, 0.25);
-  transform: translateX(5px);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 24px rgba(139, 92, 246, 0.6),
+    0 4px 12px rgba(139, 92, 246, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, lighten($dark-purple, 5%), lighten($light-purple, 5%));
   outline: none;
+}
+
+.resumeButton:active {
+  transform: translateY(0);
+}
+
+.buttonIcon {
+  transition: transform 0.3s ease;
+}
+
+.resumeButton:hover .buttonIcon {
+  transform: translateX(5px);
 }
 
 /* Responsive Design */
@@ -380,6 +683,35 @@
 }
 
 @media (max-width: 576px) {
+  .iconWrapper {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 12px;
+  }
+  
+  .recentTopicTitle {
+    font-size: 18px;
+  }
+  
+  .recentTopicSubtitle {
+    font-size: 12px;
+  }
+  
+  .topicName {
+    font-size: 20px;
+  }
+  
+  .topicMessage,
+  .noTopicMessage {
+    font-size: 13px;
+  }
+  
+  .resumeButton {
+    padding: 0.85rem 1.5rem;
+    font-size: 14px;
+  }
+  
   .donutChart {
     width: 140px;
     height: 140px;

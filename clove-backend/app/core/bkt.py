@@ -32,5 +32,6 @@ class BKT:
         p_Kn_given_action = numerator / denominator if denominator else 0.0
         updated_knowledge = p_Kn_given_action + (1 - p_Kn_given_action) * self.p_T
         
-        # Only ensure knowledge doesn't exceed 1.0, no minimum limit
-        return round(min(1.0, updated_knowledge), 2)
+        # Ensure knowledge stays within bounds [0.1, 1.0]
+        # Minimum of 0.1 ensures users always have at least 10% baseline knowledge
+        return round(max(0.1, min(1.0, updated_knowledge)), 2)

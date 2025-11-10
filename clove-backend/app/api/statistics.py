@@ -50,7 +50,7 @@ async def update_recent_topic(
 
 @router.post("/challenge", response_model=StatisticRead)
 async def record_challenge(
-    payload: dict,  # {"type", "is_correct", "time_spent", "completed_type"}
+    payload: dict,  # {"type", "is_correct", "time_spent", "completed_type", "points"}
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -60,5 +60,6 @@ async def record_challenge(
         payload["type"],
         payload["is_correct"],
         payload["time_spent"],
-        payload.get("completed_type", False)
+        payload.get("completed_type", False),
+        payload.get("points", 0)
     )

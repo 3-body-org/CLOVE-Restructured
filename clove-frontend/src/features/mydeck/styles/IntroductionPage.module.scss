@@ -37,6 +37,10 @@
   font-family: var(--font-primary, "Roboto", sans-serif);
   line-height: 1.6;
   transition: background-color 0.3s, color 0.3s;
+  
+  // Background image support (for topic-specific backgrounds)
+  // The ImageThemeBackground component uses styles from SubtopicPage.module.scss
+  // which will handle the positioning and styling
 
   .content {
     position: relative;

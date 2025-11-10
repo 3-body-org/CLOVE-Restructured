@@ -64,9 +64,15 @@ async def main():
                 profile_photo_url=''
             )
 
-            # Auto-verify superuser email
+            # Auto-verify superuser email and complete onboarding
             user.email_verified = True
             user.is_active = True
+            user.onboarding_completed = True  # Superusers skip onboarding
+            user.traveler_name = f"{first_name} {last_name}"
+            user.traveler_class = "admin"
+            user.selected_realm = "wizard-academy"
+            user.current_realm = "wizard-academy"
+            user.story_progress = {"admin_user": True, "skip_onboarding": True}
             await session.commit()
 
             print(f"Superuser '{username}' created successfully with all required data.")

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/landing/styles/ScrollIndicator.module.scss";
@@ -122,17 +123,35 @@ export default function ScrollIndicator() {
     return null;
   }
 
-  if (!isVisible) {
-    return null;
-  }
-
   return (
-    <div className={styles.scrollIndicator} onClick={scrollToFeatures}>
-      <div className={styles.scrollText}>Scroll to explore</div>
-      <div className={styles.scrollArrow}>
-        <FontAwesomeIcon icon={faChevronDown} />
-      </div>
-
-    </div>
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div 
+          className={styles.scrollIndicator} 
+          onClick={scrollToFeatures}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <motion.div 
+            className={styles.scrollText}
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Scroll to explore
+          </motion.div>
+          <motion.div 
+            className={styles.scrollArrow}
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <FontAwesomeIcon icon={faChevronDown} />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 } 

@@ -1,380 +1,686 @@
-@use "/variables" as *; /* import the global variable from _variables.scss */
+// Auth Form Page Styles with CLOVE Theme - Matching other auth pages
+@use "/variables" as *;
 
-/* Page Container: Grid with Header, Content, Footer */
-.page {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+.authPage {
   min-height: 100vh;
-  background-color: $light-black;
-  font-family: "Open Sauce One", "Roboto", sans-serif;
-}
-
-/* Header */
-.header {
-  padding: 0 80px;
-  // background-color: #1c1e22;
-  // box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.paragraph {
-  font-size: 18px;
-}
-
-.logoSection {
-  padding-top: 5px;
   display: flex;
   align-items: center;
-}
-
-/* Logo Text & Image */
-.logo {
-  font-size: 58px;
-  font-weight: bold;
-  color: $white;
-}
-
-.logoImg {
-  width: 50px;
-  height: auto;
-  margin-left: 8px;
-}
-
-/* Main Content */
-.content {
-  grid-row: 2;
-  display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 16px;
-}
-
-/* Form Wrapper */
-.formWrapper {
-  width: 100%;
-  max-width: 600px;
-  padding: 32px;
-  margin-top: 20px;
-  background-color: $light-black;
-  color: $white;
-}
-
-/* Toggle Nav: Sign Up / Login Buttons */
-.toggleNav {
-  display: flex;
-  justify-content: space-evenly; /* Evenly space the 2 buttons */
-  align-items: center;
-  flex-wrap: nowrap; /* Prevent wrap */
-  margin-bottom: 24px;
-  padding-bottom: 8px;
-}
-
-/* Toggle Buttons */
-.toggleButton {
-  font-size: 24px;
-  font-weight: 700;
-  cursor: pointer;
-  color: $white;
-  padding: 16px 0;
-  background: transparent;
-  border: none;
-  flex: 1;
-  text-align: center;
+  padding: 20px;
   position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
 }
 
-.toggleButton.active {
-  color: $light-purple;
-}
-
-/* Underline animation */
-.toggleButton::after {
-  content: "";
+.background {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.gradientOrb1,
+.gradientOrb2,
+.gradientOrb3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.3;
+  animation: float 6s ease-in-out infinite;
+}
+
+.gradientOrb1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, $dark-purple, transparent);
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.gradientOrb2 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, $light-purple, transparent);
+  top: 60%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.gradientOrb3 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #6b46c1, transparent);
+  bottom: 20%;
+  left: 60%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  height: 3px;
-  background-color: $light-purple;
-  transform: scaleX(0);
-  transform-origin: right;
+  max-width: 540px;
+}
+
+/* Back Button */
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30, 30, 42, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: $open-sauce;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.backButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.backButton:hover::before {
+  left: 100%;
+}
+
+.backButton:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: $white;
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+}
+
+.backIcon {
+  font-size: 16px;
   transition: transform 0.3s ease;
 }
 
-.toggleButton.active::after {
-  transform: scaleX(1);
-  transform-origin: left;
+.backButton:hover .backIcon {
+  transform: translateX(-3px);
 }
 
-/* Headings */
-.loginHeading,
-.signupHeading {
-  font-size: 48px;
-  font-weight: bold;
+.backText {
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  background: rgba(30, 30, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(107, 70, 193, 0.2);
+  border-radius: 24px;
+  padding: 48px 40px;
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: $white;
-}
-
-.loginDescription,
-.signupDescription {
-  text-align: center;
-  color: $white;
-  margin-bottom: 2rem;
-  font-size: 22px;
-}
-
-/* Form Fields */
-.formField {
-  width: 100%;
-  padding: 18px 16px;
-  background-color: transparent;
-  border: 2.5px solid $light-purple;
-  border-radius: 7px;
-  color: $white;
-  font-size: 22px;
-  margin-bottom: 18px;
-  box-sizing: border-box;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  &:-webkit-autofill,
-  &:-webkit-autofill:focus,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px $light-black inset !important;
-    box-shadow: 0 0 0 1000px $light-black inset !important;
-    -webkit-text-fill-color: $white !important;
-    caret-color: $white !important;
-    border-color: $light-purple;
-    transition: background-color 5000s ease-in-out 0s;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 80px rgba(107, 70, 193, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.4),
+      0 0 100px rgba(107, 70, 193, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 }
 
-.formField:focus {
-  border-color: $light-purple;
-  box-shadow: 0 0 0 2px rgba($light-purple, 0.25);
-  outline: none;
+.logoContainer {
+  margin-bottom: 32px;
 }
 
-/* Checkbox Wrapper */
-.checkboxWrapper {
+.logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(107, 70, 193, 0.3));
+}
+
+// Toggle Navigation
+.toggleNav {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 16px;
+  margin-bottom: 32px;
+  background: rgba(20, 20, 30, 0.6);
+  border-radius: 12px;
+  padding: 6px;
+  position: relative;
 }
 
-.checkbox {
-  margin-right: 8px;
-  accent-color: $light-purple;
-}
-
-.checkboxLabel {
-  font-size: 18px;
-  color: $white;
-}
-
-/* Terms Link */
-.termsLink {
-  cursor: pointer;
-  color: $light-purple;
-  text-decoration: underline;
-}
-
-/* Form Button */
-.formButton {
-  width: 100%;
-  background-color: $light-purple;
-  padding: 18px;
+.toggleButton {
+  flex: 1;
+  font-family: $open-sauce;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 24px;
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
+  background: transparent;
+  color: $dark-white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+
+  &:hover {
+    color: $white;
+  }
+
+  &.active {
+    background: linear-gradient(135deg, $dark-purple 0%, $light-purple 100%);
+    color: $white;
+    box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
+  }
+}
+
+// Titles and Descriptions
+.title {
+  font-family: $open-sauce;
+  font-size: 28px;
   font-weight: 700;
-  font-size: 22px;
   color: $white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 24px;
+  margin-bottom: 12px;
+  line-height: 1.2;
+  
+  background: linear-gradient(135deg, $white 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.formButton:hover {
-  background-color: $dark-purple;
-}
-
-/* Forgot Password */
-.forgotPassword {
-  text-align: right;
+.description {
+  font-family: $open-sauce;
   font-size: 15px;
-  color: $light-purple;
-  cursor: pointer;
-  text-decoration: underline;
+  color: $dark-white;
+  margin-bottom: 24px;
+  line-height: 1.5;
 }
 
-/* Footer */
-.footer {
-  grid-row: 3;
-  text-align: center;
-  padding: 16px;
-  color: $white;
-  font-size: 13px;
-}
-
-/* Responsive Media Queries */
-@media (max-width: 768px) {
-  .header {
-    padding: 15px;
-  }
-
-  .logo {
-    font-size: 28px;
-    margin-left: 10px;
-  }
-
-  .formWrapper {
-    width: 90%;
-    padding: 18px;
-  }
-
-  .toggleButton {
-    font-size: 15px;
-    padding: 8px 0;
-  }
-
-  .loginHeading,
-  .signupHeading {
-    font-size: 38px;
-  }
-
-  .loginDescription,
-  .signupDescription {
-    font-size: 16px;
-  }
-
-  .formField {
-    font-size: 16px;
-    padding: 10px;
-  }
-
-  .formButton {
-    font-size: 16px;
-    padding: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo {
-    font-size: 20px;
-  }
-
-  .loginHeading,
-  .signupHeading {
-    font-size: 38px;
-  }
-
-  .formWrapper {
-    padding: 10px;
-  }
-
-  .formField {
-    font-size: 16px;
-    padding: 10px;
-  }
-
-  .formButton {
-    font-size: 16px;
-    padding: 10px;
-  }
-}
-
-.fieldError {
-  color: #ef4444;
-  font-size: 17px;
-  margin-top: -8px;
-  margin-bottom: 14px;
-  padding-left: 2px;
-}
-
-.errorField {
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 0 2px rgba(239,68,68,0.15) !important;
-}
-
-.dateField::-webkit-calendar-picker-indicator {
-  filter: invert(1) brightness(2);
-}
-.dateField::-moz-calendar-picker-indicator {
-  filter: invert(1) brightness(2);
-}
-.dateField::-ms-input-placeholder {
-  color: $white;
-}
-.dateField::placeholder {
-  color: $white;
-}
-
-label {
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-
-.errorBox {
-  background: rgba(239,68,68,0.12);
-  border: 1.5px solid #ef4444;
-  color: #fca5a5;
-  border-radius: 8px;
-  padding: 10px 16px;
-  margin-bottom: 16px;
-  text-align: center;
-  font-weight: 500;
-  box-shadow: 0 2px 8px 0 rgba(239,68,68,0.10);
+// Success and Error Messages
+.successMessage,
+.errorMessage {
   display: flex;
   align-items: center;
-  gap: 8px;
   justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-family: $open-sauce;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.successBox {
-  background: rgba(16,185,129,0.12);
-  border: 1.5px solid #10b981;
+.successMessage {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   color: #6ee7b7;
-  border-radius: 8px;
-  padding: 10px 16px;
-  margin-bottom: 16px;
-  text-align: center;
-  font-weight: 500;
-  box-shadow: 0 2px 8px 0 rgba(16,185,129,0.10);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
 }
 
-.passwordEyeButton {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
+.errorMessage {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+}
+
+.messageIcon {
   font-size: 18px;
-  transition: color 0.2s, box-shadow 0.2s;
 }
 
-.signupGrid {
+// Form Styles
+.form {
+  text-align: left;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-.relativeWrapper {
+.label {
+  font-family: $open-sauce;
+  font-weight: 600;
+  color: $white;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.inputContainer,
+.passwordInputContainer {
   position: relative;
 }
 
-.termsLinkButton {
+.inputIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $dark-white;
+  font-size: 16px;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.input {
+  width: 100%;
+  font-family: $open-sauce;
+  padding: 14px 16px 14px 48px;
+  border: 2px solid rgba(107, 70, 193, 0.2);
+  border-radius: 12px;
+  background: rgba(30, 30, 42, 0.8);
+  color: $white;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  
+  &::placeholder {
+    color: $dark-white;
+  }
+  
+  &:focus {
+  outline: none;
+    border-color: $dark-purple;
+    box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+    background: rgba(30, 30, 42, 1);
+    
+    ~ .inputIcon {
+      color: $dark-purple;
+    }
+  }
+  
+  &.errorInput {
+    border-color: $danger;
+    
+    &:focus {
+      border-color: $danger;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  // Autofill styles
+  &:-webkit-autofill,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px rgba(30, 30, 42, 1) inset !important;
+    box-shadow: 0 0 0 1000px rgba(30, 30, 42, 1) inset !important;
+    -webkit-text-fill-color: $white !important;
+    caret-color: $white !important;
+    border-color: rgba(107, 70, 193, 0.2);
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}
+
+.passwordInput {
+  padding-right: 48px;
+}
+
+.dateInput {
+  cursor: pointer;
+  
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(0.8);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.eyeButton {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
-  color: #a78bfa;
+  color: $dark-white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease;
+  padding: 4px;
+  
+  &:hover {
+    color: $light-purple;
+  }
+  
+  &:focus {
+  outline: none;
+  }
+}
+
+.error {
+  font-family: $open-sauce;
+  font-size: 13px;
+  color: $danger;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+// Forgot Password Link
+.forgotPasswordLink {
+  text-align: right;
+  margin-bottom: 20px;
+  margin-top: -4px;
+}
+
+.link {
+  font-family: $open-sauce;
+  font-size: 13px;
+  color: $light-purple;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: $dark-purple;
+    text-decoration: underline;
+  }
+}
+
+// Checkbox
+.checkboxContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.checkbox {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: $light-purple;
+  flex-shrink: 0;
+}
+
+.checkboxLabel {
+  font-family: $open-sauce;
+  font-size: 13px;
+  color: $dark-white;
+  line-height: 1.5;
+  cursor: pointer;
+  user-select: none;
+}
+
+.termsButton {
+  background: none;
+  border: none;
+  color: $light-purple;
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
-  margin-left: 2px;
+  font-family: $open-sauce;
+  font-size: 13px;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: $dark-purple;
+  }
+}
+
+// Submit Button
+.submitButton {
+  font-family: $open-sauce;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, $dark-purple 0%, $light-purple 100%);
+  color: white;
+  box-shadow: 0 8px 20px rgba(107, 70, 193, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+  
+  &:hover:not(:disabled)::before {
+    left: 100%;
+  }
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(107, 70, 193, 0.4);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.buttonIcon {
+  font-size: 16px;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .authPage {
+    padding: 16px;
+  }
+  
+  .container {
+    max-width: 100%;
+  }
+  
+  .card {
+    padding: 36px 28px;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .description {
+    font-size: 14px;
+  }
+
+  .toggleButton {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+  
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .input {
+    padding: 12px 14px 12px 40px;
+    font-size: 14px;
+  }
+  
+  .inputIcon {
+    left: 12px;
+    font-size: 14px;
+  }
+  
+  .backButton {
+    padding: 10px 16px;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .backIcon {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+  
+  .backButton {
+    padding: 8px 14px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+  }
+  
+  .backIcon {
+    font-size: 13px;
+  }
+  
+  .backText {
+    font-size: 13px;
+  }
+  
+  .logoContainer {
+    margin-bottom: 24px;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .title {
+    font-size: 22px;
+  }
+  
+  .toggleNav {
+    gap: 8px;
+    padding: 4px;
+  }
+  
+  .toggleButton {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+  
+  .submitButton {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+  
+  .gradientOrb1,
+  .gradientOrb2,
+  .gradientOrb3 {
+    filter: blur(40px);
+  }
+  
+  .backButton {
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 8px;
+  }
+  
+  .backIcon {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .card {
+    padding: 24px 16px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .description {
+    font-size: 13px;
+  }
+  
+  .backButton {
+    padding: 7px 12px;
+    font-size: 11px;
+    gap: 7px;
+  border-radius: 8px;
+  }
+  
+  .backIcon {
+    font-size: 11px;
+  }
+  
+  .backText {
+    font-size: 11px;
+  }
+  
+  .input {
+    padding: 10px 12px 10px 36px;
+    font-size: 13px;
+  }
+  
+  .toggleNav {
+    margin-bottom: 20px;
+  }
+  
+  .submitButton {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  .checkboxLabel {
+    font-size: 12px;
+  }
 }

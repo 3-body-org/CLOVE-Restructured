@@ -486,7 +486,8 @@ export const useChallengeService = (userId, paramSubtopicId) => {
           type: currentChallenge.mode,
           is_correct: (challengeState === CHALLENGE_STATES.RESUMED || challengeState === CHALLENGE_STATES.EXPIRED) ? false : validationResult.isCorrect,
           time_spent: adaptiveTimeSpent,
-          completed_type: true
+          completed_type: true,
+          points: (challengeState === CHALLENGE_STATES.RESUMED || challengeState === CHALLENGE_STATES.EXPIRED) ? 0 : validationResult.points
         };
         
         await post('/statistics/challenge', statisticsPayload);

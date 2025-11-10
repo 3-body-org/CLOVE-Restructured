@@ -1,4 +1,4 @@
-@use "/variables" as *; /* import the global variable from _variables.scss */
+@use "/variables" as *;
 
 /* GLOBAL STYLES */
 .page {
@@ -9,17 +9,19 @@
   position: relative;
 }
 
-
-
 /* ===== HERO SECTION ===== */
 .hero {
-  padding: 100px 0;
+  padding: 120px 0 100px;
   position: relative;
+  z-index: 10;
 }
 
 .wideContainer {
-  padding: 0;
-  margin: 0;
+  padding: 0 40px;
+  margin: 0 auto;
+  max-width: 1400px;
+  position: relative;
+  z-index: 10;
 }
 
 /* Hero Title & Paragraph */
@@ -40,6 +42,7 @@
   background-clip: text;
   animation: slideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
+  text-shadow: 0 0 60px rgba(139, 92, 246, 0.3);
 }
 
 .heroTitle::before {
@@ -49,19 +52,23 @@
   left: -8px;
   right: -8px;
   bottom: -8px;
-  background: linear-gradient(45deg, rgba(139, 92, 246, 0.05), transparent, rgba(124, 58, 237, 0.05));
+  background: linear-gradient(45deg, 
+    rgba(139, 92, 246, 0.08), 
+    transparent, 
+    rgba(124, 58, 237, 0.08));
   border-radius: 16px;
   z-index: -1;
-  filter: blur(12px);
+  filter: blur(16px);
 }
 
 .heroParagraph {
-  font-size: 24px;
+  font-size: 22px;
   line-height: 1.7;
   margin-bottom: 45px;
   color: rgba(255, 255, 255, 0.85);
   font-weight: 400;
   animation: slideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s both;
+  letter-spacing: 0.3px;
 }
 
 /* Buttons */
@@ -69,19 +76,25 @@
   display: flex;
   gap: 20px;
   animation: slideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.4s both;
+  position: relative;
+  z-index: 10;
 }
 
 .heroButtons button {
-  width: 180px;
-  height: 70px;
-  font-size: 20px;
+  font-family: $open-sauce;
+  min-width: 200px;
+  height: 60px;
+  padding: 0 32px;
+  font-size: 17px;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  border: 2px solid rgba(139, 92, 246, 0.3);
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  border-radius: 18px;
+  border-radius: 14px;
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.5px;
+  z-index: 1;
 }
 
 .heroButtons button::before {
@@ -91,36 +104,37 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.6s ease;
 }
 
 .heroButtons button:hover::before {
   left: 100%;
 }
 
-.learnMoreBtn {
-  background: linear-gradient(135deg, $light-purple 0%, $dark-purple 100%);
-  color: $white;
-  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
-}
-
-.learnMoreBtn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 35px rgba(139, 92, 246, 0.4);
-}
-
 .signUpBtn {
-  background: rgba(255, 255, 255, 0.05);
-  color: $light-purple;
-  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, $dark-purple 0%, $light-purple 100%);
+  color: $white;
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
 }
 
 .signUpBtn:hover {
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5);
+}
+
+.learnMoreBtn {
+  background: transparent;
+  color: $light-purple;
+  border-color: rgba(139, 92, 246, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.learnMoreBtn:hover {
   background: rgba(139, 92, 246, 0.1);
   color: $white;
-  border-color: rgba(139, 92, 246, 0.5);
-  transform: translateY(-3px) scale(1.05);
+  border-color: $light-purple;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
 }
 
 /* Hero Image */
@@ -155,9 +169,24 @@
 
 .heroImg:hover {
   transform: scale(1.02);
-  box-shadow: 
-    0 25px 50px rgba(139, 92, 246, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.heroImg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(139, 92, 246, 0.15);
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: -1;
+}
+
+.heroImg:hover::after {
+  opacity: 1;
 }
 
 .heroImg:hover::before {
@@ -178,8 +207,12 @@
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {
+  .wideContainer {
+    padding: 0 30px;
+  }
+
   .hero {
-    padding: 80px 0;
+    padding: 100px 0 80px;
   }
 
   .heroTitle {
@@ -187,7 +220,7 @@
   }
 
   .heroParagraph {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .heroImg {
@@ -200,13 +233,12 @@
 }
 
 @media (max-width: 768px) {
-  .header {
-    padding: 20px 40px;
-    align-items: center;
+  .wideContainer {
+    padding: 0 20px;
   }
-  
-  .hero .container {
-    padding: 0 40px;
+
+  .hero {
+    padding: 80px 0 60px;
   }
 
   .heroTitle {
@@ -214,7 +246,8 @@
   }
 
   .heroParagraph {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 35px;
   }
 
   .heroButtons {
@@ -222,9 +255,9 @@
   }
 
   .heroButtons button {
-    width: 160px;
-    height: 65px;
-    font-size: 18px;
+    min-width: 160px;
+    height: 54px;
+    font-size: 16px;
   }
 
   .heroImg {
@@ -233,16 +266,12 @@
 }
 
 @media (max-width: 480px) {
-  .header {
-    padding: 15px 20px;
-  }
-  
-  .hero .container {
-    padding: 0 20px;
+  .wideContainer {
+    padding: 0 16px;
   }
 
-  .logo {
-    font-size: 42px;
+  .hero {
+    padding: 60px 0 40px;
   }
 
   .heroTitle {
@@ -250,7 +279,8 @@
   }
 
   .heroParagraph {
-    font-size: 18px;
+    font-size: 16px;
+    margin-bottom: 30px;
   }
 
   .heroButtons {
@@ -260,8 +290,8 @@
 
   .heroButtons button {
     width: 100%;
-    height: 55px;
-    font-size: 18px;
+    height: 52px;
+    font-size: 16px;
   }
 
   .heroImg {
@@ -269,5 +299,42 @@
     max-width: 400px;
     height: auto;
     border-radius: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .wideContainer {
+    padding: 0 12px;
+  }
+
+  .hero {
+    padding: 50px 0 35px;
+  }
+
+  .heroTitle {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .heroParagraph {
+    font-size: 15px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+  }
+
+  .heroButtons {
+    gap: 10px;
+  }
+
+  .heroButtons button {
+    height: 48px;
+    font-size: 15px;
+    min-width: 100%;
+    padding: 0 24px;
+  }
+
+  .heroImg {
+    max-width: 100%;
+    border-radius: 12px;
   }
 }

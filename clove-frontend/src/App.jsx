@@ -1,5 +1,5 @@
 //router
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 //bootstrap
@@ -50,6 +50,9 @@ const AssessmentPage = lazy(() => import("components/assessments/Assessment"));
 const AssessmentResultPage = lazy(() => import("components/assessments/AssessmentResult"));
 const AssessmentInstructions = lazy(() => import("components/assessments/AssessmentInstructions"));
 
+// Onboarding Feature
+const OnboardingFlow = lazy(() => import("features/onboarding/OnboardingFlow"));
+
 //components
 import Layout from "components/layout/Sidebar/Layout";
 
@@ -57,12 +60,14 @@ import Layout from "components/layout/Sidebar/Layout";
 import { MyDeckProvider } from "contexts/MyDeckContext";
 import ThemeProvider from "features/mydeck/providers/ThemeProvider";
 import { AuthProvider, useAuth } from "contexts/AuthContext";
+import { JoyrideProvider } from "contexts/JoyrideContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ErrorBoundary from "components/error_fallback/ErrorBoundary";
 import NotFoundPage from "components/error_fallback/NotFoundPage";
 import { ServerStatusProvider, useServerStatus } from "contexts/ServerStatusContext";
 import ServerDownPage from "components/error_fallback/ServerDownPage";
+import JoyrideTour from "features/joyride/JoyrideTour";
 
 // Loading component with consistent styling
 const LoadingSpinner = ({ message = "Loading..." }) => (
@@ -99,8 +104,17 @@ const LoadingSpinner = ({ message = "Loading..." }) => (
 );
 
 // Protected Route component that checks authentication
-function ProtectedRoute({ children }) {
-  const { user, loading, token } = useAuth();
+function ProtectedRoute({ children, path }) {
+  // Add defensive check for context availability (handles HMR/react-refresh timing issues)
+  let authContext;
+  try {
+    authContext = useAuth();
+  } catch (error) {
+    // If context isn't available yet (e.g., during HMR), return loading state
+    return <LoadingSpinner message="Initializing..." />;
+  }
+  
+  const { user, loading, token } = authContext || {};
   
   if (loading) {
     return <LoadingSpinner message="Loading your profile..." />;
@@ -116,13 +130,37 @@ function ProtectedRoute({ children }) {
     return <LoadingSpinner message="Verifying your session..." />;
   }
   
+  // Check if user needs onboarding
+  if (user && user.onboarding_completed === false && path !== "/onboarding") {
+    return <Navigate to="/onboarding" replace />;
+  }
+  
+  // If user completed onboarding but is on onboarding page, redirect to dashboard
+  if (user && user.onboarding_completed && path === "/onboarding") {
+    return <Navigate to="/dashboard" replace />;
+  }
+  
+  // For onboarding page, don't use layout
+  if (path === "/onboarding") {
+    return children;
+  }
+  
   // User is authenticated, render the protected content with layout
   return <Layout>{children}</Layout>;
 }
 
 // Public Route component that redirects authenticated users away from public pages
 function PublicRoute({ children }) {
-  const { user, loading, token } = useAuth();
+  // Add defensive check for context availability
+  let authContext;
+  try {
+    authContext = useAuth();
+  } catch (error) {
+    // If context isn't available yet, allow public access
+    return children;
+  }
+  
+  const { user, loading, token } = authContext || {};
   
   if (loading) {
     return <LoadingSpinner />;
@@ -137,8 +175,21 @@ function PublicRoute({ children }) {
   return children;
 }
 
+// Onboarding wrapper component
+const OnboardingWrapper = () => {
+  const navigate = useNavigate();
+  
+  const handleOnboardingComplete = (userData) => {
+    // Redirect to dashboard after onboarding completion
+    navigate('/dashboard', { replace: true });
+  };
+  
+  return <OnboardingFlow onComplete={handleOnboardingComplete} />;
+};
+
 // Route configuration for better maintainability
 const protectedRoutes = [
+  { path: "/onboarding", element: <OnboardingWrapper /> },
   { path: "/dashboard", element: <DashboardPage /> },
   { path: "/progress", element: <ProgressPage /> },
   { path: "/profile", element: <ProfilePage /> },
@@ -185,44 +236,47 @@ function AppContent() {
       />
         <Router>
           <AuthProvider>
-          <MyDeckProvider>
-            <ThemeProvider>
-              <Container fluid className="app-container p-0 m-0">
-                <Suspense fallback={<LoadingSpinner message="Loading page..." />}>
-                  <Routes>
-                    {/* Public Pages (No Sidebar) */}
-                    {publicRoutes.map(({ path, element }) => (
-                      <Route 
-                        key={path}
-                        path={path} 
-                        element={
-                          path === "/" ? element : (
-                            <PublicRoute>{element}</PublicRoute>
-                          )
-                        } 
-                      />
-                    ))}
-                    
-                    {/* Protected Pages (With Sidebar) */}
-                    {protectedRoutes.map(({ path, element }) => (
-                      <Route
-                        key={path}
-                        path={path}
-                        element={
-                          <ProtectedRoute>
-                            {element}
-                          </ProtectedRoute>
-                        }
-                      />
-                    ))}
-                    
-                    {/* Catch-all route for unmatched URLs */}
-                    <Route path="*" element={<NotFoundPage />} />
-                  </Routes>
-                </Suspense>
-              </Container>
-            </ThemeProvider>
-          </MyDeckProvider>
+            <MyDeckProvider>
+              <ThemeProvider>
+                <JoyrideProvider>
+                  <JoyrideTour />
+                  <Container fluid className="app-container p-0 m-0">
+                    <Suspense fallback={<LoadingSpinner message="Loading page..." />}>
+                      <Routes>
+                        {/* Public Pages (No Sidebar) */}
+                        {publicRoutes.map(({ path, element }) => (
+                          <Route 
+                            key={path}
+                            path={path} 
+                            element={
+                              path === "/" ? element : (
+                                <PublicRoute>{element}</PublicRoute>
+                              )
+                            } 
+                          />
+                        ))}
+                        
+                        {/* Protected Pages (With Sidebar) */}
+                        {protectedRoutes.map(({ path, element }) => (
+                          <Route
+                            key={path}
+                            path={path}
+                            element={
+                              <ProtectedRoute path={path}>
+                                {element}
+                              </ProtectedRoute>
+                            }
+                          />
+                        ))}
+                        
+                        {/* Catch-all route for unmatched URLs */}
+                        <Route path="*" element={<NotFoundPage />} />
+                      </Routes>
+                    </Suspense>
+                  </Container>
+                </JoyrideProvider>
+              </ThemeProvider>
+            </MyDeckProvider>
           </AuthProvider>
         </Router>
     </>

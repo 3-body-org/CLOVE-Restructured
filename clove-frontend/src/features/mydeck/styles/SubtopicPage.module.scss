@@ -107,7 +107,7 @@
   font-family: 'Cinzel', serif; 
   letter-spacing: 0.04em; 
 }
-.backgroundImage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none; user-select: none; }
+.backgroundImage { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; pointer-events: none; user-select: none; }
 .blur { filter: blur(4px); }
 
 .introductionButtonContainer {

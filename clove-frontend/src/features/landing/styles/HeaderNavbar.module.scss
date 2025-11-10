@@ -1,55 +1,69 @@
-@use "/variables" as *; /* import the global variable from _variables.scss */
+@use "/variables" as *;
 
 /* ===== HEADER ===== */
 .header {
-  padding: 0 20px;
-  background-color: $black;
+  padding: 20px 40px;
+  background: rgba(20, 20, 30, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(107, 70, 193, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
+  height: 90px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .logoSection {
   display: flex;
   align-items: center;
-}
-
-.logoImg {
-  width: 50px;
-  height: auto;
-  margin-left: 8px;
-  filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3));
+  gap: 12px;
 }
 
 .logo {
-  font-size: 58px;
+  font-family: $open-sauce;
+  font-size: 48px;
   font-weight: 900;
-  color: $white;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, $light-purple 100%);
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, $light-purple 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: none;
+  letter-spacing: -1px;
+}
+
+.logoImg {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4));
+  transition: all 0.3s ease;
 }
 
 .headerButtons {
   display: flex;
-  justify-content: flex-end;
-  gap: 15px;
+  align-items: center;
+  gap: 16px;
 }
 
 .headerButtons button {
-  width: 85px;
-  height: 50px;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  font-family: $open-sauce;
+  min-width: 100px;
+  height: 46px;
+  padding: 0 24px;
+  border: 2px solid rgba(139, 92, 246, 0.3);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   border-radius: 12px;
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.3px;
 }
 
 .headerButtons button::before {
@@ -59,34 +73,86 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s ease;
 }
 
 .headerButtons button:hover::before {
   left: 100%;
 }
 
-.loginBtnBtn {
-  background: linear-gradient(135deg, $light-purple 0%, $dark-purple 100%);
-  color: $white;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-}
-
-.loginBtnBtn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
-}
-
 .signUpBtnBtn {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   color: $light-purple;
-  backdrop-filter: blur(10px);
+  border-color: rgba(139, 92, 246, 0.4);
 }
 
 .signUpBtnBtn:hover {
   background: rgba(139, 92, 246, 0.1);
   color: $white;
-  border-color: rgba(139, 92, 246, 0.5);
-  transform: translateY(-2px) scale(1.05);
-} 
+  border-color: $light-purple;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+}
+
+.loginBtnBtn {
+  background: linear-gradient(135deg, $dark-purple 0%, $light-purple 100%);
+  color: $white;
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+
+.loginBtnBtn:hover {
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5);
+  border-color: transparent;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
+    height: 75px;
+  }
+
+  .logo {
+    font-size: 36px;
+  }
+
+  .logoImg {
+    width: 35px;
+    height: 35px;
+  }
+
+  .headerButtons {
+    gap: 10px;
+  }
+
+  .headerButtons button {
+    min-width: 80px;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 16px;
+    height: 65px;
+  }
+
+  .logo {
+    font-size: 28px;
+  }
+
+  .logoImg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .headerButtons button {
+    min-width: 70px;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+}

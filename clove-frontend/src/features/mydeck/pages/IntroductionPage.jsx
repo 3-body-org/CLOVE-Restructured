@@ -62,6 +62,8 @@ import { useAuth } from "contexts/AuthContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 import DOMPurify from 'dompurify';
+import Topic1Background from "assets/background/Topic1Background.webp";
+import ImageThemeBackground from "features/mydeck/components/ImageThemeBackground";
 
 /**
  * IntroductionPage
@@ -88,6 +90,13 @@ const IntroductionPage = () => {
 
   // Check if user is coming from subtopic page
   const isFromSubtopic = new URLSearchParams(location.search).get('from') === 'subtopic';
+  
+  // Extract numeric topic ID for checking if it's topic 1
+  const numericTopicId = useMemo(() => {
+    return topicId ? parseInt(topicId.split('-')[0]) : null;
+  }, [topicId]);
+  
+  const isTopic1 = numericTopicId === 1;
 
   // Load topic data and update recent topic
   useEffect(() => {
@@ -224,6 +233,15 @@ const IntroductionPage = () => {
     <div
       className={`${styles.container} ${isSpaceTheme ? styles.spaceTheme : ""} ${isWizardTheme ? styles.wizardTheme : ""} ${isDetectiveTheme ? styles.detectiveTheme : ""}`}
     >
+      {/* Topic 1 specific background */}
+      {isTopic1 && (
+        <ImageThemeBackground 
+          src={Topic1Background} 
+          alt="Topic 1 Background" 
+          blur={false}
+        />
+      )}
+      {/* Theme backgrounds - show runes/animations on top of topic 1 background */}
       {isSpaceTheme && <SpaceBackground />}
       {isWizardTheme && <RuneBackground />}
       {isDetectiveTheme && <RainfallBackground />}

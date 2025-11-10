@@ -22,6 +22,7 @@ class Statistic(Base):
 
     # — Challenges & Modes, raw counts —
     total_challenges_solved = Column(Integer, default=0, nullable=False)
+    total_points    = Column(Integer, default=0, nullable=False, comment="Total points earned from all challenges")
     mode_stats      = Column(
         JSON,
         nullable=False,

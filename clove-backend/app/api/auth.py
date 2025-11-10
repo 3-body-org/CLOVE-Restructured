@@ -28,7 +28,6 @@ from app.utils.security import (
     create_verification_token_expires,
     create_reset_token_expires
 )
-from app.crud.statistic import update_login_streak
 from app.services.email import email_service
 from app.core.config import settings
 
@@ -208,8 +207,8 @@ async def login(
     user.is_active = True
     await db.commit()
 
-    # Update login streak (NEW: always update on login)
-    await update_login_streak(db, user.id, datetime.now(timezone.utc).date())
+    # Note: Login streak is updated by frontend AuthContext after successful login
+    # to avoid duplicate streak updates
 
     # Create tokens
     access_token = create_access_token(data={"sub": str(user.id)})

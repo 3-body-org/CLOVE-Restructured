@@ -4,12 +4,16 @@
   display: flex; // Ensures sidebar and content are in the same row
   width: 100%;
   min-height: 100vh;
+  position: relative;
 }
 
 .sidebarContainer {
   transition: width 0.3s ease-in-out;
   background-color: #3f05df;
   min-height: 100vh;
+  height: auto; /* Allow height to grow naturally */
+  display: flex; /* Ensure flex layout for sidebar */
+  flex-direction: column; /* Stack sidebar vertically */
 }
 
 .mainContent {
@@ -19,4 +23,80 @@
   // width: 100%;
   overflow-y: auto;
   transition: margin-left 0.3s ease-in-out;
+}
+
+/* Tablet & Mobile - Ensure main content uses full width when sidebar is hidden */
+@media (max-width: 768px) {
+  .mainContent {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .sidebarContainer {
+    width: 0; // Hide sidebar container when collapsed
+  }
+}
+
+/* Mobile Menu Button */
+.mobileMenuButton {
+  display: none;
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 1050;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(139, 92, 246, 0.9);
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  
+  &:hover {
+    background: rgba(139, 92, 246, 1);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Mobile Overlay */
+.mobileOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Show mobile elements on tablet and mobile screens */
+@media (max-width: 768px) {
+  .mobileMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mobileOverlay {
+    display: block;
+  }
 }

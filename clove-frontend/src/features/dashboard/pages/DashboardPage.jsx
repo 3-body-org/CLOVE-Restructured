@@ -7,6 +7,7 @@ import {
   faCheck,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 import styles from "features/dashboard/styles/DashboardPage.module.scss";
 import { DashboardAnalytics } from "features/dashboard/components/DashboardAnalytics";
 import TitleAndProfile from "components/layout/Navbar/TitleAndProfile";
@@ -17,9 +18,14 @@ import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 import { useSidebar } from "../../../components/layout/Sidebar/Layout";
 import { useMyDeckService } from "../../mydeck/hooks/useMydeckService";
+import LevelXPBar from "../components/LevelXPBar";
+import EnhancedStreak from "../components/EnhancedStreak";
+import AchievementBadges from "../components/AchievementBadges";
 
 // Reusable components
-const CompletedTopicItem = ({ topicNumber, date, badgeText }) => {
+const CompletedTopicItem = ({ topicNumber, date, badgeText, index }) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+  
   const getBadgeClass = (badgeText) => {
     switch (badgeText) {
       case 'Mastered': return styles.badgeMastered;
@@ -31,15 +37,53 @@ const CompletedTopicItem = ({ topicNumber, date, badgeText }) => {
   };
 
   return (
-    <div className={styles.completedTopic}>
+    <motion.div 
+      className={styles.completedTopic}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
       <div className={styles.topicInfo}>
         <h5>
           <FontAwesomeIcon icon={faCheck} /> {topicNumber}
         </h5>
         <small>Completed on {date}</small>
       </div>
-      <div className={`${styles.topicBadge} ${getBadgeClass(badgeText)}`}>{badgeText}</div>
-    </div>
+      <div 
+        className={`${styles.topicBadge} ${getBadgeClass(badgeText)}`}
+      >
+        {badgeText}
+      </div>
+      {isHovered && badgeText === 'Mastered' && (
+        <>
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={i}
+              className={styles.sparkle}
+              style={{
+                left: `${30 + i * 30}%`,
+                top: '50%'
+              }}
+              initial={{ scale: 0, opacity: 1 }}
+              animate={{
+                scale: [0, 1, 0],
+                opacity: [1, 1, 0],
+                y: [-20, -40]
+              }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                delay: i * 0.3
+              }}
+            >
+              ✨
+            </motion.div>
+          ))}
+        </>
+      )}
+    </motion.div>
   );
 };
 
@@ -54,6 +98,7 @@ const Dashboard = () => {
   const { get, post } = useApi();
   const [stats, setStats] = React.useState(null);
   const [topicProgress, setTopicProgress] = React.useState([]);
+  const [totalPoints, setTotalPoints] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
   const navigate = useNavigate();
@@ -90,7 +135,7 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        // Fetch stats and topic progress using consistent service
+        // Fetch stats and topic progress
         const [statsRes, topicsData] = await Promise.all([
           get('/statistics/me'),
           getTopicsWithProgress()
@@ -101,6 +146,8 @@ const Dashboard = () => {
         if (statsRes.ok) {
           const statsData = await statsRes.json();
           setStats(statsData);
+          // Get total points directly from statistics
+          setTotalPoints(statsData.total_points || 0);
         } else {
           setError("Failed to load dashboard stats");
         }
@@ -198,62 +245,99 @@ const Dashboard = () => {
       <main className={styles.dashboard}>
         <TitleAndProfile
           nonColored={"Hello,"}
-          colored={`${user ? (user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.username || "User") : "User"}!`}
+          colored={`${user ? (user.username || (user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || "User")) : "User"}!`}
           description={"Here's your learning journey progress 🌱"}
         />
 
         <div className={styles.mainContent}>
-          <div className={styles.topRow}>
-            <div className={`${styles.card} ${styles.highlight}`}>
-              <h3>
-                <FontAwesomeIcon icon={faBookOpen} /> Most Recent Topic
-              </h3>
-              <p>
-                {stats?.recent_topic ? (
-                  <>You were last seen studying <strong>{stats.recent_topic.title}</strong>. Let's keep going!</>
-                ) : (
-                  <>No recent topic found. Start learning now!</>
-                )}
-              </p>
-              {stats?.recent_topic && (
-                <button
-                  className={styles.resumeButton}
-                  onClick={() => {
-                    const recentTopicId = stats.recent_topic.topic_id;
-                    const recentTopicSlug = stats.recent_topic.title
-                      ? stats.recent_topic.title.toLowerCase().replace(/\s+/g, '-')
-                      : `topic-${recentTopicId}`;
-                    const topicObj = topicProgress.find(
-                      tp => tp.topic?.topic_id === recentTopicId
-                    );
-                    if (topicObj && topicObj.introduction_seen) {
-                      navigate(`/my-deck/${recentTopicId}-${recentTopicSlug}`);
-                    } else {
-                      navigate(`/my-deck/${recentTopicId}-${recentTopicSlug}/introduction`);
-                    }
-                    closeSidebar(); // Close sidebar after navigation
-                  }}
-                >
-                  Resume Topic <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-              )}
-            </div>
+          {/* Level and XP Bar */}
+          <LevelXPBar totalPoints={totalPoints} />
 
-            <div className={styles.card}>
+          <div className={styles.topRow}>
+            <motion.div 
+              className={`${styles.card} ${styles.recentTopicCard}`}
+              data-joyride="continue-learning"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <h3>
+                <FontAwesomeIcon icon={faBookOpen} /> Continue Learning
+              </h3>
+              <span className={styles.recentTopicSubtitle}>Pick up where you left off</span>
+
+              {/* Topic Content Section */}
+              <div className={styles.recentTopicContent}>
+                {stats?.recent_topic ? (
+                  <div className={styles.topicContentWrapper}>
+                    <div className={styles.topicBadge}>
+                      <FontAwesomeIcon icon={faBookOpen} className={styles.topicBadgeIcon} />
+                      <span className={styles.topicBadgeText}>Last Studied</span>
+                    </div>
+                    <h4 className={styles.topicName}>{stats.recent_topic.title}</h4>
+                    <p className={styles.topicMessage}>
+                      Keep the momentum going! 🚀
+                    </p>
+                  </div>
+                ) : (
+                  <div className={styles.noTopicWrapper}>
+                    <div className={styles.noTopicIcon}>🎯</div>
+                    <p className={styles.noTopicMessage}>
+                      No recent topic found. Start your learning journey now!
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Resume Button Section */}
+              {stats?.recent_topic && (
+                <div className={styles.resumeButtonWrapper}>
+                  <motion.button
+                    className={styles.resumeButton}
+                    onClick={() => {
+                      const recentTopicId = stats.recent_topic.topic_id;
+                      const recentTopicSlug = stats.recent_topic.title
+                        ? stats.recent_topic.title.toLowerCase().replace(/\s+/g, '-')
+                        : `topic-${recentTopicId}`;
+                      const topicObj = topicProgress.find(
+                        tp => tp.topic?.topic_id === recentTopicId
+                      );
+                      if (topicObj && topicObj.introduction_seen) {
+                        navigate(`/my-deck/${recentTopicId}-${recentTopicSlug}`);
+                      } else {
+                        navigate(`/my-deck/${recentTopicId}-${recentTopicSlug}/introduction`);
+                      }
+                      closeSidebar();
+                    }}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span>Resume Topic</span>
+                    <FontAwesomeIcon icon={faArrowRight} className={styles.buttonIcon} />
+                  </motion.button>
+                </div>
+              )}
+
+              {/* Decorative Elements */}
+              <div className={styles.cardDecoration}></div>
+            </motion.div>
+
+            <motion.div 
+              className={styles.card}
+              data-joyride="streak-card"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
               <h3>
                 <FontAwesomeIcon icon={faFire} /> Your Streak
               </h3>
-              <div className={styles.streak}>
-                <div className={styles.days}>
-                  {streakDays.map((day, index) => (
-                    <StreakDay key={day} day={day} filled={filledDays.includes(index)} />
-                  ))}
-                </div>
-                <p className={styles.streakText}>
-                  You're on a <strong>{stats?.current_streak || 0}-day streak</strong>. Consistency is key.
-                </p>
-              </div>
-            </div>
+              <EnhancedStreak 
+                currentStreak={stats?.current_streak || 0}
+                loginDaysThisWeek={filledDays}
+                stats={stats}
+              />
+            </motion.div>
           </div>
 
           <DashboardAnalytics
@@ -261,19 +345,36 @@ const Dashboard = () => {
             challengesData={challengesData}
           />
 
-          <div className={`${styles.card} ${styles.bottomHighlight}`}>
+          {/* Achievement Badges - Phase 3 */}
+          <div data-joyride="achievements">
+            <AchievementBadges stats={stats} topicProgress={topicProgress} />
+          </div>
+
+          <motion.div 
+            className={`${styles.card} ${styles.bottomHighlight}`}
+            data-joyride="completed-topics"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+          >
             <h3>
               <FontAwesomeIcon icon={faCheckCircle} /> Completed Topics
             </h3>
             <div className={styles.completedTopics}>
               {completedTopics.length === 0 ? (
-                <div className={styles.noCompletedTopics}>
+                <motion.div 
+                  className={styles.noCompletedTopics}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.9 }}
+                >
                   You haven't completed any topics yet. Keep learning and your completed topics will appear here!
-                </div>
+                </motion.div>
               ) : (
                 completedTopics.map((topic, index) => (
                   <CompletedTopicItem
                     key={index}
+                    index={index}
                     topicNumber={topic.topicNumber}
                     date={topic.date}
                     badgeText={topic.badgeText}
@@ -281,7 +382,7 @@ const Dashboard = () => {
                 ))
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </main>
     </div>
