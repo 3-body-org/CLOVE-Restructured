@@ -1,0 +1,308 @@
+@use "/variables" as *;
+
+.container {
+  margin: 2rem 0;
+}
+
+.sectionHeader {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 900;
+  color: $white;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.modeCard {
+  background: rgba(30, 30, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modeCard:hover {
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.cardBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  opacity: 0.8;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.modeIcon {
+  font-size: 36px;
+  filter: drop-shadow(0 4px 8px currentColor);
+}
+
+.modeInfo {
+  flex: 1;
+}
+
+.modeName {
+  font-size: 18px;
+  font-weight: 700;
+  color: $white;
+  margin-bottom: 0.25rem;
+}
+
+.modeDescription {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.statsGrid {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.statItem {
+  flex: 1;
+}
+
+.accuracyRing {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto;
+}
+
+.ringCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.ringValue {
+  font-size: 20px;
+  font-weight: 900;
+  text-shadow: 0 2px 8px currentColor;
+}
+
+.ringLabel {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.statBox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.statBox:hover {
+  background: rgba(0, 0, 0, 0.3);
+  transform: translateX(5px);
+}
+
+.statIcon {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.statValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: $white;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: auto;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.masteryBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  color: $white;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.masteryIcon {
+  font-size: 20px;
+}
+
+.masteryText {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .modeCard {
+    padding: 1.25rem;
+  }
+  
+  .modeName {
+    font-size: 16px;
+  }
+  
+  .modeIcon {
+    font-size: 32px;
+  }
+  
+  .statsGrid {
+    flex-direction: column;
+  }
+  
+  .accuracyRing {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .title {
+    font-size: 24px;
+  }
+  
+  .subtitle {
+    font-size: 13px;
+  }
+  
+  .modeCard {
+    padding: 1rem;
+  }
+  
+  .cardHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .modeIcon {
+    font-size: 28px;
+  }
+  
+  .modeName {
+    font-size: 15px;
+  }
+  
+  .modeDescription {
+    font-size: 12px;
+  }
+  
+  .accuracyRing {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .ringValue {
+    font-size: 18px;
+  }
+  
+  .statBox {
+    padding: 0.5rem;
+  }
+  
+  .statValue {
+    font-size: 14px;
+  }
+  
+  .statLabel {
+    font-size: 10px;
+  }
+  
+  .masteryBadge {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .masteryIcon {
+    font-size: 18px;
+  }
+  
+  .masteryText {
+    font-size: 12px;
+  }
+}
+

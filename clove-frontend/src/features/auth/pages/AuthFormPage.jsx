@@ -1,19 +1,24 @@
-//react
 import { useState, useEffect } from "react";
-//react router
 import { useNavigate, useLocation, Link } from "react-router-dom";
-//framer motion
-import { motion } from "framer-motion"; //this is being USED, its just flaging as "unused"
-//scss
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "features/auth/styles/AuthFormPage.module.scss";
-//assets
 import CloveLogo from "assets/icons/common/icon-common-clove-logo.png";
-//components
 import TermsAndConditions from "features/auth/components/TermsAndConditions";
 import { useAuth } from "contexts/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import clsx from "clsx"; // for conditional classnames (optional, if available)
+import { 
+  faEye, 
+  faEyeSlash, 
+  faCheckCircle, 
+  faUser, 
+  faEnvelope, 
+  faLock,
+  faCalendar,
+  faSpinner,
+    faTimesCircle,
+  faArrowLeft
+} from "@fortawesome/free-solid-svg-icons";
+import clsx from "clsx";
 import { getEmailValidationError } from "../../../utils/validation";
 
 export default function AuthFormPage() {
@@ -191,26 +196,54 @@ export default function AuthFormPage() {
   }, [error]);
 
   return (
-    <div className={styles.page}>
-      {/* ===== HEADER ===== */}
-      <header className={styles.header}>
-        <div className={styles.logoSection}>
-          <h1 className={styles.logo}>
-            CLOVE
-            <img src={CloveLogo} alt="Clover Logo" className={styles.logoImg} />
-          </h1>
-        </div>
-      </header>
+    <div className={styles.authPage}>
+      {/* Background with animated gradient orbs */}
+      <div className={styles.background}>
+        <div className={styles.gradientOrb1}></div>
+        <div className={styles.gradientOrb2}></div>
+        <div className={styles.gradientOrb3}></div>
+      </div>
+      
+      <motion.div 
+        className={styles.container}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Back Button */}
+        <motion.button
+          className={styles.backButton}
+          onClick={() => navigate("/")}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          whileHover={{ x: -5, scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} className={styles.backIcon} />
+          <span className={styles.backText}>Back</span>
+        </motion.button>
 
-      {/* ===== MAIN CONTENT ===== */}
-      <main className={styles.content}>
-        <div className={styles.formWrapper}>
+        <div className={styles.card}>
+          {/* Logo */}
+          <motion.div 
+            className={styles.logoContainer}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          >
+            <img src={CloveLogo} alt="CLOVE" className={styles.logo} />
+          </motion.div>
+
           {/* Toggle Nav */}
-          <div className={styles.toggleNav}>
+          <motion.div 
+            className={styles.toggleNav}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
             <button
-              className={`${styles.toggleButton} ${
-                !isLogin ? styles.active : ""
-              }`}
+              className={`${styles.toggleButton} ${!isLogin ? styles.active : ""}`}
               onClick={() => { 
                 setIsLogin(false); 
                 setError(""); 
@@ -219,12 +252,10 @@ export default function AuthFormPage() {
                 setSignupErrors({});
               }}
             >
-              <p className={styles.paragraph}>Sign Up</p>
+              Sign Up
             </button>
             <button
-              className={`${styles.toggleButton} ${
-                isLogin ? styles.active : ""
-              }`}
+              className={`${styles.toggleButton} ${isLogin ? styles.active : ""}`}
               onClick={() => { 
                 setIsLogin(true); 
                 setError(""); 
@@ -233,239 +264,331 @@ export default function AuthFormPage() {
                 setSignupErrors({});
               }}
             >
-              <p className={styles.paragraph}>Login</p>
+              Login
             </button>
-          </div>
+          </motion.div>
 
-          {/* Motion Animation */}
-          <motion.div
-            initial={{ opacity: 0, x: isLogin ? 50 : -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: isLogin ? -50 : 50 }}
-            key={isLogin ? "login" : "signup"}
-          >
+          {/* Forms with AnimatePresence */}
+          <AnimatePresence mode="wait">
             {isLogin ? (
-              <div>
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
                 {/* Login Form */}
-                <h2 className={styles.loginHeading}>Log In</h2>
-                <p className={styles.loginDescription}>
+                <h2 className={styles.title}>Welcome Back!</h2>
+                <p className={styles.description}>
                   Nice to see you again!
                 </p>
-                {error && (
-                  <div className={styles.errorBox}>
-                    <FontAwesomeIcon icon={faEyeSlash} style={{ color: "#ef4444", fontSize: 18 }} />
-                    <span>{error}</span>
-                  </div>
-                )}
+
+                {/* Success Message */}
                 {successMessage && (
-                  <div className={styles.successBox}>
-                    <FontAwesomeIcon icon={faCheckCircle} style={{ color: "#10b981", fontSize: 18 }} />
+                  <motion.div 
+                    className={styles.successMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <FontAwesomeIcon icon={faCheckCircle} className={styles.messageIcon} />
                     <span>{successMessage}</span>
-                  </div>
+                  </motion.div>
                 )}
-                <form onSubmit={handleLogin}>
-                  <label htmlFor="login-email">Email*</label>
-                  <input
-                    type="email"
-                    id="login-email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder="Email"
-                    className={clsx(styles.formField, loginErrors.email && styles.errorField)}
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    onFocus={() => {
-                      // Clear error when user focuses on field
-                      setLoginErrors((prev) => ({ ...prev, email: undefined }));
-                    }}
-                    onBlur={(e) => {
-                      setLoginErrors((prev) => ({ ...prev, email: validateLoginField("email", e.target.value) }));
-                    }}
-                  />
-                  {loginErrors.email && <div className={styles.fieldError}>{loginErrors.email}</div>}
-                  <label htmlFor="login-password">Password*</label>
-                  <div className={styles.relativeWrapper}>
-                  <input
-                      type={showPassword ? "text" : "password"}
-                      id="login-password"
-                      name="password"
-                      autoComplete="current-password"
-                    placeholder="Password"
-                      className={clsx(styles.formField, loginErrors.password && styles.errorField)}
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      style={{ paddingRight: 44 }}
-                      onFocus={() => {
-                        // Clear error when user focuses on field
-                        setLoginErrors((prev) => ({ ...prev, password: undefined }));
-                      }}
-                      onBlur={(e) => {
-                        setLoginErrors((prev) => ({ ...prev, password: validateLoginField("password", e.target.value) }));
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((v) => !v)}
-                      className={styles.passwordEyeButton}
-                      style={{ color: showPassword ? "#a78bfa" : "#a3a3a3" }}
-                      tabIndex={-1}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                    >
-                      <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                    </button>
+
+                {/* Error Message */}
+                {error && (
+                  <motion.div 
+                    className={styles.errorMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <FontAwesomeIcon icon={faTimesCircle} className={styles.messageIcon} />
+                    <span>{error}</span>
+                  </motion.div>
+                )}
+
+                <form onSubmit={handleLogin} className={styles.form}>
+                  {/* Email Field */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="login-email" className={styles.label}>
+                      Email *
+                    </label>
+                    <div className={styles.inputContainer}>
+                      <FontAwesomeIcon icon={faEnvelope} className={styles.inputIcon} />
+                      <input
+                        type="email"
+                        id="login-email"
+                        name="email"
+                        autoComplete="email"
+                        placeholder="Enter your email"
+                        className={clsx(styles.input, loginErrors.email && styles.errorInput)}
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        onFocus={() => {
+                          setLoginErrors((prev) => ({ ...prev, email: undefined }));
+                        }}
+                        onBlur={(e) => {
+                          setLoginErrors((prev) => ({ ...prev, email: validateLoginField("email", e.target.value) }));
+                        }}
+                      />
+                    </div>
+                    {loginErrors.email && (
+                      <div className={styles.error}>{loginErrors.email}</div>
+                    )}
                   </div>
-                  {loginErrors.password && <div className={styles.fieldError}>{loginErrors.password}</div>}
-                  <div className={styles.forgotPassword}>
-                    <Link
-                      to="/forgot-password"
-                      className={styles.forgotPassword}
-                    >
+
+                  {/* Password Field */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="login-password" className={styles.label}>
+                      Password *
+                    </label>
+                    <div className={styles.passwordInputContainer}>
+                      <FontAwesomeIcon icon={faLock} className={styles.inputIcon} />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="login-password"
+                        name="password"
+                        autoComplete="current-password"
+                        placeholder="Enter your password"
+                        className={clsx(styles.input, styles.passwordInput, loginErrors.password && styles.errorInput)}
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        onFocus={() => {
+                          setLoginErrors((prev) => ({ ...prev, password: undefined }));
+                        }}
+                        onBlur={(e) => {
+                          setLoginErrors((prev) => ({ ...prev, password: validateLoginField("password", e.target.value) }));
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((v) => !v)}
+                        className={styles.eyeButton}
+                        tabIndex={-1}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                      </button>
+                    </div>
+                    {loginErrors.password && (
+                      <div className={styles.error}>{loginErrors.password}</div>
+                    )}
+                  </div>
+
+                  {/* Forgot Password Link */}
+                  <div className={styles.forgotPasswordLink}>
+                    <Link to="/forgot-password" className={styles.link}>
                       Forgot your password?
                     </Link>
                   </div>
+
+                  {/* Submit Button */}
                   <button 
                     type="submit" 
-                    className={styles.formButton} 
+                    className={styles.submitButton} 
                     disabled={formLoading}
                   >
-                    {formLoading ? "Logging in..." : "Login"}
+                    {formLoading ? (
+                      <>
+                        <FontAwesomeIcon icon={faSpinner} spin className={styles.buttonIcon} />
+                        Logging in...
+                      </>
+                    ) : (
+                      "Login"
+                    )}
                   </button>
                 </form>
-              </div>
+              </motion.div>
             ) : (
-              <div>
+              <motion.div
+                key="signup"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
                 {/* Sign Up Form */}
-                <h2 className={styles.signupHeading}>Sign Up</h2>
-                <p className={styles.signupDescription}>
+                <h2 className={styles.title}>Join CLOVE</h2>
+                <p className={styles.description}>
                   Your journey in programming starts now!
                 </p>
+
+                {/* Error Message */}
                 {error && (
-                  <div className={styles.errorBox}>
-                    <FontAwesomeIcon icon={faEyeSlash} style={{ color: "#ef4444", fontSize: 18 }} />
+                  <motion.div 
+                    className={styles.errorMessage}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <FontAwesomeIcon icon={faTimesCircle} className={styles.messageIcon} />
                     <span>{error}</span>
-                  </div>
+                  </motion.div>
                 )}
-                <form onSubmit={handleSignup}>
-                  <div className={styles.signupGrid}>
-                    <div>
-                      <label htmlFor="signup-firstName">First Name*</label>
-                      <input
-                        type="text"
-                        id="signup-firstName"
-                        name="firstName"
-                        autoComplete="given-name"
-                        placeholder="First Name"
-                        className={clsx(styles.formField, signupErrors.firstName && styles.errorField)}
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        onFocus={() => {
-                          // Clear error when user focuses on field
-                          setSignupErrors((prev) => ({ ...prev, firstName: undefined }));
-                        }}
-                        onBlur={(e) => {
-                          setSignupErrors((prev) => ({ ...prev, firstName: validateSignupField("firstName", e.target.value) }));
-                        }}
-                      />
-                      {signupErrors.firstName && <div className={styles.fieldError}>{signupErrors.firstName}</div>}
+
+                <form onSubmit={handleSignup} className={styles.form}>
+                  {/* First Name & Last Name */}
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="signup-firstName" className={styles.label}>
+                        First Name *
+                      </label>
+                      <div className={styles.inputContainer}>
+                        <FontAwesomeIcon icon={faUser} className={styles.inputIcon} />
+                        <input
+                          type="text"
+                          id="signup-firstName"
+                          name="firstName"
+                          autoComplete="given-name"
+                          placeholder="First Name"
+                          className={clsx(styles.input, signupErrors.firstName && styles.errorInput)}
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          onFocus={() => {
+                            setSignupErrors((prev) => ({ ...prev, firstName: undefined }));
+                          }}
+                          onBlur={(e) => {
+                            setSignupErrors((prev) => ({ ...prev, firstName: validateSignupField("firstName", e.target.value) }));
+                          }}
+                        />
+                      </div>
+                      {signupErrors.firstName && (
+                        <div className={styles.error}>{signupErrors.firstName}</div>
+                      )}
                     </div>
-                    <div>
-                      <label htmlFor="signup-lastName">Last Name*</label>
-                      <input
-                        type="text"
-                        id="signup-lastName"
-                        name="lastName"
-                        autoComplete="family-name"
-                        placeholder="Last Name"
-                        className={clsx(styles.formField, signupErrors.lastName && styles.errorField)}
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        onFocus={() => {
-                          // Clear error when user focuses on field
-                          setSignupErrors((prev) => ({ ...prev, lastName: undefined }));
-                        }}
-                        onBlur={(e) => {
-                          setSignupErrors((prev) => ({ ...prev, lastName: validateSignupField("lastName", e.target.value) }));
-                        }}
-                      />
-                      {signupErrors.lastName && <div className={styles.fieldError}>{signupErrors.lastName}</div>}
+
+                    <div className={styles.formGroup}>
+                      <label htmlFor="signup-lastName" className={styles.label}>
+                        Last Name *
+                      </label>
+                      <div className={styles.inputContainer}>
+                        <FontAwesomeIcon icon={faUser} className={styles.inputIcon} />
+                        <input
+                          type="text"
+                          id="signup-lastName"
+                          name="lastName"
+                          autoComplete="family-name"
+                          placeholder="Last Name"
+                          className={clsx(styles.input, signupErrors.lastName && styles.errorInput)}
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          onFocus={() => {
+                            setSignupErrors((prev) => ({ ...prev, lastName: undefined }));
+                          }}
+                          onBlur={(e) => {
+                            setSignupErrors((prev) => ({ ...prev, lastName: validateSignupField("lastName", e.target.value) }));
+                          }}
+                        />
+                      </div>
+                      {signupErrors.lastName && (
+                        <div className={styles.error}>{signupErrors.lastName}</div>
+                      )}
                     </div>
                   </div>
-                  <label htmlFor="signup-birthday">Birthday*</label>
-                  <input
-                    type="date"
-                    id="signup-birthday"
-                    name="birthday"
-                    autoComplete="bday"
-                    className={clsx(styles.formField, styles.dateField, signupErrors.birthday && styles.errorField)}
-                    value={birthday}
-                    onChange={(e) => setBirthday(e.target.value)}
-                    max={(() => {
-                      const today = new Date();
-                      const minAge = 13;
-                      const maxDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
-                      return maxDate.toISOString().split('T')[0];
-                    })()}
-                    onFocus={() => {
-                      // Clear error when user focuses on field
-                      setSignupErrors((prev) => ({ ...prev, birthday: undefined }));
-                    }}
-                    onBlur={(e) => {
-                      setSignupErrors((prev) => ({ ...prev, birthday: validateSignupField("birthday", e.target.value) }));
-                    }}
-                  />
-                  {signupErrors.birthday && <div className={styles.fieldError}>{signupErrors.birthday}</div>}
-                  <label htmlFor="signup-email">Email*</label>
-                  <input
-                    type="email"
-                    id="signup-email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder="Email"
-                    className={clsx(styles.formField, signupErrors.email && styles.errorField)}
-                    value={signupEmail}
-                    onChange={(e) => setSignupEmail(e.target.value)}
-                    onFocus={() => {
-                      // Clear error when user focuses on field
-                      setSignupErrors((prev) => ({ ...prev, email: undefined }));
-                    }}
-                    onBlur={(e) => {
-                      setSignupErrors((prev) => ({ ...prev, email: validateSignupField("email", e.target.value) }));
-                    }}
-                  />
-                  {signupErrors.email && <div className={styles.fieldError}>{signupErrors.email}</div>}
-                  <label htmlFor="signup-password">Password*</label>
-                  <div className={styles.relativeWrapper}>
-                  <input
-                      type={showSignupPassword ? "text" : "password"}
-                      id="signup-password"
-                      name="password"
-                      autoComplete="new-password"
-                    placeholder="Password"
-                      className={clsx(styles.formField, signupErrors.password && styles.errorField)}
-                      value={signupPassword}
-                      onChange={(e) => setSignupPassword(e.target.value)}
-                      style={{ paddingRight: 44 }}
-                      onFocus={() => {
-                        // Clear error when user focuses on field
-                        setSignupErrors((prev) => ({ ...prev, password: undefined }));
-                      }}
-                      onBlur={(e) => {
-                        setSignupErrors((prev) => ({ ...prev, password: validateSignupField("password", e.target.value) }));
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowSignupPassword((v) => !v)}
-                      className={styles.passwordEyeButton}
-                      style={{ color: showSignupPassword ? "#a78bfa" : "#a3a3a3" }}
-                      tabIndex={-1}
-                      aria-label={showSignupPassword ? "Hide password" : "Show password"}
-                    >
-                      <FontAwesomeIcon icon={showSignupPassword ? faEyeSlash : faEye} />
-                    </button>
+
+                  {/* Birthday */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="signup-birthday" className={styles.label}>
+                      Birthday *
+                    </label>
+                    <div className={styles.inputContainer}>
+                      <FontAwesomeIcon icon={faCalendar} className={styles.inputIcon} />
+                      <input
+                        type="date"
+                        id="signup-birthday"
+                        name="birthday"
+                        autoComplete="bday"
+                        className={clsx(styles.input, styles.dateInput, signupErrors.birthday && styles.errorInput)}
+                        value={birthday}
+                        onChange={(e) => setBirthday(e.target.value)}
+                        max={(() => {
+                          const today = new Date();
+                          const minAge = 13;
+                          const maxDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
+                          return maxDate.toISOString().split('T')[0];
+                        })()}
+                        onFocus={() => {
+                          setSignupErrors((prev) => ({ ...prev, birthday: undefined }));
+                        }}
+                        onBlur={(e) => {
+                          setSignupErrors((prev) => ({ ...prev, birthday: validateSignupField("birthday", e.target.value) }));
+                        }}
+                      />
+                    </div>
+                    {signupErrors.birthday && (
+                      <div className={styles.error}>{signupErrors.birthday}</div>
+                    )}
                   </div>
-                  {signupErrors.password && <div className={styles.fieldError}>{signupErrors.password}</div>}
-                  <div className={`${styles.checkboxWrapper} ${styles.relativeWrapper}`}>
+
+                  {/* Email */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="signup-email" className={styles.label}>
+                      Email *
+                    </label>
+                    <div className={styles.inputContainer}>
+                      <FontAwesomeIcon icon={faEnvelope} className={styles.inputIcon} />
+                      <input
+                        type="email"
+                        id="signup-email"
+                        name="email"
+                        autoComplete="email"
+                        placeholder="Enter your email"
+                        className={clsx(styles.input, signupErrors.email && styles.errorInput)}
+                        value={signupEmail}
+                        onChange={(e) => setSignupEmail(e.target.value)}
+                        onFocus={() => {
+                          setSignupErrors((prev) => ({ ...prev, email: undefined }));
+                        }}
+                        onBlur={(e) => {
+                          setSignupErrors((prev) => ({ ...prev, email: validateSignupField("email", e.target.value) }));
+                        }}
+                      />
+                    </div>
+                    {signupErrors.email && (
+                      <div className={styles.error}>{signupErrors.email}</div>
+                    )}
+                  </div>
+
+                  {/* Password */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="signup-password" className={styles.label}>
+                      Password *
+                    </label>
+                    <div className={styles.passwordInputContainer}>
+                      <FontAwesomeIcon icon={faLock} className={styles.inputIcon} />
+                      <input
+                        type={showSignupPassword ? "text" : "password"}
+                        id="signup-password"
+                        name="password"
+                        autoComplete="new-password"
+                        placeholder="Enter your password (min. 8 characters)"
+                        className={clsx(styles.input, styles.passwordInput, signupErrors.password && styles.errorInput)}
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                        onFocus={() => {
+                          setSignupErrors((prev) => ({ ...prev, password: undefined }));
+                        }}
+                        onBlur={(e) => {
+                          setSignupErrors((prev) => ({ ...prev, password: validateSignupField("password", e.target.value) }));
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowSignupPassword((v) => !v)}
+                        className={styles.eyeButton}
+                        tabIndex={-1}
+                        aria-label={showSignupPassword ? "Hide password" : "Show password"}
+                      >
+                        <FontAwesomeIcon icon={showSignupPassword ? faEyeSlash : faEye} />
+                      </button>
+                    </div>
+                    {signupErrors.password && (
+                      <div className={styles.error}>{signupErrors.password}</div>
+                    )}
+                  </div>
+
+                  {/* Terms and Conditions */}
+                  <div className={styles.checkboxContainer}>
                     <input
                       type="checkbox"
                       id="termsCheckbox"
@@ -478,35 +601,40 @@ export default function AuthFormPage() {
                       {...(termsDeclinedOnce ? { required: true } : {})}
                     />
                     <label htmlFor="termsCheckbox" className={styles.checkboxLabel}>
-                      I have read and agree to the {" "}
+                      I have read and agree to the{" "}
                       <button
                         type="button"
-                        className={`${styles.termsLink} ${styles.termsLinkButton}`}
-                        style={{ background: "none", border: "none", color: "#a78bfa", textDecoration: "underline", cursor: "pointer", padding: 0, marginLeft: 2 }}
+                        className={styles.termsButton}
                         onClick={() => setShowTerms(true)}
                       >
                         Terms and Conditions
                       </button>
                     </label>
                   </div>
+
+                  {/* Submit Button */}
                   <button 
-                    className={styles.formButton} 
                     type="submit" 
+                    className={styles.submitButton} 
                     disabled={formLoading}
                   >
-                    {formLoading ? "Signing up..." : "Sign Up"}
+                    {formLoading ? (
+                      <>
+                        <FontAwesomeIcon icon={faSpinner} spin className={styles.buttonIcon} />
+                        Signing up...
+                      </>
+                    ) : (
+                      "Sign Up"
+                    )}
                   </button>
                 </form>
-              </div>
+              </motion.div>
             )}
-          </motion.div>
+          </AnimatePresence>
         </div>
-      </main>
-      {/* ===== FOOTER ===== */}
-      <footer className={styles.footer}>
-        <p>© 2025 CLOVE</p>
-      </footer>
-      {/* ===== TERMS MODAL ===== */}
+      </motion.div>
+
+      {/* Terms and Conditions Modal */}
       {(showTerms || showTermsOnAttempt) && (
         <TermsAndConditions
           onClose={() => { setShowTerms(false); setShowTermsOnAttempt(false); }}

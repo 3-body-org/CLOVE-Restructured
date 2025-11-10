@@ -8,8 +8,9 @@
 }
 
 .wideContainer {
-  padding: 0 250px;
-  margin: 0;
+  padding: 0 40px;
+  margin: 0 auto;
+  max-width: 1400px;
 }
 
 .teamLabel {
@@ -209,8 +210,12 @@
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
+  .wideContainer {
+    padding: 0 30px;
+  }
+
   .teamSection {
-    padding: 60px 20px;
+    padding: 60px 0;
   }
   
   .teamHeading {
@@ -233,12 +238,12 @@
 }
 
 @media (max-width: 768px) {
+  .wideContainer {
+    padding: 0 20px;
+  }
+
   .teamSection {
     padding: 50px 0;
-  }
-  
-  .teamSection .container {
-    padding: 0 40px;
   }
 
   .teamHeading {
@@ -276,8 +281,17 @@
 }
 
 @media (max-width: 480px) {
+  .wideContainer {
+    padding: 0 16px;
+  }
+
   .teamSection {
-    padding: 40px 15px;
+    padding: 40px 0;
+  }
+
+  .teamLabel {
+    font-size: 11px;
+    letter-spacing: 2px;
   }
 
   .teamHeading {
@@ -311,5 +325,53 @@
     width: 32px;
     height: 32px;
     font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .wideContainer {
+    padding: 0 12px;
+  }
+
+  .teamSection {
+    padding: 35px 0;
+  }
+
+  .teamLabel {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+
+  .teamHeading {
+    font-size: 24px;
+  }
+
+  .teamSubheading {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .teamPhoto {
+    width: 70px;
+    height: 70px;
+  }
+
+  .teamName {
+    font-size: 15px;
+  }
+
+  .teamRole {
+    font-size: 11px;
+  }
+
+  .teamDesc {
+    font-size: 11px;
+    max-width: 180px;
+  }
+
+  .iconLink {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
   }
 }

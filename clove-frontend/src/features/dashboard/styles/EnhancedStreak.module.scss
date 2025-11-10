@@ -1,0 +1,366 @@
+@use "/variables" as *;
+
+.streakContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  height: 100%;
+}
+
+.streakHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.fireIconContainer {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fireIcon {
+  font-size: 48px;
+  filter: drop-shadow(0 4px 12px currentColor);
+  z-index: 2;
+  position: relative;
+  
+  &.legendary {
+    animation: legendaryPulse 1.5s infinite;
+  }
+  
+  &.hot {
+    animation: hotFlicker 1s infinite;
+  }
+  
+  &.warming {
+    animation: warmGlow 2s infinite;
+  }
+}
+
+@keyframes legendaryPulse {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 4px 12px currentColor) drop-shadow(0 0 20px currentColor);
+  }
+  50% { 
+    transform: scale(1.1) rotate(5deg);
+    filter: drop-shadow(0 6px 16px currentColor) drop-shadow(0 0 30px currentColor);
+  }
+}
+
+@keyframes hotFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes warmGlow {
+  0%, 100% { filter: drop-shadow(0 4px 12px currentColor); }
+  50% { filter: drop-shadow(0 6px 16px currentColor); }
+}
+
+.fireGlow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: blur(20px);
+  z-index: 1;
+}
+
+.streakInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.streakCount {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.streakNumber {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 2px 10px currentColor;
+}
+
+.streakLabel {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.streakMessage {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.weekCalendar {
+  position: relative;
+}
+
+.calendarLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.75rem;
+}
+
+.days {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.day {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.day:hover {
+  // Ensure no violet overlay appears
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.day:hover .tooltip {
+  opacity: 1;
+  transform: translateY(-5px);
+}
+
+.streakFilled:hover {
+  // Keep the gradient background but prevent additional violet overlay
+  background: linear-gradient(135deg, $dark-purple, $light-purple) !important;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: $white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+  z-index: 10;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.streakFilled {
+  background: linear-gradient(135deg, $dark-purple, $light-purple);
+  color: $white;
+  border-color: $light-purple;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+  position: relative;
+}
+
+.dayGlow {
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(135deg, $dark-purple, $light-purple);
+  border-radius: 10px;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+.today {
+  border-color: #FFD93D;
+  // Removed todayPulse animation
+}
+
+// Removed todayPulse keyframes - no longer needed
+// @keyframes todayPulse {
+//   0%, 100% {
+//     box-shadow: 0 0 0 0 rgba(255, 217, 61, 0.7);
+//   }
+//   50% {
+//     box-shadow: 0 0 0 8px rgba(255, 217, 61, 0);
+//   }
+// }
+
+.connectionTrail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.milestones {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.milestone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  
+  &.achieved {
+    opacity: 1;
+    transform: scale(1.05);
+    
+    .milestoneIcon {
+      animation: bounce 1s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.milestoneIcon {
+  font-size: 20px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.milestoneText {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .fireIconContainer {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .fireIcon {
+    font-size: 42px;
+  }
+  
+  .streakNumber {
+    font-size: 42px;
+  }
+  
+  .streakLabel {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .streakHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .streakInfo {
+    align-items: center;
+  }
+  
+  .streakCount {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .fireIconContainer {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .fireIcon {
+    font-size: 36px;
+  }
+  
+  .streakNumber {
+    font-size: 36px;
+  }
+  
+  .streakLabel {
+    font-size: 14px;
+  }
+  
+  .streakMessage {
+    font-size: 13px;
+  }
+  
+  .day {
+    width: 32px;
+    height: 32px;
+    font-size: 10px;
+  }
+  
+  .milestoneIcon {
+    font-size: 16px;
+  }
+  
+  .milestoneText {
+    font-size: 9px;
+  }
+}
+

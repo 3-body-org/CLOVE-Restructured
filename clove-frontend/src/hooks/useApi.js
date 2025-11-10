@@ -13,7 +13,13 @@ function withBase(url) {
  * @returns {Object} Object containing apiCall function and loading state
  */
 export const useApi = () => {
-  const { makeAuthenticatedRequest, isRefreshing } = useAuth();
+  const authContext = useAuth();
+  // useAuth will throw if context is undefined, but it might return null during init
+  // Check if authContext exists and has required properties
+  if (!authContext || !authContext.makeAuthenticatedRequest) {
+    throw new Error('useApi must be used within an AuthProvider and AuthProvider must be initialized');
+  }
+  const { makeAuthenticatedRequest, isRefreshing } = authContext;
 
   /**
    * Make an authenticated API call with automatic token refresh

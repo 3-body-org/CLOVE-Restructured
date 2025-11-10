@@ -143,7 +143,13 @@ class DatabaseSeeder:
                     email_verified=True,  # Make verified
                     is_active=True,       # Make active
                     bio="",
-                    profile_photo_url=""
+                    profile_photo_url="",
+                    # Onboarding fields - seeded users need to complete onboarding
+                    onboarding_completed=False,
+                    traveler_class=None,
+                    selected_realm=None,
+                    current_realm="wizard-academy",  # Default realm
+                    story_progress=None
                 )
             )
             
@@ -162,7 +168,13 @@ class DatabaseSeeder:
                     email_verified=True,  # Make verified
                     is_active=True,       # Make active
                     bio="",
-                    profile_photo_url=""
+                    profile_photo_url="",
+                    # Onboarding fields - seeded users need to complete onboarding
+                    onboarding_completed=False,
+                    traveler_class=None,
+                    selected_realm=None,
+                    current_realm="wizard-academy",  # Default realm
+                    story_progress=None
                 )
             )
             
@@ -182,7 +194,13 @@ class DatabaseSeeder:
                     email_verified=True,  # Make verified
                     is_active=True,       # Make active
                     bio="",
-                    profile_photo_url=""
+                    profile_photo_url="",
+                    # Onboarding fields - seeded users need to complete onboarding
+                    onboarding_completed=False,
+                    traveler_class=None,
+                    selected_realm=None,
+                    current_realm="wizard-academy",  # Default realm
+                    story_progress=None
                 )
             )
             
@@ -201,7 +219,13 @@ class DatabaseSeeder:
                     email_verified=True,  # Make verified
                     is_active=True,       # Make active
                     bio="",
-                    profile_photo_url=""
+                    profile_photo_url="",
+                    # Onboarding fields - seeded users need to complete onboarding
+                    onboarding_completed=False,
+                    traveler_class=None,
+                    selected_realm=None,
+                    current_realm="wizard-academy",  # Default realm
+                    story_progress=None
                 )
             )
 

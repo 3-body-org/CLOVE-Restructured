@@ -1,20 +1,97 @@
-@use "/variables" as *; /* import the global variable from _variables.scss */
+@use "/variables" as *;
 
 .landingPage {
   min-height: 100vh;
   width: 100%;
   position: relative;
   overflow-x: hidden;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+}
+
+// Animated Background with Gradient Orbs
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gradientOrb1,
+.gradientOrb2,
+.gradientOrb3,
+.gradientOrb4 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.25;
+  // Removed animation for static orbs
+  // animation: float 8s ease-in-out infinite;
+  // will-change: transform, opacity;
+}
+
+.gradientOrb1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, $dark-purple, transparent);
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.gradientOrb2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, $light-purple, transparent);
+  top: 50%;
+  right: 10%;
+  animation-delay: 2s;
+}
+
+.gradientOrb3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #6b46c1, transparent);
+  bottom: 15%;
+  left: 50%;
+  animation-delay: 4s;
+}
+
+.gradientOrb4 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.8), transparent);
+  top: 70%;
+  left: 15%;
+  animation-delay: 6s;
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px) translateX(0px) scale(1); 
+  }
+  25% { 
+    transform: translateY(-30px) translateX(20px) scale(1.05); 
+  }
+  50% { 
+    transform: translateY(-20px) translateX(-15px) scale(0.95); 
+  }
+  75% { 
+    transform: translateY(25px) translateX(15px) scale(1.02); 
+  }
 }
 
 .backgroundWrapper {
-  background-color: $light-black;
   position: relative;
   width: 100%;
   min-height: 100vh;
+  z-index: 1;
 }
 
-/* Background patterns and circles to mask gradient edges */
+// Additional subtle patterns overlay
 .backgroundWrapper::before {
   content: '';
   position: fixed;
@@ -23,39 +100,80 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 15% 25%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 85% 75%, rgba(124, 58, 237, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%),
-    radial-gradient(circle at 75% 15%, rgba(139, 92, 246, 0.04) 0%, transparent 35%),
-    radial-gradient(circle at 25% 85%, rgba(124, 58, 237, 0.04) 0%, transparent 35%);
+    radial-gradient(circle at 15% 25%, rgba(139, 92, 246, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(124, 58, 237, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.02) 0%, transparent 60%);
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
 }
 
-/* Additional subtle patterns */
-.backgroundWrapper::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.03) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Ensure all child components are positioned above the background */
+// Ensure all child components are positioned above the background
 .backgroundWrapper > * {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
-/* Global content wrapper for consistent spacing */
+// Global content wrapper for consistent spacing
 .contentWrapper {
   max-width: 1500px;
   margin: 0 auto;
   padding: 0 20px;
-} 
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .gradientOrb1,
+  .gradientOrb2,
+  .gradientOrb3,
+  .gradientOrb4 {
+    filter: blur(60px);
+    opacity: 0.2;
+  }
+
+  .gradientOrb1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .gradientOrb2 {
+    width: 220px;
+    height: 220px;
+  }
+
+  .gradientOrb3 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .gradientOrb4 {
+    width: 210px;
+    height: 210px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gradientOrb1,
+  .gradientOrb2,
+  .gradientOrb3,
+  .gradientOrb4 {
+    filter: blur(40px);
+    opacity: 0.15;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradientOrb1,
+  .gradientOrb2,
+  .gradientOrb3,
+  .gradientOrb4 {
+    animation: none;
+  }
+}
+
+:global(html) {
+  scrollbar-width: none; /* For Firefox */
+}
+
+:global(body::-webkit-scrollbar) {
+  display: none; /* For Chrome, Safari, and Opera */
+}

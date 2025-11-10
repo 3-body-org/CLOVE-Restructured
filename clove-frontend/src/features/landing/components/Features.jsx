@@ -1,50 +1,54 @@
-//react
-import { useState } from "react";
-//scss
+import React from "react";
+import ScrollReveal from "./ScrollReveal";
 import styles from "features/landing/styles/Features.module.scss";
-// Import the 3 feature GIFs
-import feature1Gif from "assets/GIF/landing/gif-feature1.gif";
-import feature2Gif from "assets/GIF/landing/gif-feature2.gif";
-import feature3Gif from "assets/GIF/landing/gif-feature3.gif";
+// Import the 3 feature videos
+import feature1Video from "assets/Mp4/landing/mp4-feature1.mp4";
+import feature2Video from "assets/Mp4/landing/mp4-feature2.mp4";
+import feature3Video from "assets/Mp4/landing/mp4-feature3.mp4";
 
 export default function Features() {
   return (
     <section className={styles.featuresSection}>
       <div className={`container-fluid ${styles.wideContainer}`}>
         {/* ===== Top Row: Title / Paragraph ===== */}
-        <div className="row">
-          <div className="col-md-6">
-            <p className={styles.innovateText}>Innovate</p>
+        <ScrollReveal animation="staggerContainer" className="row">
+          <ScrollReveal animation="fadeInUp" className="col-md-6">
+            <p className={styles.innovateText}>✨ Dimensional Powers</p>
             <h1 className={styles.featuresHeading}>
-              How Clove Helps You Learn Java Better
+              Master Java Through Realm-Adaptive Learning
             </h1>
-          </div>
-          <div className="col-md-6">
+          </ScrollReveal>
+          <ScrollReveal animation="fadeInUp" className="col-md-6">
             <p className={styles.featuresParagraph}>
-              Clove adjusts each coding challenge based on how you're doing,
-               from hints to timers to difficulty levels. Set inside unique,
-                themed scenarios, your learning journey stays fresh, balanced, 
-                and just challenging enough to keep you moving forward.
+              Each dimensional realm responds to your energy—challenges evolve,
+              portals adapt, and mysteries unfold based on your journey.
+              Navigate through enchanted academies, noir-lit streets, and cosmic
+              stations as you unlock the secrets of Java programming.
             </p>
-          </div>
-        </div>
+          </ScrollReveal>
+        </ScrollReveal>
 
         {/* ===== Main Feature Cards ===== */}
         <div className="row mt-5">
           {/* Feature 1 */}
           <div className="col-md-4 d-flex align-items-stretch">
             <div className={styles.featureCard}>
-              <img
-                src={feature1Gif}
+              <video
+                src={feature1Video}
                 alt="Personalized Learning"
                 className={styles.featureImg}
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <h3 className={styles.featureTitle}>
-                Challenges That Adjust With You
+                🌟 Realm-Adaptive Pathways
               </h3>
               <p className={styles.featureDescription}>
-                Clove responds intelligently to your progress, 
-                adapting each challenge to meet you at your current skill level.
+                The dimensional fabric responds to your essence—each realm
+                shifts its challenges to match your current power level,
+                ensuring every portal leads to growth.
               </p>
             </div>
           </div>
@@ -52,17 +56,22 @@ export default function Features() {
           {/* Feature 2 */}
           <div className="col-md-4 d-flex align-items-stretch mt-4 mt-md-0">
             <div className={styles.featureCard}>
-              <img
-                src={feature2Gif}
+              <video
+                src={feature2Video}
                 alt="Real-Time Adaptability"
                 className={styles.featureImg}
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <h3 className={styles.featureTitle}>
-                 More Than Just Practice
+                ⚡ Mastery Through Dimensions
               </h3>
               <p className={styles.featureDescription}>
-                Every challenge is purposefully designed to build
-                mastery through thoughtful pacing and gradual complexity.
+                Each trial you face is woven into the realm's ancient tapestry—
+                build your powers gradually through carefully crafted challenges
+                that unlock deeper mysteries of the coding arts.
               </p>
             </div>
           </div>
@@ -70,17 +79,20 @@ export default function Features() {
           {/* Feature 3 */}
           <div className="col-md-4 d-flex align-items-stretch mt-4 mt-md-0">
             <div className={styles.featureCard}>
-              <img
-                src={feature3Gif}
+              <video
+                src={feature3Video}
                 alt="Engaging Content"
                 className={styles.featureImg}
+                autoPlay
+                loop
+                muted
+                playsInline
               />
-              <h3 className={styles.featureTitle}>
-                Built-In Support That Doesn't Interrupt
-              </h3>
+              <h3 className={styles.featureTitle}>🔮 Dimensional Guidance</h3>
               <p className={styles.featureDescription}>
-                Assistance appears only when it's needed, 
-                helping you stay focused without breaking your learning flow.
+                Ancient realm spirits manifest when you need them most— subtle
+                whispers and glowing hints appear in your darkest moments,
+                guiding without disrupting your journey through the code.
               </p>
             </div>
           </div>

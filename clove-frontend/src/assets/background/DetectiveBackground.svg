@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="detectiveSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a2520" />
+      <stop offset="50%" stop-color="#1a1510" />
+      <stop offset="100%" stop-color="#0f0a08" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky background - Warm noir gradient -->
+  <rect width="320" height="240" fill="url(#detectiveSky)" />
+
+  <!-- City buildings silhouette - More visible with warm tones -->
+  <rect x="0" y="120" width="60" height="120" fill="#1a1410" opacity="0.95" />
+  <rect x="0" y="120" width="60" height="120" fill="#2a2015" opacity="0.5" />
+
+  <rect x="70" y="100" width="50" height="140" fill="#1a1410" opacity="0.9" />
+  <rect x="70" y="100" width="50" height="140" fill="#2a2015" opacity="0.4" />
+
+  <rect x="130" y="130" width="45" height="110" fill="#1a1410" opacity="0.95" />
+  <rect x="130" y="130" width="45" height="110" fill="#2a2015" opacity="0.5" />
+
+  <rect x="185" y="110" width="55" height="130" fill="#1a1410" opacity="0.9" />
+  <rect x="185" y="110" width="55" height="130" fill="#2a2015" opacity="0.4" />
+
+  <rect x="250" y="140" width="70" height="100" fill="#1a1410" opacity="0.95" />
+  <rect x="250" y="140" width="70" height="100" fill="#2a2015" opacity="0.5" />
+
+  <!-- Building edges/highlights for depth -->
+  <line x1="60" y1="120" x2="60" y2="240" stroke="#4a3a2a" stroke-width="1" opacity="0.4" />
+  <line x1="120" y1="100" x2="120" y2="240" stroke="#4a3a2a" stroke-width="1" opacity="0.4" />
+  <line x1="175" y1="130" x2="175" y2="240" stroke="#4a3a2a" stroke-width="1" opacity="0.4" />
+  <line x1="240" y1="110" x2="240" y2="240" stroke="#4a3a2a" stroke-width="1" opacity="0.4" />
+
+  <!-- Windows - Gold with more variety -->
+  <rect x="10" y="130" width="8" height="12" fill="#d1b773" opacity="0.7" />
+  <rect x="25" y="130" width="8" height="12" fill="#d1b773" opacity="0.8" />
+  <rect x="42" y="130" width="8" height="12" fill="#d1b773" opacity="0.6" />
+  <rect x="10" y="150" width="8" height="12" fill="#d1b773" opacity="0.5" />
+  <rect x="25" y="150" width="8" height="12" fill="#d1b773" opacity="0.7" />
+  <rect x="42" y="155" width="8" height="12" fill="#d1b773" opacity="0.6" />
+  <rect x="10" y="175" width="8" height="12" fill="#d1b773" opacity="0.8" />
+  <rect x="42" y="180" width="8" height="12" fill="#d1b773" opacity="0.5" />
+
+  <rect x="80" y="115" width="8" height="12" fill="#d1b773" opacity="0.8" />
+  <rect x="95" y="115" width="8" height="12" fill="#d1b773" opacity="0.7" />
+  <rect x="80" y="135" width="8" height="12" fill="#d1b773" opacity="0.6" />
+  <rect x="95" y="135" width="8" height="12" fill="#d1b773" opacity="0.8" />
+  <rect x="80" y="160" width="8" height="12" fill="#d1b773" opacity="0.7" />
+
+  <rect x="140" y="145" width="8" height="12" fill="#d1b773" opacity="0.7" />
+  <rect x="155" y="145" width="8" height="12" fill="#d1b773" opacity="0.6" />
+  <rect x="140" y="170" width="8" height="12" fill="#d1b773" opacity="0.8" />
+
+  <rect x="195" y="125" width="8" height="12" fill="#d1b773" opacity="0.8" />
+  <rect x="210" y="125" width="8" height="12" fill="#d1b773" opacity="0.7" />
+  <rect x="195" y="150" width="8" height="12" fill="#d1b773" opacity="0.6" />
+  <rect x="210" y="150" width="8" height="12" fill="#d1b773" opacity="0.7" />
+  <rect x="225" y="155" width="8" height="12" fill="#d1b773" opacity="0.5" />
+
+  <rect x="260" y="155" width="8" height="12" fill="#d1b773" opacity="0.8" />
+  <rect x="275" y="155" width="8" height="12" fill="#d1b773" opacity="0.7" />
+  <rect x="260" y="175" width="8" height="12" fill="#d1b773" opacity="0.6" />
+  <rect x="290" y="165" width="8" height="12" fill="#d1b773" opacity="0.7" />
+
+  <!-- Streetlamp - More visible -->
+  <line x1="270" y1="160" x2="270" y2="200" stroke="#3a2a1a" stroke-width="3" opacity="0.9" />
+  <circle cx="270" cy="158" r="6" fill="#d1b773" opacity="0.8" />
+  <ellipse cx="270" cy="158" rx="18" ry="10" fill="#d1b773" opacity="0.4" />
+
+  <!-- Detective silhouette - More visible -->
+  <g transform="translate(200, 150)">
+    <!-- Body/coat - Slightly lighter -->
+    <path d="M20,35 L15,75 L35,75 L30,35 Z" fill="#1a1410" opacity="0.95" />
+    <path d="M20,35 L15,75 L35,75 L30,35 Z" fill="#2a2015" opacity="0.3" />
+    <!-- Collar -->
+    <path d="M18,38 L25,35 L32,38" fill="#1a1410" opacity="0.95" />
+    <!-- Head -->
+    <circle cx="25" cy="30" r="7" fill="#1a1410" opacity="0.95" />
+    <circle cx="25" cy="30" r="7" fill="#2a2015" opacity="0.3" />
+    <!-- Hat -->
+    <ellipse cx="25" cy="26" rx="12" ry="4" fill="#1a1410" opacity="0.95" />
+    <path d="M18,26 L20,18 L30,18 L32,26 Z" fill="#1a1410" opacity="0.95" />
+    <path d="M18,26 L20,18 L30,18 L32,26 Z" fill="#2a2015" opacity="0.3" />
+    <!-- Magnifying glass - Brighter gold -->
+    <circle cx="12" cy="50" r="8" fill="transparent" stroke="#e6c885" stroke-width="2.5" opacity="0.9" />
+    <line x1="7" y1="56" x2="3" y2="62" stroke="#e6c885" stroke-width="2.5" opacity="0.9" />
+    <circle cx="12" cy="50" r="6" fill="#d1b773" opacity="0.3" />
+    <!-- Lens shine -->
+    <circle cx="10" cy="48" r="2" fill="#fff" opacity="0.4" />
+  </g>
+
+  <!-- Floating clues/papers - More visible -->
+  <g opacity="0.7">
+    <rect x="80" y="70" width="15" height="20" rx="2" fill="#c9b08a" opacity="0.8" transform="rotate(-15 87.5 80)" />
+    <line x1="83" y1="75" x2="92" y2="75" stroke="#1a1410" stroke-width="1" opacity="0.6" />
+    <line x1="83" y1="80" x2="90" y2="80" stroke="#1a1410" stroke-width="1" opacity="0.6" />
+  </g>
+
+  <!-- Evidence markers - Brighter gold and sepia -->
+  <circle cx="150" cy="70" r="2.5" fill="#e6c885" opacity="0.8" />
+  <circle cx="120" cy="90" r="2" fill="#d1b773" opacity="0.7" />
+  <circle cx="240" cy="80" r="2.5" fill="#e6c885" opacity="0.7" />
+  <circle cx="50" cy="95" r="1.5" fill="#d1b773" opacity="0.6" />
+</svg>

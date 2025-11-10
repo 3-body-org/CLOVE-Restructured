@@ -19,6 +19,7 @@ class StatisticBase(BaseModel):
     login_days_this_week: list[int] = Field(default_factory=list)
 
     total_challenges_solved: int = 0
+    total_points: int = 0
 
     mode_stats: dict[
         Literal["code_fixer","code_completion","output_tracing"],
@@ -49,6 +50,7 @@ class StatisticCreate(BaseModel):
     last_login_date: date | None = None
     current_streak: int = 0
     total_challenges_solved: int = 0
+    total_points: int = 0
     login_days_this_week: list[int] = Field(default_factory=list)
 
 class StatisticRead(StatisticBase):

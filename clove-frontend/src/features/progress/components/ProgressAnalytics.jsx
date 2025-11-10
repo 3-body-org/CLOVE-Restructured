@@ -10,6 +10,9 @@ import {
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/progress/styles/ProgressPage.module.scss";
+import codeCompletionBg from "../../../assets/background/CodeCompletionModeBackground.svg";
+import codeFixerBg from "../../../assets/background/CodeFixerModeBackground.svg";
+import outputTracingBg from "../../../assets/background/OutputTracingModeBackground.svg";
 
 // --- Moved from ProgressPage.jsx ---
 
@@ -36,6 +39,48 @@ export const getMasteryLevel = (knowledge) => {
   return "Beginner";
 };
 
+// Calculate topic proficiency level based on subtopic knowledge levels (same logic as DashboardPage)
+export const calculateTopicProficiency = (subtopics) => {
+  if (!subtopics || subtopics.length === 0) return { level: "Not Started", score: 0 };
+  
+  // Filter subtopics that have knowledge level scores
+  const subtopicsWithScores = subtopics.filter(st => 
+    st.knowledge_level !== undefined && st.knowledge_level > 0
+  );
+  
+  if (subtopicsWithScores.length === 0) {
+    return { level: "Not Started", score: 0 };
+  }
+  
+  // Calculate average knowledge level from individual subtopic scores
+  const totalScore = subtopicsWithScores.reduce((sum, st) => sum + st.knowledge_level, 0);
+  const averageKnowledgeLevel = totalScore / subtopicsWithScores.length;
+  
+  // Use same badge logic as DashboardPage, use Novice instead of Completed"
+  let proficiencyLevel = "";
+  if (averageKnowledgeLevel >= 0.95) proficiencyLevel = "Mastered";
+  else if (averageKnowledgeLevel >= 0.85) proficiencyLevel = "Proficient";
+  else if (averageKnowledgeLevel >= 0.75) proficiencyLevel = "Learned";
+  else proficiencyLevel = "Novice"; // Changed to "Novice"
+  
+  return { 
+    level: proficiencyLevel, 
+    score: averageKnowledgeLevel,
+    percentage: Math.round(averageKnowledgeLevel * 100)
+  };
+};
+
+// Get CSS class for topic proficiency badge
+export const getTopicProficiencyClass = (level) => {
+  switch (level) {
+    case 'Mastered': return styles.topicBadgeMastered;
+    case 'Proficient': return styles.topicBadgeProficient;
+    case 'Learned': return styles.topicBadgeLearned;
+    case 'Novice': return styles.topicBadgeNovice;
+    default: return styles.topicBadgeNovice;
+  }
+};
+
 // Helper to get strengths/weaknesses for a topic
 export const getStrengthsWeaknesses = (subtopics = []) => {
   const isDefault = (k) => k === 0.1;
@@ -51,8 +96,23 @@ export const getStrengthsWeaknesses = (subtopics = []) => {
 };
 
 // Card for each learning mode
-export const ModeCard = ({ icon, name, category, stats = [] }) => (
+// SVG backgrounds for each mode
+const getModeSVG = (name) => {
+  if (name === "Code Completion Mode") {
+    return <img src={codeCompletionBg} className={styles.modeSvg} aria-hidden="true" alt="" />;
+  }
+  if (name === "Code Fixer Mode") {
+    return <img src={codeFixerBg} className={styles.modeSvg} aria-hidden="true" alt="" />;
+  }
+  if (name === "Output Tracing Mode") {
+    return <img src={outputTracingBg} className={styles.modeSvg} aria-hidden="true" alt="" />;
+  }
+  return null;
+};
+
+export const ModeCard = React.memo(({ icon, name, category, stats = [] }) => (
   <div className={styles.modeCard}>
+    {getModeSVG(name)}
     <div className={styles.modeHeader}>
       <div className={styles.modeIcon}>
         <FontAwesomeIcon icon={icon} />
@@ -73,10 +133,24 @@ export const ModeCard = ({ icon, name, category, stats = [] }) => (
       ))}
     </div>
   </div>
-);
+));
+
+// Topic Proficiency Badge Component
+export const TopicProficiencyBadge = ({ proficiency }) => {
+  if (!proficiency || proficiency.level === "Not Started") {
+    return null;
+  }
+
+  return (
+    <div className={`${styles.topicProficiencyBadge} ${getTopicProficiencyClass(proficiency.level)}`}>
+      <span className={styles.proficiencyLevel}>{proficiency.level}</span>
+      {/* <span className={styles.proficiencyScore}>({proficiency.percentage}%)</span> */}
+    </div>
+  );
+};
 
 // Card for each subtopic
-export const SubtopicCard = ({
+export const SubtopicCard = React.memo(({
   name = "Untitled Subtopic",
   masteryLevel = "Beginner",
   progress = 0,
@@ -119,7 +193,7 @@ export const SubtopicCard = ({
       )}
     </div>
   );
-};
+});
 
 const ProgressMetric = ({
   icon,
@@ -172,7 +246,7 @@ const StrengthsWeaknesses = ({ type, items }) => (
 );
 
 // ProgressAnalytics: Shows progress and knowledge bars for a subtopic
-const ProgressAnalytics = ({
+const ProgressAnalytics = React.memo(({
   progress = 0,
   knowledge = 0,
   hideHeader = false,
@@ -244,6 +318,6 @@ const ProgressAnalytics = ({
       {/* Performance Analysis removed, now handled at topic level */}
     </div>
   );
-};
+});
 
 export { ProgressAnalytics };

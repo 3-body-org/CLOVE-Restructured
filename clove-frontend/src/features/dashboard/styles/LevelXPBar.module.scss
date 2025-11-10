@@ -1,0 +1,344 @@
+@use "/variables" as *;
+
+.levelXPContainer {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: rgba(30, 30, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.levelXPContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.levelXPContainer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.levelBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  width: 120px;
+  height: 110px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 3px solid $light-purple;
+  border-radius: 60px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+  padding: 0.75rem 0.5rem;
+}
+
+.levelBadge:hover {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+}
+
+.levelNumber {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 24px;
+  font-weight: 900;
+  color: $light-purple;
+}
+
+.levelIcon {
+  font-size: 20px;
+  margin-bottom: 0.25rem;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.levelTier {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 0.25rem;
+  color: $light-purple;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.xpSection {
+  flex: 1;
+  position: relative;
+}
+
+.xpHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.xpTitle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.realmPower {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  filter: drop-shadow(0 2px 8px currentColor);
+}
+
+.totalPoints {
+  font-size: 24px;
+  font-weight: 900;
+  background: linear-gradient(135deg, $light-purple, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.5));
+}
+
+.levelInfo {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.pointsNeeded {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+.xpBarContainer {
+  position: relative;
+  width: 100%;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.xpBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, $light-purple, $dark-purple);
+  border-radius: 16px;
+  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.xpBarGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+  border-radius: 16px 16px 0 0;
+}
+
+.xpBarShine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.xpBarText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 13px;
+  font-weight: 700;
+  color: $white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  letter-spacing: 0.5px;
+}
+
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: $light-purple;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .levelXPContainer {
+    padding: 1.25rem 1.5rem;
+    gap: 1.5rem;
+  }
+  
+  .levelBadge {
+    min-width: 110px;
+    width: 110px;
+    height: 95px;
+    border-radius: 50px;
+    padding: 0.5rem 0.5rem;
+  }
+  
+  .levelNumber {
+    font-size: 24px;
+  }
+  
+  .levelIcon {
+    font-size: 18px;
+  }
+  
+  .levelTier {
+    font-size: 9px;
+  }
+  
+  .totalPoints {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .levelXPContainer {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .levelBadge {
+    min-width: 105px;
+    width: 105px;
+    height: 90px;
+    border-radius: 50px;
+    padding: 0.5rem 0.5rem;
+  }
+  
+  .levelNumber {
+    font-size: 22px;
+  }
+  
+  .levelIcon {
+    font-size: 16px;
+  }
+  
+  .levelTier {
+    font-size: 9px;
+  }
+  
+  .xpHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .xpTitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .xpBarContainer {
+    height: 28px;
+  }
+}
+
+@media (max-width: 576px) {
+  .levelXPContainer {
+    padding: 1.25rem;
+  }
+  
+  .levelBadge {
+    min-width: 100px;
+    width: 100px;
+    height: 80px;
+    border-radius: 45px;
+    padding: 0.5rem;
+  }
+  
+  .levelNumber {
+    font-size: 20px;
+  }
+  
+  .levelIcon {
+    font-size: 14px;
+  }
+  
+  .levelTier {
+    font-size: 8px;
+    letter-spacing: 0.3px;
+  }
+  
+  .realmPower {
+    font-size: 14px;
+  }
+  
+  .totalPoints {
+    font-size: 18px;
+  }
+  
+  .levelInfo {
+    font-size: 12px;
+  }
+  
+  .xpBarContainer {
+    height: 24px;
+  }
+  
+  .xpBarText {
+    font-size: 11px;
+  }
+}
+

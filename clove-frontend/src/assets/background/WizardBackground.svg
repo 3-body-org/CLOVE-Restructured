@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="wizardSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a2e26" />
+      <stop offset="50%" stop-color="#0d1a14" />
+      <stop offset="100%" stop-color="#050a08" />
+    </linearGradient>
+    <radialGradient id="magicGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6EE7B7" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#6EE7B7" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Sky background - Dark greenish -->
+  <rect width="320" height="240" fill="url(#wizardSky)" />
+
+  <!-- Moon with greenish tint -->
+  <circle cx="240" cy="50" r="35" fill="#6EE7B7" opacity="0.25" />
+  <circle cx="240" cy="50" r="28" fill="#a7f3d0" opacity="0.2" />
+
+  <!-- Mountains in background - dark green -->
+  <path d="M0,180 L60,120 L120,160 L180,100 L240,140 L320,80 L320,240 L0,240 Z" 
+        fill="#0d1a14" opacity="0.7" />
+
+  <!-- Magical Academy Complex -->
+  <!-- Main Academy Building - Center -->
+  <g transform="translate(100, 90)">
+    <!-- Central tower -->
+    <rect x="30" y="30" width="50" height="90" fill="#34d399" opacity="0.65" />
+    <rect x="30" y="30" width="50" height="90" fill="#10b981" opacity="0.3" />
+    <polygon points="30,30 55,5 80,30" fill="#6EE7B7" opacity="0.7" />
+
+    <!-- Clock/Emblem at top -->
+    <circle cx="55" cy="45" r="8" fill="#6EE7B7" opacity="0.8" />
+    <circle cx="55" cy="45" r="6" fill="#0d1a14" opacity="0.6" />
+
+    <!-- Main entrance arch -->
+    <path d="M42,90 Q42,75 55,75 Q68,75 68,90 Z" fill="#0d1a14" opacity="0.7" />
+    <rect x="42" y="90" width="26" height="30" fill="#0d1a14" opacity="0.7" />
+
+    <!-- Windows - Glowing green -->
+    <rect x="37" y="50" width="8" height="12" fill="#6EE7B7" opacity="0.85" />
+    <rect x="65" y="50" width="8" height="12" fill="#6EE7B7" opacity="0.85" />
+    <rect x="37" y="70" width="8" height="12" fill="#6EE7B7" opacity="0.8" />
+    <rect x="65" y="70" width="8" height="12" fill="#6EE7B7" opacity="0.8" />
+  </g>
+
+  <!-- Left Wing - Library -->
+  <g transform="translate(20, 120)">
+    <rect x="20" y="40" width="40" height="60" fill="#34d399" opacity="0.6" />
+    <rect x="20" y="40" width="40" height="60" fill="#10b981" opacity="0.25" />
+    <polygon points="20,40 40,25 60,40" fill="#6EE7B7" opacity="0.65" />
+
+    <!-- Library windows -->
+    <rect x="27" y="50" width="7" height="10" fill="#6EE7B7" opacity="0.75" />
+    <rect x="46" y="50" width="7" height="10" fill="#6EE7B7" opacity="0.75" />
+    <rect x="27" y="70" width="7" height="10" fill="#6EE7B7" opacity="0.7" />
+    <rect x="46" y="70" width="7" height="10" fill="#6EE7B7" opacity="0.7" />
+  </g>
+
+  <!-- Right Wing - Potion Lab -->
+  <g transform="translate(200, 125)">
+    <rect x="15" y="45" width="35" height="55" fill="#34d399" opacity="0.6" />
+    <rect x="15" y="45" width="35" height="55" fill="#10b981" opacity="0.25" />
+    <polygon points="15,45 32.5,32 50,45" fill="#6EE7B7" opacity="0.65" />
+
+    <!-- Lab windows with colored glow -->
+    <rect x="20" y="55" width="6" height="9" fill="#6EE7B7" opacity="0.75" />
+    <rect x="38" y="55" width="6" height="9" fill="#a7f3d0" opacity="0.75" />
+    <rect x="20" y="72" width="6" height="9" fill="#a7f3d0" opacity="0.7" />
+    <rect x="38" y="72" width="6" height="9" fill="#6EE7B7" opacity="0.7" />
+  </g>
+
+  <!-- Courtyard elements -->
+  <!-- Magical fountain -->
+  <g transform="translate(160, 180)">
+    <ellipse cx="0" cy="0" rx="15" ry="6" fill="#34d399" opacity="0.4" />
+    <rect x="-3" y="-12" width="6" height="12" fill="#34d399" opacity="0.5" />
+    <!-- Water spray -->
+    <circle cx="0" cy="-15" r="3" fill="#6EE7B7" opacity="0.6" />
+  </g>
+
+  <!-- Student silhouettes -->
+  <!-- Student 1 - with book -->
+  <g transform="translate(70, 185)">
+    <ellipse cx="0" cy="15" rx="8" ry="3" fill="#0d1a14" opacity="0.3" />
+    <rect x="-4" y="5" width="8" height="10" fill="#0d1a14" opacity="0.8" />
+    <circle cx="0" cy="2" r="3" fill="#0d1a14" opacity="0.8" />
+    <!-- Book -->
+    <rect x="5" y="7" width="4" height="5" fill="#34d399" opacity="0.7" />
+  </g>
+
+  <!-- Student 2 - with wand -->
+  <g transform="translate(240, 190)">
+    <ellipse cx="0" cy="12" rx="7" ry="3" fill="#0d1a14" opacity="0.3" />
+    <rect x="-3" y="3" width="6" height="9" fill="#0d1a14" opacity="0.8" />
+    <circle cx="0" cy="0" r="2.5" fill="#0d1a14" opacity="0.8" />
+    <!-- Wand with spark -->
+    <line x1="4" y1="5" x2="10" y2="2" stroke="#34d399" stroke-width="1.5" opacity="0.8" />
+    <circle cx="10" cy="2" r="2" fill="#6EE7B7" opacity="0.9" />
+  </g>
+
+  <!-- Floating magical books -->
+  <g opacity="0.7">
+    <rect x="50" y="70" width="10" height="13" rx="1" fill="#34d399" opacity="0.6" transform="rotate(-20 55 76.5)" />
+    <line x1="52" y1="73" x2="58" y2="73" stroke="#6EE7B7" stroke-width="1" opacity="0.5" />
+    <line x1="52" y1="77" x2="58" y2="77" stroke="#6EE7B7" stroke-width="1" opacity="0.5" />
+  </g>
+
+  <!-- Floating potion bottle -->
+  <g transform="translate(270, 90)">
+    <rect x="-3" y="0" width="6" height="10" rx="1" fill="#34d399" opacity="0.5" />
+    <circle cx="0" cy="-2" r="2" fill="#a7f3d0" opacity="0.6" />
+    <ellipse cx="0" cy="5" rx="2" ry="3" fill="#6EE7B7" opacity="0.4" />
+  </g>
+
+  <!-- Professor with staff -->
+  <g transform="translate(190, 175)">
+    <!-- Robe -->
+    <path d="M0,7 L-4,22 L4,22 L0,7 Z" fill="#0d1a14" opacity="0.9" />
+    <!-- Head -->
+    <circle cx="0" cy="5" r="3" fill="#0d1a14" opacity="0.9" />
+    <!-- Wizard hat -->
+    <path d="M-3,5 L0,-3 L3,5 Z" fill="#34d399" opacity="0.7" />
+    <ellipse cx="0" cy="5" rx="4" ry="1.5" fill="#34d399" opacity="0.7" />
+    <!-- Staff -->
+    <line x1="5" y1="10" x2="8" y2="0" stroke="#34d399" stroke-width="1.5" opacity="0.8" />
+    <circle cx="8" cy="0" r="2" fill="#6EE7B7" opacity="0.9" />
+    <circle cx="8" cy="0" r="3" fill="url(#magicGlow)" />
+  </g>
+
+  <!-- Magical sparkles and floating elements -->
+  <circle cx="130" cy="60" r="2" fill="#6EE7B7" opacity="0.8" />
+  <circle cx="180" cy="80" r="1.5" fill="#a7f3d0" opacity="0.7" />
+  <circle cx="220" cy="100" r="2" fill="#6EE7B7" opacity="0.6" />
+  <circle cx="85" cy="110" r="1.5" fill="#34d399" opacity="0.8" />
+  <circle cx="260" cy="130" r="2" fill="#a7f3d0" opacity="0.7" />
+
+  <!-- Enchantment trails -->
+  <path d="M140,65 Q145,70 150,65" stroke="#6EE7B7" stroke-width="1" fill="none" opacity="0.5" />
+  <path d="M210,105 Q215,100 220,105" stroke="#a7f3d0" stroke-width="1" fill="none" opacity="0.5" />
+</svg>

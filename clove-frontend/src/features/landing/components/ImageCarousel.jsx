@@ -3,16 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import styles from "features/landing/styles/ImageCarousel.module.scss";
 
-// Import the 3 specific GIFs for the carousel
-import wizardGif from "assets/GIF/landing/gif-wizardsubtopics.gif";
-import detectiveGif from "assets/GIF/landing/gif-detectivesubtopics.gif";
-import spaceGif from "assets/GIF/landing/gif-spacesubtopics.gif";
+// Import the 3 specific Mp4s for the carousel
+import WizardMp4 from "assets/Mp4/landing/mp4-wizardsubtopics.mp4";
+import DetectiveMp4 from "assets/Mp4/landing/mp4-detectivesubtopics.mp4";
+import SpaceMp4 from "assets/Mp4/landing/mp4-spacesubtopics.mp4";
 
 const carouselData = [
   {
     id: 1,
     theme: 'wizard',
-    image: wizardGif,
+    image: WizardMp4,
     title: 'Wizard Academy',
     description: 'Master Java spells in an arcane learning environment with magical coding challenges',
     color: '#fbbf24', // Gold for wizard theme
@@ -22,7 +22,7 @@ const carouselData = [
   {
     id: 2,
     theme: 'detective',
-    image: detectiveGif,
+    image: DetectiveMp4,
     title: 'Noir Investigations',
     description: 'Solve coding mysteries in a classic detective setting with immersive storytelling',
     color: '#374151', // Dark gray for detective theme
@@ -32,7 +32,7 @@ const carouselData = [
   {
     id: 3,
     theme: 'space',
-    image: spaceGif,
+    image: SpaceMp4,
     title: 'Space Exploration',
     description: 'Navigate through cosmic coding challenges in a futuristic space environment',
     color: '#3b82f6', // Blue for space theme
@@ -44,27 +44,23 @@ const carouselData = [
 export default function ImageCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [transitionDirection, setTransitionDirection] = useState('next');
 
   const nextSlide = useCallback(() => {
-    setTransitionDirection('next');
     setCurrentIndex((prev) => (prev + 1) % carouselData.length);
   }, []);
 
   const prevSlide = useCallback(() => {
-    setTransitionDirection('prev');
     setCurrentIndex((prev) => (prev - 1 + carouselData.length) % carouselData.length);
   }, []);
 
   const goToSlide = (index) => {
-    setTransitionDirection(index > currentIndex ? 'next' : 'prev');
     setCurrentIndex(index);
   };
 
   // Auto-play functionality
   useEffect(() => {
     if (!isAutoPlaying) return;
-    const interval = setInterval(nextSlide, 6000); // Increased to 6 seconds for GIFs
+    const interval = setInterval(nextSlide, 6000); // Increased to 6 seconds for Mp4s
     return () => clearInterval(interval);
   }, [isAutoPlaying, nextSlide]);
 
@@ -80,10 +76,15 @@ export default function ImageCarousel() {
       {/* Main Image Container */}
       <div className={styles.imageContainer}>
         <div className={`${styles.carouselImage} ${styles[carouselData[currentIndex].transition]}`}>
-          <img 
-            src={carouselData[currentIndex].image} 
+          <video
+            key={carouselData[currentIndex].image}
+            src={carouselData[currentIndex].image}
             alt={carouselData[currentIndex].title}
-            className={styles.gifImage}
+            className={styles.mp4Image}
+            autoPlay
+            loop
+            muted
+            playsInline
           />
         </div>
         

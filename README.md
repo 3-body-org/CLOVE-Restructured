@@ -1,7 +1,7 @@
 ![plot](./CLOVE_banner.png)
 
-
 ## 📘 Table of Contents
+
 - [About CLOVE](#-system-overview)
 - [Purpose](#purpose)
 - [Core Algorithms](#-core-algorithms)
@@ -33,7 +33,6 @@
   - [Deployment Architecture](#deployment-architecture)
 - [License](#-license)
 
-
 ## 🎯 System Overview
 
 **CLOVE** (Code, Logic, Overcome, Validate, Excel) is an intelligent, adaptive learning platform designed to teach Java programming through immersive, game-inspired challenges. The system combines advanced educational algorithms with engaging thematic environments to create a personalized learning experience that adapts to each student's performance and learning patterns.
@@ -51,6 +50,7 @@ CLOVE addresses the challenge of making programming education more engaging and 
 ## 🧠 Core Algorithms
 
 ### 1. Bayesian Knowledge Tracing (BKT)
+
 - **Purpose**: Models student knowledge state and predicts learning outcomes
 - **File Location**: `clove-backend/app/core/bkt.py`
 - **Parameters**:
@@ -61,6 +61,7 @@ CLOVE addresses the challenge of making programming education more engaging and 
 - **Key Method**: `update_knowledge(knowledge_prob, is_correct)`
 
 ### 2. Q-Learning (Reinforcement Learning)
+
 - **Purpose**: Optimizes challenge selection strategy based on student performance
 - **File Location**: `clove-backend/app/core/rl.py`
 - **Parameters**:
@@ -73,26 +74,29 @@ CLOVE addresses the challenge of making programming education more engaging and 
 - **Key Methods**: `select_action(state)`, `update_q_value(current_state, action, reward, next_state)`
 
 ### 3. Adaptive Challenge Selection
+
 - **Purpose**: Intelligently selects the most appropriate challenge for each student
 - **File Location**: `clove-backend/app/services/selection.py`
-- **Mastery Classification**: 
+- **Mastery Classification**:
   - Beginner (0-33% knowledge)
-  - Intermediate (34-66% knowledge) 
+  - Intermediate (34-66% knowledge)
   - Advanced (67-100% knowledge)
 - **Difficulty Mapping**: Automatically adjusts challenge difficulty based on mastery level
 - **Streak Analysis**: Tracks correct/incorrect streaks to activate timers and hints
 - **Key Functions**: `_select_adaptive_challenge()`, `_select_non_adaptive_challenge()`
 
 ### 4. Learning Engine
+
 - **Purpose**: Orchestrates the learning process and updates student knowledge
 - **File Location**: `clove-backend/app/services/engine.py`
-- **Functions**: 
+- **Functions**:
   - Manages adaptive and non-adaptive learning updates
   - Integrates BKT and Q-Learning algorithms
   - Handles reward calculation and state transitions
 - **Key Functions**: `_run_adaptive_update()`, `_run_non_adaptive_update()`
 
 ### 5. Algorithm Utilities
+
 - **Purpose**: Common utilities and configuration for all algorithms
 - **File Location**: `clove-backend/app/core/utils.py`
 - **Contains**:
@@ -104,6 +108,7 @@ CLOVE addresses the challenge of making programming education more engaging and 
 ## 🏗️ System Architecture
 
 ### Frontend (React + Vite)
+
 - **Framework**: React 19 with Vite for fast development
 - **Styling**: SCSS with Bootstrap 5 and custom theme system
 - **State Management**: React Context API for authentication and app state
@@ -113,6 +118,7 @@ CLOVE addresses the challenge of making programming education more engaging and 
 - **Charts**: Recharts for progress visualization
 
 ### Backend (FastAPI + PostgreSQL)
+
 - **Framework**: FastAPI with async/await support
 - **Database**: PostgreSQL with SQLAlchemy ORM
 - **Authentication**: JWT tokens with refresh token mechanism
@@ -121,7 +127,9 @@ CLOVE addresses the challenge of making programming education more engaging and 
 - **Deployment**: Render.com with PostgreSQL database
 
 ### Database Schema
+
 Core entities include:
+
 - **Users**: Student profiles and authentication
 - **Topics/Subtopics**: Learning content hierarchy
 - **Challenges**: Interactive coding exercises with multiple types
@@ -133,16 +141,19 @@ Core entities include:
 ## 🎮 Learning Features
 
 ### Challenge Types
+
 1. **Code Fixer**: Identify and correct bugs in provided code
 2. **Code Completion**: Complete missing code segments
 3. **Output Tracing**: Predict program output and trace execution
 
 ### Thematic Environments
+
 - **Wizard Academy**: Fantasy-themed learning with magical elements
 - **Noir Detective**: Mystery-themed problem-solving scenarios
 - **Space Mission**: Sci-fi themed challenges aboard a starship
 
 ### Adaptive Features
+
 - **Dynamic Difficulty**: Automatically adjusts based on performance
 - **Smart Hints**: Contextual help that activates during struggle
 - **Timer Management**: Adaptive time limits based on performance streaks
@@ -150,32 +161,37 @@ Core entities include:
 
 ## 🚀 Getting Started
 
-Before running **CLOVE**, both the frontend and backend need to be set up to ensure the system runs correctly.  
+Before running **CLOVE**, both the frontend and backend need to be set up to ensure the system runs correctly.
 
 Make sure the following prerequisites are already installed and properly configured on your machine before proceeding:
+
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Python 3.11+
 - PostgreSQL database
 - Git
 
-Start by cloning the project repository, then follow the setup steps in order — beginning with the **frontend**, followed by the **backend**.  
+Start by cloning the project repository, then follow the setup steps in order — beginning with the **frontend**, followed by the **backend**.
 
 ### Frontend Setup
 
 1. **Navigate to frontend directory**:
+
 ```bash
 cd clove-frontend
 # Moves into the frontend project folder
 ```
 
 2. **Install dependencies**:
+
 ```bash
 npm install
 # Installs all required frontend packages
 ```
 
 3. **Start development server**:
+
 ```bash
 npm run dev
 # Launches the frontend on the local development server
@@ -184,12 +200,14 @@ npm run dev
 ### Backend Setup
 
 1. **Navigate to backend directory**:
+
 ```bash
 cd clove-backend
 # Moves into the backend project folder
 ```
 
 2. **Create virtual environment**:
+
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -197,36 +215,42 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 3. **Install dependencies**:
+
 ```bash
 pip install -r requirements.txt
 # Installs all required backend packages
 ```
 
 4. **Set up environment variables**:
+
 ```bash
 cp .env.template .env
 # Edit .env with your database and API keys
 ```
 
 5. **Generate JWT Secret Key**:
+
 ```bash
 python -m scripts.generate_key (creation of key)
 # Edit .env and add the generated key under JWT Secret Key
 ```
 
-   5.1 **Populate the database by seeding**:
-   ```bash
-   python -m app.db.seeder
-   # Run this only if the database has not been seeded yet
-   ```
+5.1 **Populate the database by seeding**:
+
+```bash
+python -m app.db.seeder
+# Run this only if the database has not been seeded yet
+```
 
 6. **Run database migrations**:
+
 ```bash
 alembic upgrade head
 # Applies all database schema migrations
 ```
 
 7. **Start the server**:
+
 ```bash
 uvicorn app.main:app --reload
 # Starts the FastAPI backend server in development mode
@@ -237,11 +261,13 @@ uvicorn app.main:app --reload
 To access the Render PostgreSQL database:
 
 1. **Via Render Dashboard**:
+
    - Go to your Render dashboard
    - Navigate to your PostgreSQL service
    - Use the built-in database browser or connection details
 
 2. **Via psql (if you have connection details)**:
+
 ```bash
 psql -h YOUR_RENDER_DB_HOST -U YOUR_USERNAME -d YOUR_DB_NAME
 ```
@@ -253,20 +279,21 @@ psql -h YOUR_RENDER_DB_HOST -U YOUR_USERNAME -d YOUR_DB_NAME
 ## 📊 Usage
 
 ### How to Use CLOVE
+
 Follow these steps to navigate the platform and begin your learning journey:
 
-1. **Access the Website** – Open the CLOVE platform in your browser.  
-2. **Sign Up or Log In** – Create an account or sign in to enter your learning dashboard.  
-3. **Open “My Deck”** – Go to the **My Deck** tab to browse and start available lessons.  
-4. **Start a Lesson** – Take the pre-assessment to unlock subtopics under the selected lesson.  
-5. **Study Each Subtopic** – Read the learning materials provided for every subtopic.  
-6. **Practice and Challenge** – Apply your knowledge through practice exercises or coding challenges.  
+1. **Access the Website** – Open the CLOVE platform in your browser.
+2. **Sign Up or Log In** – Create an account or sign in to enter your learning dashboard.
+3. **Open “My Deck”** – Go to the **My Deck** tab to browse and start available lessons.
+4. **Start a Lesson** – Take the pre-assessment to unlock subtopics under the selected lesson.
+5. **Study Each Subtopic** – Read the learning materials provided for every subtopic.
+6. **Practice and Challenge** – Apply your knowledge through practice exercises or coding challenges.
 7. **Track Progress** – Visit the **Progress** tab to monitor your overall improvement and completion across lessons.
-
 
 ## 🔧 Development
 
 ### Project Structure
+
 ```
 CLOVE-Restructured/
 ├── clove-frontend/          # React frontend application
@@ -287,6 +314,7 @@ CLOVE-Restructured/
 ```
 
 ### Key Technologies
+
 - **Frontend**: React, Vite, SCSS, Bootstrap, Framer Motion
 - **Backend**: FastAPI, SQLAlchemy, PostgreSQL, Alembic
 - **AI/ML**: NumPy, Custom BKT and Q-Learning implementations
@@ -296,6 +324,7 @@ CLOVE-Restructured/
 ## 📊 Learning Metrics & Insights
 
 The platform tracks detailed learning data to evaluate student progress and adapt challenges dynamically, including:
+
 - Mastery progression
 - Challenge completion rates
 - Time-to-mastery
@@ -306,10 +335,10 @@ The platform tracks detailed learning data to evaluate student progress and adap
 
 Multiple layers of security are implemented to protect user data and maintain application integrity, including:
 
-- **JWT-based authentication** with refresh tokens for secure session management  
-- **Password hashing** using bcrypt  
-- **CORS protection** and **rate limiting** to prevent unauthorized or excessive requests  
-- **Input validation** and **sanitization** to reduce injection risks  
+- **JWT-based authentication** with refresh tokens for secure session management
+- **Password hashing** using bcrypt
+- **CORS protection** and **rate limiting** to prevent unauthorized or excessive requests
+- **Input validation** and **sanitization** to reduce injection risks
 - **Secure database connections** using encrypted credentials
 
 ## 🌐 Deployment
@@ -320,8 +349,8 @@ The platform is deployed using cloud-based services for scalability and reliabil
 - **Backend API**: Deployed on [Render.com](https://render.com)
 - **Database**: PostgreSQL hosted on Render.com
 
-
 ### Deployment Architecture
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Netlify       │    │   Render.com    │    │   Render.com    │
@@ -330,10 +359,7 @@ The platform is deployed using cloud-based services for scalability and reliabil
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-
 ## 📝 License
+
 This project is licensed under the MIT License.  
 See the [LICENSE](./LICENSE) file for details.
-
-
-

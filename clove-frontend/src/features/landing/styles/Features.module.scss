@@ -9,7 +9,9 @@
 }
 
 .wideContainer {
-  padding: 0;
+  padding: 0 40px;
+  margin: 0 auto;
+  max-width: 1400px;
 }
 
 /* Top Row: Innovate & Heading */
@@ -88,6 +90,7 @@
   width: 100%;
   position: relative;
   overflow: hidden;
+  will-change: transform;
 }
 
 .featureCard::before {
@@ -113,31 +116,21 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(45deg, 
-    $light-purple, 
-    $dark-purple, 
-    #8b5cf6, 
+  background: linear-gradient(45deg,
+    $light-purple,
+    $dark-purple,
+    #8b5cf6,
     $light-purple);
   border-radius: 22px;
   z-index: -1;
   opacity: 0;
   transition: opacity 0.4s ease;
+  box-shadow: 0 25px 50px rgba(139, 92, 246, 0.15);
 }
 
 .featureCard:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(139, 92, 246, 0.2);
-  box-shadow: 
-    0 25px 50px rgba(139, 92, 246, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.featureCard:hover::before {
-  opacity: 1;
-}
-
-.featureCard:hover::after {
-  opacity: 0.2;
+  transform: translateY(-8px);
+  border-color: rgba(139, 92, 246, 0.4);
 }
 
 .featureImg {
@@ -214,6 +207,10 @@
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
+  .wideContainer {
+    padding: 0 30px;
+  }
+
   .featuresSection {
     padding: 60px 0;
   }
@@ -249,12 +246,12 @@
 }
 
 @media (max-width: 768px) {
+  .wideContainer {
+    padding: 0 20px;
+  }
+
   .featuresSection {
     padding: 50px 0;
-  }
-  
-  .featuresSection .container {
-    padding: 0 40px;
   }
 
   .featuresHeading {
@@ -290,8 +287,17 @@
 }
 
 @media (max-width: 480px) {
+  .wideContainer {
+    padding: 0 16px;
+  }
+
   .featuresSection {
     padding: 40px 0;
+  }
+
+  .innovateText {
+    font-size: 12px;
+    letter-spacing: 2px;
   }
 
   .featuresHeading {
@@ -323,5 +329,50 @@
   .featureImg {
     height: 140px;
     border-radius: 14px 14px 0 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .wideContainer {
+    padding: 0 12px;
+  }
+
+  .featuresSection {
+    padding: 35px 0;
+  }
+
+  .innovateText {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+
+  .featuresHeading {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .featuresParagraph {
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+
+  .featureCard {
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+
+  .featureTitle {
+    font-size: 16px;
+    margin: 16px 16px 8px 16px;
+  }
+
+  .featureDescription {
+    font-size: 12px;
+    margin: 0 16px 16px 16px;
+  }
+  
+  .featureImg {
+    height: 120px;
+    border-radius: 12px 12px 0 0;
   }
 }

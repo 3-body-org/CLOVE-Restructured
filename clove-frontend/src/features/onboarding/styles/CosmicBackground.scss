@@ -1,0 +1,116 @@
+// CosmicBackground.scss
+@use "/variables" as *;
+
+.cosmic-background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: visible;
+}
+
+.cosmic-background {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.stars {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.3;
+  background: radial-gradient(circle, $dark-purple, transparent);
+  top: 15%;
+  left: 8%;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.nebula {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.3;
+  background: radial-gradient(circle, $light-purple, transparent);
+  top: 55%;
+  right: 12%;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.floating-particles {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.3;
+  background: radial-gradient(circle, #6b46c1, transparent);
+  bottom: 18%;
+  left: 55%;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 4s;
+}
+
+// Animations
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .stars,
+  .nebula,
+  .floating-particles {
+    filter: blur(50px);
+    opacity: 0.25;
+  }
+  
+  .stars {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .nebula {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .floating-particles {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stars,
+  .nebula,
+  .floating-particles {
+    filter: blur(40px);
+    opacity: 0.2;
+  }
+  
+  .stars {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .nebula {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .floating-particles {
+    width: 150px;
+    height: 150px;
+  }
+}
+

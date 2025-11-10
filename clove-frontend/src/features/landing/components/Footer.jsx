@@ -1,4 +1,6 @@
 import React from "react";
+import { motion } from "framer-motion";
+import ScrollReveal from "./ScrollReveal";
 import styles from "features/landing/styles/Footer.module.scss";
 import CloveLogo from "assets/icons/common/icon-common-clove-logo.png";
 
@@ -6,40 +8,45 @@ export default function Footer() {
   return (
     <footer className={styles.footerSection}>
       {/* ===== Top Separator Line (Full Width) ===== */}
-      <div className={styles.topLine}></div>
+      <motion.div
+        className={styles.topLine}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      ></motion.div>
 
       {/* ===== Container for Link Columns (custom .footerContainer) ===== */}
       <div className={`container-fluid ${styles.wideContainer}`}>
         <div className={styles.linkContainer}>
           {/* 5 columns in a grid */}
-          <div>
+          <ScrollReveal animation="fadeInUp" custom={0} delay={0}>
             <h4 className={styles.columnTitle}>Resources Section</h4>
             <ul className={styles.linkList}>
               <li>About Us</li>
               <li>Contact Support</li>
               <li>FAQs</li>
             </ul>
-          </div>
+          </ScrollReveal>
 
-          <div>
+          <ScrollReveal animation="fadeInUp" custom={1} delay={0.1}>
             <h4 className={styles.columnTitle}>Connect With Us</h4>
             <ul className={styles.linkList}>
               <li>Facebook</li>
               <li>X (Twitter)</li>
               <li>YouTube</li>
             </ul>
-          </div>
+          </ScrollReveal>
 
-          <div>
+          <ScrollReveal animation="fadeInUp" custom={2} delay={0.2}>
             <h4 className={styles.columnTitle}>Support</h4>
             <ul className={styles.linkList}>
               <li>Help Center</li>
               <li>Submit a Ticket</li>
               <li>Feedback</li>
             </ul>
-          </div>
+          </ScrollReveal>
 
-          <div>
+          <ScrollReveal animation="fadeInUp" custom={3} delay={0.3}>
             <h4 className={styles.columnTitle}>Legal</h4>
             <ul className={styles.linkList}>
               <li>Cookie Policy</li>
@@ -47,9 +54,9 @@ export default function Footer() {
               <li>User Agreement</li>
               <li>Copyright Notice</li>
             </ul>
-          </div>
+          </ScrollReveal>
 
-          <div>
+          <ScrollReveal animation="fadeInUp" custom={4} delay={0.4}>
             <h4 className={styles.columnTitle}>Contact</h4>
             <ul className={styles.linkList}>
               <li>Email Us</li>
@@ -57,27 +64,43 @@ export default function Footer() {
               <li>Visit Us</li>
               <li>Feedback Form</li>
             </ul>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
 
       {/* ===== Second Separator Line (Full Width) ===== */}
-      <div className={styles.bottomLine}></div>
+      <motion.div
+        className={styles.bottomLine}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+      ></motion.div>
 
       {/* ===== Bottom Container: Logo & Copyright ===== */}
       <div className={`container-fluid ${styles.wideContainer}`}>
-        <div className={styles.bottomContainer}>
+        <motion.div
+          className={styles.bottomContainer}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
           {/* Left side: Logo or text */}
           <div className={styles.logoSection}>
             {/* <img src={cloveLogo} alt="CLOVE Logo" className={styles.footerLogo} /> */}
             <h2 className={styles.logoText}>CLOVE</h2>
-            <img src={CloveLogo} alt="Clover Logo" className={styles.logoImg} />
+            <motion.img
+              src={CloveLogo}
+              alt="Clover Logo"
+              className={styles.logoImg}
+              whileHover={{ rotate: 360, scale: 1.1 }}
+              transition={{ duration: 0.6 }}
+            />
           </div>
           {/* Right side: Copyright */}
           <div>
             <p>© 2025 CLOVE. All rights reserved.</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

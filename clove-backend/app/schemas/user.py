@@ -1,6 +1,6 @@
 # app/schemas/user.py
 from datetime import datetime, date
-from typing import Optional
+from typing import Optional, Dict, Any
 from pydantic import BaseModel, EmailStr, Field
 
 class UserBase(BaseModel):
@@ -26,6 +26,13 @@ class UserUpdate(BaseModel):
     password: Optional[str] = Field(None, min_length=8)
     bio: Optional[str] = None
     profile_photo_url: Optional[str] = None
+    
+    # Onboarding fields
+    onboarding_completed: Optional[bool] = None
+    traveler_class: Optional[str] = Field(None, max_length=50)
+    selected_realm: Optional[str] = Field(None, max_length=50)
+    current_realm: Optional[str] = Field(None, max_length=50)
+    story_progress: Optional[Dict[str, Any]] = None
 
 class UserRead(UserBase):
     id: int
@@ -36,6 +43,13 @@ class UserRead(UserBase):
     login_cooldown_until: Optional[datetime] = None
     is_active: bool
     email_verified: bool
+    
+    # Onboarding fields
+    onboarding_completed: bool = False
+    traveler_class: Optional[str] = None
+    selected_realm: Optional[str] = None
+    current_realm: Optional[str] = None
+    story_progress: Optional[Dict[str, Any]] = None
 
     class Config:
         from_attributes = True

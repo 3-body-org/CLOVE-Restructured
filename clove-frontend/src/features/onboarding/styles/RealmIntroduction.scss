@@ -1,0 +1,566 @@
+// RealmIntroduction.scss
+.realm-introduction {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: white;
+}
+
+.introduction-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.theme-background {
+  width: 100%;
+  height: 100%;
+  
+  &.wizard {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 25%, #C084FC 50%, #DDD6FE 75%, #F3E8FF 100%);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
+      animation: wizard-glow 4s ease-in-out infinite alternate;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(1px 1px at 60px 20px, rgba(255, 255, 255, 0.7), transparent),
+        radial-gradient(1px 1px at 80px 50px, rgba(255, 255, 255, 0.5), transparent),
+        radial-gradient(1px 1px at 100px 80px, rgba(255, 255, 255, 0.9), transparent),
+        radial-gradient(1px 1px at 120px 40px, rgba(255, 255, 255, 0.4), transparent);
+      background-repeat: repeat;
+      background-size: 150px 100px;
+      animation: magic-sparkles 8s linear infinite;
+    }
+  }
+  
+  &.detective {
+    background: linear-gradient(135deg, #1F2937 0%, #374151 25%, #4B5563 50%, #6B7280 75%, #9CA3AF 100%);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%),
+        radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(107, 114, 128, 0.2) 0%, transparent 50%);
+      animation: detective-scan 3s linear infinite;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.1) 2%, transparent 4%),
+        linear-gradient(0deg, transparent 0%, rgba(59, 130, 246, 0.1) 2%, transparent 4%),
+        linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.05) 1%, transparent 2%),
+        linear-gradient(-45deg, transparent 0%, rgba(255, 255, 255, 0.05) 1%, transparent 2%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: detective-grid 6s linear infinite;
+    }
+  }
+  
+  &.space {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 25%, #334155 50%, #475569 75%, #64748B 100%);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(3px 3px at 60px 20px, rgba(59, 130, 246, 0.7), transparent),
+        radial-gradient(1px 1px at 80px 50px, rgba(255, 255, 255, 0.9), transparent),
+        radial-gradient(2px 2px at 100px 80px, rgba(255, 255, 255, 0.5), transparent),
+        radial-gradient(1px 1px at 120px 40px, rgba(59, 130, 246, 0.8), transparent),
+        radial-gradient(1px 1px at 140px 60px, rgba(255, 255, 255, 0.7), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.4), transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: space-twinkle 6s linear infinite;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(1px 1px at 30px 20px, rgba(255, 255, 255, 0.3), transparent),
+        radial-gradient(1px 1px at 50px 60px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(1px 1px at 70px 10px, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 90px 80px, rgba(255, 255, 255, 0.3), transparent),
+        radial-gradient(1px 1px at 110px 40px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(1px 1px at 130px 70px, rgba(255, 255, 255, 0.5), transparent);
+      background-repeat: repeat;
+      background-size: 150px 80px;
+      animation: space-drift 12s linear infinite;
+    }
+  }
+}
+
+.introduction-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.mentor-dialogue {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.mentor-avatar {
+  flex-shrink: 0;
+  
+  .avatar-container {
+    text-align: center;
+    position: relative;
+  }
+  
+  .mentor-image {
+    font-size: 8rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+    animation: mentor-float 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .mentor-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    position: relative;
+    z-index: 2;
+  }
+  
+  .floating-particle {
+    position: absolute;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 1;
+    
+    &.particle-1 {
+      top: 20%;
+      right: 10%;
+    }
+    
+    &.particle-2 {
+      top: 60%;
+      left: 5%;
+    }
+    
+    &.particle-3 {
+      top: 40%;
+      right: 5%;
+    }
+  }
+}
+
+.dialogue-container {
+  flex: 1;
+}
+
+.dialogue-bubble {
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 15px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .dialogue-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: white;
+    
+    .typing-indicator {
+      .cursor {
+        animation: blink 1s infinite;
+        color: #ffd700;
+      }
+    }
+  }
+}
+
+.dialogue-actions {
+  display: flex;
+  justify-content: center;
+  
+  .continue-dialogue-btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    border: none;
+    border-radius: 15px;
+    color: #1a1a2e;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(45deg, #ffed4e, #ffd700);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.tutorial-section {
+  max-width: 800px;
+  width: 100%;
+}
+
+.tutorial-content {
+  text-align: center;
+  
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 3rem;
+  }
+}
+
+.tutorial-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.tutorial-step {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .step-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+  
+  .step-content {
+    text-align: left;
+    
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #ffd700;
+    }
+    
+    p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+}
+
+.tutorial-actions {
+  .start-adventure-btn {
+    padding: 1.2rem 2.5rem;
+    background: linear-gradient(45deg, #10B981, #059669);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    
+    &:hover {
+      background: linear-gradient(45deg, #059669, #047857);
+      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.4);
+      transform: translateY(-3px);
+    }
+  }
+}
+
+.introduction-footer {
+  position: relative;
+  z-index: 2;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 0.5rem;
+  
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    
+    &.active {
+      background: #ffd700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+  }
+}
+
+// Animations
+@keyframes wizard-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes detective-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes space-twinkle {
+  0% { 
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  25% { 
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  75% { 
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+  100% { 
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+@keyframes mentor-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes magic-sparkles {
+  0% { 
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.8;
+  }
+  25% { 
+    transform: translateY(-10px) rotate(90deg);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(-5px) rotate(180deg);
+    opacity: 0.6;
+  }
+  75% { 
+    transform: translateY(-15px) rotate(270deg);
+    opacity: 0.9;
+  }
+  100% { 
+    transform: translateY(0px) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes detective-grid {
+  0% { 
+    transform: translateX(0px) translateY(0px);
+    opacity: 0.1;
+  }
+  25% { 
+    transform: translateX(10px) translateY(-5px);
+    opacity: 0.2;
+  }
+  50% { 
+    transform: translateX(0px) translateY(-10px);
+    opacity: 0.15;
+  }
+  75% { 
+    transform: translateX(-5px) translateY(-5px);
+    opacity: 0.25;
+  }
+  100% { 
+    transform: translateX(0px) translateY(0px);
+    opacity: 0.1;
+  }
+}
+
+@keyframes space-drift {
+  0% { 
+    transform: translateX(0px) translateY(0px);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translateX(-20px) translateY(-10px);
+    opacity: 0.2;
+  }
+  100% { 
+    transform: translateX(0px) translateY(0px);
+    opacity: 0.3;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .mentor-dialogue {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .mentor-avatar .mentor-image {
+    font-size: 6rem;
+  }
+  
+  .dialogue-bubble {
+    padding: 1.5rem;
+    
+    &::before {
+      display: none;
+    }
+  }
+  
+  .dialogue-text {
+    font-size: 1.1rem;
+  }
+  
+  .tutorial-content h2 {
+    font-size: 2rem;
+  }
+  
+  .tutorial-step {
+    flex-direction: column;
+    text-align: center;
+    
+    .step-content {
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .introduction-content {
+    padding: 1rem;
+  }
+  
+  .mentor-avatar .mentor-image {
+    font-size: 5rem;
+  }
+  
+  .dialogue-bubble {
+    padding: 1rem;
+  }
+  
+  .dialogue-text {
+    font-size: 1rem;
+  }
+  
+  .tutorial-content h2 {
+    font-size: 1.6rem;
+  }
+  
+  .tutorial-step {
+    padding: 1rem;
+    
+    .step-icon {
+      font-size: 2rem;
+    }
+  }
+}

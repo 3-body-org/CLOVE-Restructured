@@ -105,10 +105,10 @@ const ChallengeFeedback = ({
 
       {/* Points and Stats - Moved to top */}
       <div className="stats-container">
-        {/* <div className="stat">
+        <div className="stat">
           <span className="stat-label">Points:</span>
           <span className="stat-value">{isCorrect ? points : 0}</span>
-        </div> */}
+        </div>
         <div className="stat">
           <span className="stat-label">Time:</span>
           <span className="stat-value">{formatTimeSpent(timeSpent, timerEnabled)}</span>

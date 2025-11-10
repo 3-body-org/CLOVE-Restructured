@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import CustomExitWarningModal from "../features/challenges/components/CustomExitWarningModal";
 
 // AuthContext: Central place for authentication state and functions
-const AuthContext = createContext();
+// Don't provide a default value - undefined means not in provider, null/object means in provider
+const AuthContext = createContext(undefined);
 
 // Add a global array to hold reset callbacks from other contexts
 const resetCallbacks = [];
@@ -315,6 +316,11 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // --- Update user info locally (for immediate UI updates) ---
+  function updateUser(userData) {
+    setUser(prevUser => ({ ...prevUser, ...userData }));
+  }
+
   // --- Refresh user info from backend ---
   async function refreshUser() {
     if (token) {
@@ -436,6 +442,7 @@ export function AuthProvider({ children }) {
       login, // Login function
       signup, // Signup function
       logout: handleLogout, // Logout function with exit prevention
+      updateUser, // Update user info locally
       refreshUser, // Refresh user info from backend
       makeAuthenticatedRequest, // For advanced API calls
       manualRefreshToken, // For manual token refresh (rarely needed)
@@ -464,5 +471,17 @@ export function AuthProvider({ children }) {
 
 // Custom hook to use the AuthContext
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  // Only throw error if context is undefined (not provided by any provider)
+  // The provider always provides an object, so undefined means we're outside the provider
+  if (context === undefined) {
+    // In development, provide more helpful error message
+    if (import.meta.env.DEV) {
+      console.error('useAuth called outside AuthProvider. Check component tree.');
+    }
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  // Context should always be an object when inside provider
+  // If it's null or falsy, something went wrong but we'll return it anyway
+  return context;
 } 

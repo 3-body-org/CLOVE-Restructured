@@ -108,7 +108,13 @@ async def update_user_subtopic_progress(db, user_id, subtopic_id):
 
         user_subtopic.progress_percent = progress_percent
         was_completed = user_subtopic.is_completed
-        user_subtopic.is_completed = progress_percent == 1.0
+        is_now_completed = progress_percent == 1.0
+        user_subtopic.is_completed = is_now_completed
+        
+        # Set completed_at timestamp when subtopic is first completed
+        if is_now_completed and not was_completed and not user_subtopic.completed_at:
+            from datetime import datetime, timezone
+            user_subtopic.completed_at = datetime.now(timezone.utc)
 
         await db.commit()
         await db.refresh(user_subtopic)
@@ -224,6 +230,7 @@ async def update_user_topic_progress(db, user_id, topic_id):
                 )
                 next_user_topic = next_user_topic.scalars().first()
                 if next_user_topic and not next_user_topic.is_unlocked:
+                    # Note: All topics start unlocked, this is just a safety check
                     next_user_topic.is_unlocked = True
                     await db.commit()
                     await db.refresh(next_user_topic)
@@ -243,15 +250,19 @@ async def unlock_first_subtopic_for_user(db: AsyncSession, user_id: int, topic_i
     user_subtopic = await get_by_user_and_subtopic(db, user_id, subtopic.subtopic_id)
     if user_subtopic:
         if not user_subtopic.is_unlocked:
+            from datetime import datetime, timezone
             user_subtopic.is_unlocked = True
+            user_subtopic.unlocked_at = datetime.now(timezone.utc)
             await db.commit()
             await db.refresh(user_subtopic)
     else:
         # Create if not exists
+        from datetime import datetime, timezone
         new_user_subtopic = UserSubtopic(
             user_id=user_id,
             subtopic_id=subtopic.subtopic_id,
-            is_unlocked=True
+            is_unlocked=True,
+            unlocked_at=datetime.now(timezone.utc)
         )
         db.add(new_user_subtopic)
         await db.commit()
@@ -280,7 +291,9 @@ async def unlock_next_subtopic_or_post_assessment(db: AsyncSession, user_id: int
         next_subtopic = all_subtopics[idx + 1]
         user_subtopic = await get_by_user_and_subtopic(db, user_id, next_subtopic.subtopic_id)
         if user_subtopic and not user_subtopic.is_unlocked:
+            from datetime import datetime, timezone
             user_subtopic.is_unlocked = True
+            user_subtopic.unlocked_at = datetime.now(timezone.utc)
             await db.commit()
             await db.refresh(user_subtopic)
     elif idx is not None and idx + 1 == len(all_subtopics):
