@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import { validateSteps } from 'features/joyride/utils/stepValidator';
+import { tourSteps } from 'features/joyride/config/tourSteps';
+import { VALIDATION_OPTIONS } from 'features/joyride/config/tourConstants';
 
 const JoyrideContext = createContext(null);
 
@@ -8,78 +10,80 @@ const STORAGE_KEY = 'joyride_completed';
 export const JoyrideProvider = ({ children }) => {
   const [run, setRun] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [isNavigating, setIsNavigating] = useState(false);
-  const navigationTimerRef = useRef(null); // Store navigation timer to clear it if needed
-  // These hooks require Router context - must be inside Router
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [validationError, setValidationError] = useState(null);
 
   // Check if joyride was completed before
-  const isCompleted = () => {
+  const isCompleted = useCallback(() => {
     return localStorage.getItem(STORAGE_KEY) === 'true';
-  };
+  }, []);
 
-  // Start the tour
-  const startTour = useCallback(() => {
+  // Validate steps before starting tour
+  const validateTourSteps = useCallback(async () => {
+    try {
+      const validation = await validateSteps(tourSteps, {
+        waitForElements: VALIDATION_OPTIONS.WAIT_FOR_ELEMENTS,
+        waitTimeout: VALIDATION_OPTIONS.WAIT_TIMEOUT,
+        strict: VALIDATION_OPTIONS.STRICT,
+      });
+
+      if (!validation.valid) {
+        setValidationError(validation.errors.join('; '));
+        return false;
+      }
+
+      setValidationError(null);
+      return true;
+    } catch (error) {
+      setValidationError(`Validation failed: ${error.message}`);
+      return false;
+    }
+  }, []);
+
+  // Start the tour with validation
+  const startTour = useCallback(async () => {
+    // Validate steps before starting
+    const isValid = await validateTourSteps();
+    
+    if (!isValid) {
+      console.warn('Tour validation failed:', validationError);
+      // Still start the tour but log the warning
+      // This allows the tour to proceed even if some elements aren't ready yet
+      // The hooks will handle waiting for elements
+    }
+
     setStepIndex(0);
     setRun(true);
     localStorage.removeItem(STORAGE_KEY);
-  }, []);
+  }, [validateTourSteps, validationError]);
 
   // Stop the tour
   const stopTour = useCallback(() => {
     setRun(false);
     setStepIndex(0);
-    setIsNavigating(false); // Clear navigation state when stopping tour
-    // Clear any pending navigation timers
-    if (navigationTimerRef.current) {
-      clearTimeout(navigationTimerRef.current);
-      navigationTimerRef.current = null;
-    }
+    setValidationError(null);
   }, []);
 
-  // Reset tour (mark as not completed)
-  const resetTour = useCallback(() => {
+  // Reset tour (mark as not completed and restart)
+  const resetTour = useCallback(async () => {
+    // First, ensure tour is fully stopped
+    setRun(false);
+    setStepIndex(0);
+    setValidationError(null);
+    // Clear the completion flag
     localStorage.removeItem(STORAGE_KEY);
-    startTour();
+    // Small delay to ensure state is fully reset before starting
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    // Then start the tour
+    await startTour();
   }, [startTour]);
 
   // Complete the tour
   const completeTour = useCallback(() => {
     setRun(false);
     setStepIndex(0);
-    setIsNavigating(false); // Clear navigation state when completing tour
-    // Clear any pending navigation timers
-    if (navigationTimerRef.current) {
-      clearTimeout(navigationTimerRef.current);
-      navigationTimerRef.current = null;
-    }
+    setValidationError(null);
     localStorage.setItem(STORAGE_KEY, 'true');
   }, []);
-
-  // Navigate to a specific route
-  // Only works when tour is running - prevents navigation after tour is stopped
-  const navigateToRoute = useCallback((route) => {
-    // Don't navigate if tour is not running
-    if (!run) {
-      return;
-    }
-    
-    if (location.pathname !== route) {
-      // Clear any existing navigation timer
-      if (navigationTimerRef.current) {
-        clearTimeout(navigationTimerRef.current);
-      }
-      
-      setIsNavigating(true);
-      navigate(route);
-      // Wait a bit for page to load, then clear navigation state
-      navigationTimerRef.current = setTimeout(() => {
-        setIsNavigating(false);
-        navigationTimerRef.current = null;
-      }, 500);
-    }
-  }, [navigate, location.pathname, run]);
 
   const value = {
     run,
@@ -90,8 +94,8 @@ export const JoyrideProvider = ({ children }) => {
     resetTour,
     completeTour,
     isCompleted,
-    isNavigating,
-    navigateToRoute,
+    validationError,
+    validateTourSteps,
   };
 
   return (

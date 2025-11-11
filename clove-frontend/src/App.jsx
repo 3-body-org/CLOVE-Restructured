@@ -67,7 +67,7 @@ import ErrorBoundary from "components/error_fallback/ErrorBoundary";
 import NotFoundPage from "components/error_fallback/NotFoundPage";
 import { ServerStatusProvider, useServerStatus } from "contexts/ServerStatusContext";
 import ServerDownPage from "components/error_fallback/ServerDownPage";
-import JoyrideTour from "features/joyride/JoyrideTour";
+import JoyrideTour from "features/joyride/components/JoyrideTour";
 
 // Loading component with consistent styling
 const LoadingSpinner = ({ message = "Loading..." }) => (
