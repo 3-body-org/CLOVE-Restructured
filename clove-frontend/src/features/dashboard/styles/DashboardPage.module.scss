@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "/variables" as *; /* import the global variable from _variables.scss */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
@@ -639,7 +640,7 @@
     0 8px 24px rgba(139, 92, 246, 0.6),
     0 4px 12px rgba(139, 92, 246, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  background: linear-gradient(135deg, lighten($dark-purple, 5%), lighten($light-purple, 5%));
+  background: linear-gradient(135deg, color.adjust($dark-purple, $lightness: 5%), color.adjust($light-purple, $lightness: 5%));
   outline: none;
 }
 
