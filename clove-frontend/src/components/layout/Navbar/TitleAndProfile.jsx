@@ -3,6 +3,7 @@ import { Image } from "react-bootstrap";
 import styles from "components/layout/Navbar/TitleAndProfile.module.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
+import RetentionTestNotification from "./RetentionTestNotification";
 
 // import profile from "../assets/images/DashboardPage/profile.svg";
 
@@ -39,29 +40,32 @@ export default function TitleAndProfile({ nonColored, colored, description, show
         </h2>
         <p>{description}</p>
       </div>
-      {showProfileButton && (
-        <button
-          className={styles.profileButton}
-          onClick={() => navigate("/profile")}
-          aria-label="Go to profile"
-          data-joyride="profile-button"
-          style={{ background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer" }}
-        >
-          {profilePhoto ? (
-            <img
-              className={styles.profile}
-              src={profilePhoto}
-              alt="User avatar"
-            />
-          ) : (
-            <img
-              className={styles.profile}
-              src={`https://api.dicebear.com/7.x/rings/svg?seed=${user?.username || 'default'}&color[]=a78bfa&color[]=38bdf8&color[]=06b6d4&color[]=818cf8`}
-              alt="Default avatar"
-            />
-          )}
-        </button>
-      )}
+      <div className={styles.headerRight}>
+        <RetentionTestNotification />
+        {showProfileButton && (
+          <button
+            className={styles.profileButton}
+            onClick={() => navigate("/profile")}
+            aria-label="Go to profile"
+            data-joyride="profile-button"
+            style={{ background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer" }}
+          >
+            {profilePhoto ? (
+              <img
+                className={styles.profile}
+                src={profilePhoto}
+                alt="User avatar"
+              />
+            ) : (
+              <img
+                className={styles.profile}
+                src={`https://api.dicebear.com/7.x/rings/svg?seed=${user?.username || 'default'}&color[]=a78bfa&color[]=38bdf8&color[]=06b6d4&color[]=818cf8`}
+                alt="Default avatar"
+              />
+            )}
+          </button>
+        )}
+      </div>
     </header>
   );
 }

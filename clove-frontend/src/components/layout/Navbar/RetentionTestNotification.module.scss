@@ -1,0 +1,280 @@
+@use "/variables" as *;
+
+.notificationContainer {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.notificationButton {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.1);
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  color: $light-purple;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  margin: 0;
+
+  &:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+  }
+}
+
+.notificationIcon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: $danger;
+  color: white;
+  border-radius: 12px;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 6px;
+  border: 2px solid $pitch-black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 360px;
+  max-height: 500px;
+  background: rgba(26, 26, 46, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(139, 92, 246, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: $white;
+  }
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: $dark-white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: $white;
+  }
+}
+
+.dropdownContent {
+  max-height: 400px;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(139, 92, 246, 0.5);
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  gap: 1rem;
+  color: $dark-white;
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(139, 92, 246, 0.2);
+    border-top-color: $light-purple;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.noNotifications {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: $dark-white;
+
+  .emptyIcon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0 0 0.5rem 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: $white;
+  }
+
+  .emptyMessage {
+    font-size: 14px;
+    color: $dark-white;
+  }
+}
+
+.notificationsList {
+  padding: 0.5rem 0;
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba(139, 92, 246, 0.1);
+  }
+}
+
+.notificationContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.topicName {
+  font-size: 15px;
+  font-weight: 600;
+  color: $white;
+}
+
+.stages {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.stageBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: $light-purple;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.arrowIcon {
+  width: 20px;
+  height: 20px;
+  color: $dark-white;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+@media (max-width: 768px) {
+  .dropdown {
+    width: 320px;
+    right: -10px;
+  }
+
+  .notificationButton {
+    width: 44px;
+    height: 44px;
+  }
+
+  .notificationIcon {
+    width: 20px;
+    height: 20px;
+  }
+}
+

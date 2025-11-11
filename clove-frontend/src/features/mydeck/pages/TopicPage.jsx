@@ -239,15 +239,47 @@ const TopicPage = () => {
     [navigate, getTopicById, updateRecentTopic, closeSidebar]
   );
 
+  // Get the first topic's theme for background styling
+  const getFeaturedTheme = () => {
+    if (!topics || topics.length === 0) return 'default';
+    return topics[0].theme || 'default';
+  };
+
+  const featuredTheme = getFeaturedTheme();
+
   // Simple loading state management - AFTER all hooks
   if (loading || !minTimePassed) return <LoadingScreen message="Loading topics..." />;
   if (error) return <ErrorScreen message={error} />;
+
+  // Background patterns - Same as Progress Page
+  const renderBackgroundPatterns = () => {
+    return (
+      <div className={styles.backgroundPatterns}>
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={`bg-orb-${i}`}
+            className={styles.bgOrb}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${Math.random() * 200 + 100}px`,
+              height: `${Math.random() * 200 + 100}px`,
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <Container
       fluid
       className={`${styles.myDeckWrapper} text-white d-flex flex-column`}
+      data-featured-theme={featuredTheme}
     >
+      {/* Background Patterns - Same as Progress Page */}
+      {renderBackgroundPatterns()}
+      
       <TitleAndProfile
         nonColored={"Lesson "}
         colored={"Cards"}
@@ -256,45 +288,7 @@ const TopicPage = () => {
         }
       />
       
-      {/* Retention Test Status Section - Only show available tests (not completed ones) */}
-      {retentionTestStatus.filter(test => test.isAvailable).length > 0 && (
-        <div className={`${styles.retentionTestSection} mt-3 mb-4`}>
-          <div className={styles.retentionTestHeader}>
-            <h3>RETENTION TESTS AVAILABLE!</h3>
-            <p>You have retention tests ready to take</p>
-          </div>
-          
-          <div className={styles.retentionTestList}>
-            {retentionTestStatus
-              .filter(test => test.isAvailable) // Only show available tests
-              .map((test) => (
-                <div key={test.topicId} className={styles.retentionTestItem}>
-                  <div className={styles.retentionTestInfo}>
-                    <span className={styles.topicName}>{test.topicName}</span>
-                    <span className={styles.availability}>
-                      Available
-                    </span>
-                  </div>
-                  <button
-                    className={styles.startRetentionTestBtn}
-                    onClick={() => {
-                      const topic = topics.find(t => t.id === test.topicId);
-                      if (topic) {
-                        handleStartRetentionTest(topic);
-                      }
-                    }}
-                  >
-                    Start Retention Test
-                  </button>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-      
-      <div
-        className={`${styles.floatContainer} mt-3 p-0 d-flex flex-wrap justify-content-center`}
-      >
+      <div className={styles.topicsGridContainer}>
         {topics.length === 0 ? (
           <div className="text-center" style={{ minHeight: "400px", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div>
@@ -303,33 +297,36 @@ const TopicPage = () => {
             </div>
           </div>
         ) : (
-          [
-            ...topics.map(topic => ({ 
-              type: "topic", 
-              topic, 
-              theme: topic.theme,
-              retentionTestStatus: retentionTestStatus.find(rt => rt.topicId === topic.id) || null
-            })),
-            { type: "comingSoon" }
-          ].map((card, idx) => {
-
-            return card.type === "topic" ? (
-              <TopicCard
-                key={card.topic.id}
-                topic={card.topic}
-                onClick={handleTopicClick}
-                themeStyles={getThemeStyles(card.theme)}
-                retentionTestStatus={card.retentionTestStatus}
-                onRetentionTestClick={handleStartRetentionTest}
-              />
-            ) : (
-              <TopicCard
-                key="coming-soon"
-                comingSoon={true}
-                themeStyles={THEMES.default}
-              />
-            );
-          })
+          <div className={styles.topicsGrid}>
+            {[
+              ...topics.map(topic => ({ 
+                type: "topic", 
+                topic, 
+                theme: topic.theme,
+                retentionTestStatus: retentionTestStatus.find(rt => rt.topicId === topic.id) || null
+              })),
+              { type: "comingSoon" }
+            ].map((card, idx) => {
+              return card.type === "topic" ? (
+                <TopicCard
+                  key={card.topic.id}
+                  topic={card.topic}
+                  onClick={handleTopicClick}
+                  themeStyles={getThemeStyles(card.theme)}
+                  retentionTestStatus={card.retentionTestStatus}
+                  onRetentionTestClick={handleStartRetentionTest}
+                  isFeatured={false}
+                />
+              ) : (
+                <TopicCard
+                  key="coming-soon"
+                  comingSoon={true}
+                  themeStyles={THEMES.default}
+                  isFeatured={false}
+                />
+              );
+            })}
+          </div>
         )}
       </div>
       

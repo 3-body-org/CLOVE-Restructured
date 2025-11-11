@@ -1,7 +1,7 @@
 @use "/variables" as *;
 @use "sass:color";
 
-// Themed SVG Background
+// Themed SVG Background - Enhanced for immersive feel with animations, fills entire card
 .themeSvg {
   position: absolute;
   top: 0;
@@ -12,8 +12,1219 @@
   pointer-events: none;
   z-index: 0;
   border-radius: inherit;
-  opacity: 0.3;
+  opacity: 0.7; // More visible since card is transparent
   transition: opacity 0.4s ease;
+  filter: blur(0px); // No blur for sharper, more interactive look
+  overflow: hidden; // Ensure SVG stays within card bounds
+}
+
+// Animation classes for interactive game elements
+.animatedSparkles,
+.twinklingStars,
+.floatingClues,
+.spaceParticles {
+  animation: floatParticles 6s ease-in-out infinite;
+}
+
+// Animation classes are applied via SVG animate elements
+
+.rocketShip {
+  animation: floatRocket 4s ease-in-out infinite;
+}
+
+.robot {
+  animation: floatRobot 5s ease-in-out infinite;
+}
+
+@keyframes floatParticles {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes floatRocket {
+  0%, 100% {
+    transform: translate(0px, 0px);
+  }
+  25% {
+    transform: translate(2px, -3px);
+  }
+  50% {
+    transform: translate(0px, -5px);
+  }
+  75% {
+    transform: translate(-2px, -3px);
+  }
+}
+
+@keyframes floatRobot {
+  0%, 100% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(1px, -2px);
+  }
+}
+
+// Immersive card wrapper
+.immersiveCard {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  overflow: visible; // Allow runes to leak outside
+}
+
+// Topic 1 - Magical Rune Leak Effect
+.topicOneCard {
+  overflow: visible !important;
+  position: relative;
+  
+  // Custom diagonal wooden wand cursor for wizard theme with magical glow and particles
+  &:not(.lockedCard) {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40'%3E%3Cdefs%3E%3ClinearGradient id='woodGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%238B4513'/%3E%3Cstop offset='30%25' stop-color='%23A0522D'/%3E%3Cstop offset='60%25' stop-color='%23CD853F'/%3E%3Cstop offset='100%25' stop-color='%23D2691E'/%3E%3C/linearGradient%3E%3ClinearGradient id='woodGrain' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23A0522D' stop-opacity='0.6'/%3E%3Cstop offset='50%25' stop-color='%23CD853F' stop-opacity='0.3'/%3E%3Cstop offset='100%25' stop-color='%23A0522D' stop-opacity='0.6'/%3E%3C/linearGradient%3E%3CradialGradient id='magicGlow' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%236EE7B7' stop-opacity='1'/%3E%3Cstop offset='40%25' stop-color='%2334d399' stop-opacity='0.9'/%3E%3Cstop offset='70%25' stop-color='%2310b981' stop-opacity='0.6'/%3E%3Cstop offset='100%25' stop-color='%2310b981' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='wandShadow'%3E%3CfeGaussianBlur stdDeviation='0.5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='magicGlowFilter'%3E%3CfeGaussianBlur stdDeviation='3' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='magicGlowOuter'%3E%3CfeGaussianBlur stdDeviation='5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='particleGlow'%3E%3CfeGaussianBlur stdDeviation='1.5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg transform='rotate(-20 20 20)'%3E%3Cpath d='M20 4 L20 32' stroke='url(%23woodGrad)' stroke-width='2.5' fill='none' filter='url(%23wandShadow)'/%3E%3Crect x='18.5' y='4' width='3' height='28' fill='url(%23woodGrad)'/%3E%3Cpath d='M18.5 4 L21.5 4 M18.5 8 L21.5 8 M18.5 12 L21.5 12 M18.5 16 L21.5 16 M18.5 20 L21.5 20 M18.5 24 L21.5 24 M18.5 28 L21.5 28' stroke='url(%23woodGrain)' stroke-width='0.5' opacity='0.4'/%3E%3C/g%3E%3Cg transform='rotate(-20 20 20)'%3E%3Ccircle cx='20' cy='4' r='6' fill='url(%23magicGlow)' filter='url(%23magicGlowOuter)' opacity='0.8'/%3E%3Ccircle cx='20' cy='4' r='5' fill='url(%23magicGlow)' filter='url(%23magicGlowFilter)' opacity='0.95'/%3E%3Ccircle cx='20' cy='4' r='3.5' fill='%236EE7B7' opacity='0.98'/%3E%3Ccircle cx='20' cy='4' r='2.5' fill='%2334d399' opacity='0.95'/%3E%3Ccircle cx='20' cy='4' r='1.5' fill='%23ffffff' opacity='0.9'/%3E%3Ccircle cx='18.5' cy='2.5' r='1.2' fill='%2334d399' opacity='0.8' filter='url(%23particleGlow)'/%3E%3Ccircle cx='21.5' cy='2.5' r='1' fill='%236EE7B7' opacity='0.85' filter='url(%23particleGlow)'/%3E%3Ccircle cx='19' cy='6' r='1.1' fill='%23ffffff' opacity='0.7' filter='url(%23particleGlow)'/%3E%3Ccircle cx='21' cy='6' r='0.9' fill='%2334d399' opacity='0.75' filter='url(%23particleGlow)'/%3E%3Ccircle cx='18' cy='5.5' r='0.8' fill='%236EE7B7' opacity='0.7' filter='url(%23particleGlow)'/%3E%3Ccircle cx='22' cy='5.5' r='0.8' fill='%23ffffff' opacity='0.65' filter='url(%23particleGlow)'/%3E%3C/g%3E%3C/svg%3E") 20 20, pointer;
+  }
+  
+  // Override floatCard overflow for topic 1
+  &.floatCard {
+    overflow: visible !important;
+  }
+}
+
+// Also override when floatCard class is applied
+.floatCard.topicOneCard {
+  overflow: visible !important;
+}
+
+// Topic 2 - Detective Clues Leak Effect
+.topicTwoCard {
+  overflow: visible !important;
+  position: relative;
+  
+  // Custom magnifying glass cursor for detective theme with glass effect
+  &:not(.lockedCard) {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36' width='36' height='36'%3E%3Cdefs%3E%3ClinearGradient id='glassGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff' stop-opacity='0.4'/%3E%3Cstop offset='30%25' stop-color='%23fbbf24' stop-opacity='0.2'/%3E%3Cstop offset='70%25' stop-color='%23fbbf24' stop-opacity='0.15'/%3E%3Cstop offset='100%25' stop-color='%23ffffff' stop-opacity='0.3'/%3E%3C/linearGradient%3E%3ClinearGradient id='glassHighlight' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff' stop-opacity='0.6'/%3E%3Cstop offset='50%25' stop-color='%23ffffff' stop-opacity='0.2'/%3E%3Cstop offset='100%25' stop-color='%23ffffff' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cfilter id='magGlassGlow'%3E%3CfeGaussianBlur stdDeviation='1' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx='18' cy='18' r='9' fill='url(%23glassGrad)' stroke='%23fbbf24' stroke-width='2.5' filter='url(%23magGlassGlow)'/%3E%3Ccircle cx='18' cy='18' r='9' fill='url(%23glassHighlight)'/%3E%3Ccircle cx='18' cy='18' r='3.5' fill='%23fbbf24' opacity='0.25'/%3E%3Cline x1='22' y1='22' x2='28' y2='28' stroke='%23fbbf24' stroke-width='2.5' stroke-linecap='round' filter='url(%23magGlassGlow)'/%3E%3C/svg%3E") 18 18, pointer;
+  }
+  
+  &.floatCard {
+    overflow: visible !important;
+  }
+  
+  // Flickering light effect on hover - like a flashlight beam
+  &:hover {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 5;
+      background: radial-gradient(
+        ellipse 300% 200% at 50% 50%,
+        rgba(209, 183, 115, 0.5) 0%,
+        rgba(209, 183, 115, 0.3) 15%,
+        rgba(209, 183, 115, 0.15) 30%,
+        rgba(209, 183, 115, 0.05) 50%,
+        transparent 70%
+      );
+      opacity: 0;
+      animation: flickerDetectiveLight 3s ease-in-out infinite;
+      border-radius: inherit;
+      mix-blend-mode: screen;
+      filter: blur(20px);
+    }
+  }
+}
+
+.floatCard.topicTwoCard {
+  overflow: visible !important;
+}
+
+// Topic 3 - Space Particles Leak Effect
+.topicThreeCard {
+  overflow: visible !important;
+  position: relative;
+  
+  // Custom star cursor for space theme with enhanced glow - bigger size
+  &:not(.lockedCard) {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40'%3E%3Cdefs%3E%3CradialGradient id='starGrad' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff' stop-opacity='1'/%3E%3Cstop offset='50%25' stop-color='%238b5cf6' stop-opacity='0.9'/%3E%3Cstop offset='100%25' stop-color='%236366f1' stop-opacity='0.7'/%3E%3C/radialGradient%3E%3Cfilter id='starGlow'%3E%3CfeGaussianBlur stdDeviation='3' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='starGlowOuter'%3E%3CfeGaussianBlur stdDeviation='6' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx='20' cy='20' r='8' fill='%238b5cf6' opacity='0.4' filter='url(%23starGlowOuter)'/%3E%3Ccircle cx='20' cy='20' r='6.5' fill='url(%23starGrad)' filter='url(%23starGlow)'/%3E%3Ccircle cx='20' cy='20' r='4' fill='%23ffffff' opacity='0.95'/%3E%3Ccircle cx='20' cy='20' r='2' fill='%23ffffff' opacity='1'/%3E%3Ccircle cx='15' cy='15' r='1.2' fill='%23a78bfa' opacity='0.8' filter='url(%23starGlow)'/%3E%3Ccircle cx='25' cy='12' r='1' fill='%23ffffff' opacity='0.7' filter='url(%23starGlow)'/%3E%3Ccircle cx='28' cy='25' r='1.5' fill='%238b5cf6' opacity='0.6' filter='url(%23starGlow)'/%3E%3Ccircle cx='12' cy='25' r='1' fill='%23a78bfa' opacity='0.7' filter='url(%23starGlow)'/%3E%3C/svg%3E") 20 20, pointer;
+  }
+  
+  &.floatCard {
+    overflow: visible !important;
+  }
+}
+
+.floatCard.topicThreeCard {
+  overflow: visible !important;
+}
+
+// Rune Leak Container - extends beyond card boundaries
+.runeLeakContainer {
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  right: -80px;
+  bottom: -80px;
+  width: calc(100% + 160px);
+  height: calc(100% + 160px);
+  pointer-events: none;
+  z-index: 15;
+  overflow: visible;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  // Ensure it's not clipped
+  clip-path: none;
+  will-change: opacity;
+}
+
+.topicOneCard:hover .runeLeakContainer {
+  opacity: 1;
+}
+
+// Individual rune leak elements
+.runeLeakTop,
+.runeLeakBottom,
+.runeLeakLeft,
+.runeLeakRight,
+.runeLeakTopRight,
+.runeLeakTopLeft,
+.runeLeakBottomRight,
+.runeLeakBottomLeft {
+  position: absolute;
+  font-family: 'Times New Roman', serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #6EE7B7;
+  text-shadow: 
+    0 0 10px rgba(110, 231, 183, 1),
+    0 0 20px rgba(110, 231, 183, 0.8),
+    0 0 30px rgba(110, 231, 183, 0.6),
+    0 0 40px rgba(110, 231, 183, 0.4);
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  filter: drop-shadow(0 0 8px rgba(110, 231, 183, 0.9));
+}
+
+// Top edge - multiple runes (positioned at card edge, which is 80px from container edge)
+.runeLeakTop {
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: leakRunesTop 2.5s ease-out infinite;
+  animation-delay: 0s;
+  
+  &::before {
+    content: 'ᚠ';
+    display: inline-block;
+    animation: floatRune 3s ease-in-out infinite;
+  }
+  &::after {
+    content: 'ᚢ';
+    display: inline-block;
+    margin-left: 12px;
+    animation: floatRune 3s ease-in-out infinite 0.3s;
+  }
+}
+
+// Bottom edge
+.runeLeakBottom {
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: leakRunesBottom 2.5s ease-out infinite;
+  animation-delay: 0.5s;
+  
+  &::before {
+    content: 'ᚦ';
+    display: inline-block;
+    animation: floatRune 3s ease-in-out infinite 0.5s;
+  }
+  &::after {
+    content: 'ᚨ';
+    display: inline-block;
+    margin-left: 12px;
+    animation: floatRune 3s ease-in-out infinite 0.8s;
+  }
+}
+
+// Left edge
+.runeLeakLeft {
+  left: 80px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  animation: leakRunesLeft 2.5s ease-out infinite;
+  animation-delay: 1s;
+  
+  &::before {
+    content: 'ᚱ';
+    display: inline-block;
+    animation: floatRune 3s ease-in-out infinite 1s;
+  }
+  &::after {
+    content: 'ᚲ';
+    display: inline-block;
+    margin-left: 12px;
+    animation: floatRune 3s ease-in-out infinite 1.3s;
+  }
+}
+
+// Right edge
+.runeLeakRight {
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  animation: leakRunesRight 2.5s ease-out infinite;
+  animation-delay: 1.5s;
+  
+  &::before {
+    content: 'ᚷ';
+    display: inline-block;
+    animation: floatRune 3s ease-in-out infinite 1.5s;
+  }
+  &::after {
+    content: 'ᚹ';
+    display: inline-block;
+    margin-left: 12px;
+    animation: floatRune 3s ease-in-out infinite 1.8s;
+  }
+}
+
+// Corner runes (positioned at card corners)
+.runeLeakTopRight {
+  top: 80px;
+  right: 80px;
+  animation: leakRunesCornerTopRight 2.8s ease-out infinite;
+  animation-delay: 0.2s;
+  
+  &::before {
+    content: 'ᚠ';
+    display: inline-block;
+    animation: floatRune 3.5s ease-in-out infinite 0.2s;
+  }
+}
+
+.runeLeakTopLeft {
+  top: 80px;
+  left: 80px;
+  animation: leakRunesCornerTopLeft 2.8s ease-out infinite;
+  animation-delay: 0.4s;
+  
+  &::before {
+    content: 'ᚢ';
+    display: inline-block;
+    animation: floatRune 3.5s ease-in-out infinite 0.4s;
+  }
+}
+
+.runeLeakBottomRight {
+  bottom: 80px;
+  right: 80px;
+  animation: leakRunesCornerBottomRight 2.8s ease-out infinite;
+  animation-delay: 0.6s;
+  
+  &::before {
+    content: 'ᚦ';
+    display: inline-block;
+    animation: floatRune 3.5s ease-in-out infinite 0.6s;
+  }
+}
+
+.runeLeakBottomLeft {
+  bottom: 80px;
+  left: 80px;
+  animation: leakRunesCornerBottomLeft 2.8s ease-out infinite;
+  animation-delay: 0.8s;
+  
+  &::before {
+    content: 'ᚨ';
+    display: inline-block;
+    animation: floatRune 3.5s ease-in-out infinite 0.8s;
+  }
+}
+
+// Rune floating animation
+@keyframes floatRune {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.1);
+    opacity: 1;
+  }
+}
+
+// Rune leak animations from different edges - starting from card edge, leaking outward
+@keyframes leakRunesTop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0px) scale(0.7);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateX(-50%) translateY(-80px) scale(1.4);
+  }
+}
+
+@keyframes leakRunesBottom {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0px) scale(0.7);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateX(-50%) translateY(80px) scale(1.4);
+  }
+}
+
+@keyframes leakRunesLeft {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(0px) rotate(-90deg) scale(0.7);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateY(-50%) translateX(-80px) rotate(-90deg) scale(1.4);
+  }
+}
+
+@keyframes leakRunesRight {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(0px) rotate(90deg) scale(0.7);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateY(-50%) translateX(80px) rotate(90deg) scale(1.4);
+  }
+}
+
+@keyframes leakRunesCornerTopRight {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(45px, -45px) scale(1.5);
+  }
+}
+
+@keyframes leakRunesCornerTopLeft {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(-45px, -45px) scale(1.5);
+  }
+}
+
+@keyframes leakRunesCornerBottomRight {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(45px, 45px) scale(1.5);
+  }
+}
+
+@keyframes leakRunesCornerBottomLeft {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(-45px, 45px) scale(1.5);
+  }
+}
+
+// ============================================
+// TOPIC 2 - FLICKERING LIGHT EFFECT ONLY
+// ============================================
+
+// Flickering detective light animation - creates flashlight flickering effect
+@keyframes flickerDetectiveLight {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.8);
+  }
+  2% {
+    opacity: 0.9;
+  }
+  4% {
+    opacity: 0.2;
+    transform: translate(30px, -20px) scale(1.1);
+  }
+  6% {
+    opacity: 0.85;
+  }
+  8% {
+    opacity: 0.3;
+    transform: translate(-25px, 15px) scale(0.9);
+  }
+  10% {
+    opacity: 0.95;
+  }
+  12% {
+    opacity: 0.15;
+    transform: translate(20px, 25px) scale(1.05);
+  }
+  14% {
+    opacity: 0.8;
+  }
+  16% {
+    opacity: 0.25;
+    transform: translate(-30px, -15px) scale(1.0);
+  }
+  18% {
+    opacity: 0.9;
+  }
+  20% {
+    opacity: 0.2;
+    transform: translate(15px, 30px) scale(1.15);
+  }
+  22% {
+    opacity: 0.75;
+  }
+  24% {
+    opacity: 0.3;
+    transform: translate(-20px, -25px) scale(0.85);
+  }
+  26% {
+    opacity: 0.88;
+  }
+  28% {
+    opacity: 0.18;
+    transform: translate(25px, 10px) scale(1.08);
+  }
+  30% {
+    opacity: 0.92;
+  }
+  32% {
+    opacity: 0.22;
+    transform: translate(-15px, 20px) scale(0.95);
+  }
+  34% {
+    opacity: 0.82;
+  }
+  36% {
+    opacity: 0.28;
+    transform: translate(35px, -30px) scale(1.12);
+  }
+  38% {
+    opacity: 0.87;
+  }
+  40% {
+    opacity: 0.2;
+    transform: translate(-35px, 35px) scale(0.88);
+  }
+  42% {
+    opacity: 0.9;
+  }
+  44% {
+    opacity: 0.25;
+    transform: translate(10px, -10px) scale(1.05);
+  }
+  46% {
+    opacity: 0.78;
+  }
+  48% {
+    opacity: 0.3;
+    transform: translate(-10px, 15px) scale(0.92);
+  }
+  50% {
+    opacity: 0.93;
+  }
+  52% {
+    opacity: 0.2;
+    transform: translate(40px, 20px) scale(1.1);
+  }
+  54% {
+    opacity: 0.85;
+  }
+  56% {
+    opacity: 0.27;
+    transform: translate(-40px, -20px) scale(0.9);
+  }
+  58% {
+    opacity: 0.89;
+  }
+  60% {
+    opacity: 0.23;
+    transform: translate(5px, 40px) scale(1.06);
+  }
+  62% {
+    opacity: 0.8;
+  }
+  64% {
+    opacity: 0.3;
+    transform: translate(-5px, -40px) scale(0.94);
+  }
+  66% {
+    opacity: 0.91;
+  }
+  68% {
+    opacity: 0.19;
+    transform: translate(45px, -5px) scale(1.13);
+  }
+  70% {
+    opacity: 0.86;
+  }
+  72% {
+    opacity: 0.26;
+    transform: translate(-45px, 5px) scale(0.87);
+  }
+  74% {
+    opacity: 0.88;
+  }
+  76% {
+    opacity: 0.21;
+    transform: translate(0, 0) scale(1.02);
+  }
+  78% {
+    opacity: 0.84;
+  }
+  80% {
+    opacity: 0.29;
+    transform: translate(50px, 50px) scale(1.15);
+  }
+  82% {
+    opacity: 0.9;
+  }
+  84% {
+    opacity: 0.17;
+    transform: translate(-50px, -50px) scale(0.85);
+  }
+  86% {
+    opacity: 0.87;
+  }
+  88% {
+    opacity: 0.24;
+    transform: translate(20px, -30px) scale(1.08);
+  }
+  90% {
+    opacity: 0.83;
+  }
+  92% {
+    opacity: 0.31;
+    transform: translate(-20px, 30px) scale(0.91);
+  }
+  94% {
+    opacity: 0.92;
+  }
+  96% {
+    opacity: 0.2;
+    transform: translate(0, 0) scale(1.0);
+  }
+  98% {
+    opacity: 0.81;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.8);
+  }
+}
+
+// ============================================
+// TOPIC 3 - ORBITAL CIRCLES & LEAKING CIRCLE STARS
+// ============================================
+
+// Orbital System Container - extends beyond card boundaries
+.orbitalSystem3D {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 900px;
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: opacity;
+  overflow: visible;
+  perspective: 1200px;
+  perspective-origin: center center;
+  transform-style: preserve-3d;
+}
+
+.topicThreeCard:hover .orbitalSystem3D {
+  opacity: 1;
+}
+
+// Orbital Circle - Rotating path container with 3D tilt
+.orbitCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--orbit-radius) * 2);
+  height: calc(var(--orbit-radius) * 2);
+  pointer-events: none;
+  transform-style: preserve-3d;
+  animation: rotateOrbit3D var(--orbit-speed, 25s) linear infinite;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
+  transform: translate(-50%, -50%) rotateX(var(--orbit-tilt, 45deg));
+}
+
+.orbitCounterClockwise {
+  animation-direction: reverse;
+}
+
+// 3D Rotation Animation - Full 360 degree revolution with tilt
+@keyframes rotateOrbit3D {
+  0% {
+    transform: translate(-50%, -50%) rotateX(var(--orbit-tilt, 45deg)) rotateZ(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateX(var(--orbit-tilt, 45deg)) rotateZ(360deg);
+  }
+}
+
+// Orbital Path SVG Circle
+.orbitPathSVG {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.8));
+}
+
+// Orbital Planet - SVG circle that orbits
+.orbitalPlanet {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.9));
+  animation: pulsePlanet 3s ease-in-out infinite;
+}
+
+@keyframes pulsePlanet {
+  0%, 100% {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+// Circle Star Leak Container - extends beyond card boundaries
+.circleStarLeakContainer {
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  right: -80px;
+  bottom: -80px;
+  width: calc(100% + 160px);
+  height: calc(100% + 160px);
+  pointer-events: none;
+  z-index: 15;
+  overflow: visible;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  clip-path: none;
+  will-change: opacity;
+}
+
+.topicThreeCard:hover .circleStarLeakContainer {
+  opacity: 1;
+}
+
+// Individual star particle leak elements - Simple circular dots
+.circleStarLeakTop,
+.circleStarLeakBottom,
+.circleStarLeakLeft,
+.circleStarLeakRight,
+.circleStarLeakTopRight,
+.circleStarLeakTopLeft,
+.circleStarLeakBottomRight,
+.circleStarLeakBottomLeft {
+  position: absolute;
+  opacity: 0;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+  }
+}
+
+// Top edge - Star particles
+.circleStarLeakTop {
+  top: 80px;
+  left: 50%;
+  transform: translateX(calc(-50% + var(--star-offset, 0px)));
+  animation: leakStarParticlesTop 2.5s ease-out infinite;
+  animation-delay: var(--star-delay, 0s);
+  width: 4px;
+  height: 4px;
+  
+  &::before {
+    left: 0;
+    top: 0;
+    width: var(--star-size, 2px);
+    height: var(--star-size, 2px);
+    animation: floatStarParticle 3s ease-in-out infinite;
+  }
+}
+
+// Bottom edge
+.circleStarLeakBottom {
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(calc(-50% + var(--star-offset, 0px)));
+  animation: leakStarParticlesBottom 2.5s ease-out infinite;
+  animation-delay: var(--star-delay, 0s);
+  width: 4px;
+  height: 4px;
+  
+  &::before {
+    left: 0;
+    top: 0;
+    width: var(--star-size, 2px);
+    height: var(--star-size, 2px);
+    animation: floatStarParticle 3s ease-in-out infinite;
+  }
+}
+
+// Left edge
+.circleStarLeakLeft {
+  left: 80px;
+  top: 50%;
+  transform: translateY(calc(-50% + var(--star-offset, 0px)));
+  animation: leakStarParticlesLeft 2.5s ease-out infinite;
+  animation-delay: var(--star-delay, 0s);
+  width: 4px;
+  height: 4px;
+  
+  &::before {
+    left: 0;
+    top: 0;
+    width: var(--star-size, 2px);
+    height: var(--star-size, 2px);
+    animation: floatStarParticle 3s ease-in-out infinite;
+  }
+}
+
+// Right edge
+.circleStarLeakRight {
+  right: 80px;
+  top: 50%;
+  transform: translateY(calc(-50% + var(--star-offset, 0px)));
+  animation: leakStarParticlesRight 2.5s ease-out infinite;
+  animation-delay: var(--star-delay, 0s);
+  width: 4px;
+  height: 4px;
+  
+  &::before {
+    left: 0;
+    top: 0;
+    width: var(--star-size, 2px);
+    height: var(--star-size, 2px);
+    animation: floatStarParticle 3s ease-in-out infinite;
+  }
+}
+
+// Corner star particles
+.circleStarLeakTopRight {
+  top: 80px;
+  right: 80px;
+  animation: leakStarParticlesCornerTopRight 2.8s ease-out infinite;
+  animation-delay: 0.2s;
+  
+  &::before {
+    width: 2px;
+    height: 2px;
+    animation: floatStarParticle 3.5s ease-in-out infinite 0.2s;
+  }
+}
+
+.circleStarLeakTopLeft {
+  top: 80px;
+  left: 80px;
+  animation: leakStarParticlesCornerTopLeft 2.8s ease-out infinite;
+  animation-delay: 0.4s;
+  
+  &::before {
+    width: 1.5px;
+    height: 1.5px;
+    animation: floatStarParticle 3.5s ease-in-out infinite 0.4s;
+  }
+}
+
+.circleStarLeakBottomRight {
+  bottom: 80px;
+  right: 80px;
+  animation: leakStarParticlesCornerBottomRight 2.8s ease-out infinite;
+  animation-delay: 0.6s;
+  
+  &::before {
+    width: 2.5px;
+    height: 2.5px;
+    animation: floatStarParticle 3.5s ease-in-out infinite 0.6s;
+  }
+}
+
+.circleStarLeakBottomLeft {
+  bottom: 80px;
+  left: 80px;
+  animation: leakStarParticlesCornerBottomLeft 2.8s ease-out infinite;
+  animation-delay: 0.8s;
+  
+  &::before {
+    width: 1px;
+    height: 1px;
+    animation: floatStarParticle 3.5s ease-in-out infinite 0.8s;
+  }
+}
+
+// Star particle floating animation
+@keyframes floatStarParticle {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-6px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+// Star particle leak animations - Scattered and spread out
+@keyframes leakStarParticlesTop {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(-50% + var(--star-offset, 0px))) translateY(0px);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translateX(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-x, 0px))) translateY(calc(-150px + var(--star-scatter-y, 0px)));
+  }
+}
+
+@keyframes leakStarParticlesBottom {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(-50% + var(--star-offset, 0px))) translateY(0px);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translateX(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-x, 0px))) translateY(calc(150px + var(--star-scatter-y, 0px)));
+  }
+}
+
+@keyframes leakStarParticlesLeft {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(-50% + var(--star-offset, 0px))) translateX(0px);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translateY(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-y, 0px))) translateX(calc(-150px + var(--star-scatter-x, 0px)));
+  }
+}
+
+@keyframes leakStarParticlesRight {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(-50% + var(--star-offset, 0px))) translateX(0px);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translateY(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-y, 0px))) translateX(calc(150px + var(--star-scatter-x, 0px)));
+  }
+}
+
+@keyframes leakStarParticlesCornerTopRight {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(80px, -80px) rotate(45deg);
+  }
+}
+
+@keyframes leakStarParticlesCornerTopLeft {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(-80px, -80px) rotate(-45deg);
+  }
+}
+
+@keyframes leakStarParticlesCornerBottomRight {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(80px, 80px) rotate(-45deg);
+  }
+}
+
+@keyframes leakStarParticlesCornerBottomLeft {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(-80px, 80px) rotate(45deg);
+  }
+}
+
+// Featured Card - Center, Enlarged, Illuminated
+.featuredCard {
+  transform: scale(1.15) !important;
+  z-index: 5 !important;
+  filter: brightness(1.2) !important;
+  
+  .floatCard {
+    border-color: transparent !important;
+    box-shadow: 
+      0 20px 60px rgba(139, 92, 246, 0.5),
+      0 0 80px rgba(139, 92, 246, 0.4),
+      0 0 120px rgba(139, 92, 246, 0.2) !important;
+  }
+  
+  // Theme-specific glow for featured card - no dark shadows
+  &[data-theme="wizard"] .floatCard {
+    box-shadow: 
+      0 20px 60px rgba(110, 231, 183, 0.5),
+      0 0 80px rgba(110, 231, 183, 0.4),
+      0 0 120px rgba(110, 231, 183, 0.2) !important;
+    border-color: transparent !important;
+  }
+  
+  &[data-theme="detective"] .floatCard {
+    box-shadow: 
+      0 20px 60px rgba(209, 183, 115, 0.5),
+      0 0 80px rgba(209, 183, 115, 0.4),
+      0 0 120px rgba(209, 183, 115, 0.2) !important;
+    border-color: transparent !important;
+  }
+  
+  &[data-theme="space"] .floatCard {
+    box-shadow: 
+      0 20px 60px rgba(139, 92, 246, 0.5),
+      0 0 80px rgba(139, 92, 246, 0.4),
+      0 0 120px rgba(139, 92, 246, 0.2) !important;
+    border-color: transparent !important;
+  }
+  
+  .themeSvg {
+    opacity: 0.9 !important; // More visible on featured card since background is transparent
+    filter: blur(0px) !important;
+  }
+  
+  // Theme-specific colored backgrounds - full color, no darkening
+  &[data-theme="wizard"] {
+    .floatCard {
+      background: rgba(110, 231, 183, 0.15) !important; // Light teal tint
+      border-color: transparent !important;
+      backdrop-filter: blur(12px);
+    }
+  }
+  
+  &[data-theme="detective"] {
+    .floatCard {
+      background: rgba(209, 183, 115, 0.15) !important; // Light golden tint
+      border-color: transparent !important;
+      backdrop-filter: blur(12px);
+    }
+  }
+  
+  &[data-theme="space"] {
+    .floatCard {
+      background: rgba(139, 92, 246, 0.15) !important; // Light purple tint
+      border-color: transparent !important;
+      backdrop-filter: blur(12px);
+    }
+  }
+}
+
+// Dimmed Card - Side cards, visible but shadowed
+.dimmedCard {
+  transform: scale(0.85);
+  z-index: 1;
+  pointer-events: auto;
+  
+  .floatCard {
+    border-color: transparent !important;
+    box-shadow: 
+      0 4px 16px rgba(139, 92, 246, 0.3) !important;
+  }
+  
+  .themeSvg {
+    opacity: 0.8 !important;
+    filter: blur(0px) !important;
+  }
+  
+  // Theme-specific colored backgrounds - full color
+  &[data-theme="wizard"] {
+    .floatCard {
+      background: rgba(110, 231, 183, 0.12) !important;
+      backdrop-filter: blur(8px);
+    }
+  }
+  
+  &[data-theme="detective"] {
+    .floatCard {
+      background: rgba(209, 183, 115, 0.12) !important;
+      backdrop-filter: blur(8px);
+    }
+  }
+  
+  &[data-theme="space"] {
+    .floatCard {
+      background: rgba(139, 92, 246, 0.12) !important;
+      backdrop-filter: blur(8px);
+    }
+  }
+  
+  // Removed hover effects as requested
+}
+
+// Coming Soon Card - No hover effects, not selectable, same size as other cards
+.comingSoonCard {
+  pointer-events: none;
+  cursor: default !important;
+  transform: scale(0.85); // Match dimmed card scale
+  z-index: 1;
+  opacity: 0.8; // Slightly reduced but still visible
+  
+  // Ensure no hover effects
+  &:hover {
+    transform: scale(0.85) !important; // Keep same scale on hover
+    opacity: 0.8 !important;
+  }
+  
+  .floatCard {
+    cursor: default !important;
+    min-height: 500px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    
+    &:hover {
+      transform: none !important;
+      box-shadow: 
+        0 8px 32px rgba(139, 92, 246, 0.3) !important;
+      border-color: transparent !important;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .floatCard {
+      min-height: 450px !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .floatCard {
+      min-height: 480px !important; // Taller for better mobile proportions
+    }
+  }
+  
+  @media (max-width: 360px) {
+    .floatCard {
+      min-height: 460px !important;
+    }
+  }
 }
 
 .cardContent {
@@ -24,31 +1235,77 @@
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
-  @media (max-width: 480px) { padding: 1.5rem; }
+  align-items: center;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: 480px) { 
+    padding: 1.25rem 1.5rem; // Optimized mobile padding
+  }
+  
+  @media (max-width: 360px) {
+    padding: 1rem 1.25rem;
+  }
 }
 
 .cardTitle {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   color: #fff;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  @media (max-width: 480px) { font-size: 1.5rem; }
+  text-shadow: 
+    0 2px 8px rgba(139, 92, 246, 0.5),
+    0 0 20px rgba(139, 92, 246, 0.4);
+  
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+    margin-bottom: 0.875rem;
+  }
+  
+  @media (max-width: 480px) { 
+    font-size: 1.5rem; // Better mobile readability
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+  
+  @media (max-width: 360px) {
+    font-size: 1.375rem;
+  }
 }
 
 .cardDesc {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   opacity: 0.85;
   line-height: 1.6;
-  margin-bottom: 1.25rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.95rem; // Optimized for mobile readability
+    line-height: 1.5;
+    opacity: 0.9; // Slightly more visible on mobile
+  }
+  
+  @media (max-width: 360px) {
+    font-size: 0.875rem;
+  }
+  
+  margin-bottom: 1.5rem;
   color: rgba(255, 255, 255, 0.9);
   font-weight: 400;
-  @media (max-width: 480px) { font-size: 0.875rem; }
+  text-align: center;
 }
 
 .startButton {
+  // Default/space theme colors
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(124, 58, 237, 0.9) 100%);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -68,45 +1325,67 @@
   letter-spacing: 0.02em;
   backdrop-filter: blur(10px);
   
-  &:not(:disabled):hover {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 1) 0%, rgba(124, 58, 237, 1) 100%);
-    transform: translateY(-3px);
+  // Theme-specific button colors
+  [data-theme="wizard"] & {
+    background: linear-gradient(135deg, rgba(110, 231, 183, 0.9) 0%, rgba(52, 211, 153, 0.9) 100%);
     box-shadow: 
-      0 8px 24px rgba(139, 92, 246, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-      0 0 30px rgba(139, 92, 246, 0.3);
-  }
-  
-  &:not(:disabled):active {
-    transform: translateY(-1px);
-    box-shadow: 
-      0 4px 12px rgba(139, 92, 246, 0.3),
+      0 4px 16px rgba(110, 231, 183, 0.3),
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
   
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.15),
-      transparent
-    );
-    transition: left 0.5s ease;
+  [data-theme="detective"] & {
+    background: linear-gradient(135deg, rgba(209, 183, 115, 0.9) 0%, rgba(180, 150, 80, 0.9) 100%);
+    box-shadow: 
+      0 4px 16px rgba(209, 183, 115, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
   
-  &:hover::before {
-    left: 100%;
+  [data-theme="space"] & {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(99, 102, 241, 0.9) 100%);
+    box-shadow: 
+      0 4px 16px rgba(139, 92, 246, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+  
+  // Removed hover effects on buttons as requested
+  
+  &:not(:disabled):active {
+    transform: translateY(-1px);
+    
+    [data-theme="wizard"] & {
+      box-shadow: 
+        0 4px 12px rgba(110, 231, 183, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    }
+    
+    [data-theme="detective"] & {
+      box-shadow: 
+        0 4px 12px rgba(209, 183, 115, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    }
+    
+    [data-theme="space"] & {
+      box-shadow: 
+        0 4px 12px rgba(139, 92, 246, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.875rem 1.75rem;
+    font-size: 1.05rem;
   }
   
   @media (max-width: 480px) {
-    padding: 0.875rem 1.5rem;
+    padding: 0.875rem 1.5rem; // Minimum 44px height for touch targets
     font-size: 1rem;
+    min-height: 44px; // Ensure minimum touch target size
+  }
+  
+  @media (max-width: 360px) {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    min-height: 44px;
   }
 }
 
@@ -215,48 +1494,168 @@
   transition: all 0.3s;
   filter: grayscale(100%);
   opacity: 0.7;
+  z-index: 5;
   @media (max-width: 480px) { font-size: 1.1rem; }
 }
 
-.cardProgress {
-  width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  margin: 1rem 0;
-  overflow: hidden;
+// Retention Test Summary Icon - Upper Right Corner (Red Circle Location)
+.retentionTestIcon {
+  position: absolute !important;
+  top: 0.75rem !important;
+  right: 0.75rem !important;
+  z-index: 15 !important;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
+  border: 2px solid rgba(16, 185, 129, 0.9);
+  border-radius: 50%;
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.2) inset,
-    0 1px 0 rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+    0 4px 12px rgba(16, 185, 129, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 2px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  pointer-events: auto;
   
-  .progressFill {
-    height: 100%;
-    background: linear-gradient(90deg, 
-      rgba(139, 92, 246, 0.8) 0%, 
-      rgba(236, 72, 153, 0.8) 50%,
-      rgba(139, 92, 246, 0.8) 100%
-    );
-    border-radius: 8px;
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    transform: scale(1.15);
     box-shadow: 
-      0 0 12px rgba(139, 92, 246, 0.5),
-      0 2px 4px rgba(139, 92, 246, 0.3);
-    position: relative;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 50%;
-      background: linear-gradient(to bottom, 
-        rgba(255, 255, 255, 0.3), 
-        transparent
-      );
-      border-radius: 8px 8px 0 0;
-    }
+      0 6px 16px rgba(16, 185, 129, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+      0 0 25px rgba(16, 185, 129, 0.5);
+    border-color: rgba(16, 185, 129, 1);
+  }
+  
+  &:active {
+    transform: scale(1.05);
+  }
+  
+  &:focus {
+    outline: 2px solid rgba(16, 185, 129, 0.6);
+    outline-offset: 2px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.iconSymbol {
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+  }
+}
+
+.completedIndicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.95) 0%, rgba(245, 158, 11, 0.95) 100%);
+  border: 2px solid rgba(251, 191, 36, 0.9);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 
+    0 2px 6px rgba(251, 191, 36, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  text-shadow: 0 1px 2px rgba(139, 92, 246, 0.3);
+  
+  @media (max-width: 480px) {
+    width: 16px;
+    height: 16px;
+    font-size: 0.65rem;
+  }
+}
+
+// Circular Progress Ring - Themed Immersive Style
+.progressRingContainer {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressRing {
+  width: 100%;
+  height: 100%;
+  // No glow effect
+}
+
+.progressRingBg {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-linecap: round;
+}
+
+.progressRingFill {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  // No glow effect - removed filter
+  // Color is set inline in the component based on theme
+}
+
+.progressPercentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+}
+
+.progressNumber {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(139, 92, 246, 0.5);
+  
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.75rem;
+  }
+}
+
+.progressPercent {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
   }
 }
 

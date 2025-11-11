@@ -14,8 +14,9 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   font-family: $font-family;
   position: relative;
   overflow: hidden;
+  transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   
-  /* Static Background Orbs */
+  /* Static Background Orbs - Same as Progress Page */
   &::before,
   &::after {
     content: '';
@@ -47,6 +48,34 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   @media (max-width: 768px) { padding: 1.5rem; gap: 1.5rem; }
 }
 
+// Theme-specific background SVG - Full page design elements
+.themeBackgroundSvg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; // Behind everything but above base background
+  pointer-events: none;
+  opacity: 0.4; // Subtle so it doesn't overpower content
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // Ensure it covers the full viewport
+  object-fit: cover;
+  
+  // Smooth transitions when theme changes
+  animation: fadeInBackground 0.8s ease-in-out;
+}
+
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
 // Removed floatOrbs animation - orbs are now static (same as landing page)
 // @keyframes floatOrbs {
 //   0%, 100% { 
@@ -63,38 +92,298 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
 //   }
 // }
 
-.floatContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  position: relative;
-  z-index: 1;
-  @media (max-width: 480px) { grid-template-columns: 1fr; gap: 1rem; padding: 0; }
+// Background Patterns - Same as Progress Page
+.backgroundPatterns {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
 }
 
-// Compact Notification-Style Retention Test Component
-.retentionTestSection {
+.bgOrb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent);
+  filter: blur(40px);
+  animation: floatOrb 12s ease-in-out infinite;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+@keyframes floatOrb {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) translateZ(0);
+    opacity: 0.05;
+  }
+  25% {
+    transform: translate(30px, -20px) scale(1.1) translateZ(0);
+    opacity: 0.12;
+  }
+  50% {
+    transform: translate(-20px, 15px) scale(0.95) translateZ(0);
+    opacity: 0.08;
+  }
+  75% {
+    transform: translate(20px, 25px) scale(1.05) translateZ(0);
+    opacity: 0.1;
+  }
+}
+
+// Topics Grid Container
+.topicsGridContainer {
   position: relative;
-  background: rgba($black, 0.9);
-  border: 1px solid rgba($light-purple, 0.4);
-  border-radius: 1rem;
-  padding: 1.25rem 1.5rem;
-  margin: 0 auto 1.5rem;
-  max-width: 600px;
   width: 100%;
-  backdrop-filter: blur(15px);
-  box-shadow: 
-    0 12px 24px rgba($light-purple, 0.15),
-    0 4px 8px rgba($black, 0.3);
-  animation: notificationSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-  z-index: 2;
+  margin: 2rem 0;
+  padding: 0 2rem;
+  overflow: visible; // Allow shadows to show
+  z-index: 2; // Above vignette
   
-  // Subtle animated background
+  @media (max-width: 768px) {
+    padding: 0 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0 1rem;
+    margin: 1.25rem 0;
+  }
+  
+  @media (max-width: 360px) {
+    padding: 0 0.75rem;
+    margin: 1rem 0;
+  }
+}
+
+// Topics Grid Layout
+.topicsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 2rem;
+  width: 100%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+  overflow: visible; // Allow runes to extend outside cards
+  
+  // First 3 cards in top row
+  > *:nth-child(-n+3) {
+    grid-column: auto;
+  }
+  
+  // 4th card (coming soon) - centered in second row
+  > *:nth-child(4) {
+    grid-column: 2; // Center in the middle column
+    justify-self: center;
+  }
+  
+  @media (max-width: 1024px) {
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    
+    // First 2 cards in top row
+    > *:nth-child(-n+2) {
+      grid-column: auto;
+    }
+    
+    // 3rd card in second row, left
+    > *:nth-child(3) {
+      grid-column: 1;
+    }
+    
+    // 4th card (coming soon) - centered in second row
+    > *:nth-child(4) {
+      grid-column: 2;
+      justify-self: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    
+    // All cards stack vertically
+    > * {
+      grid-column: 1;
+      justify-self: stretch;
+    }
+    
+    // Coming soon card still centered
+    > *:last-child {
+      justify-self: center;
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    gap: 0.875rem;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+}
+
+// Backdrop overlay - Black shadow that closes popup on click
+.retentionTestBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($black, 0.4);
+  backdrop-filter: blur(3px);
+  z-index: 99; // Below popup but above other content
+  animation: backdropFadeIn 0.2s ease-out;
+  cursor: pointer;
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Inline Retention Test Notification - Below subtitle
+.retentionTestInline {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  margin: 0.01rem 0 1.5rem 0; // Reduced top margin to move upward
+  z-index: 100; // Above vignette and other content
+  
+  @media (max-width: 768px) {
+    margin: 0.375rem 0 1.25rem 0;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 0.25rem 0 1rem 0;
+  }
+}
+
+// Floating Badge Button
+.retentionTestBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba($light-purple, 0.95) 0%, rgba($dark-purple, 0.95) 100%);
+  border: 2px solid rgba($light-purple, 0.5);
+  border-radius: 2rem;
+  padding: 0.75rem 1.25rem;
+  color: $white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 8px 24px rgba($light-purple, 0.4),
+    0 4px 12px rgba($black, 0.3),
+    0 0 0 0 rgba($light-purple, 0.5);
+  backdrop-filter: blur(10px);
+  animation: pulseGlow 2s ease-in-out infinite;
+  position: relative;
+  
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+      0 12px 32px rgba($light-purple, 0.5),
+      0 6px 16px rgba($black, 0.4),
+      0 0 20px rgba($light-purple, 0.6);
+    border-color: rgba($light-purple, 0.8);
+  }
+  
+  &:active {
+    transform: translateY(0) scale(1);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    gap: 0.4rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    gap: 0.35rem;
+    border-width: 1.5px;
+  }
+}
+
+.badgeIcon {
+  font-size: 1.2rem;
+  line-height: 1;
+  animation: bellRing 2s ease-in-out infinite;
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+}
+
+.badgeCount {
+  background: rgba($white, 0.25);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+  
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+  }
+}
+
+.badgeText {
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+// Expanded Panel - Absolutely positioned to not affect layout
+.retentionTestPanel {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: 0;
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.98) 0%, rgba(15, 15, 25, 0.98) 100%);
+  border: 1px solid rgba($light-purple, 0.3);
+  border-radius: 1.25rem;
+  padding: 0;
+  min-width: 380px;
+  max-width: 420px;
+  width: max-content;
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 20px 60px rgba($black, 0.7),
+    0 8px 32px rgba($light-purple, 0.25),
+    0 0 0 1px rgba($light-purple, 0.1) inset;
+  animation: panelSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  z-index: 101;
+  
+  // Glowing border effect
   &::before {
     content: '';
     position: absolute;
@@ -102,33 +391,152 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, 
-      rgba($light-purple, 0.08) 0%, 
-      rgba($dark-purple, 0.05) 50%, 
-      rgba($light-purple, 0.08) 100%);
-    background-size: 200% 100%;
-    animation: subtleShift 6s ease-in-out infinite;
-    z-index: -1;
-  }
-  
-  // Notification indicator dot
-  &::after {
-    content: '';
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    width: 8px;
-    height: 8px;
-    background: $light-purple;
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-    z-index: 1;
+    border-radius: 1.25rem;
+    padding: 1px;
+    background: linear-gradient(135deg, 
+      rgba($light-purple, 0.4) 0%, 
+      rgba($dark-purple, 0.3) 50%,
+      rgba($light-purple, 0.4) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.6;
   }
   
   @media (max-width: 768px) {
-    padding: 1rem 1.25rem;
-    margin: 0 1rem 1rem;
-    max-width: 100%;
+    min-width: 320px;
+    max-width: 90vw;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 0.5rem);
+  }
+  
+  @media (max-width: 480px) {
+    min-width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1rem;
+  }
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba($light-purple, 0.1) 0%, rgba($dark-purple, 0.05) 100%);
+  border-bottom: 1px solid rgba($light-purple, 0.15);
+  position: relative;
+  
+  // Decorative accent line
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba($light-purple, 0.5) 50%, 
+      transparent 100%);
+  }
+  
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, $light-purple 0%, rgba($light-purple, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    &::before {
+      content: '📝';
+      font-size: 1.2rem;
+      filter: drop-shadow(0 2px 4px rgba($light-purple, 0.3));
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.closePanelBtn {
+  background: transparent;
+  border: none;
+  color: rgba($white, 0.7);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  
+  &:hover {
+    background: rgba($white, 0.1);
+    color: $white;
+    transform: rotate(90deg);
+  }
+  
+  @media (max-width: 480px) {
+    width: 28px;
+    height: 28px;
+    font-size: 1.25rem;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 
+      0 8px 24px rgba($light-purple, 0.4),
+      0 4px 12px rgba($black, 0.3),
+      0 0 0 0 rgba($light-purple, 0.5);
+  }
+  50% {
+    box-shadow: 
+      0 8px 24px rgba($light-purple, 0.5),
+      0 4px 12px rgba($black, 0.3),
+      0 0 0 4px rgba($light-purple, 0.3);
+  }
+}
+
+@keyframes bellRing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30% {
+    transform: rotate(-10deg);
+  }
+  20%, 40% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes panelSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -206,34 +614,77 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding: 1.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba($white, 0.03);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba($light-purple, 0.4) 0%, rgba($dark-purple, 0.3) 100%);
+    border-radius: 3px;
+    
+    &:hover {
+      background: linear-gradient(135deg, rgba($light-purple, 0.6) 0%, rgba($dark-purple, 0.5) 100%);
+    }
+  }
 }
 
 .retentionTestItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba($white, 0.02);
-  border: 1px solid rgba($light-purple, 0.2);
-  border-radius: 0.75rem;
-  padding: 1rem;
+  background: linear-gradient(135deg, rgba($white, 0.05) 0%, rgba($white, 0.02) 100%);
+  border: 1px solid rgba($light-purple, 0.15);
+  border-radius: 0.875rem;
+  padding: 1rem 1.25rem;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  gap: 1rem;
+  overflow: hidden;
   
-  &:hover {
-    background: rgba($white, 0.04);
-    border-color: rgba($light-purple, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 
-      0 8px 16px rgba($light-purple, 0.1),
-      0 4px 8px rgba($black, 0.2);
+  // Subtle glow effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba($light-purple, 0.1) 50%, 
+      transparent 100%);
+    transition: left 0.5s ease;
   }
   
-  @media (max-width: 768px) {
+  &:hover {
+    background: linear-gradient(135deg, rgba($light-purple, 0.08) 0%, rgba($dark-purple, 0.05) 100%);
+    border-color: rgba($light-purple, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 20px rgba($light-purple, 0.2),
+      0 2px 8px rgba($black, 0.3),
+      0 0 0 1px rgba($light-purple, 0.1) inset;
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
-    text-align: center;
-    padding: 0.875rem;
+    gap: 1rem;
+    text-align: left;
+    padding: 1rem;
   }
 }
 
@@ -250,59 +701,85 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
 }
 
 .topicName {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   color: $white;
   letter-spacing: -0.01em;
+  line-height: 1.3;
 }
 
 .availability {
-  font-size: 0.9rem;
-  color: rgba($white, 0.7);
+  font-size: 0.8rem;
+  color: rgba($white, 0.6);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  margin-top: 0.25rem;
 }
 
 .startRetentionTestBtn {
-  background: linear-gradient(135deg, $light-purple 0%, $dark-purple 100%);
+  background: linear-gradient(135deg, rgba($light-purple, 0.9) 0%, rgba($dark-purple, 0.9) 100%);
   color: $white;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
+  border: 1px solid rgba($light-purple, 0.3);
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 
-    0 4px 12px rgba($light-purple, 0.2),
-    0 2px 4px rgba($black, 0.2);
+    0 4px 16px rgba($light-purple, 0.25),
+    0 2px 8px rgba($black, 0.3),
+    0 0 0 0 rgba($light-purple, 0.4);
   position: relative;
   z-index: 1;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  overflow: hidden;
+  
+  // Shine effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba($white, 0.2) 50%, 
+      transparent 100%);
+    transition: left 0.5s ease;
+  }
   
   &:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow: 
-      0 6px 16px rgba($light-purple, 0.25),
-      0 3px 6px rgba($black, 0.3);
+      0 8px 24px rgba($light-purple, 0.35),
+      0 4px 12px rgba($black, 0.4),
+      0 0 0 4px rgba($light-purple, 0.2);
     background: linear-gradient(135deg, 
-      color.adjust($light-purple, $lightness: 5%) 0%, 
+      color.adjust($light-purple, $lightness: 8%) 0%, 
       color.adjust($dark-purple, $lightness: 5%) 100%);
+    border-color: rgba($light-purple, 0.5);
+    
+    &::before {
+      left: 100%;
+    }
   }
   
   &:active {
     transform: translateY(0);
     box-shadow: 
-      0 2px 8px rgba($light-purple, 0.2),
-      0 1px 3px rgba($black, 0.2);
+      0 2px 8px rgba($light-purple, 0.25),
+      0 1px 4px rgba($black, 0.3);
   }
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     width: 100%;
-    padding: 0.875rem;
-    font-size: 0.95rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -314,67 +791,76 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
 }
 
 .floatCard {
-  background: rgba(30, 30, 42, 0.4);
-  backdrop-filter: blur(20px);
-  border-radius: 1.25rem;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.15); // Light purple base - full color
+  backdrop-filter: blur(15px);
+  border-radius: 1.5rem;
+  border: 1px solid transparent;
   color: var(--text-color, $white);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 300px;
+    0 8px 32px rgba(139, 92, 246, 0.3); // Colored shadow instead of black
+  position: relative !important;
+  overflow: hidden !important; // Changed to hidden to contain SVG properly
+  
+  // Allow overflow for topics 1, 2, 3 to show leak effects
+  &[data-topic-id="1"],
+  &[data-topic-id="2"],
+  &[data-topic-id="3"],
+  &.topicOneCard,
+  &.topicTwoCard,
+  &.topicThreeCard {
+    overflow: visible !important;
+  }
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-height: 500px;
+  width: 100%; // Flexible width for grid
+  max-width: 100%;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  margin: 0; // No margin needed in grid
   
-  /* Subtle border glow */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, 
-      rgba(139, 92, 246, 0.4) 0%, 
-      rgba(236, 72, 153, 0.2) 50%, 
-      rgba(139, 92, 246, 0.4) 100%);
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask: 
-      linear-gradient(#fff 0 0) content-box, 
-      linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-  
-  &:not(.lockedCard):hover {
-    transform: translateY(-8px);
-    border-color: rgba(139, 92, 246, 0.5);
+  // Theme-specific colored backgrounds - full color, no darkening
+  &[data-theme="wizard"] {
+    background: rgba(110, 231, 183, 0.15); // Light teal - full color
+    border-color: transparent;
+    backdrop-filter: blur(10px);
     box-shadow: 
-      0 16px 48px rgba(0, 0, 0, 0.5),
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-      0 0 40px rgba(139, 92, 246, 0.2);
-    
-    &::before {
-      opacity: 1;
-    }
+      0 8px 32px rgba(110, 231, 183, 0.3); // Colored shadow
   }
+  
+  &[data-theme="detective"] {
+    background: rgba(209, 183, 115, 0.15); // Light golden - full color
+    border-color: transparent;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+      0 8px 32px rgba(209, 183, 115, 0.3); // Colored shadow
+  }
+  
+  &[data-theme="space"] {
+    background: rgba(139, 92, 246, 0.15); // Light purple - full color
+    border-color: transparent;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+      0 8px 32px rgba(139, 92, 246, 0.3); // Colored shadow
+  }
+  
+  /* Border glow removed - borders are transparent */
+  
+  // Removed hover effects on cards as requested
   
   @media (max-width: 768px) {
-    min-height: 280px;
-    &:hover { 
-      transform: translateY(-4px);
-    }
+    min-height: 450px;
+  }
+  
+  @media (max-width: 480px) {
+    min-height: 480px; // Taller for better mobile proportions
+  }
+  
+  @media (max-width: 360px) {
+    min-height: 460px;
   }
 }
 
@@ -396,7 +882,7 @@ $font-family: "Open Sauce One", "Roboto", sans-serif;
   color: $white;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
   @media (max-width: 480px) { font-size: 1.5rem; }
 }
 
