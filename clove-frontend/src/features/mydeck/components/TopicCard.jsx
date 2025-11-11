@@ -694,6 +694,7 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
       className={`${themeStyles.floatCard || ""} ${isLocked ? themeStyles.lockedCard || "" : ""} ${styles.immersiveCard} ${isFeatured ? styles.featuredCard : styles.dimmedCard} ${topic.id === 1 ? styles.topicOneCard : ""} ${topic.id === 2 ? styles.topicTwoCard : ""} ${topic.id === 3 ? styles.topicThreeCard : ""}`}
       data-theme={topic.theme}
       data-topic-id={topic.id}
+      data-joyride={topic.id === 1 ? "topic-card-1" : topic.id === 2 ? "topic-card-2" : topic.id === 3 ? "topic-card-3" : undefined}
       style={{ position: 'relative' }}
       onClick={() => !isLocked && onCardClick && onCardClick()}
     >
