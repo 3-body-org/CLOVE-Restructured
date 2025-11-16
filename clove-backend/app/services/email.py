@@ -2,8 +2,11 @@ from typing import Optional
 from jinja2 import Template
 import requests
 import json
+import logging
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 class EmailService:
@@ -51,17 +54,26 @@ class EmailService:
                 response = requests.post(self.brevo_url, headers=headers, data=json.dumps(data))
                 
                 if response.status_code == 201:
-                    print(f"Email sent successfully to {to_email} via Brevo")
+                    logger.info(f"Email sent successfully to {to_email} via Brevo")
                     return True
                 else:
-                    print(f"Brevo API error: {response.status_code} - {response.text}")
+                    error_msg = response.text
+                    logger.error(f"Brevo API error: {response.status_code} - {error_msg}")
+                    
+                    # Check for IP authorization error specifically
+                    if response.status_code == 401 and "unrecognised IP address" in error_msg:
+                        logger.error(
+                            "Brevo IP authorization error. Please add Render's IP addresses to Brevo's authorized IPs list: "
+                            "https://app.brevo.com/security/authorised_ips"
+                        )
+                    
                     return False
             else:
-                print(f"Brevo not configured, email sending disabled for {to_email}")
+                logger.warning(f"Brevo not configured, email sending disabled for {to_email}")
                 return False
             
         except Exception as e:
-            print(f"Failed to send email to {to_email}: {e}")
+            logger.error(f"Failed to send email to {to_email}: {e}", exc_info=True)
             return False
 
     async def send_verification_email(self, to_email: str, verification_link: str, user_name: str) -> bool:

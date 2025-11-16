@@ -1,11 +1,14 @@
 # app/api/auth.py
 
 import os
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timedelta, timezone
+
+logger = logging.getLogger(__name__)
 
 from app.db.models.users import User
 from app.schemas.user import UserCreate, UserRead, Token, UserLogin, EmailVerificationRequest, PasswordResetRequest, PasswordResetConfirm, MessageResponse
@@ -111,14 +114,17 @@ async def create_user_endpoint(
     
     # Send verification email (don't fail signup if email fails)
     try:
-        await email_service.send_verification_email(
+        email_sent = await email_service.send_verification_email(
             to_email=user.email,
             verification_link=verification_link,
             user_name=user.first_name or "User"
         )
-        print(f"Verification email sent to {user.email}")
+        if email_sent:
+            logger.info(f"Verification email sent successfully to {user.email}")
+        else:
+            logger.error(f"Failed to send verification email to {user.email} - check Brevo configuration and IP whitelist")
     except Exception as e:
-        print(f"Failed to send verification email: {e}")
+        logger.error(f"Failed to send verification email to {user.email}: {e}", exc_info=True)
 
     return user
 
