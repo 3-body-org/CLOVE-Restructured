@@ -1,11 +1,14 @@
 # app/api/auth.py
 
 import os
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timedelta, timezone
+
+logger = logging.getLogger(__name__)
 
 from app.db.models.users import User
 from app.schemas.user import UserCreate, UserRead, Token, UserLogin, EmailVerificationRequest, PasswordResetRequest, PasswordResetConfirm, MessageResponse
@@ -79,7 +82,6 @@ async def create_user_endpoint(
     """
     Create a new user. Checks for existing email first, then auto-generates username.
     """
-    print('DEBUG: type(db) in signup =', type(db))
     # 1) Check for duplicate email
     existing = await get_by_email(db, email=user_in.email)
     if existing:
@@ -111,14 +113,17 @@ async def create_user_endpoint(
     
     # Send verification email (don't fail signup if email fails)
     try:
-        await email_service.send_verification_email(
+        email_sent = await email_service.send_verification_email(
             to_email=user.email,
             verification_link=verification_link,
             user_name=user.first_name or "User"
         )
-        print(f"Verification email sent to {user.email}")
+        if email_sent:
+            logger.info(f"Verification email sent successfully to {user.email}")
+        else:
+            logger.error(f"Failed to send verification email to {user.email} - check Brevo configuration and IP whitelist")
     except Exception as e:
-        print(f"Failed to send verification email: {e}")
+        logger.error(f"Failed to send verification email to {user.email}: {e}", exc_info=True)
 
     return user
 
@@ -184,7 +189,7 @@ async def login(
         for threshold, minutes in COOLDOWN_THRESHOLDS.items():
             if user.login_attempts == threshold:
                 cooldown_minutes = minutes
-                print(f"Login cooldown triggered: {user.login_attempts} attempts = {minutes} minutes")
+                logger.warning(f"Login cooldown triggered: {user.login_attempts} attempts = {minutes} minutes")
                 break
         
         # If cooldown is needed, set it
@@ -370,7 +375,7 @@ async def forgot_password(
     )
     
     if not success:
-        print(f"Failed to send reset email to {user.email}")
+        logger.error(f"Failed to send reset email to {user.email} - check Brevo configuration and IP whitelist")
     
     return MessageResponse(message="If the email exists, a reset link has been sent")
 
