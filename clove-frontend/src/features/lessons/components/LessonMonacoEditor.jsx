@@ -13,8 +13,12 @@ const getMonacoThemeName = (appTheme) => {
   }
 };
 
+// Use WeakMap to track which monaco instances have had themes defined
+// This avoids the "object is not extensible" error
+const monacoThemesDefined = new WeakMap();
+
 const defineMonacoThemes = (monaco) => {
-  if (monaco.__cloveThemesDefined) return;
+  if (monacoThemesDefined.has(monaco)) return;
   
   monaco.editor.defineTheme('space-theme', {
     base: 'vs-dark',
@@ -286,7 +290,8 @@ const defineMonacoThemes = (monaco) => {
     }
   });
   
-  monaco.__cloveThemesDefined = true;
+  // Mark this monaco instance as having themes defined
+  monacoThemesDefined.set(monaco, true);
 };
 
 const LessonMonacoEditor = ({
