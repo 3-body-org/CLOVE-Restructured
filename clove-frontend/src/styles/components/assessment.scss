@@ -21,7 +21,7 @@
   position: relative;
   overflow: hidden;
   
-  // Animated background particles
+  // Static background particles (animation removed for performance)
   &::before {
     content: '';
     position: absolute;
@@ -33,7 +33,7 @@
       radial-gradient(circle at 20% 80%, rgba(var(--primary-rgb), 0.1) 0%, transparent 50%),
       radial-gradient(circle at 80% 20%, rgba(var(--secondary-rgb), 0.1) 0%, transparent 50%),
       radial-gradient(circle at 40% 40%, rgba(var(--accent-primary-rgb), 0.05) 0%, transparent 50%);
-    animation: float 20s ease-in-out infinite;
+    // Removed animation: float 20s ease-in-out infinite; for better performance
     pointer-events: none;
   }
   
@@ -43,11 +43,12 @@
   }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-20px) rotate(1deg); }
-  66% { transform: translateY(10px) rotate(-1deg); }
-}
+// Removed float animation for better performance
+// @keyframes float {
+//   0%, 100% { transform: translateY(0px) rotate(0deg); }
+//   33% { transform: translateY(-20px) rotate(1deg); }
+//   66% { transform: translateY(10px) rotate(-1deg); }
+// }
 
 // ============================================================================
 // ASSESSMENT TEST CONTAINER
@@ -431,9 +432,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 10010;
   padding: 20px;
   overflow-y: auto;
+  
+  // Hide scrollbars while maintaining scroll functionality
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   
   // Mobile-first responsive padding
   @media (max-width: 480px) {
@@ -459,6 +467,13 @@
   box-shadow: var(--shadow-lg);
   position: relative;
   overflow-y: auto;
+  
+  // Hide scrollbars while maintaining scroll functionality
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   
   // Responsive padding and sizing
   @media (max-width: 768px) {

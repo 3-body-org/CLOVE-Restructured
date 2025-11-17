@@ -72,7 +72,7 @@ export const tourSteps = [
   {
     target: STEP_TARGETS.PROGRESS_OVERVIEW,
     content: 'See your overall progress across all topics. Track how much you\'ve completed in each realm.',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     route: ROUTES.DASHBOARD,
     spotlightClicks: false,
@@ -82,7 +82,7 @@ export const tourSteps = [
   {
     target: STEP_TARGETS.CHALLENGES_SOLVED,
     content: 'Monitor your challenge completion rate. Solve more challenges to improve your skills!',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     route: ROUTES.DASHBOARD,
     spotlightClicks: false,
@@ -115,7 +115,7 @@ export const tourSteps = [
   {
     target: STEP_TARGETS.TOPIC_CARD_1,
     content: 'Start with "Data Types and Variables" - Learn about variables, data types, and how to declare and use them in programming.',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     route: ROUTES.MY_DECK,
     spotlightClicks: false,
@@ -125,7 +125,7 @@ export const tourSteps = [
   {
     target: STEP_TARGETS.TOPIC_CARD_2,
     content: 'Explore "Operators" - Master different types of operators used in programming for calculations and comparisons.',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     route: ROUTES.MY_DECK,
     spotlightClicks: false,
@@ -135,7 +135,7 @@ export const tourSteps = [
   {
     target: STEP_TARGETS.TOPIC_CARD_3,
     content: 'Dive into "Conditional and Loops" - Understand control flow with conditional statements and different types of loops.',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     route: ROUTES.MY_DECK,
     nextRoute: ROUTES.PROGRESS, // Auto-navigate to Progress after this step
@@ -158,23 +158,20 @@ export const tourSteps = [
   {
     target: STEP_TARGETS.LEARNING_MODES,
     content: 'Track your performance across different learning modes: Code Completion, Code Fixer, and Output Tracing. Improve your accuracy!',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     route: ROUTES.PROGRESS,
     spotlightClicks: false,
   },
   
-  // Step 14: Learning Realms Section
+  // Step 14: First Realm Card (Data Types and Variables)
   {
-    target: STEP_TARGETS.LEARNING_REALMS,
+    target: STEP_TARGETS.REALM_CARD_1,
     content: 'Explore all learning realms and track your progress. Each realm can be mastered independently - choose your path!',
-    placement: 'top',
+    placement: 'bottom',
     disableBeacon: true,
     route: ROUTES.PROGRESS,
     spotlightClicks: false,
-    // Special handling: This step may need to expand the realm before showing realm-details
-    requiresExpansion: true,
-    expansionTarget: STEP_TARGETS.LEARNING_REALMS,
   },
   
   // Step 15: Realm Performance Analysis (last progress step - auto-navigate to Dashboard and show completion)

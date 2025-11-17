@@ -13,7 +13,7 @@ import {
   faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/ProgressPage.module.scss";
-import { getRealmTheme, getThemeColors, getRealmStatus } from "../config/realmThemeConfig";
+import { getRealmTheme, getThemeColors, getRealmStatus, THEME_TYPES } from "../config/realmThemeConfig";
 import { SubtopicCard, TopicProficiencyBadge, getMasteryLevel } from "./ProgressAnalytics";
 
 // SVG backgrounds for realm cards based on topic theme
@@ -449,6 +449,7 @@ const RealmCard = React.memo(({
     <motion.div
       key={topic.topic_id}
       className={`${styles.realmCard} ${isCompleted ? styles.completed : ''} ${isInProgress && !isCompleted ? styles.inProgress : ''}`}
+      data-joyride={topic.topic_id === 1 ? "realm-card-1" : undefined}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
@@ -487,7 +488,7 @@ const RealmCard = React.memo(({
             cy="60"
             r={ringRadius}
             fill="none"
-            stroke={isCompleted ? '#10b981' : themeColors.color}
+            stroke={isCompleted ? '#10b981' : realmTheme === THEME_TYPES.WIZARD ? '#FBBF24' : themeColors.color}
             strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray={ringCircumference}

@@ -17,6 +17,7 @@ import styles from "../styles/SubtopicPage.module.scss";
  * @param {string} props.theme - Current theme name.
  * @param {string} [props.className] - Optional extra class.
  * @param {boolean} [props.hideTitle] - Hide the title if true.
+ * @param {boolean} [props.isNewlyUnlocked] - Whether this subtopic is newly unlocked.
  */
 const SubtopicNode = ({
   subtopic,
@@ -25,6 +26,7 @@ const SubtopicNode = ({
   theme,
   className = "",
   hideTitle = false,
+  isNewlyUnlocked = false,
 }) => {
   const renderPopover = () => (
       <Popover id={`popover-${subtopic.id}`}>
@@ -49,7 +51,7 @@ const SubtopicNode = ({
         overlay={renderPopover()}
       >
         <div
-          className={`${styles.subtopicIconWrapper} ${isLocked ? styles.lockedImage : ""}`}
+          className={`${styles.subtopicIconWrapper} ${isLocked ? styles.lockedImage : ""} ${isNewlyUnlocked ? styles.newlyUnlocked : ""}`}
           onClick={() => onSubtopicClick(subtopic)}
         >
           <img
@@ -78,6 +80,7 @@ SubtopicNode.propTypes = {
   theme: PropTypes.string,
   className: PropTypes.string,
   hideTitle: PropTypes.bool,
+  isNewlyUnlocked: PropTypes.bool,
 };
 
 export default SubtopicNode; 

@@ -25,6 +25,7 @@ import { useSidebar } from '../../../components/layout/Sidebar/Layout';
 import { useMyDeckService } from "../hooks/useMydeckService";
 import { showLockedNotification } from "../../../utils/notifications";
 import AssessmentInstructions from "../../../components/assessments/AssessmentInstructions";
+import { getThemeCursor } from "../../../utils/themeCursors";
 
 export default function SubtopicSelectionPage() {
   const navigate = useNavigate();
@@ -382,6 +383,7 @@ export default function SubtopicSelectionPage() {
         position: 'relative',
         overflow: 'hidden',
         transition: 'background 0.5s cubic-bezier(0.4,0,0.2,1)',
+        cursor: getThemeCursor(theme),
         ...(isWizardTheme || isDetectiveTheme ? { backgroundColor: 'transparent' } : {})
       }}
     >
@@ -529,6 +531,32 @@ export default function SubtopicSelectionPage() {
           theme={theme}
           layoutConfig={layoutConfig}
           nodeRefs={nodeRefs}
+          isNewlyUnlocked={(() => {
+            // Find the most recently unlocked subtopic by comparing unlockedAt timestamps
+            if (!subtopics || subtopics.length === 0) {
+              return () => false;
+            }
+            
+            // Filter unlocked subtopics with valid unlockedAt timestamps
+            const unlockedSubtopics = subtopics
+              .filter(s => s.isUnlocked && s.unlockedAt)
+              .map(s => ({
+                key: s.key,
+                unlockedAt: new Date(s.unlockedAt).getTime()
+              }));
+            
+            if (unlockedSubtopics.length === 0) {
+              return () => false;
+            }
+            
+            // Find the most recently unlocked subtopic
+            const mostRecent = unlockedSubtopics.reduce((latest, current) => {
+              return current.unlockedAt > latest.unlockedAt ? current : latest;
+            });
+            
+            // Return a function that checks if a subtopic key is the newly unlocked one
+            return (subtopicKey) => subtopicKey === mostRecent.key;
+          })()}
         />
         {/* SVG overlay for floating rocks - only for space theme */}
         {isSpaceTheme && (

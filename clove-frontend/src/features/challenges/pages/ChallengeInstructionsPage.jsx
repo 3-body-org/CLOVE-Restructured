@@ -11,6 +11,7 @@ import ChallengeThemeProvider from '../components/ChallengeThemeProvider';
 import LoadingScreen from '../../../components/layout/StatusScreen/LoadingScreen';
 import ErrorScreen from '../../../components/layout/StatusScreen/ErrorScreen';
 import styles from '../styles/ChallengeInstructionsPage.module.scss';
+import { getThemeCursor, getThemeIcon } from '../../../utils/themeCursors';
 
 const ChallengeInstructionsPage = () => {
   const navigate = useNavigate();
@@ -47,11 +48,11 @@ const ChallengeInstructionsPage = () => {
 
   return (
     <ChallengeThemeProvider>
-      <div className={styles.container} style={themeStyles}>
+      <div className={styles.container} style={{ ...themeStyles, cursor: getThemeCursor(currentTheme) }}>
         <div className={styles.content}>
         {/* Header */}
         <div className={styles.header}>
-          <h1 className={styles.title}>🎯 Challenge Instructions</h1>
+          <h1 className={styles.title}>{getThemeIcon(currentTheme)} Challenge Instructions</h1>
           <p className={styles.subtitle}>
             Learn about the challenge layout and important rules before you begin
           </p>
@@ -219,7 +220,7 @@ const ChallengeInstructionsPage = () => {
             className={styles.startButton}
             onClick={handleStartChallenges}
           >
-            🚀 Start Challenges
+            {getThemeIcon(currentTheme)} Start Challenges
           </button>
         </div>
         </div>

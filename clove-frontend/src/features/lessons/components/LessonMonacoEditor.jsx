@@ -5,6 +5,9 @@ import { useMemo, useEffect } from 'react';
 import { subtopicContent } from '../../mydeck/content/subtopicContent';
 // Theme imports removed - using centralized theme system
 
+// Module-level flag to track if themes have been defined
+let themesDefined = false;
+
 const getMonacoThemeName = (appTheme) => {
   switch (appTheme) {
     case 'wizard': return 'wizard-theme';
@@ -14,7 +17,7 @@ const getMonacoThemeName = (appTheme) => {
 };
 
 const defineMonacoThemes = (monaco) => {
-  if (monaco.__cloveThemesDefined) return;
+  if (themesDefined) return;
   
   monaco.editor.defineTheme('space-theme', {
     base: 'vs-dark',
@@ -286,7 +289,7 @@ const defineMonacoThemes = (monaco) => {
     }
   });
   
-  monaco.__cloveThemesDefined = true;
+  themesDefined = true;
 };
 
 const LessonMonacoEditor = ({

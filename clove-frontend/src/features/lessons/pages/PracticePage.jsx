@@ -12,6 +12,7 @@ import { useAuth } from "contexts/AuthContext";
 import { MyDeckContext } from "contexts/MyDeckContext";
 import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
+import { getThemeCursor } from "../../../utils/themeCursors";
 
 // Monaco editor types for highlighting
 let monaco = null;
@@ -928,7 +929,7 @@ const PracticePage = () => {
   }
 
     return (
-    <div className={`practice-container theme-${currentTheme || 'space'}`}>
+    <div className={`practice-container theme-${currentTheme || 'space'}`} style={{ cursor: getThemeCursor(currentTheme || 'space') }}>
       {/* Left Sidebar */}
       <div className="sidebar">
         <div className="sidebarContent">

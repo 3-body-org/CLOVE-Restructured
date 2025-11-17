@@ -19,6 +19,7 @@ import styles from "../styles/SubtopicPage.module.scss";
  * @param {Object} [props.layoutConfig={}] - Optional layout config (nodes, containerStyle, containerClassName).
  * @param {Object} [props.nodeRefs={}] - Optional refs for each node.
  * @param {Function} [props.renderNode] - Optional custom node renderer.
+ * @param {Function} [props.isNewlyUnlocked] - Function to check if a subtopic is newly unlocked.
  */
 const SubtopicLayout = ({
   subtopicKeys = [],
@@ -29,6 +30,7 @@ const SubtopicLayout = ({
   layoutConfig = {},
   nodeRefs = {},
   renderNode,
+  isNewlyUnlocked = () => false,
 }) => {
   const nodes = layoutConfig.nodes || subtopicKeys.map((key) => ({ key, style: {}, className: '' }));
   
@@ -52,6 +54,7 @@ const SubtopicLayout = ({
             theme,
             ref: nodeRefs[node.key] || null,
             key: node.key + '-wrapper',
+            isNewlyUnlocked: isNewlyUnlocked(node.key),
           });
         }
         // Default rendering
@@ -68,6 +71,7 @@ const SubtopicLayout = ({
             onSubtopicClick={onSubtopicClick}
             theme={theme}
             hideTitle={true}
+            isNewlyUnlocked={isNewlyUnlocked(node.key)}
           />
           </div>
         );
@@ -85,6 +89,7 @@ SubtopicLayout.propTypes = {
   layoutConfig: PropTypes.object,
   nodeRefs: PropTypes.object,
   renderNode: PropTypes.func,
+  isNewlyUnlocked: PropTypes.func,
 };
 
 export default SubtopicLayout; 

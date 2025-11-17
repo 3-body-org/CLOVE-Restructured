@@ -63,7 +63,9 @@ import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 import DOMPurify from 'dompurify';
 import Topic1Background from "assets/background/Topic1Background.webp";
+import Topic2Background from "assets/background/Topic2Background.webp";
 import ImageThemeBackground from "features/mydeck/components/ImageThemeBackground";
+import { getThemeCursor } from "../../../utils/themeCursors";
 
 /**
  * IntroductionPage
@@ -97,6 +99,7 @@ const IntroductionPage = () => {
   }, [topicId]);
   
   const isTopic1 = numericTopicId === 1;
+  const isTopic2 = numericTopicId === 2;
 
   // Load topic data and update recent topic
   useEffect(() => {
@@ -232,12 +235,21 @@ const IntroductionPage = () => {
   return (
     <div
       className={`${styles.container} ${isSpaceTheme ? styles.spaceTheme : ""} ${isWizardTheme ? styles.wizardTheme : ""} ${isDetectiveTheme ? styles.detectiveTheme : ""}`}
+      style={{ cursor: getThemeCursor(currentTheme) }}
     >
       {/* Topic 1 specific background */}
       {isTopic1 && (
         <ImageThemeBackground 
           src={Topic1Background} 
           alt="Topic 1 Background" 
+          blur={false}
+        />
+      )}
+      {/* Topic 2 specific background */}
+      {isTopic2 && (
+        <ImageThemeBackground 
+          src={Topic2Background} 
+          alt="Topic 2 Background" 
           blur={false}
         />
       )}

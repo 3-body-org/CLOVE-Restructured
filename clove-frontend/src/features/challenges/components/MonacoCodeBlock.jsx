@@ -3,6 +3,9 @@ import Editor from "@monaco-editor/react";
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
 import '../../../styles/components/challenge.scss';
 
+// Module-level flag to track if themes have been defined
+let themesDefined = false;
+
 const getMonacoThemeName = (appTheme) => {
   switch (appTheme) {
     case 'wizard': return 'wizard-theme';
@@ -12,11 +15,7 @@ const getMonacoThemeName = (appTheme) => {
 };
 
 const defineMonacoThemes = (monaco) => {
-  if (monaco.__cloveThemesDefined) {
-    monaco.__cloveThemesDefined = false;
-  }
-  
-  if (monaco.__cloveThemesDefined) return;
+  if (themesDefined) return;
   
   monaco.editor.defineTheme('space-theme', {
     base: 'vs-dark',
@@ -165,7 +164,7 @@ const defineMonacoThemes = (monaco) => {
       'editorWidget.shadow': '0 2px 8px rgba(0,0,0,0.5)',
     }
   });
-  monaco.__cloveThemesDefined = true;
+  themesDefined = true;
 };
 
 const MonacoCodeBlock = ({
@@ -259,7 +258,6 @@ const MonacoCodeBlock = ({
   const handleMount = (editor, monaco) => {
     editorRef.current = editor;
     
-    monaco.__cloveThemesDefined = false;
     defineMonacoThemes(monaco);
     
     setTimeout(() => {
@@ -364,7 +362,6 @@ const MonacoCodeBlock = ({
 
   React.useEffect(() => {
     if (editorRef.current && window.monaco) {
-      window.monaco.__cloveThemesDefined = false;
       defineMonacoThemes(window.monaco);
       
       setTimeout(() => {

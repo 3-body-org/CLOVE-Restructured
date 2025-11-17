@@ -151,7 +151,8 @@ const getBackendData = (key, preAssessment, subtopics, postAssessment) => {
     lessonsCompleted: subtopic.lessons_completed,
     practiceCompleted: subtopic.practice_completed,
     challengesCompleted: subtopic.challenges_completed,
-    knowledgeLevel: subtopic.knowledge_level
+    knowledgeLevel: subtopic.knowledge_level,
+    unlockedAt: subtopic.unlocked_at || null
   };
 };
 

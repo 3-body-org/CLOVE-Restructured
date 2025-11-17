@@ -21,6 +21,7 @@ import CustomExitWarningModal from '../components/CustomExitWarningModal';
 import OtherSessionWarningModal from '../components/OtherSessionWarningModal';
 import '../../../styles/components/challenge.scss';
 import { useChallengeTheme } from '../hooks/useChallengeTheme';
+import { getThemeCursor } from '../../../utils/themeCursors';
 
 const ChallengesPage = () => {
   // Ensure correct theme class is applied before first paint for this route
@@ -234,7 +235,7 @@ const ChallengesPage = () => {
   }
 
   return (
-    <div className={`challenges-container theme-${topicTheme || 'space'}`}>
+    <div className={`challenges-container theme-${topicTheme || 'space'}`} style={{ cursor: getThemeCursor(topicTheme || 'space') }}>
       {/* Custom Exit Warning Modal - Option 1 */}
       <CustomExitWarningModal
         isVisible={showCustomExitWarning}

@@ -23,6 +23,13 @@
   // width: 100%;
   overflow-y: auto;
   transition: margin-left 0.3s ease-in-out;
+  
+  // Hide scrollbars while maintaining scroll functionality
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Tablet & Mobile - Ensure main content uses full width when sidebar is hidden */
