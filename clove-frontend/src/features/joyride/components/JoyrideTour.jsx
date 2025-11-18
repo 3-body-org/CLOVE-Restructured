@@ -140,7 +140,7 @@ const JoyrideTour = () => {
 
           // Check if this step has a nextRoute (auto-navigation)
           if (currentStepData?.nextRoute) {
-            // Only navigate if tour is still running, not skipped, and navigation not cancelled
+            // Navigate to nextRoute immediately
             if (
               isRunning &&
               !wasSkippedRef.current &&
@@ -149,7 +149,7 @@ const JoyrideTour = () => {
               navigate(currentStepData.nextRoute, { replace: true });
             }
 
-            // If it's the last step, show completion modal after navigation
+            // If it's the last step, show completion modal
             if (currentStepData.isLastStep) {
               setTimeout(() => {
                 finishTour();
@@ -158,10 +158,38 @@ const JoyrideTour = () => {
               return;
             }
 
-            // Advance to next step after navigation delay
-            setTimeout(() => {
+            // Wait for next step's element to exist before advancing
+            // This ensures the page has finished rendering after navigation
+            const nextStep = tourSteps[index + 1];
+            if (nextStep?.target) {
+              const startTime = Date.now();
+              const timeout = TIMEOUTS.ELEMENT_WAIT;
+              
+              const checkElement = () => {
+                // Check if element exists
+                const element = document.querySelector(nextStep.target);
+                
+                if (element) {
+                  // Element found, safe to advance
+                  goToNextStep();
+                } else {
+                  // Check timeout
+                  if (Date.now() - startTime > timeout) {
+                    // Timeout reached, advance anyway to prevent blocking
+                    goToNextStep();
+                  } else {
+                    // Keep checking on next animation frame
+                    requestAnimationFrame(checkElement);
+                  }
+                }
+              };
+              
+              // Start checking on next animation frame
+              requestAnimationFrame(checkElement);
+            } else {
+              // No target for next step, advance immediately
               goToNextStep();
-            }, TIMEOUTS.NAVIGATION_DELAY);
+            }
             return;
           }
 

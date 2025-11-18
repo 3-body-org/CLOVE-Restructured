@@ -14,8 +14,8 @@ export const THEME_TYPES = {
 // Theme color configurations
 export const THEME_COLORS = {
   [THEME_TYPES.WIZARD]: {
-    color: '#10b981',
-    bgGradient: 'linear-gradient(135deg, #10b981, #059669)'
+    color: '#0EA5E9',
+    bgGradient: 'linear-gradient(135deg, #0EA5E9, #06B6D4)'
   },
   [THEME_TYPES.DETECTIVE]: {
     color: '#d1b773',

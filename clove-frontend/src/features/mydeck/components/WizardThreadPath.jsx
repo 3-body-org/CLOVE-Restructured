@@ -11,7 +11,7 @@ import path3 from 'assets/icons/wizard/icon-path3.webp';
 const PATHS = [path1, path2, path3];
 const SVG_NATURAL_WIDTH = 80; // px
 const SVG_NATURAL_HEIGHT = 971; // px
-const PATH_SCALE_FACTOR = 1.3;
+const PATH_SCALE_FACTOR = 0.8;
 const GLOW_FILTER = '0 0 32px 8px #f5d782, 0 0 64px 16px #3fbabf'; // gold and teal glow
 
 /**

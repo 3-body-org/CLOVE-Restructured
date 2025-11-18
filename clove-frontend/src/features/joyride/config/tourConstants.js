@@ -72,6 +72,7 @@ export const STEP_TARGETS = {
   ACTIVITY_FEED: '[data-joyride="activity-feed"]',
   LEARNING_MODES: '[data-joyride="learning-modes"]',
   LEARNING_REALMS: '[data-joyride="learning-realms"]',
+  REALM_CARD_1: '[data-joyride="realm-card-1"]',
   REALM_DETAILS: '[data-joyride="realm-details"]',
 };
 

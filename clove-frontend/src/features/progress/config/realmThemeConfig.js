@@ -14,8 +14,8 @@ export const THEME_TYPES = {
 // Theme color configurations
 export const THEME_COLORS = {
   [THEME_TYPES.WIZARD]: {
-    color: '#10b981',
-    shadowColor: 'rgba(16, 185, 129, 0.4)'
+    color: '#0EA5E9',
+    shadowColor: 'rgba(14, 165, 233, 0.4)'
   },
   [THEME_TYPES.DETECTIVE]: {
     color: '#d1b773',

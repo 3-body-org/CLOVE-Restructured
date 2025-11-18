@@ -1,5 +1,5 @@
 //react
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, useMemo } from "react";
 //react router
 import { useNavigate, useParams } from "react-router-dom";
 //context
@@ -18,6 +18,9 @@ import LoadingScreen from "components/layout/StatusScreen/LoadingScreen";
 import ErrorScreen from "components/layout/StatusScreen/ErrorScreen";
 //security
 import DOMPurify from 'dompurify';
+//utils
+import { getThemeCursor } from "../../../utils/themeCursors";
+import { subtopicContent } from "features/mydeck/content/subtopicContent";
 
 //scss
 import "../../../styles/components/lesson.scss";
@@ -269,6 +272,16 @@ const LessonsPage = () => {
   const [showSkipSnackbar, setShowSkipSnackbar] = useState(false);
   const [userSubtopicData, setUserSubtopicData] = useState(null);
   const [minTimePassed, setMinTimePassed] = useState(false);
+
+  // Get theme for cursor
+  const topicTheme = useMemo(() => {
+    if (topicId) {
+      const numericTopicId = parseInt(topicId);
+      const topic = subtopicContent[numericTopicId];
+      return topic ? topic.theme : 'space';
+    }
+    return 'space';
+  }, [topicId]);
   
   useEffect(() => {
     setMinTimePassed(false);
@@ -563,7 +576,7 @@ const LessonsPage = () => {
 
   return (
     <LessonThemeProvider>
-    <div className="lessonLayout">
+    <div className="lessonLayout" style={{ cursor: getThemeCursor(topicTheme) }}>
       
       <div 
         className="lessonCard"

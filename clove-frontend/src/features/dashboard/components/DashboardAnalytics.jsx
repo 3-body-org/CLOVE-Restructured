@@ -99,7 +99,7 @@ const TopicCard = React.memo(({ topic, percentage, index }) => {
                 cy="50"
                 r={radius}
                 fill="none"
-                stroke={theme.color}
+                stroke={theme.themeType === THEME_TYPES.WIZARD ? '#FBBF24' : theme.color}
                 strokeWidth="8"
                 strokeLinecap="round"
                 strokeDasharray={circumference}
@@ -110,7 +110,7 @@ const TopicCard = React.memo(({ topic, percentage, index }) => {
                 style={{
                   transform: "rotate(-90deg)",
                   transformOrigin: "50% 50%",
-                  filter: `drop-shadow(0 0 5px ${theme.color}70)`
+                  filter: `drop-shadow(0 0 5px ${theme.themeType === THEME_TYPES.WIZARD ? '#FBBF24' : theme.color}70)`
                 }}
               />
             </svg>

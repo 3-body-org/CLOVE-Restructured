@@ -16,56 +16,64 @@
   transition: opacity 0.4s ease;
   filter: blur(0px); // No blur for sharper, more interactive look
   overflow: hidden; // Ensure SVG stays within card bounds
+  transform: translateZ(0);
+  contain: layout style paint;
 }
 
-// Animation classes for interactive game elements
+// Animation classes for interactive game elements - GPU accelerated
 .animatedSparkles,
 .twinklingStars,
 .floatingClues,
 .spaceParticles {
   animation: floatParticles 6s ease-in-out infinite;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 // Animation classes are applied via SVG animate elements
 
 .rocketShip {
   animation: floatRocket 4s ease-in-out infinite;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .robot {
   animation: floatRobot 5s ease-in-out infinite;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 @keyframes floatParticles {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) translateZ(0);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translateY(-5px) translateZ(0);
   }
 }
 
 @keyframes floatRocket {
   0%, 100% {
-    transform: translate(0px, 0px);
+    transform: translate(0px, 0px) translateZ(0);
   }
   25% {
-    transform: translate(2px, -3px);
+    transform: translate(2px, -3px) translateZ(0);
   }
   50% {
-    transform: translate(0px, -5px);
+    transform: translate(0px, -5px) translateZ(0);
   }
   75% {
-    transform: translate(-2px, -3px);
+    transform: translate(-2px, -3px) translateZ(0);
   }
 }
 
 @keyframes floatRobot {
   0%, 100% {
-    transform: translate(0px, 0px);
+    transform: translate(0px, 0px) translateZ(0);
   }
   50% {
-    transform: translate(1px, -2px);
+    transform: translate(1px, -2px) translateZ(0);
   }
 }
 
@@ -83,7 +91,7 @@
   
   // Custom diagonal wooden wand cursor for wizard theme with magical glow and particles
   &:not(.lockedCard) {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40'%3E%3Cdefs%3E%3ClinearGradient id='woodGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%238B4513'/%3E%3Cstop offset='30%25' stop-color='%23A0522D'/%3E%3Cstop offset='60%25' stop-color='%23CD853F'/%3E%3Cstop offset='100%25' stop-color='%23D2691E'/%3E%3C/linearGradient%3E%3ClinearGradient id='woodGrain' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23A0522D' stop-opacity='0.6'/%3E%3Cstop offset='50%25' stop-color='%23CD853F' stop-opacity='0.3'/%3E%3Cstop offset='100%25' stop-color='%23A0522D' stop-opacity='0.6'/%3E%3C/linearGradient%3E%3CradialGradient id='magicGlow' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%236EE7B7' stop-opacity='1'/%3E%3Cstop offset='40%25' stop-color='%2334d399' stop-opacity='0.9'/%3E%3Cstop offset='70%25' stop-color='%2310b981' stop-opacity='0.6'/%3E%3Cstop offset='100%25' stop-color='%2310b981' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='wandShadow'%3E%3CfeGaussianBlur stdDeviation='0.5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='magicGlowFilter'%3E%3CfeGaussianBlur stdDeviation='3' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='magicGlowOuter'%3E%3CfeGaussianBlur stdDeviation='5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='particleGlow'%3E%3CfeGaussianBlur stdDeviation='1.5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg transform='rotate(-20 20 20)'%3E%3Cpath d='M20 4 L20 32' stroke='url(%23woodGrad)' stroke-width='2.5' fill='none' filter='url(%23wandShadow)'/%3E%3Crect x='18.5' y='4' width='3' height='28' fill='url(%23woodGrad)'/%3E%3Cpath d='M18.5 4 L21.5 4 M18.5 8 L21.5 8 M18.5 12 L21.5 12 M18.5 16 L21.5 16 M18.5 20 L21.5 20 M18.5 24 L21.5 24 M18.5 28 L21.5 28' stroke='url(%23woodGrain)' stroke-width='0.5' opacity='0.4'/%3E%3C/g%3E%3Cg transform='rotate(-20 20 20)'%3E%3Ccircle cx='20' cy='4' r='6' fill='url(%23magicGlow)' filter='url(%23magicGlowOuter)' opacity='0.8'/%3E%3Ccircle cx='20' cy='4' r='5' fill='url(%23magicGlow)' filter='url(%23magicGlowFilter)' opacity='0.95'/%3E%3Ccircle cx='20' cy='4' r='3.5' fill='%236EE7B7' opacity='0.98'/%3E%3Ccircle cx='20' cy='4' r='2.5' fill='%2334d399' opacity='0.95'/%3E%3Ccircle cx='20' cy='4' r='1.5' fill='%23ffffff' opacity='0.9'/%3E%3Ccircle cx='18.5' cy='2.5' r='1.2' fill='%2334d399' opacity='0.8' filter='url(%23particleGlow)'/%3E%3Ccircle cx='21.5' cy='2.5' r='1' fill='%236EE7B7' opacity='0.85' filter='url(%23particleGlow)'/%3E%3Ccircle cx='19' cy='6' r='1.1' fill='%23ffffff' opacity='0.7' filter='url(%23particleGlow)'/%3E%3Ccircle cx='21' cy='6' r='0.9' fill='%2334d399' opacity='0.75' filter='url(%23particleGlow)'/%3E%3Ccircle cx='18' cy='5.5' r='0.8' fill='%236EE7B7' opacity='0.7' filter='url(%23particleGlow)'/%3E%3Ccircle cx='22' cy='5.5' r='0.8' fill='%23ffffff' opacity='0.65' filter='url(%23particleGlow)'/%3E%3C/g%3E%3C/svg%3E") 20 20, pointer;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40'%3E%3Cdefs%3E%3ClinearGradient id='woodGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%238B4513'/%3E%3Cstop offset='30%25' stop-color='%23A0522D'/%3E%3Cstop offset='60%25' stop-color='%23CD853F'/%3E%3Cstop offset='100%25' stop-color='%23D2691E'/%3E%3C/linearGradient%3E%3ClinearGradient id='woodGrain' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23A0522D' stop-opacity='0.6'/%3E%3Cstop offset='50%25' stop-color='%23CD853F' stop-opacity='0.3'/%3E%3Cstop offset='100%25' stop-color='%23A0522D' stop-opacity='0.6'/%3E%3C/linearGradient%3E%3CradialGradient id='magicGlow' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23FBBF24' stop-opacity='1'/%3E%3Cstop offset='40%25' stop-color='%23F59E0B' stop-opacity='0.9'/%3E%3Cstop offset='70%25' stop-color='%23FBBF24' stop-opacity='0.6'/%3E%3Cstop offset='100%25' stop-color='%23FBBF24' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='wandShadow'%3E%3CfeGaussianBlur stdDeviation='0.5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='magicGlowFilter'%3E%3CfeGaussianBlur stdDeviation='3' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='magicGlowOuter'%3E%3CfeGaussianBlur stdDeviation='5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3C/feMerge%3E%3C/filter%3E%3Cfilter id='particleGlow'%3E%3CfeGaussianBlur stdDeviation='1.5' result='coloredBlur'/%3E%3CfeMerge%3E%3CfeMergeNode in='coloredBlur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg transform='rotate(-20 20 20)'%3E%3Cpath d='M20 4 L20 32' stroke='url(%23woodGrad)' stroke-width='2.5' fill='none' filter='url(%23wandShadow)'/%3E%3Crect x='18.5' y='4' width='3' height='28' fill='url(%23woodGrad)'/%3E%3Cpath d='M18.5 4 L21.5 4 M18.5 8 L21.5 8 M18.5 12 L21.5 12 M18.5 16 L21.5 16 M18.5 20 L21.5 20 M18.5 24 L21.5 24 M18.5 28 L21.5 28' stroke='url(%23woodGrain)' stroke-width='0.5' opacity='0.4'/%3E%3C/g%3E%3Cg transform='rotate(-20 20 20)'%3E%3Ccircle cx='20' cy='4' r='6' fill='url(%23magicGlow)' filter='url(%23magicGlowOuter)' opacity='0.8'/%3E%3Ccircle cx='20' cy='4' r='5' fill='url(%23magicGlow)' filter='url(%23magicGlowFilter)' opacity='0.95'/%3E%3Ccircle cx='20' cy='4' r='3.5' fill='%23FBBF24' opacity='0.98'/%3E%3Ccircle cx='20' cy='4' r='2.5' fill='%23F59E0B' opacity='0.95'/%3E%3Ccircle cx='20' cy='4' r='1.5' fill='%23ffffff' opacity='0.9'/%3E%3Ccircle cx='18.5' cy='2.5' r='1.2' fill='%23F59E0B' opacity='0.8' filter='url(%23particleGlow)'/%3E%3Ccircle cx='21.5' cy='2.5' r='1' fill='%23FBBF24' opacity='0.85' filter='url(%23particleGlow)'/%3E%3Ccircle cx='19' cy='6' r='1.1' fill='%23ffffff' opacity='0.7' filter='url(%23particleGlow)'/%3E%3Ccircle cx='21' cy='6' r='0.9' fill='%23F59E0B' opacity='0.75' filter='url(%23particleGlow)'/%3E%3Ccircle cx='18' cy='5.5' r='0.8' fill='%23FBBF24' opacity='0.7' filter='url(%23particleGlow)'/%3E%3Ccircle cx='22' cy='5.5' r='0.8' fill='%23ffffff' opacity='0.65' filter='url(%23particleGlow)'/%3E%3C/g%3E%3C/svg%3E") 20 20, pointer;
   }
   
   // Override floatCard overflow for topic 1
@@ -131,10 +139,12 @@
         transparent 70%
       );
       opacity: 0;
-      animation: flickerDetectiveLight 3s ease-in-out infinite;
+      animation: flickerDetectiveLight 4s ease-in-out infinite;
       border-radius: inherit;
       mix-blend-mode: screen;
-      filter: blur(20px);
+      filter: blur(15px);
+      transform: translateZ(0);
+      will-change: opacity;
     }
   }
 }
@@ -179,6 +189,8 @@
   // Ensure it's not clipped
   clip-path: none;
   will-change: opacity;
+  transform: translateZ(0);
+  // Removed contain property to allow runes to extend beyond card boundaries
 }
 
 .topicOneCard:hover .runeLeakContainer {
@@ -198,16 +210,18 @@
   font-family: 'Times New Roman', serif;
   font-size: 32px;
   font-weight: bold;
-  color: #6EE7B7;
+  color: #FBBF24;
   text-shadow: 
-    0 0 10px rgba(110, 231, 183, 1),
-    0 0 20px rgba(110, 231, 183, 0.8),
-    0 0 30px rgba(110, 231, 183, 0.6),
-    0 0 40px rgba(110, 231, 183, 0.4);
+    0 0 10px rgba(251, 191, 36, 1),
+    0 0 20px rgba(251, 191, 36, 0.8),
+    0 0 30px rgba(251, 191, 36, 0.6),
+    0 0 40px rgba(251, 191, 36, 0.4);
   line-height: 1;
   white-space: nowrap;
   opacity: 0;
-  filter: drop-shadow(0 0 8px rgba(110, 231, 183, 0.9));
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.9));
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 
 // Top edge - multiple runes (positioned at card edge, which is 80px from container edge)
@@ -347,23 +361,24 @@
   }
 }
 
-// Rune floating animation
+// Rune floating animation - GPU accelerated
 @keyframes floatRune {
   0%, 100% {
-    transform: translateY(0) scale(1);
+    transform: translateY(0) translateZ(0) scale(1);
     opacity: 0.8;
   }
   50% {
-    transform: translateY(-8px) scale(1.1);
+    transform: translateY(-8px) translateZ(0) scale(1.1);
     opacity: 1;
   }
 }
 
 // Rune leak animations from different edges - starting from card edge, leaking outward
+// GPU accelerated with translateZ(0)
 @keyframes leakRunesTop {
   0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(0px) scale(0.7);
+    transform: translateX(-50%) translateY(0px) translateZ(0) scale(0.7);
   }
   10% {
     opacity: 0.8;
@@ -373,14 +388,14 @@
   }
   100% {
     opacity: 0.15;
-    transform: translateX(-50%) translateY(-80px) scale(1.4);
+    transform: translateX(-50%) translateY(-80px) translateZ(0) scale(1.4);
   }
 }
 
 @keyframes leakRunesBottom {
   0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(0px) scale(0.7);
+    transform: translateX(-50%) translateY(0px) translateZ(0) scale(0.7);
   }
   10% {
     opacity: 0.8;
@@ -390,14 +405,14 @@
   }
   100% {
     opacity: 0.15;
-    transform: translateX(-50%) translateY(80px) scale(1.4);
+    transform: translateX(-50%) translateY(80px) translateZ(0) scale(1.4);
   }
 }
 
 @keyframes leakRunesLeft {
   0% {
     opacity: 0;
-    transform: translateY(-50%) translateX(0px) rotate(-90deg) scale(0.7);
+    transform: translateY(-50%) translateX(0px) translateZ(0) rotate(-90deg) scale(0.7);
   }
   10% {
     opacity: 0.8;
@@ -407,14 +422,14 @@
   }
   100% {
     opacity: 0.15;
-    transform: translateY(-50%) translateX(-80px) rotate(-90deg) scale(1.4);
+    transform: translateY(-50%) translateX(-80px) translateZ(0) rotate(-90deg) scale(1.4);
   }
 }
 
 @keyframes leakRunesRight {
   0% {
     opacity: 0;
-    transform: translateY(-50%) translateX(0px) rotate(90deg) scale(0.7);
+    transform: translateY(-50%) translateX(0px) translateZ(0) rotate(90deg) scale(0.7);
   }
   10% {
     opacity: 0.8;
@@ -424,63 +439,63 @@
   }
   100% {
     opacity: 0.15;
-    transform: translateY(-50%) translateX(80px) rotate(90deg) scale(1.4);
+    transform: translateY(-50%) translateX(80px) translateZ(0) rotate(90deg) scale(1.4);
   }
 }
 
 @keyframes leakRunesCornerTopRight {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.6);
+    transform: translate(0, 0) translateZ(0) scale(0.6);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(45px, -45px) scale(1.5);
+    transform: translate(45px, -45px) translateZ(0) scale(1.5);
   }
 }
 
 @keyframes leakRunesCornerTopLeft {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.6);
+    transform: translate(0, 0) translateZ(0) scale(0.6);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(-45px, -45px) scale(1.5);
+    transform: translate(-45px, -45px) translateZ(0) scale(1.5);
   }
 }
 
 @keyframes leakRunesCornerBottomRight {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.6);
+    transform: translate(0, 0) translateZ(0) scale(0.6);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(45px, 45px) scale(1.5);
+    transform: translate(45px, 45px) translateZ(0) scale(1.5);
   }
 }
 
 @keyframes leakRunesCornerBottomLeft {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.6);
+    transform: translate(0, 0) translateZ(0) scale(0.6);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(-45px, 45px) scale(1.5);
+    transform: translate(-45px, 45px) translateZ(0) scale(1.5);
   }
 }
 
@@ -488,186 +503,65 @@
 // TOPIC 2 - FLICKERING LIGHT EFFECT ONLY
 // ============================================
 
-// Flickering detective light animation - creates flashlight flickering effect
+// Flickering detective light animation - creates realistic flashlight flickering effect
+// Uses occasional on/off flashes to simulate real flashlight flickering (less frequent)
 @keyframes flickerDetectiveLight {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.8);
   }
-  2% {
-    opacity: 0.9;
+  5% {
+    opacity: 1;
   }
-  4% {
-    opacity: 0.2;
-    transform: translate(30px, -20px) scale(1.1);
-  }
-  6% {
-    opacity: 0.85;
+  7% {
+    opacity: 0;
   }
   8% {
-    opacity: 0.3;
-    transform: translate(-25px, 15px) scale(0.9);
-  }
-  10% {
-    opacity: 0.95;
-  }
-  12% {
-    opacity: 0.15;
-    transform: translate(20px, 25px) scale(1.05);
-  }
-  14% {
     opacity: 0.8;
   }
-  16% {
-    opacity: 0.25;
-    transform: translate(-30px, -15px) scale(1.0);
+  9% {
+    opacity: 0;
   }
-  18% {
-    opacity: 0.9;
+  25% {
+    opacity: 0;
   }
-  20% {
-    opacity: 0.2;
-    transform: translate(15px, 30px) scale(1.15);
+  27% {
+    opacity: 1;
   }
-  22% {
-    opacity: 0.75;
-  }
-  24% {
+  29% {
     opacity: 0.3;
-    transform: translate(-20px, -25px) scale(0.85);
   }
-  26% {
-    opacity: 0.88;
-  }
-  28% {
-    opacity: 0.18;
-    transform: translate(25px, 10px) scale(1.08);
-  }
-  30% {
-    opacity: 0.92;
-  }
-  32% {
-    opacity: 0.22;
-    transform: translate(-15px, 20px) scale(0.95);
-  }
-  34% {
-    opacity: 0.82;
-  }
-  36% {
-    opacity: 0.28;
-    transform: translate(35px, -30px) scale(1.12);
-  }
-  38% {
-    opacity: 0.87;
-  }
-  40% {
-    opacity: 0.2;
-    transform: translate(-35px, 35px) scale(0.88);
-  }
-  42% {
-    opacity: 0.9;
-  }
-  44% {
-    opacity: 0.25;
-    transform: translate(10px, -10px) scale(1.05);
-  }
-  46% {
-    opacity: 0.78;
-  }
-  48% {
-    opacity: 0.3;
-    transform: translate(-10px, 15px) scale(0.92);
+  31% {
+    opacity: 0;
   }
   50% {
-    opacity: 0.93;
+    opacity: 0;
   }
   52% {
-    opacity: 0.2;
-    transform: translate(40px, 20px) scale(1.1);
-  }
-  54% {
-    opacity: 0.85;
-  }
-  56% {
-    opacity: 0.27;
-    transform: translate(-40px, -20px) scale(0.9);
-  }
-  58% {
-    opacity: 0.89;
-  }
-  60% {
-    opacity: 0.23;
-    transform: translate(5px, 40px) scale(1.06);
-  }
-  62% {
-    opacity: 0.8;
-  }
-  64% {
-    opacity: 0.3;
-    transform: translate(-5px, -40px) scale(0.94);
-  }
-  66% {
-    opacity: 0.91;
-  }
-  68% {
-    opacity: 0.19;
-    transform: translate(45px, -5px) scale(1.13);
-  }
-  70% {
-    opacity: 0.86;
-  }
-  72% {
-    opacity: 0.26;
-    transform: translate(-45px, 5px) scale(0.87);
-  }
-  74% {
-    opacity: 0.88;
-  }
-  76% {
-    opacity: 0.21;
-    transform: translate(0, 0) scale(1.02);
-  }
-  78% {
-    opacity: 0.84;
-  }
-  80% {
-    opacity: 0.29;
-    transform: translate(50px, 50px) scale(1.15);
-  }
-  82% {
     opacity: 0.9;
   }
-  84% {
-    opacity: 0.17;
-    transform: translate(-50px, -50px) scale(0.85);
+  54% {
+    opacity: 0;
   }
-  86% {
-    opacity: 0.87;
+  55% {
+    opacity: 0.6;
   }
-  88% {
-    opacity: 0.24;
-    transform: translate(20px, -30px) scale(1.08);
+  56% {
+    opacity: 0;
   }
-  90% {
-    opacity: 0.83;
+  75% {
+    opacity: 0;
   }
-  92% {
-    opacity: 0.31;
-    transform: translate(-20px, 30px) scale(0.91);
+  77% {
+    opacity: 1;
   }
-  94% {
-    opacity: 0.92;
+  79% {
+    opacity: 0.4;
   }
-  96% {
-    opacity: 0.2;
-    transform: translate(0, 0) scale(1.0);
-  }
-  98% {
-    opacity: 0.81;
+  81% {
+    opacity: 0;
   }
   100% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.8);
   }
 }
 
@@ -680,7 +574,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateZ(0);
   width: 900px;
   height: 900px;
   pointer-events: none;
@@ -692,6 +586,7 @@
   perspective: 1200px;
   perspective-origin: center center;
   transform-style: preserve-3d;
+  contain: layout style paint;
 }
 
 .topicThreeCard:hover .orbitalSystem3D {
@@ -709,20 +604,21 @@
   transform-style: preserve-3d;
   animation: rotateOrbit3D var(--orbit-speed, 25s) linear infinite;
   filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
-  transform: translate(-50%, -50%) rotateX(var(--orbit-tilt, 45deg));
+  transform: translate(-50%, -50%) translateZ(0) rotateX(var(--orbit-tilt, 45deg));
+  will-change: transform;
 }
 
 .orbitCounterClockwise {
   animation-direction: reverse;
 }
 
-// 3D Rotation Animation - Full 360 degree revolution with tilt
+// 3D Rotation Animation - Full 360 degree revolution with tilt - GPU accelerated
 @keyframes rotateOrbit3D {
   0% {
-    transform: translate(-50%, -50%) rotateX(var(--orbit-tilt, 45deg)) rotateZ(0deg);
+    transform: translate(-50%, -50%) translateZ(0) rotateX(var(--orbit-tilt, 45deg)) rotateZ(0deg);
   }
   100% {
-    transform: translate(-50%, -50%) rotateX(var(--orbit-tilt, 45deg)) rotateZ(360deg);
+    transform: translate(-50%, -50%) translateZ(0) rotateX(var(--orbit-tilt, 45deg)) rotateZ(360deg);
   }
 }
 
@@ -741,20 +637,21 @@
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
   z-index: 2;
   filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.9));
   animation: pulsePlanet 3s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 @keyframes pulsePlanet {
   0%, 100% {
     opacity: 0.9;
-    transform: translateX(-50%) scale(1);
+    transform: translateX(-50%) translateZ(0) scale(1);
   }
   50% {
     opacity: 1;
-    transform: translateX(-50%) scale(1.05);
+    transform: translateX(-50%) translateZ(0) scale(1.05);
   }
 }
 
@@ -774,6 +671,8 @@
   transition: opacity 0.3s ease;
   clip-path: none;
   will-change: opacity;
+  contain: layout style paint;
+  transform: translateZ(0);
 }
 
 .topicThreeCard:hover .circleStarLeakContainer {
@@ -947,7 +846,7 @@
 @keyframes leakStarParticlesTop {
   0% {
     opacity: 0;
-    transform: translateX(calc(-50% + var(--star-offset, 0px))) translateY(0px);
+    transform: translateX(calc(-50% + var(--star-offset, 0px))) translateY(0px) translateZ(0);
   }
   10% {
     opacity: 0.8;
@@ -957,14 +856,14 @@
   }
   100% {
     opacity: 0.1;
-    transform: translateX(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-x, 0px))) translateY(calc(-150px + var(--star-scatter-y, 0px)));
+    transform: translateX(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-x, 0px))) translateY(calc(-150px + var(--star-scatter-y, 0px))) translateZ(0);
   }
 }
 
 @keyframes leakStarParticlesBottom {
   0% {
     opacity: 0;
-    transform: translateX(calc(-50% + var(--star-offset, 0px))) translateY(0px);
+    transform: translateX(calc(-50% + var(--star-offset, 0px))) translateY(0px) translateZ(0);
   }
   10% {
     opacity: 0.8;
@@ -974,14 +873,14 @@
   }
   100% {
     opacity: 0.1;
-    transform: translateX(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-x, 0px))) translateY(calc(150px + var(--star-scatter-y, 0px)));
+    transform: translateX(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-x, 0px))) translateY(calc(150px + var(--star-scatter-y, 0px))) translateZ(0);
   }
 }
 
 @keyframes leakStarParticlesLeft {
   0% {
     opacity: 0;
-    transform: translateY(calc(-50% + var(--star-offset, 0px))) translateX(0px);
+    transform: translateY(calc(-50% + var(--star-offset, 0px))) translateX(0px) translateZ(0);
   }
   10% {
     opacity: 0.8;
@@ -991,14 +890,14 @@
   }
   100% {
     opacity: 0.1;
-    transform: translateY(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-y, 0px))) translateX(calc(-150px + var(--star-scatter-x, 0px)));
+    transform: translateY(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-y, 0px))) translateX(calc(-150px + var(--star-scatter-x, 0px))) translateZ(0);
   }
 }
 
 @keyframes leakStarParticlesRight {
   0% {
     opacity: 0;
-    transform: translateY(calc(-50% + var(--star-offset, 0px))) translateX(0px);
+    transform: translateY(calc(-50% + var(--star-offset, 0px))) translateX(0px) translateZ(0);
   }
   10% {
     opacity: 0.8;
@@ -1008,63 +907,63 @@
   }
   100% {
     opacity: 0.1;
-    transform: translateY(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-y, 0px))) translateX(calc(150px + var(--star-scatter-x, 0px)));
+    transform: translateY(calc(-50% + var(--star-offset, 0px) + var(--star-scatter-y, 0px))) translateX(calc(150px + var(--star-scatter-x, 0px))) translateZ(0);
   }
 }
 
 @keyframes leakStarParticlesCornerTopRight {
   0% {
     opacity: 0;
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0) translateZ(0) rotate(0deg);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(80px, -80px) rotate(45deg);
+    transform: translate(80px, -80px) translateZ(0) rotate(45deg);
   }
 }
 
 @keyframes leakStarParticlesCornerTopLeft {
   0% {
     opacity: 0;
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0) translateZ(0) rotate(0deg);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(-80px, -80px) rotate(-45deg);
+    transform: translate(-80px, -80px) translateZ(0) rotate(-45deg);
   }
 }
 
 @keyframes leakStarParticlesCornerBottomRight {
   0% {
     opacity: 0;
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0) translateZ(0) rotate(0deg);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(80px, 80px) rotate(-45deg);
+    transform: translate(80px, 80px) translateZ(0) rotate(-45deg);
   }
 }
 
 @keyframes leakStarParticlesCornerBottomLeft {
   0% {
     opacity: 0;
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0) translateZ(0) rotate(0deg);
   }
   15% {
     opacity: 1;
   }
   100% {
     opacity: 0.1;
-    transform: translate(-80px, 80px) rotate(45deg);
+    transform: translate(-80px, 80px) translateZ(0) rotate(45deg);
   }
 }
 
@@ -1259,8 +1158,8 @@
   letter-spacing: -0.02em;
   line-height: 1.2;
   text-shadow: 
-    0 2px 8px rgba(139, 92, 246, 0.5),
-    0 0 20px rgba(139, 92, 246, 0.4);
+    0 2px 8px rgba(251, 191, 36, 0.5),
+    0 0 20px rgba(251, 191, 36, 0.4);
   
   @media (max-width: 768px) {
     font-size: 1.75rem;
@@ -1275,6 +1174,19 @@
   
   @media (max-width: 360px) {
     font-size: 1.375rem;
+  }
+  
+  // Theme-specific text-shadow colors
+  [data-theme="detective"] & {
+    text-shadow: 
+      0 2px 8px rgba(209, 183, 115, 0.5),
+      0 0 20px rgba(209, 183, 115, 0.4);
+  }
+  
+  [data-theme="space"] & {
+    text-shadow: 
+      0 2px 8px rgba(166, 170, 251, 0.5),
+      0 0 20px rgba(166, 170, 251, 0.4);
   }
 }
 
@@ -1327,9 +1239,9 @@
   
   // Theme-specific button colors
   [data-theme="wizard"] & {
-    background: linear-gradient(135deg, rgba(110, 231, 183, 0.9) 0%, rgba(52, 211, 153, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.9) 0%, rgba(6, 182, 212, 0.9) 100%);
     box-shadow: 
-      0 4px 16px rgba(110, 231, 183, 0.3),
+      0 4px 16px rgba(14, 165, 233, 0.3),
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
   
@@ -1354,7 +1266,7 @@
     
     [data-theme="wizard"] & {
       box-shadow: 
-        0 4px 12px rgba(110, 231, 183, 0.3),
+        0 4px 12px rgba(14, 165, 233, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     }
     

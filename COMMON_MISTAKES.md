@@ -137,6 +137,13 @@
 **How to Fix**: Add navigation source parameter (`?from=subtopic`) and check for it in IntroductionPage to prevent redirect when coming from subtopic page
 **Prevention**: Always consider navigation context and source when implementing redirect logic, use URL parameters to track navigation flow
 
+### 20. Scrollbar Reappearance After Page Edits
+**MISTAKE**: Scrollbars keep being shown/brought back every time a page is edited, despite previous fixes
+**What I Did Wrong**: When editing pages, I inadvertently reintroduce scrollbars by changing overflow properties, removing scrollbar-hiding CSS, or modifying parent container styles without preserving the scrollbar-hiding rules that were previously implemented
+**Impact**: Scrollbars appear on pages that should have them hidden, breaking the intended design and user experience, requiring repeated fixes
+**How to Fix**: Always preserve existing scrollbar-hiding CSS (webkit-scrollbar, scrollbar-width, -ms-overflow-style) when making edits. Check for overflow properties before changing them. Ensure parent containers maintain overflow: hidden when child elements need to extend beyond boundaries
+**Prevention**: Before editing any page styles, check for existing scrollbar-hiding CSS and overflow properties. When making changes, explicitly preserve or re-add scrollbar-hiding rules. Always verify scrollbars remain hidden after edits by checking the affected page
+
 **NOTE**: I must add new mistakes to this list whenever I make them. This list should grow over time as I learn from errors. Never delete mistakes from this list - only add new ones.
 
 ## 🔧 PREVENTION STRATEGIES

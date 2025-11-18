@@ -12,6 +12,7 @@ import { useMyDeckService } from "features/mydeck/hooks/useMydeckService";
 import { MyDeckContext } from "contexts/MyDeckContext";
 import LoadingScreen from "../../components/layout/StatusScreen/LoadingScreen";
 import { getSubtopicContent } from "features/mydeck/content/subtopicContent";
+import { getThemeCursor } from "../../utils/themeCursors";
 
 const AssessmentResult = ({ topicId: topicIdFromProps, assessmentType: assessmentTypeFromProps }) => {
   const { user } = useAuth();
@@ -217,7 +218,7 @@ const AssessmentResult = ({ topicId: topicIdFromProps, assessmentType: assessmen
   };
 
   return (
-    <div className={`assessment-results-page-container theme-${topicTheme}`}>
+    <div className={`assessment-results-page-container theme-${topicTheme}`} style={{ cursor: getThemeCursor(topicTheme) }}>
       <div className="assessment-results-container" ref={resultsContainerRef}>
         {containerWidth > 0 && containerHeight > 0 && scorePercentage >= 80 && (
           <ReactConfetti

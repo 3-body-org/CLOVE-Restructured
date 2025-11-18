@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/components/assessment.scss';
 import { getSubtopicContent } from 'features/mydeck/content/subtopicContent';
+import { getThemeCursor } from '../../utils/themeCursors';
 
 const AssessmentInstructions = ({ 
   isVisible, 
@@ -41,7 +42,7 @@ const AssessmentInstructions = ({
   };
 
   return (
-    <div className="assessment-instructions-overlay">
+    <div className="assessment-instructions-overlay" style={{ cursor: getThemeCursor(topicTheme) }}>
       <div className={`assessment-instructions-modal theme-${topicTheme}`}>
         <div className="instructions-header">
           <h2>{getAssessmentTitle()} Instructions</h2>

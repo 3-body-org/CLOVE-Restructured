@@ -17,6 +17,7 @@ import { useApi } from '../../../hooks/useApi';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWrench, faSearch, faCheck, faTimes, faStop, faClock, faCodeBranch } from "@fortawesome/free-solid-svg-icons";
 import "../../../styles/components/challenge.scss";
+import { getThemeCursor } from '../../../utils/themeCursors';
 
 // Icons for different challenge modes
 const ModeIcons = {
@@ -62,7 +63,7 @@ const ResultsPage = () => {
   const { closeSidebar } = useSidebar();
   const { topicId: contextTopicId, subtopicId: contextSubtopicId, loadTopicOverview, refreshTopics } = useContext(MyDeckContext);
   const { getAllChallengeAttemptsForResults } = useChallengeApi();
-  const { getThemeStyles } = useChallengeTheme();
+  const { getThemeStyles, currentTheme } = useChallengeTheme();
   const { post } = useApi();
   
   // Use MyDeckContext for topic and subtopic IDs
@@ -281,7 +282,7 @@ const ResultsPage = () => {
 
   return (
     <ChallengeThemeProvider>
-      <div className="resultsPageContainer">
+      <div className="resultsPageContainer" style={{ cursor: getThemeCursor(currentTheme || 'space') }}>
         <div className="resultsPageSummary">
           <h2 className="resultsPageTitle">Challenge Results</h2>
           <p className="resultsPageDescription">

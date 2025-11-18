@@ -3,7 +3,7 @@
  * @description Renders a topic card with progress, lock state, and theme-aware styles.
  */
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import styles from "features/mydeck/styles/TopicCard.module.scss";
@@ -11,27 +11,30 @@ import styles from "features/mydeck/styles/TopicCard.module.scss";
 /**
  * Render themed SVG background based on topic theme - Enhanced with more interactive elements
  */
-const renderThemeBackground = (themeName, topicId) => {
+const renderThemeBackground = (themeName, topicId, isHovered = false, svgRef = null) => {
   const uniqueId = `topic-card-${topicId}`;
+  // Animations start immediately but are controlled via pauseAnimations/unpauseAnimations
+  // This allows pausing/resuming from current position instead of resetting
+  const animationBegin = "0s";
   
   if (themeName === 'wizard') {
     return (
-      <svg className={styles.themeSvg} viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <svg ref={svgRef} className={styles.themeSvg} viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id={`wizardSky-${uniqueId}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#0a1a14" />
-            <stop offset="30%" stopColor="#1a2e26" />
-            <stop offset="70%" stopColor="#0d1a14" />
-            <stop offset="100%" stopColor="#050a08" />
+            <stop offset="0%" stopColor="#1a0f0a" />
+            <stop offset="30%" stopColor="#2a1a0f" />
+            <stop offset="70%" stopColor="#1a0f0a" />
+            <stop offset="100%" stopColor="#0a0502" />
           </linearGradient>
           <radialGradient id={`magicGlow-${uniqueId}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#6EE7B7" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="#34d399" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+            <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="#F59E0B" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#FBBF24" stopOpacity="0" />
           </radialGradient>
           <radialGradient id={`moonGlow-${uniqueId}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#a7f3d0" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#6EE7B7" stopOpacity="0" />
+            <stop offset="0%" stopColor="#FCD34D" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#FBBF24" stopOpacity="0" />
           </radialGradient>
           <filter id={`glow-${uniqueId}`}>
             <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
@@ -47,25 +50,25 @@ const renderThemeBackground = (themeName, topicId) => {
         
         {/* Magical glow overlay */}
         <rect width="500" height="500" fill={`url(#magicGlow-${uniqueId})`} opacity="0.3">
-          <animate attributeName="opacity" values="0.3;0.5;0.3" dur="4s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.3;0.5;0.3" dur="4s" repeatCount="indefinite" begin={animationBegin} />
         </rect>
         
         {/* Animated moon with pulsing glow */}
         <circle cx="320" cy="80" r="45" fill={`url(#moonGlow-${uniqueId})`}>
-          <animate attributeName="r" values="45;48;45" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="r" values="45;48;45" dur="3s" repeatCount="indefinite" begin={animationBegin} />
         </circle>
-        <circle cx="320" cy="80" r="35" fill="#a7f3d0" opacity="0.4">
-          <animate attributeName="opacity" values="0.4;0.6;0.4" dur="2.5s" repeatCount="indefinite" />
+        <circle cx="320" cy="80" r="35" fill="#FCD34D" opacity="0.4">
+          <animate attributeName="opacity" values="0.4;0.6;0.4" dur="2.5s" repeatCount="indefinite" begin={animationBegin} />
         </circle>
         
-        {/* Animated magical sparkles across the card */}
-        {[...Array(20)].map((_, i) => {
-          const x = (i * 25) % 500;
-          const y = (i * 25) % 500;
+        {/* Animated magical sparkles across the card - Reduced for performance */}
+        {[...Array(12)].map((_, i) => {
+          const x = (i * 42) % 500;
+          const y = (i * 42) % 500;
           return (
-            <circle key={i} cx={x} cy={y} r="1.5" fill="#6EE7B7" opacity="0.6">
-              <animate attributeName="opacity" values="0.3;1;0.3" dur={`${1.5 + (i % 3)}s`} repeatCount="indefinite" />
-              <animate attributeName="r" values="1.5;2.5;1.5" dur={`${2 + (i % 2)}s`} repeatCount="indefinite" />
+            <circle key={i} cx={x} cy={y} r="1.5" fill="#0EA5E9" opacity="0.6">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur={`${1.5 + (i % 3)}s`} repeatCount="indefinite" begin={animationBegin} />
+              <animate attributeName="r" values="1.5;2.5;1.5" dur={`${2 + (i % 2)}s`} repeatCount="indefinite" begin={animationBegin} />
             </circle>
           );
         })}
@@ -75,38 +78,38 @@ const renderThemeBackground = (themeName, topicId) => {
         <path d="M0,380 Q120,280 240,330 T500,310 L500,500 L0,500 Z" fill="#050a08" opacity="0.9" />
         
         {/* Floating mist effect */}
-        <ellipse cx="100" cy="320" rx="80" ry="20" fill="#34d399" opacity="0.15">
-          <animateTransform attributeName="transform" type="translate" values="0,0; 20,-10; 0,0" dur="8s" repeatCount="indefinite" />
+        <ellipse cx="100" cy="320" rx="80" ry="20" fill="#06B6D4" opacity="0.15">
+          <animateTransform attributeName="transform" type="translate" values="0,0; 20,-10; 0,0" dur="8s" repeatCount="indefinite" begin={animationBegin} />
         </ellipse>
-        <ellipse cx="300" cy="340" rx="60" ry="15" fill="#6EE7B7" opacity="0.12">
-          <animateTransform attributeName="transform" type="translate" values="0,0; -15,-8; 0,0" dur="6s" repeatCount="indefinite" />
+        <ellipse cx="300" cy="340" rx="60" ry="15" fill="#0EA5E9" opacity="0.12">
+          <animateTransform attributeName="transform" type="translate" values="0,0; -15,-8; 0,0" dur="6s" repeatCount="indefinite" begin={animationBegin} />
         </ellipse>
         
         {/* Enhanced Magical Academy - Larger and more detailed */}
         <g transform="translate(120, 200)">
           {/* Main tower with animated glow */}
-          <rect x="40" y="40" width="60" height="120" fill="#34d399" opacity="0.7">
-            <animate attributeName="opacity" values="0.7;0.85;0.7" dur="3s" repeatCount="indefinite" />
+          <rect x="40" y="40" width="60" height="120" fill="#06B6D4" opacity="0.7">
+            <animate attributeName="opacity" values="0.7;0.85;0.7" dur="3s" repeatCount="indefinite" begin={animationBegin} />
           </rect>
-          <rect x="40" y="40" width="60" height="120" fill="#10b981" opacity="0.4" />
-          <polygon points="40,40 70,10 100,40" fill="#6EE7B7" opacity="0.8">
-            <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+          <rect x="40" y="40" width="60" height="120" fill="#0EA5E9" opacity="0.4" />
+          <polygon points="40,40 70,10 100,40" fill="#0EA5E9" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" begin={animationBegin} />
           </polygon>
           
           {/* Pulsing magical orb at top */}
-          <circle cx="70" cy="55" r="12" fill="#6EE7B7" filter={`url(#glow-${uniqueId})`}>
-            <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.9;1;0.9" dur="1.5s" repeatCount="indefinite" />
+          <circle cx="70" cy="55" r="12" fill="#0EA5E9" filter={`url(#glow-${uniqueId})`}>
+            <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite" begin={animationBegin} />
+            <animate attributeName="opacity" values="0.9;1;0.9" dur="1.5s" repeatCount="indefinite" begin={animationBegin} />
           </circle>
           
           {/* Animated windows with magical light */}
           {[50, 75, 100, 125].map((y, i) => (
             <g key={i}>
-              <rect x="50" y={y} width="10" height="14" fill="#6EE7B7" opacity="0.9">
-                <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.8 + i * 0.3}s`} repeatCount="indefinite" />
+              <rect x="50" y={y} width="10" height="14" fill="#0EA5E9" opacity="0.9">
+                <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.8 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
               </rect>
-              <rect x="80" y={y} width="10" height="14" fill="#a7f3d0" opacity="0.85">
-                <animate attributeName="opacity" values="0.7;1;0.7" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+              <rect x="80" y={y} width="10" height="14" fill="#67E8F9" opacity="0.85">
+                <animate attributeName="opacity" values="0.7;1;0.7" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
               </rect>
             </g>
           ))}
@@ -114,23 +117,23 @@ const renderThemeBackground = (themeName, topicId) => {
           {/* Entrance with glowing arch */}
           <path d="M50,160 Q50,145 70,145 Q90,145 90,160 Z" fill="#0d1a14" opacity="0.8" />
           <rect x="50" y="160" width="40" height="40" fill="#0d1a14" opacity="0.8" />
-          <circle cx="70" cy="180" r="8" fill="#6EE7B7" opacity="0.6">
-            <animate attributeName="opacity" values="0.6;0.9;0.6" dur="2s" repeatCount="indefinite" />
+          <circle cx="70" cy="180" r="8" fill="#0EA5E9" opacity="0.6">
+            <animate attributeName="opacity" values="0.6;0.9;0.6" dur="2s" repeatCount="indefinite" begin={animationBegin} />
           </circle>
         </g>
         
         {/* Floating spell books with rotation */}
         {[0, 1, 2].map((i) => (
           <g key={i} transform={`translate(${60 + i * 120}, ${150 + i * 30})`}>
-            <rect x="-8" y="-10" width="16" height="20" rx="2" fill="#34d399" opacity="0.7" transform={`rotate(${i * 15})`}>
-              <animateTransform attributeName="transform" type="rotate" values={`${i * 15} 0 0;${i * 15 + 10} 0 0;${i * 15} 0 0`} dur="4s" repeatCount="indefinite" />
+            <rect x="-8" y="-10" width="16" height="20" rx="2" fill="#06B6D4" opacity="0.7" transform={`rotate(${i * 15})`}>
+              <animateTransform attributeName="transform" type="rotate" values={`${i * 15} 0 0;${i * 15 + 10} 0 0;${i * 15} 0 0`} dur="4s" repeatCount="indefinite" begin={animationBegin} />
             </rect>
-            <line x1="-6" y1="-5" x2="6" y2="-5" stroke="#6EE7B7" strokeWidth="1" opacity="0.8" transform={`rotate(${i * 15})`} />
-            <line x1="-6" y1="0" x2="6" y2="0" stroke="#6EE7B7" strokeWidth="1" opacity="0.8" transform={`rotate(${i * 15})`} />
-            <line x1="-6" y1="5" x2="6" y2="5" stroke="#6EE7B7" strokeWidth="1" opacity="0.8" transform={`rotate(${i * 15})`} />
+            <line x1="-6" y1="-5" x2="6" y2="-5" stroke="#0EA5E9" strokeWidth="1" opacity="0.8" transform={`rotate(${i * 15})`} />
+            <line x1="-6" y1="0" x2="6" y2="0" stroke="#0EA5E9" strokeWidth="1" opacity="0.8" transform={`rotate(${i * 15})`} />
+            <line x1="-6" y1="5" x2="6" y2="5" stroke="#0EA5E9" strokeWidth="1" opacity="0.8" transform={`rotate(${i * 15})`} />
             {/* Magical sparkles around books */}
-            <circle cx="12" cy="-8" r="1.5" fill="#6EE7B7" opacity="0.8">
-              <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite" />
+            <circle cx="12" cy="-8" r="1.5" fill="#0EA5E9" opacity="0.8">
+              <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite" begin={animationBegin} />
             </circle>
           </g>
         ))}
@@ -138,45 +141,45 @@ const renderThemeBackground = (themeName, topicId) => {
         {/* Floating potion bottles with bubbles */}
         {[0, 1].map((i) => (
           <g key={i} transform={`translate(${280 + i * 40}, ${220 + i * 20})`}>
-            <rect x="-4" y="0" width="8" height="15" rx="1" fill="#34d399" opacity="0.6">
-              <animateTransform attributeName="transform" type="translate" values="0,0; 0,-3; 0,0" dur={`${3 + i}s`} repeatCount="indefinite" />
+            <rect x="-4" y="0" width="8" height="15" rx="1" fill="#06B6D4" opacity="0.6">
+              <animateTransform attributeName="transform" type="translate" values="0,0; 0,-3; 0,0" dur={`${3 + i}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
-            <circle cx="0" cy="-3" r="3" fill="#a7f3d0" opacity="0.7">
-              <animate attributeName="opacity" values="0.7;0.9;0.7" dur="2s" repeatCount="indefinite" />
+            <circle cx="0" cy="-3" r="3" fill="#67E8F9" opacity="0.7">
+              <animate attributeName="opacity" values="0.7;0.9;0.7" dur="2s" repeatCount="indefinite" begin={animationBegin} />
             </circle>
             {/* Bubbles rising */}
-            <circle cx="2" cy="5" r="1.5" fill="#6EE7B7" opacity="0.6">
-              <animateTransform attributeName="transform" type="translate" values="0,0; 2,-8; 0,0" dur="2s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite" />
+            <circle cx="2" cy="5" r="1.5" fill="#0EA5E9" opacity="0.6">
+              <animateTransform attributeName="transform" type="translate" values="0,0; 2,-8; 0,0" dur="2s" repeatCount="indefinite" begin={animationBegin} />
+              <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite" begin={animationBegin} />
             </circle>
           </g>
         ))}
         
         {/* Magical energy trails */}
-        <path d="M100,180 Q150,160 200,180 T300,180" stroke="#6EE7B7" strokeWidth="2" fill="none" opacity="0.4" strokeDasharray="5,5">
-          <animate attributeName="stroke-dashoffset" values="0;10" dur="2s" repeatCount="indefinite" />
+        <path d="M100,180 Q150,160 200,180 T300,180" stroke="#0EA5E9" strokeWidth="2" fill="none" opacity="0.4" strokeDasharray="5,5">
+          <animate attributeName="stroke-dashoffset" values="0;10" dur="2s" repeatCount="indefinite" begin={animationBegin} />
         </path>
-        <path d="M120,250 Q170,230 220,250 T320,250" stroke="#a7f3d0" strokeWidth="1.5" fill="none" opacity="0.3" strokeDasharray="4,4">
-          <animate attributeName="stroke-dashoffset" values="0;8" dur="1.5s" repeatCount="indefinite" />
+        <path d="M120,250 Q170,230 220,250 T320,250" stroke="#67E8F9" strokeWidth="1.5" fill="none" opacity="0.3" strokeDasharray="4,4">
+          <animate attributeName="stroke-dashoffset" values="0;8" dur="1.5s" repeatCount="indefinite" begin={animationBegin} />
         </path>
         
         {/* Wizard silhouette with animated staff */}
         <g transform="translate(180, 380)">
           <path d="M0,10 L-5,35 L5,35 L0,10 Z" fill="#0d1a14" opacity="0.9" />
           <circle cx="0" cy="8" r="4" fill="#0d1a14" opacity="0.9" />
-          <path d="M-4,8 L0,-5 L4,8 Z" fill="#34d399" opacity="0.8" />
+          <path d="M-4,8 L0,-5 L4,8 Z" fill="#06B6D4" opacity="0.8" />
           {/* Animated staff with glowing orb */}
-          <line x1="6" y1="12" x2="10" y2="-2" stroke="#34d399" strokeWidth="2" opacity="0.8" />
-          <circle cx="10" cy="-2" r="3" fill="#6EE7B7" filter={`url(#glow-${uniqueId})`}>
-            <animate attributeName="r" values="3;5;3" dur="1.5s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.9;1;0.9" dur="1s" repeatCount="indefinite" />
+          <line x1="6" y1="12" x2="10" y2="-2" stroke="#06B6D4" strokeWidth="2" opacity="0.8" />
+          <circle cx="10" cy="-2" r="3" fill="#0EA5E9" filter={`url(#glow-${uniqueId})`}>
+            <animate attributeName="r" values="3;5;3" dur="1.5s" repeatCount="indefinite" begin={animationBegin} />
+            <animate attributeName="opacity" values="0.9;1;0.9" dur="1s" repeatCount="indefinite" begin={animationBegin} />
           </circle>
         </g>
       </svg>
     );
   } else if (themeName === 'detective') {
     return (
-      <svg className={styles.themeSvg} viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <svg ref={svgRef} className={styles.themeSvg} viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id={`detectiveSky-${uniqueId}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#1a1510" />
@@ -220,17 +223,17 @@ const renderThemeBackground = (themeName, topicId) => {
         
         {/* Warm sepia overlay */}
         <rect width="500" height="500" fill="#d1b773" opacity="0.05">
-          <animate attributeName="opacity" values="0.05;0.08;0.05" dur="5s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.05;0.08;0.05" dur="5s" repeatCount="indefinite" begin={animationBegin} />
         </rect>
         
-        {/* Animated rain effect */}
-        {[...Array(30)].map((_, i) => {
-          const x = (i * 17) % 500;
-          const delay = (i * 0.1) % 2;
+        {/* Animated rain effect - Reduced for performance */}
+        {[...Array(15)].map((_, i) => {
+          const x = (i * 34) % 500;
+          const delay = (i * 0.15) % 2;
           return (
             <line key={i} x1={x} y1="0" x2={x} y2="20" stroke="#d1b773" strokeWidth="1" opacity="0.15">
-              <animate attributeName="y1" values={`${-20 + delay * 20};500`} dur="2s" repeatCount="indefinite" />
-              <animate attributeName="y2" values={`${delay * 20};520`} dur="2s" repeatCount="indefinite" />
+              <animate attributeName="y1" values={`${-20 + delay * 20};500`} dur="2s" repeatCount="indefinite" begin={animationBegin} />
+              <animate attributeName="y2" values={`${delay * 20};520`} dur="2s" repeatCount="indefinite" begin={animationBegin} />
             </line>
           );
         })}
@@ -240,36 +243,36 @@ const renderThemeBackground = (themeName, topicId) => {
           {/* Building 1 */}
           <rect x="0" y="200" width="80" height="220" fill="#1a1410" opacity="0.95" />
           <rect x="0" y="200" width="80" height="220" fill="#2a2015" opacity="0.5" />
-          {[210, 230, 250, 270, 290, 310].map((y, i) => (
+          {[230, 270, 310].map((y, i) => (
             <rect key={i} x={10 + (i % 2) * 25} y={y} width="12" height="15" fill="#d1b773" opacity="0.7">
-              <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2.5 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2.5 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
           {/* Building 2 */}
           <rect x="100" y="170" width="70" height="250" fill="#1a1410" opacity="0.9" />
           <rect x="100" y="170" width="70" height="250" fill="#2a2015" opacity="0.4" />
-          {[180, 200, 220, 240, 260, 280, 300].map((y, i) => (
+          {[200, 240, 280].map((y, i) => (
             <rect key={i} x={110 + (i % 2) * 30} y={y} width="12" height="15" fill="#d1b773" opacity="0.8">
-              <animate attributeName="opacity" values="0.6;1;0.6" dur={`${3 + i * 0.15}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.6;1;0.6" dur={`${3 + i * 0.25}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
           {/* Building 3 */}
           <rect x="190" y="220" width="60" height="200" fill="#1a1410" opacity="0.95" />
           <rect x="190" y="220" width="60" height="200" fill="#2a2015" opacity="0.5" />
-          {[230, 250, 270, 290, 310].map((y, i) => (
+          {[250, 290].map((y, i) => (
             <rect key={i} x={200 + (i % 2) * 25} y={y} width="12" height="15" fill="#d1b773" opacity="0.75">
-              <animate attributeName="opacity" values="0.5;0.9;0.5" dur={`${2.8 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.5;0.9;0.5" dur={`${2.8 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
           {/* Building 4 - Tallest */}
           <rect x="270" y="120" width="80" height="300" fill="#1a1410" opacity="0.9" />
           <rect x="270" y="120" width="80" height="300" fill="#2a2015" opacity="0.4" />
-          {[130, 150, 170, 190, 210, 230, 250, 270, 290, 310].map((y, i) => (
+          {[150, 190, 230, 270, 310].map((y, i) => (
             <rect key={i} x={280 + (i % 2) * 30} y={y} width="12" height="15" fill="#d1b773" opacity="0.8">
-              <animate attributeName="opacity" values="0.6;1;0.6" dur={`${2.2 + i * 0.1}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.6;1;0.6" dur={`${2.2 + i * 0.2}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
@@ -278,7 +281,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="370" y="240" width="50" height="180" fill="#2a2015" opacity="0.5" />
           {[250, 270, 290, 310].map((y, i) => (
             <rect key={i} x={380 + (i % 2) * 20} y={y} width="10" height="12" fill="#d1b773" opacity="0.7">
-              <animate attributeName="opacity" values="0.5;0.9;0.5" dur={`${3.2 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.5;0.9;0.5" dur={`${3.2 + i * 0.2}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
@@ -287,7 +290,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="440" y="210" width="60" height="210" fill="#2a2015" opacity="0.4" />
           {[220, 240, 260, 280, 300, 320].map((y, i) => (
             <rect key={i} x={450 + (i % 2) * 25} y={y} width="12" height="15" fill="#d1b773" opacity="0.75">
-              <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2.6 + i * 0.15}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2.6 + i * 0.15}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
@@ -296,7 +299,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="60" y="250" width="35" height="170" fill="#2a2015" opacity="0.5" />
           {[260, 280, 300].map((y, i) => (
             <rect key={i} x={68 + (i % 2) * 15} y={y} width="8" height="10" fill="#d1b773" opacity="0.65">
-              <animate attributeName="opacity" values="0.4;0.8;0.4" dur={`${3.5 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;0.8;0.4" dur={`${3.5 + i * 0.2}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
@@ -305,7 +308,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="170" y="190" width="15" height="230" fill="#1a1410" opacity="0.6" />
           {[200, 220, 240, 260, 280, 300].map((y, i) => (
             <rect key={i} x={173} y={y} width="6" height="8" fill="#d1b773" opacity="0.6">
-              <animate attributeName="opacity" values="0.4;0.9;0.4" dur={`${2.8 + i * 0.15}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;0.9;0.4" dur={`${2.8 + i * 0.15}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
@@ -314,7 +317,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="260" y="150" width="8" height="270" fill="#1a1410" opacity="0.5" />
           {[160, 180, 200, 220, 240, 260, 280, 300, 320].map((y, i) => (
             <rect key={i} x={262} y={y} width="4" height="6" fill="#d1b773" opacity="0.7">
-              <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2.4 + i * 0.1}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2.4 + i * 0.1}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
@@ -323,7 +326,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="430" y="280" width="40" height="140" fill="#2a2015" opacity="0.45" />
           {[290, 310, 330].map((y, i) => (
             <rect key={i} x={440 + (i % 2) * 18} y={y} width="9" height="11" fill="#d1b773" opacity="0.68">
-              <animate attributeName="opacity" values="0.45;0.85;0.45" dur={`${3.3 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.45;0.85;0.45" dur={`${3.3 + i * 0.2}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
           
@@ -332,7 +335,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="350" y="200" width="18" height="220" fill="#1a1410" opacity="0.55" />
           {[210, 230, 250, 270, 290, 310].map((y, i) => (
             <rect key={i} x={353} y={y} width="6" height="8" fill="#d1b773" opacity="0.65">
-              <animate attributeName="opacity" values="0.4;0.9;0.4" dur={`${2.7 + i * 0.15}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;0.9;0.4" dur={`${2.7 + i * 0.15}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
           ))}
         </g>
@@ -342,10 +345,10 @@ const renderThemeBackground = (themeName, topicId) => {
           <g key={i} transform={`translate(${x}, 240)`}>
             <line x1="0" y1="0" x2="0" y2="40" stroke="#3a2a1a" strokeWidth="4" opacity="0.9" />
             <circle cx="0" cy="0" r="8" fill="#d1b773" filter={`url(#detectiveGlow-${uniqueId})`}>
-              <animate attributeName="opacity" values="0.8;1;0.8" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.8;1;0.8" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
             </circle>
             <ellipse cx="0" cy="0" rx="25" ry="12" fill={`url(#streetlightGlow-${uniqueId})`} opacity="0.5">
-              <animate attributeName="opacity" values="0.4;0.6;0.4" dur={`${2.5 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;0.6;0.4" dur={`${2.5 + i * 0.2}s`} repeatCount="indefinite" begin={animationBegin} />
             </ellipse>
           </g>
         ))}
@@ -354,7 +357,7 @@ const renderThemeBackground = (themeName, topicId) => {
         {[0, 1, 2].map((i) => (
           <g key={i} transform={`translate(${80 + i * 100}, ${120 + i * 40})`} opacity="0.8">
             <rect x="0" y="0" width="20" height="28" rx="2" fill="#c9b08a" transform={`rotate(${-10 + i * 5})`}>
-              <animateTransform attributeName="transform" type="translate" values="0,0; 5,-8; 0,0" dur={`${4 + i}s`} repeatCount="indefinite" />
+              <animateTransform attributeName="transform" type="translate" values="0,0; 5,-8; 0,0" dur={`${4 + i}s`} repeatCount="indefinite" begin={animationBegin} />
             </rect>
             <line x1="4" y1="8" x2="16" y2="8" stroke="#1a1410" strokeWidth="1" opacity="0.6" transform={`rotate(${-10 + i * 5})`} />
             <line x1="4" y1="14" x2="14" y2="14" stroke="#1a1410" strokeWidth="1" opacity="0.6" transform={`rotate(${-10 + i * 5})`} />
@@ -362,38 +365,29 @@ const renderThemeBackground = (themeName, topicId) => {
           </g>
         ))}
         
-        {/* Detective silhouette with animated magnifying glass */}
+        {/* Detective silhouette */}
         <g transform="translate(200, 320)">
           <path d="M25,40 L20,80 L40,80 L35,40 Z" fill="#1a1410" opacity="0.95" />
           <path d="M23,43 L30,40 L37,43" fill="#1a1410" opacity="0.95" />
           <circle cx="30" cy="35" r="8" fill="#1a1410" opacity="0.95" />
           <ellipse cx="30" cy="32" rx="15" ry="5" fill="#1a1410" opacity="0.95" />
           <path d="M22,32 L25,24 L35,24 L38,32 Z" fill="#1a1410" opacity="0.95" />
-          {/* Animated magnifying glass */}
-          <circle cx="15" cy="60" r="10" fill="transparent" stroke="#e6c885" strokeWidth="3" opacity="0.9" filter={`url(#detectiveGlow-${uniqueId})`}>
-            <animateTransform attributeName="transform" type="translate" values="0,0; 2,-2; 0,0" dur="3s" repeatCount="indefinite" />
-          </circle>
-          <line x1="10" y1="66" x2="5" y2="72" stroke="#e6c885" strokeWidth="3" opacity="0.9" />
-          <circle cx="15" cy="60" r="7" fill="#d1b773" opacity="0.3" />
-          <circle cx="13" cy="58" r="2" fill="#fff" opacity="0.5">
-            <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" />
-          </circle>
         </g>
         
         {/* Evidence markers with pulsing glow */}
         {[120, 180, 280, 340].map((x, i) => (
           <circle key={i} cx={x} cy={150 + i * 30} r="3" fill="#e6c885" filter={`url(#detectiveGlow-${uniqueId})`}>
-            <animate attributeName="r" values="3;5;3" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.8 + i * 0.2}s`} repeatCount="indefinite" />
+            <animate attributeName="r" values="3;5;3" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
+            <animate attributeName="opacity" values="0.7;1;0.7" dur={`${1.8 + i * 0.2}s`} repeatCount="indefinite" begin={animationBegin} />
           </circle>
         ))}
         
         {/* Fog/mist effect */}
         <ellipse cx="150" cy="450" rx="120" ry="30" fill="#1a1410" opacity="0.3">
-          <animateTransform attributeName="transform" type="translate" values="0,0; 30,-20; 0,0" dur="10s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="translate" values="0,0; 30,-20; 0,0" dur="10s" repeatCount="indefinite" begin={animationBegin} />
         </ellipse>
         <ellipse cx="300" cy="470" rx="100" ry="25" fill="#0f0a08" opacity="0.25">
-          <animateTransform attributeName="transform" type="translate" values="0,0; -25,-15; 0,0" dur="8s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="translate" values="0,0; -25,-15; 0,0" dur="8s" repeatCount="indefinite" begin={animationBegin} />
         </ellipse>
         
         {/* Minimalist Black Metal Railings at the bottom of the card - All Black */}
@@ -419,7 +413,7 @@ const renderThemeBackground = (themeName, topicId) => {
     );
   } else if (themeName === 'space') {
     return (
-      <svg className={styles.themeSvg} viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <svg ref={svgRef} className={styles.themeSvg} viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id={`spaceSky-${uniqueId}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#0a0a1a" />
@@ -450,21 +444,21 @@ const renderThemeBackground = (themeName, topicId) => {
         
         {/* Nebula effect */}
         <ellipse cx="100" cy="150" rx="120" ry="80" fill="#8b5cf6" opacity="0.15">
-          <animateTransform attributeName="transform" type="translate" values="0,0; 20,10; 0,0" dur="15s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="translate" values="0,0; 20,10; 0,0" dur="15s" repeatCount="indefinite" begin={animationBegin} />
         </ellipse>
         <ellipse cx="320" cy="200" rx="100" ry="60" fill="#ec4899" opacity="0.12">
-          <animateTransform attributeName="transform" type="translate" values="0,0; -15,8; 0,0" dur="12s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="translate" values="0,0; -15,8; 0,0" dur="12s" repeatCount="indefinite" begin={animationBegin} />
         </ellipse>
         
-        {/* Animated twinkling stars */}
-        {[...Array(40)].map((_, i) => {
-          const x = (i * 12.5) % 500;
-          const y = (i * 12.5) % 500;
+        {/* Animated twinkling stars - Reduced for performance */}
+        {[...Array(20)].map((_, i) => {
+          const x = (i * 25) % 500;
+          const y = (i * 25) % 500;
           const size = 0.8 + (i % 3) * 0.4;
           return (
             <circle key={i} cx={x} cy={y} r={size} fill="#ffffff" filter={`url(#spaceGlow-${uniqueId})`}>
-              <animate attributeName="opacity" values="0.4;1;0.4" dur={`${2 + (i % 4)}s`} repeatCount="indefinite" />
-              <animate attributeName="r" values={`${size};${size * 1.5};${size}`} dur={`${3 + (i % 3)}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur={`${2 + (i % 4)}s`} repeatCount="indefinite" begin={animationBegin} />
+              <animate attributeName="r" values={`${size};${size * 1.5};${size}`} dur={`${3 + (i % 3)}s`} repeatCount="indefinite" begin={animationBegin} />
             </circle>
           );
         })}
@@ -472,22 +466,22 @@ const renderThemeBackground = (themeName, topicId) => {
         {/* Large planet with rotating rings */}
         <g transform="translate(100, 120)">
           <circle cx="0" cy="0" r="50" fill={`url(#planetGlow-${uniqueId})`}>
-            <animate attributeName="opacity" values="0.6;0.8;0.6" dur="4s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.6;0.8;0.6" dur="4s" repeatCount="indefinite" begin={animationBegin} />
           </circle>
           <circle cx="0" cy="0" r="45" fill="#6b46a8" opacity="0.5" />
           {/* Planet surface details */}
           <ellipse cx="-15" cy="-10" rx="20" ry="8" fill="#4a3a5f" opacity="0.6" transform="rotate(-20 0 0)">
-            <animateTransform attributeName="transform" type="rotate" from="-20 0 0" to="340 0 0" dur="20s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="rotate" from="-20 0 0" to="340 0 0" dur="20s" repeatCount="indefinite" begin={animationBegin} />
           </ellipse>
           <ellipse cx="20" cy="15" rx="15" ry="6" fill="#2d1f3f" opacity="0.7" transform="rotate(30 0 0)">
-            <animateTransform attributeName="transform" type="rotate" from="30 0 0" to="390 0 0" dur="25s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="rotate" from="30 0 0" to="390 0 0" dur="25s" repeatCount="indefinite" begin={animationBegin} />
           </ellipse>
           {/* Rotating rings */}
           <ellipse cx="0" cy="0" rx="65" ry="12" fill="#8b5cf6" opacity="0.3" transform="rotate(-20 0 0)">
-            <animateTransform attributeName="transform" type="rotate" from="-20 0 0" to="340 0 0" dur="30s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="rotate" from="-20 0 0" to="340 0 0" dur="30s" repeatCount="indefinite" begin={animationBegin} />
           </ellipse>
           <ellipse cx="0" cy="0" rx="75" ry="8" fill="#6366f1" opacity="0.2" transform="rotate(10 0 0)">
-            <animateTransform attributeName="transform" type="rotate" from="10 0 0" to="370 0 0" dur="40s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="rotate" from="10 0 0" to="370 0 0" dur="40s" repeatCount="indefinite" begin={animationBegin} />
           </ellipse>
         </g>
         
@@ -498,7 +492,7 @@ const renderThemeBackground = (themeName, topicId) => {
           <circle cx="8" cy="8" r="5" fill="#2d1f3f" opacity="0.7" />
           {/* Orbital path indicator */}
           <circle cx="0" cy="0" r="60" fill="none" stroke="#8b5cf6" strokeWidth="1" strokeDasharray="3,3" opacity="0.3">
-            <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="20s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="20s" repeatCount="indefinite" begin={animationBegin} />
           </circle>
         </g>
         
@@ -511,16 +505,16 @@ const renderThemeBackground = (themeName, topicId) => {
           <path d="M40,50 L45,60 L40,55 Z" fill="#6366f1" opacity="0.8" />
           {/* Animated flame with pulsing */}
           <path d="M22,80 Q25,95 30,100 Q35,95 38,80 Z" fill="#ec4899" opacity="0.8">
-            <animate attributeName="opacity" values="0.6;1;0.6" dur="1s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.6;1;0.6" dur="1s" repeatCount="indefinite" begin={animationBegin} />
           </path>
           <path d="M24,80 Q26,90 30,93 Q34,90 36,80 Z" fill="#f0abfc" opacity="0.9">
-            <animate attributeName="opacity" values="0.7;0.4;0.7" dur="1.2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.7;0.4;0.7" dur="1.2s" repeatCount="indefinite" begin={animationBegin} />
           </path>
           {/* Thrust particles */}
           {[0, 1, 2].map((i) => (
             <circle key={i} cx={26 + i * 4} cy={85 + i * 3} r="2" fill="#ec4899" opacity="0.6">
-              <animateTransform attributeName="transform" type="translate" values="0,0; 0,8; 0,0" dur="0.8s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.6;0;0.6" dur="0.8s" repeatCount="indefinite" />
+              <animateTransform attributeName="transform" type="translate" values="0,0; 0,8; 0,0" dur="0.8s" repeatCount="indefinite" begin={animationBegin} />
+              <animate attributeName="opacity" values="0.6;0;0.6" dur="0.8s" repeatCount="indefinite" begin={animationBegin} />
             </circle>
           ))}
         </g>
@@ -572,7 +566,7 @@ const renderThemeBackground = (themeName, topicId) => {
               <rect x={x - 6} y="62.5" width="12" height="15" fill="#1a1a2e" opacity="0.6" />
               {/* Glowing base */}
               <ellipse cx={x} cy="77.5" rx="10" ry="3" fill="#8b5cf6" opacity="0.3">
-                <animate attributeName="opacity" values="0.2;0.4;0.2" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.2;0.4;0.2" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
               </ellipse>
             </g>
           ))}
@@ -580,7 +574,7 @@ const renderThemeBackground = (themeName, topicId) => {
           {/* Tech details - small lights along top edge */}
           {[50, 150, 250, 350, 450].map((x, i) => (
             <circle key={i} cx={x} cy="5" r="2" fill="#8b5cf6" opacity="0.7">
-              <animate attributeName="opacity" values="0.4;1;0.4" dur={`${1.5 + i * 0.2}s`} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur={`${1.5 + i * 0.2}s`} repeatCount="indefinite" begin={animationBegin} />
             </circle>
           ))}
           
@@ -588,27 +582,27 @@ const renderThemeBackground = (themeName, topicId) => {
           <rect x="200" y="20" width="100" height="25" fill="#1a1a2e" opacity="0.7" rx="3" />
           <line x1="220" y1="32.5" x2="280" y2="32.5" stroke="#8b5cf6" strokeWidth="1" opacity="0.5" />
           <circle cx="240" cy="32.5" r="3" fill="#8b5cf6" opacity="0.6">
-            <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" begin={animationBegin} />
           </circle>
           <circle cx="260" cy="32.5" r="3" fill="#6366f1" opacity="0.6">
-            <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2.3s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2.3s" repeatCount="indefinite" begin={animationBegin} />
           </circle>
         </g>
         
         {/* Floating space particles */}
         {[0, 1, 2, 3, 4].map((i) => (
           <circle key={i} cx={150 + i * 50} cy={200 + i * 40} r="2.5" fill="#ec4899" opacity="0.6">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 5,-10; 0,0" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.4;0.8;0.4" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="translate" values="0,0; 5,-10; 0,0" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" begin={animationBegin} />
+            <animate attributeName="opacity" values="0.4;0.8;0.4" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" begin={animationBegin} />
           </circle>
         ))}
         
         {/* Energy waves */}
         <path d="M50,300 Q150,280 250,300 T450,300" stroke="#8b5cf6" strokeWidth="2" fill="none" opacity="0.4" strokeDasharray="8,4">
-          <animate attributeName="stroke-dashoffset" values="0;12" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="stroke-dashoffset" values="0;12" dur="3s" repeatCount="indefinite" begin={animationBegin} />
         </path>
         <path d="M80,350 Q180,330 280,350 T480,350" stroke="#6366f1" strokeWidth="1.5" fill="none" opacity="0.3" strokeDasharray="6,3">
-          <animate attributeName="stroke-dashoffset" values="0;9" dur="2.5s" repeatCount="indefinite" />
+          <animate attributeName="stroke-dashoffset" values="0;9" dur="2.5s" repeatCount="indefinite" begin={animationBegin} />
         </path>
       </svg>
     );
@@ -659,7 +653,7 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
     const theme = topic.theme || 'default';
     switch (theme) {
       case 'wizard':
-        return '#6EE7B7'; // Teal/aqua green (like image 1)
+        return '#FBBF24'; // Enchanted Gold Bright
       case 'detective':
         return '#d1b773'; // Gold/amber
       case 'space':
@@ -670,6 +664,30 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
   };
 
   const progressRingColor = getProgressRingColor();
+
+  // Hover state for controlling animations
+  const [isHovered, setIsHovered] = useState(false);
+  const svgRef = useRef(null);
+
+  // Control SVG animations based on hover state
+  useEffect(() => {
+    if (svgRef.current) {
+      // Small delay to ensure SVG is fully rendered
+      const timeoutId = setTimeout(() => {
+        if (svgRef.current) {
+          if (isHovered) {
+            // Resume animations from where they left off
+            svgRef.current.unpauseAnimations();
+          } else {
+            // Pause animations at current position
+            svgRef.current.pauseAnimations();
+          }
+        }
+      }, 0);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isHovered]);
 
   // Determine button label and behavior based on topic state
   let buttonLabel = "Start Learning";
@@ -697,6 +715,8 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
       data-joyride={topic.id === 1 ? "topic-card-1" : topic.id === 2 ? "topic-card-2" : topic.id === 3 ? "topic-card-3" : undefined}
       style={{ position: 'relative' }}
       onClick={() => !isLocked && onCardClick && onCardClick()}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Magical Rune Leak Effect - Only for Topic 1 */}
       {topic.id === 1 && (
@@ -922,7 +942,7 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
       )}
       
       {/* Themed SVG Background - Fills entire card */}
-      {renderThemeBackground(topic.theme, topic.id)}
+      {renderThemeBackground(topic.theme, topic.id, isHovered, svgRef)}
       
       <div
         className={`${themeStyles.holographicEffect || ""} ${isLocked ? themeStyles.lockedEffect || "" : ""}`}

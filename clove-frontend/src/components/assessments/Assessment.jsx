@@ -12,6 +12,7 @@ import LoadingScreen from "../../components/layout/StatusScreen/LoadingScreen";
 import { showErrorNotification, showSuccessNotification } from "../../utils/notifications";
 import { getSubtopicContent } from "features/mydeck/content/subtopicContent";
 import DOMPurify from 'dompurify';
+import { getThemeCursor } from "../../utils/themeCursors";
 const Assessment = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -326,7 +327,7 @@ const Assessment = () => {
   };
 
   return (
-    <div className={`assessment-page-container theme-${topicTheme}`}>
+    <div className={`assessment-page-container theme-${topicTheme}`} style={{ cursor: getThemeCursor(topicTheme) }}>
       <div className="assessment-test-container">
         <div className="assessment-progress-bar">
           <div
