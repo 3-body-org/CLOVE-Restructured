@@ -16,6 +16,10 @@ const getMonacoThemeName = (appTheme) => {
   }
 };
 
+// Use WeakMap to track which monaco instances have had themes defined
+// This avoids the "object is not extensible" error
+const monacoThemesDefined = new WeakMap();
+
 const defineMonacoThemes = (monaco) => {
   if (themesDefined) return;
   
@@ -287,8 +291,7 @@ const defineMonacoThemes = (monaco) => {
       'editorOverviewRuler.infoForeground': '#7a9e7e',
       'editorWidget.shadow': '0 2px 8px rgba(0,0,0,0.5)',
     }
-  });
-  
+  }); 
   themesDefined = true;
 };
 

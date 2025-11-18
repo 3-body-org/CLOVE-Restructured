@@ -14,6 +14,10 @@ const getMonacoThemeName = (appTheme) => {
   }
 };
 
+// Use WeakMap to track which monaco instances have had themes defined
+// This avoids the "object is not extensible" error
+const monacoThemesDefined = new WeakMap();
+
 const defineMonacoThemes = (monaco) => {
   if (themesDefined) return;
   
