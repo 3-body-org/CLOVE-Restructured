@@ -998,23 +998,30 @@ const TopicCard = React.memo(({ topic, onClick, themeStyles = {}, comingSoon = f
         
       </div>
       
-      {/* Retention Test Summary Icon - Upper Right Corner (Red Circle Location) */}
-        {retentionTestStatus && retentionTestStatus.availability && (retentionTestStatus.availability.first_stage_completed || retentionTestStatus.availability.second_stage_completed) && (
-              <button
+      {/* Retention Test Icon - Upper Right Corner - Only visible after first retention test is completed */}
+      {retentionTestStatus?.availability?.first_stage_completed || retentionTestStatus?.availability?.second_stage_completed ? (
+        <button
           className={styles.retentionTestIcon}
           onClick={(e) => {
             e.stopPropagation();
+            // Show results since at least one stage is completed
             onRetentionTestClick && onRetentionTestClick(topic, true);
           }}
-          title="View Retention Test Summary"
-          aria-label="Retention Test Completed - Click to view summary"
+          title={
+            retentionTestStatus.availability.first_stage_completed && retentionTestStatus.availability.second_stage_completed
+              ? "View Retention Test Summary - Both stages completed"
+              : retentionTestStatus.availability.first_stage_completed
+              ? "View Retention Test Summary - First stage completed"
+              : "View Retention Test Summary - Second stage completed"
+          }
+          aria-label="View Retention Test Summary"
         >
           <span className={styles.iconSymbol}>📊</span>
           {retentionTestStatus.availability.first_stage_completed && retentionTestStatus.availability.second_stage_completed && (
             <span className={styles.completedIndicator}>✓</span>
           )}
-              </button>
-        )}
+        </button>
+      ) : null}
         
       {isLocked && <div className={styles.lockedIcon}>🔒</div>}
     </div>

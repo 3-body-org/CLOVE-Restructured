@@ -142,7 +142,7 @@ def upgrade() -> None:
     sa.Column('user_topic_id', sa.Integer(), nullable=False),
     sa.Column('total_score', sa.Float(), nullable=False),
     sa.Column('total_items', sa.Integer(), nullable=True),
-    sa.Column('is_unlocked', sa.Boolean(), nullable=True, server_default='false'),
+    sa.Column('is_unlocked', sa.Boolean(), nullable=True, server_default='true'),
     sa.Column('is_completed', sa.Boolean(), nullable=True, server_default='false'),
     sa.Column('subtopic_scores', sa.JSON(), nullable=False),
     sa.Column('questions_answers_iscorrect', sa.JSON(), nullable=False),
