@@ -326,41 +326,116 @@ async def check_retention_test_availability(
     topic_id: int
 ) -> Dict[str, Any]:
     """
-    Check which retention test stages are available based on user_topics.completed_at timing.
+    Check which retention test stages are available based on assessment completion timing.
+    Both stages share the same timer (count from when both assessments are completed).
     First stage: Available after 10 hours
-    Second stage: Available after 5 days (120 hours)
+    Second stage: Available after 3 days (72 hours)
     Returns information about available stages and countdown timers.
     """
     from datetime import datetime, timezone, timedelta
     
-    # Get user topic completion info
+    # OLD LOGIC - Commented out: Required topic to be fully completed (all subtopics)
+    # # Get user topic completion info
+    # result = await db.execute(
+    #     select(UserTopic).where(
+    #         UserTopic.user_id == user_id,
+    #         UserTopic.topic_id == topic_id,
+    #         UserTopic.is_completed == True
+    #     )
+    # )
+    # user_topic = result.scalar_one_or_none()
+    # 
+    # if not user_topic or not user_topic.completed_at:
+    #     return {
+    #         "first_stage_available": False,
+    #         "second_stage_available": False,
+    #         "first_stage_countdown": None,
+    #         "second_stage_countdown": None,
+    #         "message": "Topic not completed yet"
+    #     }
+    # 
+    # current_time = datetime.now(timezone.utc)
+    # completed_at = user_topic.completed_at
+    
+    # NEW LOGIC: Check if both pre and post assessments are completed
+    # (subtopics completion is not required)
+    
+    # Get user topic (without requiring is_completed)
     result = await db.execute(
         select(UserTopic).where(
             UserTopic.user_id == user_id,
-            UserTopic.topic_id == topic_id,
-            UserTopic.is_completed == True
+            UserTopic.topic_id == topic_id
         )
     )
     user_topic = result.scalar_one_or_none()
     
-    if not user_topic or not user_topic.completed_at:
+    if not user_topic:
         return {
             "first_stage_available": False,
             "second_stage_available": False,
             "first_stage_countdown": None,
             "second_stage_countdown": None,
-            "message": "Topic not completed yet"
+            "message": "User topic not found"
         }
     
+    # Get pre and post assessments
+    pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
+    post_assessments = await get_post_assessment_for_user_topic(db, user_id, topic_id)
+    
+    # Check if both assessments exist and are completed
+    pre_assessment = pre_assessments[0] if pre_assessments else None
+    post_assessment = post_assessments[0] if post_assessments else None
+    
+    # Both assessments must exist
+    if not pre_assessment or not post_assessment:
+        return {
+            "first_stage_available": False,
+            "second_stage_available": False,
+            "first_stage_countdown": None,
+            "second_stage_countdown": None,
+            "message": "Both pre and post assessments must exist"
+        }
+    
+    # Both assessments must be completed
+    is_pre_completed = pre_assessment.is_completed
+    is_post_completed = post_assessment.is_completed
+    
+    if not is_pre_completed or not is_post_completed:
+        return {
+            "first_stage_available": False,
+            "second_stage_available": False,
+            "first_stage_countdown": None,
+            "second_stage_countdown": None,
+            "message": "Both pre and post assessments must be completed"
+        }
+    
+    # Both assessments must have completion timestamps
+    # Retention test timing starts from when BOTH assessments are completed
     current_time = datetime.now(timezone.utc)
-    completed_at = user_topic.completed_at
+    pre_taken_at = pre_assessment.taken_at
+    post_taken_at = post_assessment.taken_at
+    
+    if not pre_taken_at or not post_taken_at:
+        return {
+            "first_stage_available": False,
+            "second_stage_available": False,
+            "first_stage_countdown": None,
+            "second_stage_countdown": None,
+            "message": "Both assessments must have completion timestamps"
+        }
+    
+    # Use the later of the two assessment completion times
+    # This ensures timing starts from when BOTH assessments are fully completed
+    completed_at = max(pre_taken_at, post_taken_at)
     
     # Calculate time differences
+    # Both stages share the same timer - count from when both assessments are completed
     time_since_completion = current_time - completed_at
     hours_since_completion = time_since_completion.total_seconds() / 3600
     days_since_completion = hours_since_completion / 24
     
     # Check first stage availability (10 hours)
+    # Timer starts from when both assessments are completed (completed_at)
     first_stage_available = hours_since_completion >= 10  # 10 hours
     first_stage_countdown = None
     if not first_stage_available:
@@ -370,11 +445,11 @@ async def check_retention_test_availability(
             "minutes": int((hours_remaining % 1) * 60)
         }
     
-    # Check second stage availability (5 days = 120 hours)
-    second_stage_available = hours_since_completion >= 120  # 5 days = 120 hours
+    # Check second stage availability (3 days = 72 hours)
+    second_stage_available = hours_since_completion >= 72  # 3 days = 72 hours
     second_stage_countdown = None
     if not second_stage_available:
-        hours_remaining = 120 - hours_since_completion
+        hours_remaining = 72 - hours_since_completion
         days_remaining = int(hours_remaining / 24)
         hours_in_day = hours_remaining % 24
         second_stage_countdown = {
@@ -384,30 +459,32 @@ async def check_retention_test_availability(
         }
     
     # Check if stages are completed
+    # ALWAYS check completion status, regardless of availability
+    # This ensures we detect completed tests even if timing has changed
     first_stage_completed = False
     second_stage_completed = False
     
-    if first_stage_available:
-        result = await db.execute(
-            select(RetentionTest).where(
-                RetentionTest.user_id == user_id,
-                RetentionTest.topic_id == topic_id,
-                RetentionTest.stage == 1,
-                RetentionTest.is_completed == True
-            )
+    # Always check for completed first stage (regardless of availability)
+    result = await db.execute(
+        select(RetentionTest).where(
+            RetentionTest.user_id == user_id,
+            RetentionTest.topic_id == topic_id,
+            RetentionTest.stage == 1,
+            RetentionTest.is_completed == True
         )
-        first_stage_completed = result.scalar_one_or_none() is not None
+    )
+    first_stage_completed = result.scalar_one_or_none() is not None
     
-    if second_stage_available:
-        result = await db.execute(
-            select(RetentionTest).where(
-                RetentionTest.user_id == user_id,
-                RetentionTest.topic_id == topic_id,
-                RetentionTest.stage == 2,
-                RetentionTest.is_completed == True
-            )
+    # Always check for completed second stage (regardless of availability)
+    result = await db.execute(
+        select(RetentionTest).where(
+            RetentionTest.user_id == user_id,
+            RetentionTest.topic_id == topic_id,
+            RetentionTest.stage == 2,
+            RetentionTest.is_completed == True
         )
-        second_stage_completed = result.scalar_one_or_none() is not None
+    )
+    second_stage_completed = result.scalar_one_or_none() is not None
     
     return {
         "first_stage_available": first_stage_available and not first_stage_completed,

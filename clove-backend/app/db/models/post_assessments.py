@@ -10,7 +10,7 @@ class PostAssessment(Base):
     user_topic_id          = Column(Integer, ForeignKey("user_topics.id"), nullable=False)
     total_score            = Column(Float, nullable=False, default=0.0)
     total_items            = Column(Integer, default=0)
-    is_unlocked            = Column(Boolean, default=False)
+    is_unlocked            = Column(Boolean, default=True)
     is_completed            = Column(Boolean, default=False)
     subtopic_scores        = Column(JSON, nullable=False, default=dict)
     questions_answers_iscorrect = Column(JSON, nullable=False, default=dict)

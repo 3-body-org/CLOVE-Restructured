@@ -64,7 +64,8 @@ const TopicPage = () => {
     return () => clearTimeout(timer);
   }, []); // Only on mount
 
-    // Check retention test availability using the new two-stage system
+    // Check retention test status for ALL topics
+    // Icon appears if user has completed at least the first retention test
   const checkRetentionTestAvailability = useCallback(async () => {
     if (!user?.id || !topics || topics.length === 0) {
       return;
@@ -73,65 +74,31 @@ const TopicPage = () => {
     try {
       const availableTests = [];
       
+      // Check ALL topics for retention test completion status
+      // This ensures the icon appears after completing a retention test
       for (const topic of topics) {
-        // Load detailed topic overview to get accurate completion status
-        let topicOverview = null;
         try {
-          topicOverview = await loadTopicOverview(topic.id);
-          
-          // Check if loadTopicOverview is actually a function
-          if (typeof loadTopicOverview !== 'function') {
-            continue;
-          }
-          
-        } catch (error) {
-          continue; // Skip this topic if we can't load its overview
-        }
-        
-        let isTopicCompleted = false;
-        
-        if (!topicOverview) {
-          // Use progress-based completion check since topic overview failed
-          isTopicCompleted = topic.progress === 1 || topic.progress === 100;
-        } else {
-          // Use detailed topic overview completion status
-          const { pre_assessment, subtopics, post_assessment } = topicOverview;
-          
-          // Topic is completed if ALL components are completed
-          const isPreAssessmentCompleted = pre_assessment?.is_completed || false;
-          const areAllSubtopicsCompleted = subtopics?.every(subtopic => subtopic.is_completed) || false;
-          const isPostAssessmentCompleted = post_assessment?.is_completed || false;
-          
-          isTopicCompleted = isPreAssessmentCompleted && areAllSubtopicsCompleted && isPostAssessmentCompleted;
-        }
-        
-        if (isTopicCompleted) {
-          // Check retention test availability using the new API
-          try {
-            const response = await get(`/assessment_questions/topic/${topic.id}/retention-test/availability`);
-            if (response.ok) {
-              const data = await response.json();
-              const hasAvailableTests = data.first_stage_available || data.second_stage_available;
-              const hasCompletedTests = data.first_stage_completed || data.second_stage_completed;
-              
+          // Always check retention test availability API for each topic
+          // This will return completion status even if assessments aren't done
+          const response = await get(`/assessment_questions/topic/${topic.id}/retention-test/availability`);
+          if (response.ok) {
+            const data = await response.json();
+            const hasCompletedTests = data.first_stage_completed || data.second_stage_completed;
+            
+            // Only add to list if at least one stage is completed (to show the icon)
+            if (hasCompletedTests) {
               availableTests.push({
                 topicId: topic.id,
                 topicName: topic.name,
-                isAvailable: hasAvailableTests,
-                is_completed: hasCompletedTests && !hasAvailableTests,
+                isAvailable: data.first_stage_available || data.second_stage_available,
+                is_completed: hasCompletedTests,
                 availability: data
               });
             }
-          } catch (error) {
-            // If error, assume no retention test is available
-            availableTests.push({
-              topicId: topic.id,
-              topicName: topic.name,
-              isAvailable: false,
-              is_completed: false,
-              availability: null
-            });
           }
+        } catch (error) {
+          // Silently skip topics with errors
+          continue;
         }
       }
       
@@ -139,7 +106,8 @@ const TopicPage = () => {
     } catch (error) {
       // Silent error handling for production
     }
-  }, [user, topics, loadTopicOverview, get]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, get]); // Only depend on user.id and get, not the whole topics array
 
   // Function to handle starting retention test popup
   const handleStartRetentionTest = useCallback((topic, showResults = false) => {
@@ -153,15 +121,22 @@ const TopicPage = () => {
     setShowRetentionTestPopup(false);
     setSelectedTopicForRetentionTest(null);
     setShowRetentionTestResults(false);
-  }, []);
+    // Refresh retention test status after closing popup (in case test was completed)
+    if (user?.id && topics && topics.length > 0) {
+      setTimeout(() => {
+        checkRetentionTestAvailability();
+      }, 500); // Small delay to ensure backend has updated
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Don't depend on topics or callback to avoid re-renders
 
-  // Trigger retention test check when topics are loaded (ONCE only)
+  // Trigger retention test check when topics are loaded (only once)
   useEffect(() => {
-    if (user?.id && topics && topics.length > 0 && retentionTestStatus.length === 0 && !isProcessingRetentionTests) {
-      // Call checkRetentionTestAvailability directly to avoid dependency issues
+    if (user?.id && topics && topics.length > 0) {
       checkRetentionTestAvailability();
     }
-  }, [user?.id, topics, retentionTestStatus.length, isProcessingRetentionTests]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, topics?.length]); // Only depend on topics length, not the whole array
 
   // Load topics with user progress only if not already in context
   useEffect(() => {
@@ -251,34 +226,13 @@ const TopicPage = () => {
   if (loading || !minTimePassed) return <LoadingScreen message="Loading topics..." />;
   if (error) return <ErrorScreen message={error} />;
 
-  // Background patterns - Same as Progress Page
-  const renderBackgroundPatterns = () => {
-    return (
-      <div className={styles.backgroundPatterns}>
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={`bg-orb-${i}`}
-            className={styles.bgOrb}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${Math.random() * 200 + 100}px`,
-              height: `${Math.random() * 200 + 100}px`,
-            }}
-          />
-        ))}
-      </div>
-    );
-  };
-
   return (
     <Container
       fluid
       className={`${styles.myDeckWrapper} text-white d-flex flex-column`}
       data-featured-theme={featuredTheme}
     >
-      {/* Background Patterns - Same as Progress Page */}
-      {renderBackgroundPatterns()}
+      {/* Static background is handled by CSS ::before and ::after pseudo-elements */}
       
       <TitleAndProfile
         nonColored={"Lesson "}
