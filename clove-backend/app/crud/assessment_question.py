@@ -444,6 +444,7 @@ async def check_retention_test_availability(
             "hours": int(hours_remaining),
             "minutes": int((hours_remaining % 1) * 60)
         }
+        
     
     # Check second stage availability (1.5 days = 36 hours)
     second_stage_available = hours_since_completion >= 36  # 1.5 days = 36 hours
