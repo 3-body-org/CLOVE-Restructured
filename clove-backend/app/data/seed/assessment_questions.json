@@ -2207,39 +2207,39 @@
     },
     "difficulty": "medium"
   },
-  {
-    "id": 139,
-    "subtopic_id": 1,
-    "question_choices_correctanswer": {
-      "question": "Which of the following is a valid variable identifier?",
-      "choices": [
-        "2total",
-        "class",
-        "total-sum",
-        "$totalSum"
-      ],
-      "correct_answer": "$totalSum",
-      "explanation": ""
-    },
-    "difficulty": "hard"
+ {
+  "id": 139,
+  "subtopic_id": 1,
+  "question_choices_correctanswer": {
+    "question": "Which declaration causes a Type Mismatch error?",
+    "choices": [
+      "int mana = 10;",
+      "boolean isReady = \"true\";",
+      "String spell = \"Fire\";",
+      "double size = 5.5;"
+    ],
+    "correct_answer": "boolean isReady = \"true\";",
+    "explanation": "The lesson warns against placing a String into the wrong container. \"true\" (with quotes) is a String, but the variable type is boolean."
   },
-  {
-    "id": 140,
-    "subtopic_id": 1,
-    "question_choices_correctanswer": {
-      "question": "Which keyword makes a variable belong to the class rather than an instance?",
-      "choices": [
-        "static",
-        "void",
-        "public",
-        "final"
-      ],
-      "correct_answer": "static",
-      "explanation": ""
-    },
-    "difficulty": "hard"
+  "difficulty": "hard"
+},
+{
+  "id": 140,
+  "subtopic_id": 1,
+  "question_choices_correctanswer": {
+    "question": "What specific error occurs when attempting to use a variable before it is declared?",
+    "choices": [
+      "Type mismatch error",
+      "Unknown symbol error",
+      "Memory leak warning",
+      "Runtime exception"
+    ],
+    "correct_answer": "Unknown symbol error",
+    "explanation": "Attempting to use a variable before declaration leads to an 'unknown symbol' error, as the container has not been forged yet."
   },
-  {
+  "difficulty": "hard"
+},
+{
     "id": 141,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
@@ -2271,23 +2271,39 @@
     },
     "difficulty": "medium"
   },
-  {
-    "id": 143,
-    "subtopic_id": 2,
-    "question_choices_correctanswer": {
-      "question": "What is the size of a `short`?",
-      "choices": [
-        "8-bit",
-        "32-bit",
-        "16-bit",
-        "64-bit"
-      ],
-      "correct_answer": "16-bit",
-      "explanation": ""
-    },
-    "difficulty": "medium"
+ {
+  "id": 143,
+  "subtopic_id": 2,
+  "question_choices_correctanswer": {
+    "question": "What describes the capacity of the `short` data type?",
+    "choices": [
+      "Smallest whole number",
+      "Medium-sized whole number",
+      "Large scale whole number",
+      "Decimal number"
+    ],
+    "correct_answer": "Medium-sized whole number",
+    "explanation": "The lesson defines a `short` as a 'Medium-sized whole number', sitting between the smaller `byte` and the larger `int`."
   },
-  {
+  "difficulty": "medium"
+},
+{
+  "id": 143,
+  "subtopic_id": 2,
+  "question_choices_correctanswer": {
+    "question": "What describes the capacity of the `short` data type?",
+    "choices": [
+      "Smallest whole number",
+      "Medium-sized whole number",
+      "Large scale whole number",
+      "Decimal number"
+    ],
+    "correct_answer": "Medium-sized whole number",
+    "explanation": "The lesson defines a `short` as a 'Medium-sized whole number', sitting between the smaller `byte` and the larger `int`."
+  },
+  "difficulty": "medium"
+},
+{
     "id": 144,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
@@ -2351,23 +2367,23 @@
     },
     "difficulty": "medium"
   },
-  {
-    "id": 148,
-    "subtopic_id": 3,
-    "question_choices_correctanswer": {
-      "question": "Given `int[] x = {5, 10};`, what is `x[1]`?",
-      "choices": [
-        "10",
-        "5",
-        "0",
-        "null"
-      ],
-      "correct_answer": "10",
-      "explanation": ""
-    },
-    "difficulty": "medium"
+ {
+  "id": 148,
+  "subtopic_id": 3,
+  "question_choices_correctanswer": {
+    "question": "When comparing two objects, what does the `==` operator compare?",
+    "choices": [
+      "Text content",
+      "Memory addresses",
+      "Length",
+      "Variable names"
+    ],
+    "correct_answer": "Memory addresses",
+    "explanation": "The lesson warns that using `==` on objects compares where the object is stored (its memory address), not the actual data content. Use `.equals()` for content comparison."
   },
-  {
+  "difficulty": "medium"
+},
+{
     "id": 149,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
@@ -2603,7 +2619,7 @@
         "Error"
       ],
       "correct_answer": "true",
-      "explanation": "5>10 is false. 10>5 is true. false || true is true."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2619,7 +2635,7 @@
         "true"
       ],
       "correct_answer": "true",
-      "explanation": "This is a tautology. If b is false, !b is true. false || true is true."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2635,7 +2651,7 @@
         "null"
       ],
       "correct_answer": "true",
-      "explanation": "AND (&&) happens before OR (||). false && false is false. Then true || false is true."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2651,7 +2667,7 @@
         "if (num > 8) { }"
       ],
       "correct_answer": "if (num > 8) { }",
-      "explanation": "In Java, the condition must be wrapped in parentheses, and the body must be placed inside braces."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -2667,7 +2683,7 @@
         "Java inserts a default else block"
       ],
       "correct_answer": "The program skips that code section",
-      "explanation": "When the if condition is false and no else exists, the statement is simply bypassed with no error."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2683,7 +2699,7 @@
         "if (count > 0)\n    if (count < 7)\n        System.out.println(\"Between limits\");\n    else\n        System.out.println(\"Too Large\");"
       ],
       "correct_answer": "if (count > 0)\n    if (count < 7)\n        System.out.println(\"Between limits\");\n    else\n        System.out.println(\"Too Large\");",
-      "explanation": "The inner else attaches to the closest preceding if, forming a valid nested structure."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2699,7 +2715,7 @@
         "No output"
       ],
       "correct_answer": "Pass",
-      "explanation": "Both conditions evaluate to true, making the inner \"Pass\" statement the executed block."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2715,7 +2731,7 @@
         "if (level > 50)\n    System.out.println(\"Master\");\nelse\n    System.out.println(\"Novice\");"
       ],
       "correct_answer": "if (level > 50);\n    System.out.println(\"Master\");",
-      "explanation": "The stray semicolon terminates the if-statement early, causing the message to print regardless of the condition."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2731,7 +2747,7 @@
         "Both loops behave identically"
       ],
       "correct_answer": "A do-while loop executes its body at least once",
-      "explanation": "A do-while loop guarantees at least one execution because the condition is evaluated after the loop body runs."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -2742,11 +2758,11 @@
       "question": "What output is produced by the following code?\nint n = 7;\ndo {\n    System.out.print(n);\n    n--;\n} while (n > 4);",
       "choices": ["76", "765", "7654", "76543"],
       "correct_answer": "765",
-      "explanation": "The loop prints 7,6,5 and stops when n becomes 4."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
-  {
+ {
     "id": 173,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
@@ -2757,19 +2773,24 @@
         "This code generates a compilation error",
         "The program gets stuck in an infinite loop"
       ],
-      "correct_answer": "The increment executes outside the loop",
-      "explanation": "Since only the print statement is part of the loop, index++ never runs inside it, causing endless printing."
+      "correct_answer": "The program gets stuck in an infinite loop",
+      "explanation": ""
     },
     "difficulty": "medium"
   },
-  {
+ {
     "id": 174,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is printed by this code?\nint x = 1;\ndo {\n    x++;\n    if (x == 4) continue;\n    System.out.print(x);\n} while (x <= 6);",
-      "choices": ["2356", "23456", "2456", "2567"],
+      "question": "What is the output of the following code?\nint x = 1;\ndo {\n    x++;\n    if (x == 4) continue;\n    System.out.print(x);\n} while (x < 6);",
+      "choices": [
+        "2356",
+        "23456",
+        "23567",
+        "1235"
+      ],
       "correct_answer": "2356",
-      "explanation": "x becomes 2,3,(skip 4),5,6 — producing 2,3,5,6 in sequence."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2778,9 +2799,9 @@
     "subtopic_id": 8,
     "question_choices_correctanswer": {
       "question": "What does the loop print?\nint k = 2;\ndo {\n    System.out.print(k * 3 + \" \");\n    k++;\n} while (k <= 4);",
-      "choices": ["6 9", "6 9 12", "3 6 9", "9 12"],
+      "choices": ["6 9 12", "6 9", "3 6 9", "9 12"],
       "correct_answer": "6 9 12",
-      "explanation": "The values printed are 6 (2*3), 9 (3*3), and 12 (4*3)."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2796,7 +2817,7 @@
         "for (count = 0; count < 4; count++) {\n   System.out.println(count);\n}"
       ],
       "correct_answer": "for (int count = 0; count < 4; count++) {\n   System.out.println(count);\n}",
-      "explanation": "This follows the Java for-loop structure of initialization, condition, and update."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -2805,9 +2826,9 @@
     "subtopic_id": 9,
     "question_choices_correctanswer": {
       "question": "What does the following loop output?\nfor (int i = 6; i > 1; i -= 2) {\n    System.out.print(i + \" \");\n}",
-      "choices": ["6 4", "6 4 2", "6 5 4", "6 3 1"],
+      "choices": ["6 4", "6 5 4", "6 4 2", "6 3 1"],
       "correct_answer": "6 4 2",
-      "explanation": "i decreases as 6 → 4 → 2, then stops."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2818,7 +2839,7 @@
       "question": "What happens when this loop runs?\nfor (int num = 1; num < 6; num++) {\n    if (num == 4)\n        break;\n    System.out.print(num);\n}",
       "choices": ["12345", "123", "124", "12"],
       "correct_answer": "123",
-      "explanation": "The loop prints 1, 2, 3 and stops when num reaches 4 due to break."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2826,10 +2847,15 @@
     "id": 179,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What output results from this loop?\nfor (int x = 1, y = 8; x < y; x++, y--) {\n    System.out.print(x + y + \" \");\n}",
-      "choices": ["9 9", "9 10", "9 9 9", "10 10"],
-      "correct_answer": "9 9",
-      "explanation": "Two iterations occur: 1+8=9 and 2+7=9."
+      "question": "What is the output of the following code?\nfor (int a = 0, b = 4; a < b; a++, b--) {\n    System.out.print((a + b) + \" \");\n}",
+      "choices": [
+        "4 4",
+        "4 4 4",
+        "0 4",
+        "8 8"
+      ],
+      "correct_answer": "4 4",
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2838,9 +2864,14 @@
     "subtopic_id": 9,
     "question_choices_correctanswer": {
       "question": "What is printed by this code?\nint total = 0;\nfor (int n = 2; n <= 6; n++) {\n    total += n;\n}\nSystem.out.println(total);",
-      "choices": ["15", "20", "18", "10"],
+      "choices": [
+	      "15", 
+	      "18", 
+	      "10",
+	      "20"
+      ],
       "correct_answer": "20",
-      "explanation": "The sum is 2+3+4+5+6 = 20."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2850,8 +2881,8 @@
     "question_choices_correctanswer": {
       "question": "Which variable name follows standard Java naming conventions?",
       "choices": [
-        "PlayerScore",
         "playerScore",
+        "PlayerScore",
         "player_score",
         "PLAYERSCORE"
       ],
@@ -2860,50 +2891,50 @@
     },
     "difficulty": "easy"
   },
-  {
+ {
     "id": 182,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What feature allows `var x = 10;`?",
+      "question": "Which statement accurately describes variable declaration in Java?",
       "choices": [
-        "Dynamic Typing",
-        "Auto-Boxing",
-        "Type Inference",
-        "Polymorphism"
+        "A variable must be declared with a specific data type before use.",
+        "Variables can be used without a data type.",
+        "Variable names must always start with a number.",
+        "Variables cannot be initialized in the same line as their declaration."
       ],
-      "correct_answer": "Type Inference",
+      "correct_answer": "A variable must be declared with a specific data type before use.",
       "explanation": ""
     },
     "difficulty": "medium"
   },
-  {
+ {
     "id": 183,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is 'Variable Shadowing'?",
+      "question": "What does the term 'scope' refer to regarding variables?",
       "choices": [
-        "Deleting a variable",
-        "Making a variable private",
-        "A local variable hiding an instance variable of the same name",
-        "Copying a variable"
+        "The speed at which a variable is processed.",
+        "The region of the code where a variable is valid and accessible.",
+        "The total memory size allocated to a variable.",
+        "The type of data a variable can hold."
       ],
-      "correct_answer": "A local variable hiding an instance variable of the same name",
+      "correct_answer": "The region of the code where a variable is valid and accessible.",
       "explanation": ""
     },
     "difficulty": "medium"
   },
-  {
+ {
     "id": 184,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is the correct logic to swap two variables `a` and `b`?",
+      "question": "Which of the following variable declarations will result in a compilation error?",
       "choices": [
-        "a = b; b = a;",
-        "int t = a; a = b; b = t;",
-        "swap(a, b);",
-        "a = b; t = a;"
+        "double weight = 50;",
+        "boolean isComplete = 1;",
+        "char grade = 'A';",
+        "int count = 0;"
       ],
-      "correct_answer": "int t = a; a = b; b = t;",
+      "correct_answer": "boolean isComplete = 1;",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2912,14 +2943,14 @@
     "id": 185,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What happens if you try to reassign a `final` variable?",
+      "question": "What occurs if you attempt to assign a String value (e.g., \"Hello\") to a variable declared as an `int`?",
       "choices": [
-        "Compilation Error",
-        "Runtime Error",
-        "Warning",
-        "Successful reassignment"
+        "A compilation error occurs due to type mismatch.",
+        "The program runs but produces a warning.",
+        "The String is automatically converted to a number.",
+        "The variable's type changes to String to match the value."
       ],
-      "correct_answer": "Compilation Error",
+      "correct_answer": "A compilation error occurs due to type mismatch.",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2928,30 +2959,30 @@
     "id": 186,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "How many bits does a boolean logically represent?",
+      "question": "What are the only valid values that can be assigned to a boolean variable in Java?",
       "choices": [
-        "8",
-        "1",
-        "32",
-        "16"
+        "0 and 1",
+        "yes and no",
+        "T and F",
+        "true and false"
       ],
-      "correct_answer": "1",
+      "correct_answer": "true and false",
       "explanation": ""
     },
     "difficulty": "easy"
   },
-  {
+ {
     "id": 187,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What is the default value of a `char`?",
+      "question": "Which of the following represents a valid `char` literal in Java?",
       "choices": [
-        "null",
-        "\\u0000",
-        "' '",
-        "'0'"
+        "\"A\"",
+        "'AB'",
+        "'A'",
+        "A"
       ],
-      "correct_answer": "\\u0000",
+      "correct_answer": "'A'",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2960,14 +2991,14 @@
     "id": 188,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which conversion is implicit (widening)?",
+      "question": "Which of the following primitive data types has the largest memory capacity?",
       "choices": [
-        "double to int",
-        "long to short",
-        "float to long",
-        "int to long"
+        "int",
+        "short",
+        "byte",
+        "long"
       ],
-      "correct_answer": "int to long",
+      "correct_answer": "long",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2979,9 +3010,9 @@
       "question": "Which is a valid `long` literal?",
       "choices": [
         "long x = 500.0;",
-        "long x = 500L;",
         "long x = \"500\";",
-        "long x = 500f;"
+        "long x = 500f;",
+        "long x = 500L;"
       ],
       "correct_answer": "long x = 500L;",
       "explanation": ""
@@ -3024,30 +3055,30 @@
     "id": 192,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Exception for negative array index?",
+      "question": "Which error occurs if you attempt to access a method on a non-primitive variable that currently holds no object?",
       "choices": [
         "NullPointerException",
-        "NegativeIndexError",
-        "ArrayIndexOutOfBoundsException",
-        "Error"
+        "IndexOutOfBoundsException",
+        "Compilation Error",
+        "VoidReferenceError"
       ],
-      "correct_answer": "ArrayIndexOutOfBoundsException",
+      "correct_answer": "NullPointerException",
       "explanation": ""
     },
     "difficulty": "medium"
   },
-  {
+ {
     "id": 193,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Where are String literals stored?",
+      "question": "According to the lesson, where are non-primitive objects (like Arrays and Classes) stored in memory?",
       "choices": [
-        "Stack",
-        "String Constant Pool",
-        "Registry",
-        "Disk"
+        "In the Stack",
+        "In the Heap",
+        "On the Hard Drive",
+        "In the CPU Register"
       ],
-      "correct_answer": "String Constant Pool",
+      "correct_answer": "In the Heap",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3116,18 +3147,18 @@
     },
     "difficulty": "medium"
   },
-  {
+ {
     "id": 198,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "If `int x = 5`, what is `x--`?",
+      "question": "Evaluate the expression: `10 + 5 * 2`",
       "choices": [
-        "x becomes 4",
-        "x becomes 6",
-        "x becomes 50",
-        "x becomes 0"
+        "30",
+        "20",
+        "15",
+        "25"
       ],
-      "correct_answer": "x becomes 4",
+      "correct_answer": "20",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3283,9 +3314,9 @@
       "question": "Result of `! (10 == 10)`?",
       "choices": [
         "true",
-        "false",
         "null",
-        "error"
+        "error",
+        "false"
       ],
       "correct_answer": "false",
       "explanation": ""
@@ -3314,8 +3345,8 @@
     "question_choices_correctanswer": {
       "question": "De Morgan's Law: `!(A && B)` equals?",
       "choices": [
-        "!A && !B",
         "A || B",
+        "!A && !B",
         "!A || !B",
         "A && B"
       ],
@@ -3332,7 +3363,7 @@
       "question": "What will be printed when this code runs?\nint y = 4;\nif (y < 9) {\n    System.out.println(\"Low\");\n}",
       "choices": ["No message", "4", "Low", "Compilation issue"],
       "correct_answer": "Low",
-      "explanation": "Since 4 < 9, the output is \"Low\"."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -3348,7 +3379,7 @@
         "A single branch is selected"
       ],
       "correct_answer": "A single branch is selected",
-      "explanation": "An if-else chain executes exactly one matching block."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -3359,7 +3390,7 @@
       "question": "Predict the output:\nint z = 2;\nif (z > 4)\n    System.out.println(\"Higher\");\nelse if (z == 2)\n    System.out.println(\"Match\");\nelse\n    System.out.println(\"Lower\");",
       "choices": ["Nothing", "Match", "Higher", "Lower"],
       "correct_answer": "Match",
-      "explanation": "The else-if condition z == 2 evaluates to true."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -3370,7 +3401,7 @@
       "question": "How many times is the message \"Hello\" printed?\nint v = 9;\nif (v > 6)\n    if (v <= 12)\n        System.out.println(\"Hello\");\n    else\n        System.out.println(\"Goodbye\");",
       "choices": ["One time", "Zero times", "Two times", "Infinite loop"],
       "correct_answer": "One time",
-      "explanation": "Both conditions are true, so the inner block prints once."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -3386,7 +3417,7 @@
         "if (p > 0 && q > 0)\n    System.out.println(\"Both positive\");"
       ],
       "correct_answer": "if (p > 0 && q > 0)\n    System.out.println(\"Both positive\");",
-      "explanation": "The logical AND operator requires both conditions to be true."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -3397,7 +3428,7 @@
       "question": "What is printed by this while loop?\nint t = 1;\nwhile (t < 4) {\n    System.out.print(t);\n    t++;\n}",
       "choices": ["12", "234", "123", "1234"],
       "correct_answer": "123",
-      "explanation": "The loop prints 1, 2, and 3."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -3413,7 +3444,7 @@
         "Neither option"
       ],
       "correct_answer": "Both options",
-      "explanation": "Both patterns print 2, 3, 4, 5, 6."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -3423,8 +3454,8 @@
     "question_choices_correctanswer": {
       "question": "How will this loop behave?\nint c = 2;\ndo {\n    if (c == 5)\n        break;\n    System.out.print(c);\n    c++;\n} while (c <= 8);",
       "choices": ["23", "2", "234", "23456"],
-      "correct_answer": "23",
-      "explanation": "Execution stops when c becomes 5, so only 2 and 3 print."
+      "correct_answer": "234",
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -3435,7 +3466,7 @@
       "question": "How many iterations will occur?\nint b = 1;\nwhile (b <= 20)\n    b *= 2;",
       "choices": ["20", "Infinite", "4", "5"],
       "correct_answer": "5",
-      "explanation": "Sequence: 1 → 2 → 4 → 8 → 16 → 32, so 5 updates."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -3451,7 +3482,7 @@
         "int r = 0;\nwhile (r != 4) { r += 2; }"
       ],
       "correct_answer": "int r = 3;\nwhile (r == 3) { }",
-      "explanation": "The condition never changes, so the loop cannot exit."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -3462,7 +3493,7 @@
       "question": "How many times will this for-loop run?\nfor (int k = 1; k < 4; k++) {\n    System.out.print(k);\n}",
       "choices": ["1", "Infinite", "4", "3"],
       "correct_answer": "3",
-      "explanation": "The values printed are 1, 2, and 3."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -3478,7 +3509,7 @@
         "for (int q = 3; q < 6;) {\n   q--;\n}"
       ],
       "correct_answer": "All listed choices",
-      "explanation": "Each loop never reaches a terminating condition."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -3489,7 +3520,7 @@
       "question": "What does this for-loop output?\nfor (int h = 2; h <= 8; h++) {\n    if (h % 2 == 0)\n        continue;\n    System.out.print(h);\n}",
       "choices": ["2468", "357", "2357", "24"],
       "correct_answer": "357",
-      "explanation": "Even numbers are skipped, so the printed values are 3, 5, and 7."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -3500,7 +3531,7 @@
       "question": "How many times is \"Welcome\" printed?\nfor (int a = 1; a < 20; a *= 3) {\n    System.out.println(\"Welcome\");\n}",
       "choices": ["Infinite", "4", "3", "5"],
       "correct_answer": "3",
-      "explanation": "Iterations: a = 1, 3, 9 → three runs before a becomes 27."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -3516,7 +3547,7 @@
         "No issue exists"
       ],
       "correct_answer": "temp cannot be accessed here",
-      "explanation": "temp is local to the loop and out of scope afterward."
+      "explanation": ""
     },
     "difficulty": "hard"
   }
