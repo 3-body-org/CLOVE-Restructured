@@ -3,15 +3,15 @@
     "id": 1,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which keyword is used to declare an integer variable?",
+      "question": "Which operator is used to assign a value to a variable?",
       "choices": [
-        "float",
-        "double",
-        "int",
-        "string"
+        "==",
+        ":",
+        "-",
+        "="
       ],
-      "correct_answer": "int",
-      "explanation": "In Java, the keyword int is used to declare a variable that can store integer (whole number) values."
+      "correct_answer": "=",
+      "explanation": "The single equals sign (=) is the assignment operator used to store a value in a variable."
     },
     "difficulty": "easy"
   },
@@ -19,15 +19,15 @@
     "id": 2,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which of the following is a valid variable name in Java?",
+      "question": "Which of these is a valid variable name?",
       "choices": [
-        "number one",
-        "number-one",
-        "1number",
-        "number_one"
+        "userScore",
+        "1stScore",
+        "class",
+        "user-score"
       ],
-      "correct_answer": "number_one",
-      "explanation": "Variable names cannot start with a digit or include spaces or hyphens. number_one is valid."
+      "correct_answer": "userScore",
+      "explanation": "Variable names cannot start with a digit, contain hyphens, or be reserved keywords like 'class'. 'userScore' is valid."
     },
     "difficulty": "easy"
   },
@@ -35,15 +35,15 @@
     "id": 3,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What character is allowed in a variable name?",
+      "question": "What punctuation ends a Java statement?",
       "choices": [
-        "#",
-        "!",
-        "_",
-        "@"
+        ".",
+        "1",
+        ";",
+        ":"
       ],
-      "correct_answer": "_",
-      "explanation": "Java allows letters, digits, _, and $ in variable names. Symbols like @, #, ! are not allowed."
+      "correct_answer": ";",
+      "explanation": "In Java, a semicolon (;) is mandatory to mark the end of a complete statement."
     },
     "difficulty": "easy"
   },
@@ -51,15 +51,15 @@
     "id": 4,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which of the following is NOT a valid Java variable declaration?",
+      "question": "Java is case-sensitive. What does this mean?",
       "choices": [
-        "double pi = 3.14;",
-        "char letter = 'A';",
-        "int number = 10;",
-        "String 1name = \"John\";"
+        "Case doesn't matter.",
+        "Variables 'score' and 'Score' are different.",
+        "Variables must be uppercase.",
+        "Only classes are case-sensitive."
       ],
-      "correct_answer": "String 1name = \"John\";",
-      "explanation": "Variable names can't start with a number. 1name is invalid."
+      "correct_answer": "Variables 'score' and 'Score' are different.",
+      "explanation": "Case-sensitivity means that identifiers differing only in capitalization are treated as completely different variables."
     },
     "difficulty": "easy"
   },
@@ -67,15 +67,15 @@
     "id": 5,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "How do you declare a constant in Java?",
+      "question": "Which is a valid starting character for a variable?",
       "choices": [
-        "final int x = 5;",
-        "static int x = 5;",
-        "constant int x = 5;",
-        "const int x = 5;"
+        "$",
+        "1",
+        "%",
+        "#"
       ],
-      "correct_answer": "final int x = 5;",
-      "explanation": "Java uses the final keyword to declare constants that cannot be reassigned after initialization."
+      "correct_answer": "$",
+      "explanation": "Variable names can start with a letter, underscore (_), or dollar sign ($), but not with numbers or other symbols."
     },
     "difficulty": "easy"
   },
@@ -83,15 +83,15 @@
     "id": 6,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What happens when you declare a local variable without initializing it and try to use it?",
+      "question": "How do you declare multiple int variables in one line?",
       "choices": [
-        "Compilation error",
-        "Runtime error",
-        "It uses the last assigned value",
-        "It is automatically set to 0"
+        "int x y z;",
+        "int x; int y; int z;",
+        "x, y, z = int;",
+        "int x, y, z;"
       ],
-      "correct_answer": "Compilation error",
-      "explanation": "Java requires local variables to be initialized before use, or else the compiler throws an error."
+      "correct_answer": "int x, y, z;",
+      "explanation": "You can declare multiple variables of the same type by separating their names with commas."
     },
     "difficulty": "medium"
   },
@@ -99,15 +99,15 @@
     "id": 7,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which of these is true about variable scope?",
+      "question": "What is 'Type Inference' (var)?",
       "choices": [
-        "A variable declared in a method is accessible only inside that method",
-        "A class variable is accessible only inside its constructor",
-        "Global variables are accessible in all methods",
-        "Local variables are accessible in other classes"
+        "Variable has no type.",
+        "Compiler detects type from value.",
+        "Type can change later.",
+        "It casts types automatically."
       ],
-      "correct_answer": "A variable declared in a method is accessible only inside that method",
-      "explanation": "Local variables are only accessible within the method where they are declared."
+      "correct_answer": "Compiler detects type from value.",
+      "explanation": "Using the 'var' keyword allows the compiler to infer the variable's data type based on the assigned value."
     },
     "difficulty": "medium"
   },
@@ -115,15 +115,15 @@
     "id": 8,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which declaration is valid for multiple variables in one line?",
+      "question": "What happens if you reassign a 'final' variable?",
       "choices": [
-        "int a = 5; int b = 6;",
-        "int a = 5; b = 6;",
-        "int a = 5, b = 6;",
-        "int a; b = 6;"
+        "Warning",
+        "Value updates",
+        "Compilation error",
+        "Runtime error"
       ],
-      "correct_answer": "int a = 5, b = 6;",
-      "explanation": "You can declare and initialize multiple variables in a single line using commas."
+      "correct_answer": "Compilation error",
+      "explanation": "A 'final' variable is a constant; attempting to assign a new value to it will cause a compilation error."
     },
     "difficulty": "medium"
   },
@@ -131,15 +131,15 @@
     "id": 9,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is the default value of an instance variable of type String?",
+      "question": "Scope of a variable inside a method?",
       "choices": [
-        "\" \"",
-        "\"\"",
-        "null",
-        "undefined"
+        "Class-wide",
+        "Local to that method",
+        "Global",
+        "Package-wide"
       ],
-      "correct_answer": "null",
-      "explanation": "Non-primitive instance variables like String are initialized to null by default."
+      "correct_answer": "Local to that method",
+      "explanation": "Variables declared inside a method are local to that method and cannot be accessed outside of it."
     },
     "difficulty": "medium"
   },
@@ -147,15 +147,15 @@
     "id": 10,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which keyword makes a variable shared across all objects of a class?",
+      "question": "Why is 'int class = 5;' invalid?",
       "choices": [
-        "static",
-        "private",
-        "final",
-        "public"
+        "'class' is a reserved keyword.",
+        "It's not capitalized.",
+        "It needs a value.",
+        "It's too short."
       ],
-      "correct_answer": "static",
-      "explanation": "static means the variable belongs to the class, not to individual instances."
+      "correct_answer": "'class' is a reserved keyword.",
+      "explanation": "Reserved keywords like 'class', 'public', or 'void' cannot be used as variable names."
     },
     "difficulty": "medium"
   },
@@ -163,15 +163,15 @@
     "id": 11,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which of the following is true about variable shadowing in Java?",
+      "question": "Using an uninitialized local variable causes?",
       "choices": [
-        "Instance variables always override local variables",
-        "A local variable can hide an instance variable with the same name",
-        "Local variables cannot share names with instance variables",
-        "A static variable hides a local variable"
+        "Null warning",
+        "Runtime exception",
+        "Compile-time error",
+        "Default value 0"
       ],
-      "correct_answer": "A local variable can hide an instance variable with the same name",
-      "explanation": "Shadowing occurs when a local variable shares a name with an instance variable, making the instance one inaccessible within that scope."
+      "correct_answer": "Compile-time error",
+      "explanation": "Java requires all local variables to be explicitly initialized before they are used."
     },
     "difficulty": "hard"
   },
@@ -179,15 +179,15 @@
     "id": 12,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is the outcome when you declare two variables with the same name in the same scope?",
+      "question": "Naming convention for constants?",
       "choices": [
-        "Runtime warning",
-        "The JVM chooses randomly",
-        "Compilation error",
-        "The second one overrides the first"
+        "kebab-case",
+        "camelCase",
+        "PascalCase",
+        "UPPER_SNAKE_CASE"
       ],
-      "correct_answer": "Compilation error",
-      "explanation": "Java does not allow duplicate variable names in the same scope; this results in a compile-time error."
+      "correct_answer": "UPPER_SNAKE_CASE",
+      "explanation": "Constants are typically named using all uppercase letters with underscores separating words (e.g., MAX_VALUE)."
     },
     "difficulty": "hard"
   },
@@ -195,15 +195,15 @@
     "id": 13,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which modifier ensures that a variable's value cannot be changed after initialization?",
+      "question": "Redeclaring a variable in a nested scope is?",
       "choices": [
-        "const",
-        "private",
-        "static",
-        "final"
+        "Allowed",
+        "Not allowed (Shadowing error)",
+        "Runtime error",
+        "Warning only"
       ],
-      "correct_answer": "final",
-      "explanation": "final locks the value once assigned, preventing any further modification."
+      "correct_answer": "Not allowed (Shadowing error)",
+      "explanation": "You cannot declare a new local variable with the same name as one in the enclosing scope."
     },
     "difficulty": "hard"
   },
@@ -211,15 +211,15 @@
     "id": 14,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which of the following is NOT a valid reason to use a static variable?",
+      "question": "Difference between 'int x;' and 'x=5;'?",
       "choices": [
-        "Instance-specific logic",
-        "Class-level constants",
-        "Common counter",
-        "Shared configuration"
+        "None",
+        "Assignment vs Casting",
+        "Initialization vs Declaration",
+        "Declaration vs Assignment"
       ],
-      "correct_answer": "Instance-specific logic",
-      "explanation": "Static variables are shared across all instances; they're not suitable for instance-specific behavior."
+      "correct_answer": "Declaration vs Assignment",
+      "explanation": "'int x;' declares the variable (creates the container), while 'x=5;' assigns a value to it."
     },
     "difficulty": "hard"
   },
@@ -227,15 +227,15 @@
     "id": 15,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "When does a variable become eligible for garbage collection?",
+      "question": "Java's strong typing means?",
       "choices": [
-        "When it is declared",
-        "After method ends",
-        "When it is reassigned",
-        "When it is no longer referenced"
+        "No types needed.",
+        "Everything is an Object.",
+        "Variables hold compatible types only.",
+        "Types change dynamically."
       ],
-      "correct_answer": "When it is no longer referenced",
-      "explanation": "Once no active reference points to an object, it becomes a candidate for garbage collection."
+      "correct_answer": "Variables hold compatible types only.",
+      "explanation": "Strong typing ensures that a variable can only store data that is compatible with its declared type."
     },
     "difficulty": "hard"
   },
@@ -243,15 +243,15 @@
     "id": 16,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which of these is a primitive data type?",
+      "question": "Which type stores true/false?",
       "choices": [
-        "Scanner",
-        "String",
+        "bit",
+        "boolean",
         "int",
-        "ArrayList"
+        "String"
       ],
-      "correct_answer": "int",
-      "explanation": "Primitive data types in Java include int, char, boolean, etc. ArrayList and Scanner are classes, not primitive types."
+      "correct_answer": "boolean",
+      "explanation": "The boolean data type is specifically designed to store only two possible values: true or false."
     },
     "difficulty": "easy"
   },
@@ -259,15 +259,15 @@
     "id": 17,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which data type stores true/false values?",
+      "question": "Wrapper class for int?",
       "choices": [
-        "boolean",
-        "double",
-        "int",
-        "char"
+        "Integer",
+        "Whole",
+        "Number",
+        "Int"
       ],
-      "correct_answer": "boolean",
-      "explanation": "The boolean type is used to store truth values (true or false)."
+      "correct_answer": "Integer",
+      "explanation": "The 'Integer' class is the object wrapper for the primitive 'int' data type."
     },
     "difficulty": "easy"
   },
@@ -275,15 +275,15 @@
     "id": 18,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which primitive data type stores characters?",
+      "question": "Suffix for float literals?",
       "choices": [
-        "boolean",
-        "String",
-        "int",
-        "char"
+        "d",
+        "x",
+        "l",
+        "f"
       ],
-      "correct_answer": "char",
-      "explanation": "The char type stores a single character using 16-bit Unicode."
+      "correct_answer": "f",
+      "explanation": "Floating-point literals are double by default; adding 'f' specifies them as float (e.g., 3.14f)."
     },
     "difficulty": "easy"
   },
@@ -291,15 +291,15 @@
     "id": 19,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "How many bytes does an int occupy in memory?",
+      "question": "Smallest integer primitive?",
       "choices": [
-        "8",
-        "4",
-        "1",
-        "2"
+        "long",
+        "int",
+        "byte",
+        "short"
       ],
-      "correct_answer": "4",
-      "explanation": "An int is a 32-bit signed integer, which means it takes up 4 bytes."
+      "correct_answer": "byte",
+      "explanation": "The 'byte' data type is the smallest integer primitive, occupying only 8 bits."
     },
     "difficulty": "easy"
   },
@@ -307,15 +307,15 @@
     "id": 20,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What is the default value of an int in a class?",
+      "question": "Character literal syntax?",
       "choices": [
-        "0",
-        "null",
-        "-1",
-        "undefined"
+        "'A'",
+        "char(A)",
+        "`A`",
+        "\"A\""
       ],
-      "correct_answer": "0",
-      "explanation": "Instance variables of type int default to 0 if not initialized."
+      "correct_answer": "'A'",
+      "explanation": "Character literals in Java are always enclosed in single quotes."
     },
     "difficulty": "easy"
   },
@@ -323,15 +323,15 @@
     "id": 21,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which types automatically convert to int during arithmetic?",
+      "question": "Preferred decimal type for precision?",
       "choices": [
-        "byte, short, and char",
-        "int and long",
-        "boolean and char",
-        "float and double"
+        "long",
+        "int",
+        "double",
+        "float"
       ],
-      "correct_answer": "byte, short, and char",
-      "explanation": "byte, short, and char are promoted to int in arithmetic expressions."
+      "correct_answer": "double",
+      "explanation": "Double provides 64-bit precision, making it more accurate than float for most decimal calculations."
     },
     "difficulty": "medium"
   },
@@ -339,15 +339,15 @@
     "id": 22,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which of the following can hold decimal values?",
+      "question": "Assigning int to double causes?",
       "choices": [
-        "byte",
-        "char",
-        "float",
-        "int"
+        "Widening conversion",
+        "Narrowing",
+        "Error",
+        "Exception"
       ],
-      "correct_answer": "float",
-      "explanation": "Only float and double among primitives can store decimal values."
+      "correct_answer": "Widening conversion",
+      "explanation": "Java automatically converts the smaller 'int' to the larger 'double' because no data is lost."
     },
     "difficulty": "medium"
   },
@@ -355,15 +355,15 @@
     "id": 23,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which of the following has the largest range?",
+      "question": "Integer value of 'A' (Unicode)?",
       "choices": [
-        "long",
-        "short",
-        "float",
-        "int"
+        "1",
+        "97",
+        "10",
+        "65"
       ],
-      "correct_answer": "long",
-      "explanation": "long can store a larger range of integer values compared to int, short, and float."
+      "correct_answer": "65",
+      "explanation": "In the Unicode standard, the uppercase letter 'A' corresponds to the integer value 65."
     },
     "difficulty": "medium"
   },
@@ -371,15 +371,15 @@
     "id": 24,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What is the default value of a boolean in a class variable?",
+      "question": "Exceeding max value of a primitive?",
       "choices": [
-        "null",
-        "0",
-        "false",
-        "true"
+        "Exception",
+        "Overflow",
+        "Resize",
+        "Null"
       ],
-      "correct_answer": "false",
-      "explanation": "Instance boolean variables default to false if not explicitly initialized."
+      "correct_answer": "Overflow",
+      "explanation": "Primitives have a fixed size; exceeding their max value causes the number to wrap around (overflow) to the minimum value."
     },
     "difficulty": "medium"
   },
@@ -387,15 +387,15 @@
     "id": 25,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which data type is used for single-precision floating-point numbers?",
+      "question": "Suffix for long literals?",
       "choices": [
-        "long",
-        "float",
-        "double",
-        "int"
+        "G",
+        "L",
+        "I",
+        "D"
       ],
-      "correct_answer": "float",
-      "explanation": "float is single-precision; double is double-precision."
+      "correct_answer": "L",
+      "explanation": "The 'L' suffix is required to denote a literal as a long integer (e.g., 1000000000L)."
     },
     "difficulty": "medium"
   },
@@ -403,15 +403,15 @@
     "id": 26,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which of the following primitive types is unsigned in Java?",
+      "question": "Default boolean value?",
       "choices": [
-        "char",
-        "int",
-        "byte",
-        "short"
+        "true",
+        "null",
+        "false",
+        "0"
       ],
-      "correct_answer": "char",
-      "explanation": "char is the only unsigned primitive type in Java."
+      "correct_answer": "false",
+      "explanation": "If not initialized, a boolean instance variable defaults to 'false'."
     },
     "difficulty": "hard"
   },
@@ -419,15 +419,15 @@
     "id": 27,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which conversion can cause data loss?",
+      "question": "Why avoid float/double for currency?",
       "choices": [
-        "char to byte",
-        "double to int",
-        "byte to short",
-        "int to long"
+        "Too slow",
+        "Rounding errors",
+        "No negative values",
+        "Too big"
       ],
-      "correct_answer": "double to int",
-      "explanation": "double to int truncates the decimal part, causing precision loss."
+      "correct_answer": "Rounding errors",
+      "explanation": "Floating-point arithmetic can introduce small precision errors, making it unsuitable for exact financial calculations."
     },
     "difficulty": "hard"
   },
@@ -435,15 +435,15 @@
     "id": 28,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What happens when a byte value exceeds its limit (e.g., 127 + 1)?",
+      "question": "'A' + 1 result type?",
       "choices": [
-        "Overflows to -128",
-        "Converts to int",
-        "Compilation error",
-        "Rounds up to 128"
+        "Error",
+        "int (66)",
+        "char ('B')",
+        "String (\"A1\")"
       ],
-      "correct_answer": "Overflows to -128",
-      "explanation": "Byte range is -128 to 127. Adding 1 to 127 causes overflow, wrapping to -128."
+      "correct_answer": "int (66)",
+      "explanation": "Arithmetic operations on chars promote them to integers. 65 + 1 equals the integer 66."
     },
     "difficulty": "hard"
   },
@@ -451,15 +451,15 @@
     "id": 29,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which primitive data type offers the highest precision for decimals?",
+      "question": "Uniqueness of char type?",
       "choices": [
-        "long",
-        "double",
-        "float",
-        "int"
+        "Cannot cast",
+        "Reference type",
+        "Unsigned",
+        "8-bit"
       ],
-      "correct_answer": "double",
-      "explanation": "double has higher precision (64-bit) than float (32-bit)."
+      "correct_answer": "Unsigned",
+      "explanation": "Char is the only unsigned primitive numeric type in Java; it cannot store negative values."
     },
     "difficulty": "hard"
   },
@@ -467,15 +467,15 @@
     "id": 30,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which of the following cannot be used in a switch before Java 7?",
+      "question": "Casting (int) 9.99 results in?",
       "choices": [
-        "int",
-        "char",
-        "String",
-        "byte"
+        "9 (Truncation)",
+        "0",
+        "10 (Rounding)",
+        "Error"
       ],
-      "correct_answer": "String",
-      "explanation": "String in switch was only introduced in Java 7. Before that, only integral types were allowed."
+      "correct_answer": "9 (Truncation)",
+      "explanation": "Casting a float/double to an int truncates the decimal part (drops it) rather than rounding."
     },
     "difficulty": "hard"
   },
@@ -483,15 +483,15 @@
     "id": 31,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which of the following is a non-primitive data type in Java?",
+      "question": "String concatenation operator?",
       "choices": [
-        "String",
-        "int",
-        "double",
-        "float"
+        ".",
+        "&",
+        "+",
+        "&&"
       ],
-      "correct_answer": "String",
-      "explanation": "String is a class, which makes it a non-primitive data type."
+      "correct_answer": "+",
+      "explanation": "The plus operator (+) is used to concatenate (join) strings together."
     },
     "difficulty": "easy"
   },
@@ -499,15 +499,15 @@
     "id": 32,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What is the default value of a non-primitive type (like String) in a class?",
+      "question": "First index of an array?",
       "choices": [
-        "0",
-        "undefined",
-        "\"\"",
-        "null"
+        "1",
+        "null",
+        "-1",
+        "0"
       ],
-      "correct_answer": "null",
-      "explanation": "Non-primitive types default to null if not initialized."
+      "correct_answer": "0",
+      "explanation": "Java arrays are zero-indexed, meaning the first element is always at index 0."
     },
     "difficulty": "easy"
   },
@@ -515,15 +515,15 @@
     "id": 33,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which keyword is used to create a new object of a class?",
+      "question": "Get String length?",
       "choices": [
-        "make",
-        "build",
-        "new",
-        "create"
+        ".length()",
+        ".size()",
+        ".count",
+        ".length"
       ],
-      "correct_answer": "new",
-      "explanation": "new is used to instantiate objects of a class."
+      "correct_answer": ".length()",
+      "explanation": "For Strings, the length is retrieved using the .length() method (with parentheses)."
     },
     "difficulty": "easy"
   },
@@ -531,15 +531,15 @@
     "id": 34,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What does this statement do: String s = \"Hello\";",
+      "question": "Get Array length?",
       "choices": [
-        "Declares and initializes a String object",
-        "Initializes a float",
-        "Declares a primitive int",
-        "Creates a method"
+        ".length()",
+        ".length",
+        ".count()",
+        ".size"
       ],
-      "correct_answer": "Declares and initializes a String object",
-      "explanation": "This creates a String object with the value \"Hello\"."
+      "correct_answer": ".length",
+      "explanation": "For arrays, the length is a property, so it is accessed as .length (without parentheses)."
     },
     "difficulty": "easy"
   },
@@ -547,15 +547,15 @@
     "id": 35,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which of the following is NOT a non-primitive type?",
+      "question": "Empty String representation?",
       "choices": [
-        "Array",
-        "int",
-        "String",
-        "Object"
+        "' '",
+        "null",
+        "\"\"",
+        "empty"
       ],
-      "correct_answer": "int",
-      "explanation": "int is a primitive type; the rest are non-primitive."
+      "correct_answer": "\"\"",
+      "explanation": "An empty string is a String object with zero characters, represented by double quotes with nothing between them."
     },
     "difficulty": "easy"
   },
@@ -563,15 +563,15 @@
     "id": 36,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which of the following is true about non-primitive types?",
+      "question": "String immutability means?",
       "choices": [
-        "They do not have methods",
-        "They store references to objects",
-        "They are always immutable",
-        "They store actual values"
+        "Only letters",
+        "Cannot change value after creation",
+        "No memory limit",
+        "Cannot delete"
       ],
-      "correct_answer": "They store references to objects",
-      "explanation": "Non-primitive variables store references (addresses) to objects in memory."
+      "correct_answer": "Cannot change value after creation",
+      "explanation": "Immutability means that once a String object is created, its internal content cannot be changed."
     },
     "difficulty": "medium"
   },
@@ -579,15 +579,15 @@
     "id": 37,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which of these types allows you to store multiple values of the same type?",
+      "question": "Array literal syntax?",
       "choices": [
-        "int",
-        "String",
-        "Array",
-        "boolean"
+        "{1, 2, 3}",
+        "(1, 2, 3)",
+        "[1, 2, 3]",
+        "<1, 2, 3>"
       ],
-      "correct_answer": "Array",
-      "explanation": "Arrays are non-primitive types used to store collections of elements."
+      "correct_answer": "{1, 2, 3}",
+      "explanation": "Java uses curly braces {} to define an array literal with initial values."
     },
     "difficulty": "medium"
   },
@@ -595,15 +595,15 @@
     "id": 38,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What is the output of System.out.println(\"abc\".length());",
+      "question": "Reference to no object?",
       "choices": [
-        "abc",
-        "3",
-        "2",
-        "length"
+        "0",
+        "null",
+        "undefined",
+        "void"
       ],
-      "correct_answer": "3",
-      "explanation": "The length of the string \"abc\" is 3."
+      "correct_answer": "null",
+      "explanation": "The keyword 'null' indicates that a reference variable is not currently pointing to any object."
     },
     "difficulty": "medium"
   },
@@ -611,15 +611,15 @@
     "id": 39,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which of the following is used to declare a class-type variable?",
+      "question": "Where do objects live?",
       "choices": [
-        "className obj;",
-        "new className();",
-        "var obj = className;",
-        "class obj = new obj();"
+        "Stack",
+        "Disk",
+        "Heap",
+        "Register"
       ],
-      "correct_answer": "className obj;",
-      "explanation": "className obj; declares a variable of a class type."
+      "correct_answer": "Heap",
+      "explanation": "Objects are stored in Heap memory, while their reference variables are stored in Stack memory."
     },
     "difficulty": "medium"
   },
@@ -627,15 +627,15 @@
     "id": 40,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What is the return type of the .charAt(index) method in a String?",
+      "question": "What is String Pool?",
       "choices": [
-        "boolean",
-        "int",
-        "char",
-        "String"
+        "Error log",
+        "Method list",
+        "Primitive storage",
+        "Memory for unique String literals"
       ],
-      "correct_answer": "char",
-      "explanation": "The charAt() method returns the character at a specified index in a string."
+      "correct_answer": "Memory for unique String literals",
+      "explanation": "The String Pool is a special memory area where Java stores unique string literals to save space."
     },
     "difficulty": "medium"
   },
@@ -643,15 +643,15 @@
     "id": 41,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which of the following statements is true about Strings in Java?",
+      "question": "Resize an array?",
       "choices": [
-        "String uses arrays internally and behaves like int",
-        "Strings are primitive types",
-        "Strings are mutable",
-        "Strings are immutable and stored in the string pool"
+        "Add elements",
+        "Not possible (Fixed size)",
+        "Cast to List",
+        "use .resize()"
       ],
-      "correct_answer": "Strings are immutable and stored in the string pool",
-      "explanation": "Strings in Java are immutable and stored in a special memory area called the string pool."
+      "correct_answer": "Not possible (Fixed size)",
+      "explanation": "Arrays have a fixed size once created. To 'resize', you must create a new, larger array."
     },
     "difficulty": "hard"
   },
@@ -659,15 +659,15 @@
     "id": 42,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What will happen if you compare two Strings using == instead of .equals()?",
+      "question": "Copying array variable copies?",
       "choices": [
-        "It compares memory addresses, not content",
-        "Compilation error",
-        "They will always be equal",
-        "It automatically calls equals()"
+        "Reference",
+        "Length",
+        "Values",
+        "New Object"
       ],
-      "correct_answer": "It compares memory addresses, not content",
-      "explanation": "== checks reference equality, not content."
+      "correct_answer": "Reference",
+      "explanation": "Assigning one array variable to another copies the memory reference, not the actual data."
     },
     "difficulty": "hard"
   },
@@ -675,15 +675,15 @@
     "id": 43,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Given String a = new String(\"hello\"); String b = \"hello\";, what does a == b return?",
+      "question": "Garbage Collection criteria?",
       "choices": [
-        "Compilation error",
-        "false",
-        "hello",
-        "true"
+        "Stack full",
+        "Null value",
+        "No active references",
+        "Program end"
       ],
-      "correct_answer": "false",
-      "explanation": "a and b point to different memory locations; hence a == b is false."
+      "correct_answer": "No active references",
+      "explanation": "An object becomes eligible for garbage collection when there are no more active references pointing to it."
     },
     "difficulty": "hard"
   },
@@ -691,15 +691,15 @@
     "id": 44,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "How are arrays stored in memory in Java?",
+      "question": "String s = new String(\"A\")?",
       "choices": [
-        "In stack only",
-        "As a collection of objects",
-        "As references with fixed-size contiguous memory",
-        "As primitive variables"
+        "Syntax error",
+        "Same as literal",
+        "Faster",
+        "Skips Pool, creates new Object"
       ],
-      "correct_answer": "As references with fixed-size contiguous memory",
-      "explanation": "Arrays are reference types stored with fixed-size blocks in heap memory."
+      "correct_answer": "Skips Pool, creates new Object",
+      "explanation": "Using 'new String()' forces the creation of a new object in the Heap, bypassing the String Pool optimization."
     },
     "difficulty": "hard"
   },
@@ -707,15 +707,15 @@
     "id": 45,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Which non-primitive type allows key-value pair storage?",
+      "question": "Access index 5 of length 5?",
       "choices": [
-        "Array",
-        "String",
-        "ArrayList",
-        "HashMap"
+        "Last element",
+        "ArrayIndexOutOfBoundsException",
+        "0",
+        "NullPointerException"
       ],
-      "correct_answer": "HashMap",
-      "explanation": "HashMap stores data in key-value pairs and is part of the Java Collections Framework."
+      "correct_answer": "ArrayIndexOutOfBoundsException",
+      "explanation": "Valid indices are 0 to 4. Accessing index 5 throws an ArrayIndexOutOfBoundsException."
     },
     "difficulty": "hard"
   },
@@ -723,15 +723,15 @@
     "id": 46,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the result of 5 + 3 in Java?",
+      "question": "Which operator is used to calculate the remainder of a division?",
       "choices": [
-        "8",
-        "15",
-        "2",
-        "53"
+        "#",
+        "%",
+        "REM",
+        "/"
       ],
-      "correct_answer": "8",
-      "explanation": "+ is the addition operator. 5 + 3 = 8."
+      "correct_answer": "%",
+      "explanation": "The modulus operator (%) returns the remainder of a division operation (e.g., 5 % 2 is 1)."
     },
     "difficulty": "easy"
   },
@@ -739,15 +739,15 @@
     "id": 47,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "Which operator is used for division in Java?",
+      "question": "What is the result of the expression 10 / 3 in Java (using integers)?",
       "choices": [
-        "//",
-        "/",
-        "%",
-        "\\"
+        "3",
+        "3.33",
+        "3.0",
+        "3.3333"
       ],
-      "correct_answer": "/",
-      "explanation": "/ performs standard division in Java."
+      "correct_answer": "3",
+      "explanation": "When dividing two integers, Java performs integer division, truncating any decimal remainder."
     },
     "difficulty": "easy"
   },
@@ -755,15 +755,15 @@
     "id": 48,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What does the % operator do?",
+      "question": "Which symbol represents the multiplication operator?",
       "choices": [
-        "Multiplication",
-        "Finds the remainder",
-        "Division",
-        "Subtraction"
+        "x",
+        "&",
+        "#",
+        "*"
       ],
-      "correct_answer": "Finds the remainder",
-      "explanation": "% is the modulo operator; it gives the remainder of a division."
+      "correct_answer": "*",
+      "explanation": "The asterisk (*) is the standard symbol for multiplication in Java."
     },
     "difficulty": "easy"
   },
@@ -771,15 +771,15 @@
     "id": 49,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the output of 10 - 4?",
+      "question": "What is the output of 5 + 2 * 3?",
       "choices": [
-        "10",
-        "6",
-        "5",
-        "7"
+        "21",
+        "13",
+        "11",
+        "10"
       ],
-      "correct_answer": "6",
-      "explanation": "10 - 4 = 6."
+      "correct_answer": "11",
+      "explanation": "Multiplication has higher precedence than addition. 2 * 3 = 6, then 5 + 6 = 11."
     },
     "difficulty": "easy"
   },
@@ -787,15 +787,15 @@
     "id": 50,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the result of 2 * 6?",
+      "question": "What happens if you divide a number by integer 0 in Java?",
       "choices": [
-        "26",
-        "8",
-        "14",
-        "12"
+        "ArithmeticException",
+        "Returns 0",
+        "Returns Infinity",
+        "Compilation Error"
       ],
-      "correct_answer": "12",
-      "explanation": "* multiplies numbers. 2 * 6 = 12."
+      "correct_answer": "ArithmeticException",
+      "explanation": "Dividing an integer by zero causes a runtime ArithmeticException."
     },
     "difficulty": "easy"
   },
@@ -803,15 +803,15 @@
     "id": 51,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the result of 7 % 3?",
+      "question": "What is the result of 12 % 4?",
       "choices": [
-        "4",
-        "2",
+        "3",
         "0",
+        "4",
         "1"
       ],
-      "correct_answer": "1",
-      "explanation": "7 / 3 = 2 remainder 1, so 7 % 3 = 1."
+      "correct_answer": "0",
+      "explanation": "12 divides evenly by 4, so the remainder is 0."
     },
     "difficulty": "medium"
   },
@@ -819,15 +819,15 @@
     "id": 52,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What will 4 + 5 * 2 return?",
+      "question": "Evaluate the expression: (5 - 2) * 4",
       "choices": [
-        "14",
-        "10",
+        "18",
         "13",
-        "18"
+        "8",
+        "12"
       ],
-      "correct_answer": "14",
-      "explanation": "Multiplication comes first: 5 * 2 = 10, then 4 + 10 = 14."
+      "correct_answer": "12",
+      "explanation": "Parentheses take precedence. (5 - 2) is 3. Then 3 * 4 is 12."
     },
     "difficulty": "medium"
   },
@@ -835,15 +835,15 @@
     "id": 53,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the result of (4 + 5) * 2?",
+      "question": "Which operation is performed last in this expression: 10 + 5 / 5 - 2?",
       "choices": [
-        "18",
-        "8",
-        "10",
-        "13"
+        "Division",
+        "Addition",
+        "Subtraction",
+        "Multiplication"
       ],
-      "correct_answer": "18",
-      "explanation": "Parentheses are evaluated first: 4 + 5 = 9, then 9 * 2 = 18."
+      "correct_answer": "Subtraction",
+      "explanation": "Division happens first (5/5=1). Then addition (10+1=11). Finally, subtraction (11-2)."
     },
     "difficulty": "medium"
   },
@@ -851,15 +851,15 @@
     "id": 54,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is 9 / 2 in Java if both operands are integers?",
+      "question": "If `int x = 5;`, what is the value of `x` after `x += 3;`?",
       "choices": [
-        "4.5",
-        "4",
-        "Error",
-        "5"
+        "8",
+        "5",
+        "3",
+        "15"
       ],
-      "correct_answer": "4",
-      "explanation": "Integer division discards the decimal → 9 / 2 = 4."
+      "correct_answer": "8",
+      "explanation": "`x += 3` is shorthand for `x = x + 3`. So, 5 + 3 = 8."
     },
     "difficulty": "medium"
   },
@@ -867,15 +867,15 @@
     "id": 55,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "If int x = 10; x %= 3;, what is the value of x?",
+      "question": "What is the result of `7.0 / 2`?",
       "choices": [
-        "2",
-        "1",
-        "0",
-        "3"
+        "3",
+        "3.0",
+        "3.5",
+        "Error"
       ],
-      "correct_answer": "1",
-      "explanation": "x %= 3 is the same as x = x % 3 → 10 % 3 = 1."
+      "correct_answer": "3.5",
+      "explanation": "Since one operand (7.0) is a double, the operation performs floating-point division, resulting in 3.5."
     },
     "difficulty": "medium"
   },
@@ -883,15 +883,15 @@
     "id": 56,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "Which expression results in 0?",
+      "question": "What is the result of `1 + 2 + \"3\"`?",
       "choices": [
-        "6 % 2",
-        "All of the above",
-        "7 - 7",
-        "4 * 0"
+        "15",
+        "33",
+        "123",
+        "6"
       ],
-      "correct_answer": "All of the above",
-      "explanation": "All options equal 0:\n6 % 2 = 0\n7 - 7 = 0\n4 * 0 = 0"
+      "correct_answer": "33",
+      "explanation": "Left-to-right associativity: 1 + 2 = 3. Then 3 + \"3\" performs string concatenation, resulting in \"33\"."
     },
     "difficulty": "hard"
   },
@@ -899,15 +899,15 @@
     "id": 57,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the output of ((2 + 3) * 4) / 2?",
+      "question": "What is the value of `10 * 10 / 5 + 3 - 1 * 4 / 2`?",
       "choices": [
-        "10",
-        "8",
+        "21",
         "20",
-        "12"
+        "18",
+        "23"
       ],
-      "correct_answer": "10",
-      "explanation": "(2 + 3) = 5, 5 * 4 = 20, 20 / 2 = 10."
+      "correct_answer": "21",
+      "explanation": "1) 10*10=100. 2) 100/5=20. 3) 1*4=4. 4) 4/2=2. Expression becomes 20 + 3 - 2 = 21."
     },
     "difficulty": "hard"
   },
@@ -915,15 +915,15 @@
     "id": 58,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What will 15 % 4 + 2 * 3 return?",
+      "question": "If `int a = 10;` and `int b = 20;`, what is `a + b * 2`?",
       "choices": [
-        "6",
-        "3",
-        "5",
-        "9"
+        "50",
+        "60",
+        "30",
+        "40"
       ],
-      "correct_answer": "9",
-      "explanation": "15 % 4 = 3, 2 * 3 = 6, 3 + 6 = 9"
+      "correct_answer": "50",
+      "explanation": "Multiplication first: 20 * 2 = 40. Then 10 + 40 = 50."
     },
     "difficulty": "hard"
   },
@@ -931,15 +931,15 @@
     "id": 59,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "If int x = 8 / 3;, what is the value of x?",
+      "question": "What is the result of `Math.pow(2, 3)`?",
       "choices": [
-        "2.66",
-        "3",
-        "2.6",
-        "2"
+        "8.0",
+        "6",
+        "8",
+        "9.0"
       ],
-      "correct_answer": "2",
-      "explanation": "Integer division truncates decimals → 8 / 3 = 2."
+      "correct_answer": "8.0",
+      "explanation": "Math.pow returns a double value. 2 raised to the power of 3 is 8, returned as 8.0."
     },
     "difficulty": "hard"
   },
@@ -947,15 +947,15 @@
     "id": 60,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What does 3 + 2 * (4 - 1) evaluate to?",
+      "question": "What is the result of `(int) (5.9 + 2.1)`?",
       "choices": [
-        "5",
-        "15",
-        "21",
-        "9"
+        "8.0",
+        "7",
+        "8",
+        "7.9"
       ],
-      "correct_answer": "9",
-      "explanation": "(4 - 1) = 3; 2 * 3 = 6; 3 + 6 = 9"
+      "correct_answer": "8",
+      "explanation": "5.9 + 2.1 = 8.0. Casting to `int` truncates the decimal, leaving 8."
     },
     "difficulty": "hard"
   },
@@ -963,15 +963,15 @@
     "id": 61,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What does the == operator do in Java?",
+      "question": "Which operator checks if two values are equal?",
       "choices": [
-        "Compares values for equality",
-        "Checks if one value is greater",
-        "Concatenates strings",
-        "Assigns a value"
+        "=",
+        "==",
+        "<>",
+        "==="
       ],
-      "correct_answer": "Compares values for equality",
-      "explanation": "== checks if two values are equal, not assign."
+      "correct_answer": "==",
+      "explanation": "The `==` operator is used for equality comparison in Java."
     },
     "difficulty": "easy"
   },
@@ -979,15 +979,15 @@
     "id": 62,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What is the result of 5 > 3?",
+      "question": "What does the `!=` operator mean?",
       "choices": [
-        "Error",
-        "0",
-        "false",
-        "true"
+        "Not equal",
+        "Greater than",
+        "Usually equal",
+        "Less than"
       ],
-      "correct_answer": "true",
-      "explanation": "5 is greater than 3."
+      "correct_answer": "Not equal",
+      "explanation": "`!=` returns true if the operands are different."
     },
     "difficulty": "easy"
   },
@@ -995,15 +995,15 @@
     "id": 63,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Which operator checks if two values are not equal?",
+      "question": "What is the result of `10 > 5`?",
       "choices": [
-        "><",
-        "^=",
-        "!==",
-        "!="
+        "0",
+        "1",
+        "false",
+        "true"
       ],
-      "correct_answer": "!=",
-      "explanation": "!= checks inequality. !== is from JavaScript."
+      "correct_answer": "true",
+      "explanation": "10 is indeed greater than 5, so the expression evaluates to true."
     },
     "difficulty": "easy"
   },
@@ -1011,15 +1011,15 @@
     "id": 64,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What will 4 < 4 return?",
+      "question": "Which comparison returns false?",
       "choices": [
-        "true",
-        "false",
-        "undefined",
-        "Error"
+        "5 <= 5",
+        "5 < 5",
+        "5 == 5",
+        "5 >= 5"
       ],
-      "correct_answer": "false",
-      "explanation": "4 < 4 is false because 4 is equal, not less."
+      "correct_answer": "5 < 5",
+      "explanation": "5 is equal to 5, not less than it. Therefore, 5 < 5 is false."
     },
     "difficulty": "easy"
   },
@@ -1027,15 +1027,15 @@
     "id": 65,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What does >= mean in Java?",
+      "question": "What type of value do comparison operators return?",
       "choices": [
-        "Assignment",
-        "Greater than only",
-        "Greater than or equal to",
-        "Less than or equal to"
+        "int",
+        "char",
+        "boolean",
+        "String"
       ],
-      "correct_answer": "Greater than or equal to",
-      "explanation": "It evaluates to true if left value is more or equal."
+      "correct_answer": "boolean",
+      "explanation": "All comparison operators (==, <, >, etc.) return a boolean value (true or false)."
     },
     "difficulty": "easy"
   },
@@ -1043,15 +1043,15 @@
     "id": 66,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Which expression evaluates to true?",
+      "question": "If `int a = 5` and `int b = 10`, which is true?",
       "choices": [
-        "8 != 4",
-        "10 == 5",
-        "7 < 3",
-        "6 <= 5"
+        "a > b",
+        "a >= b",
+        "a == b",
+        "a != b"
       ],
-      "correct_answer": "8 != 4",
-      "explanation": "8 is not equal to 4."
+      "correct_answer": "a != b",
+      "explanation": "5 is not equal to 10, so `a != b` is true."
     },
     "difficulty": "medium"
   },
@@ -1059,15 +1059,15 @@
     "id": 67,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "If int a = 3; int b = 5;, what does a > b return?",
+      "question": "What is the result of `10 >= 10`?",
       "choices": [
+        "null",
         "false",
-        "1",
         "true",
         "Error"
       ],
-      "correct_answer": "false",
-      "explanation": "3 is not greater than 5."
+      "correct_answer": "true",
+      "explanation": "`>=` checks for greater than OR equal to. Since 10 equals 10, it is true."
     },
     "difficulty": "medium"
   },
@@ -1075,15 +1075,15 @@
     "id": 68,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What is the result of System.out.println(10 >= 10);?",
+      "question": "Which operator is used to check if a value is less than or equal to another?",
       "choices": [
-        "Error",
-        "true",
-        "0",
-        "false"
+        "<=",
+        "=<",
+        "<<",
+        "<"
       ],
-      "correct_answer": "true",
-      "explanation": "10 is equal to 10 → >= returns true."
+      "correct_answer": "<=",
+      "explanation": "The correct symbol for 'less than or equal to' is `<=`."
     },
     "difficulty": "medium"
   },
@@ -1091,15 +1091,15 @@
     "id": 69,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Which operator would return true for 6 and 6?",
+      "question": "What is the result of `'a' == 'a'`?",
       "choices": [
-        "!=",
-        ">",
-        "<",
-        "=="
+        "true",
+        "false",
+        "Error",
+        "97"
       ],
-      "correct_answer": "==",
-      "explanation": "Equal values return true with ==."
+      "correct_answer": "true",
+      "explanation": "Character literals can be compared with `==`. Since both are 'a', the result is true."
     },
     "difficulty": "medium"
   },
@@ -1107,15 +1107,15 @@
     "id": 70,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "If x = 9 and y = 12, which is true?",
+      "question": "Comparing two different objects with `==` checks what?",
       "choices": [
-        "x == y",
-        "x > y",
-        "x <= y",
-        "x != x"
+        "If their contents are the same",
+        "If they reference the same memory address",
+        "If they are of the same type",
+        "If they have the same hash code"
       ],
-      "correct_answer": "x <= y",
-      "explanation": "9 is less than 12 → x <= y is true."
+      "correct_answer": "If they reference the same memory address",
+      "explanation": "For objects, `==` compares reference equality (memory location), not content equality."
     },
     "difficulty": "medium"
   },
@@ -1123,15 +1123,15 @@
     "id": 71,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What does !(4 == 5) return?",
+      "question": "Given `String s1 = new String(\"hi\");` and `String s2 = new String(\"hi\");`, what is `s1 == s2`?",
       "choices": [
+        "true",
         "Error",
-        "false",
         "null",
-        "true"
+        "false"
       ],
-      "correct_answer": "true",
-      "explanation": "4 == 5 is false, and !false is true."
+      "correct_answer": "false",
+      "explanation": "Using `new` creates distinct objects in memory. `==` checks references, which are different here."
     },
     "difficulty": "hard"
   },
@@ -1139,15 +1139,15 @@
     "id": 72,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Choose the expression that evaluates to false:",
+      "question": "Which statement correctly compares the *content* of two Strings `str1` and `str2`?",
       "choices": [
-        "5 >= 2",
-        "6 != 5",
-        "3 < 7",
-        "8 == 9"
+        "str1 == str2",
+        "str1.compare(str2)",
+        "str1.equals(str2)",
+        "str1 = str2"
       ],
-      "correct_answer": "8 == 9",
-      "explanation": "8 and 9 are not equal, so it's false."
+      "correct_answer": "str1.equals(str2)",
+      "explanation": "The `.equals()` method is required to compare the actual text content of String objects."
     },
     "difficulty": "hard"
   },
@@ -1155,15 +1155,15 @@
     "id": 73,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Given int x = 6;, which returns true?",
+      "question": "What is the result of `10.0 == 10`?",
       "choices": [
-        "x <= 6",
-        "x == 7",
-        "x < 5",
-        "x != 6"
+        "true",
+        "false",
+        "Error",
+        "10.0"
       ],
-      "correct_answer": "x <= 6",
-      "explanation": "6 is equal to 6, so it's true."
+      "correct_answer": "true",
+      "explanation": "Java promotes the `int` 10 to `double` 10.0 for comparison, so they are equal."
     },
     "difficulty": "hard"
   },
@@ -1171,15 +1171,15 @@
     "id": 74,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What is the output of System.out.println( (3 + 2) == 5 );?",
+      "question": "Why is `0.1 + 0.2 == 0.3` often false?",
       "choices": [
-        "Error",
-        "true",
-        "null",
-        "false"
+        "Java cannot add decimals",
+        "Floating-point precision errors",
+        "It is actually true",
+        "Compiler bug"
       ],
-      "correct_answer": "true",
-      "explanation": "3 + 2 = 5, and 5 == 5 is true."
+      "correct_answer": "Floating-point precision errors",
+      "explanation": "Binary floating-point cannot exactly represent 0.1 or 0.2, leading to a tiny error where the sum isn't exactly 0.3."
     },
     "difficulty": "hard"
   },
@@ -1187,15 +1187,15 @@
     "id": 75,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Which of the following is not a comparison operator in Java?",
+      "question": "Which comparison is valid for booleans?",
       "choices": [
-        "&&",
-        ">",
-        "!=",
-        "<="
+        "true < false",
+        "true == false",
+        "true > false",
+        "true >= false"
       ],
-      "correct_answer": "&&",
-      "explanation": "&& is a logical operator, not comparison."
+      "correct_answer": "true == false",
+      "explanation": "Booleans can only be compared for equality (`==` or `!=`). Greater/less than operators are not defined for booleans."
     },
     "difficulty": "hard"
   },
@@ -1203,15 +1203,15 @@
     "id": 76,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of the expression: (true && false)?",
+      "question": "Which symbol represents the Logical AND operator?",
       "choices": [
-        "null",
-        "1",
-        "false",
-        "true"
+        "&",
+        "AND",
+        "&&",
+        "||"
       ],
-      "correct_answer": "false",
-      "explanation": "The && operator means AND. It only gives true if both values are true. Here, true && false means one side is false → so the result is false."
+      "correct_answer": "&&",
+      "explanation": "The double ampersand (`&&`) is the logical AND operator in Java."
     },
     "difficulty": "easy"
   },
@@ -1219,15 +1219,15 @@
     "id": 77,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of: (false || true)?",
+      "question": "What does the `||` operator represent?",
       "choices": [
-        "false",
-        "null",
-        "0",
-        "true"
+        "Logical OR",
+        "Logical AND",
+        "Logical NOT",
+        "Bitwise OR"
       ],
-      "correct_answer": "true",
-      "explanation": "The || operator means OR. It gives true if at least one side is true. Here, the second value is true, so the result is true."
+      "correct_answer": "Logical OR",
+      "explanation": "The double pipe (`||`) is the logical OR operator."
     },
     "difficulty": "easy"
   },
@@ -1235,15 +1235,15 @@
     "id": 78,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "Which operator is used to reverse a boolean value?",
+      "question": "What is the result of `!true`?",
       "choices": [
-        "||",
-        "!",
-        "==",
-        "&&"
+        "true",
+        "1",
+        "null",
+        "false"
       ],
-      "correct_answer": "!",
-      "explanation": "The ! symbol means NOT. It flips the value: If the value is true, it becomes false. If it's false, it becomes true."
+      "correct_answer": "false",
+      "explanation": "The `!` operator inverts the boolean value. NOT true is false."
     },
     "difficulty": "easy"
   },
@@ -1251,15 +1251,15 @@
     "id": 79,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of: !(true && true)?",
+      "question": "When does `condition1 && condition2` return true?",
       "choices": [
-        "true",
-        "null",
-        "false",
-        "1"
+        "If both conditions are true",
+        "If at least one is true",
+        "If both are false",
+        "If condition1 is false"
       ],
-      "correct_answer": "false",
-      "explanation": "First, solve what's inside the parentheses: true && true → this becomes true. Now apply the ! operator: !true → becomes false."
+      "correct_answer": "If both conditions are true",
+      "explanation": "Logical AND requires ALL operands to be true to return true."
     },
     "difficulty": "easy"
   },
@@ -1267,15 +1267,15 @@
     "id": 80,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "In Java, what does true || false && false evaluate to?",
+      "question": "What is the result of `true || false`?",
       "choices": [
-        "error",
         "false",
+        "true",
         "null",
-        "true"
+        "Error"
       ],
       "correct_answer": "true",
-      "explanation": "In Java, AND (&&) runs before OR (||). So first do false && false → that's false. Then do true || false → this is true because one side is true."
+      "explanation": "Logical OR returns true if at least one operand is true."
     },
     "difficulty": "easy"
   },
@@ -1283,15 +1283,15 @@
     "id": 81,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of: !(false || true && false)?",
+      "question": "Evaluate: `(5 > 3) && (8 > 5)`",
       "choices": [
-        "null",
+        "false",
         "true",
-        "error",
-        "false"
+        "0",
+        "1"
       ],
       "correct_answer": "true",
-      "explanation": "false || (true && false) → false || false → false → !false → true."
+      "explanation": "5>3 is true. 8>5 is true. true && true is true."
     },
     "difficulty": "medium"
   },
@@ -1299,15 +1299,15 @@
     "id": 82,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of: true && !false?",
+      "question": "Evaluate: `(5 > 10) || (10 > 5)`",
       "choices": [
-        "true",
-        "error",
         "false",
-        "null"
+        "null",
+        "true",
+        "Error"
       ],
       "correct_answer": "true",
-      "explanation": "First solve !false → becomes true. Now do true && true → result is true."
+      "explanation": "5>10 is false. 10>5 is true. false || true is true."
     },
     "difficulty": "medium"
   },
@@ -1315,15 +1315,15 @@
     "id": 83,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "Which of the following is equivalent to !(a && b) in Boolean algebra?",
+      "question": "What is 'Short-Circuit' evaluation in `A && B`?",
       "choices": [
-        "!a || !b",
-        "a && b",
-        "!a && !b",
-        "a || b"
+        "Both are always checked",
+        "If A is false, B is not checked",
+        "If A is true, B is not checked",
+        "B is checked first"
       ],
-      "correct_answer": "!a || !b",
-      "explanation": "This is a rule called De Morgan's Law: !(A && B) becomes !A || !B. It breaks the AND into OR and flips both values."
+      "correct_answer": "If A is false, B is not checked",
+      "explanation": "In AND, if the first operand is false, the result must be false, so the second operand is skipped."
     },
     "difficulty": "medium"
   },
@@ -1331,15 +1331,15 @@
     "id": 84,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What does the expression true || (false && true) return?",
+      "question": "What is the precedence order of logical operators?",
       "choices": [
-        "error",
-        "null",
-        "true",
-        "false"
+        "&& then || then !",
+        "! then && then ||",
+        "|| then && then !",
+        "Left to right always"
       ],
-      "correct_answer": "true",
-      "explanation": "Start with parentheses: false && true → gives false. Now do: true || false → gives true."
+      "correct_answer": "! then && then ||",
+      "explanation": "NOT (!) has highest precedence, followed by AND (&&), then OR (||)."
     },
     "difficulty": "medium"
   },
@@ -1347,31 +1347,31 @@
     "id": 85,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of: !(true || false) && (false || true)?",
+      "question": "Evaluate: `! (true && false)`",
       "choices": [
-        "null",
-        "error",
         "false",
-        "true"
+        "null",
+        "true",
+        "Error"
       ],
-      "correct_answer": "false",
-      "explanation": "true || false → gives true. !true → becomes false. false || true → gives true. Now: false && true → final result is false."
+      "correct_answer": "true",
+      "explanation": "true && false is false. !false is true."
     },
-    "difficulty": "hard"
+    "difficulty": "medium"
   },
   {
     "id": 86,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "Which is logically equivalent to !(x || y) && z?",
+      "question": "If `boolean b = false;`, what is `b || !b`?",
       "choices": [
-        "(!x || !y) && z",
-        "!(x && y && z)",
-        "(!x && !y) && z",
-        "!(x && y) || z"
+        "false",
+        "null",
+        "Error",
+        "true"
       ],
-      "correct_answer": "(!x && !y) && z",
-      "explanation": "Use De Morgan's Law: !(x || y) becomes !x && !y. Then add && z to match the original expression."
+      "correct_answer": "true",
+      "explanation": "This is a tautology. If b is false, !b is true. false || true is true."
     },
     "difficulty": "hard"
   },
@@ -1379,15 +1379,15 @@
     "id": 87,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "If a = true, b = false, and c = true, what is the result of: a && b || c?",
+      "question": "What is the result of `true || false && false`?",
       "choices": [
-        "true",
         "false",
-        "null",
-        "error"
+        "true",
+        "Error",
+        "null"
       ],
       "correct_answer": "true",
-      "explanation": "a && b → true && false → false. Now false || c → false || true → final result is true."
+      "explanation": "AND (&&) happens before OR (||). false && false is false. Then true || false is true."
     },
     "difficulty": "hard"
   },
@@ -1395,15 +1395,15 @@
     "id": 88,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the output of !(true && (false || false))?",
+      "question": "De Morgan's Law: `!(A || B)` is equivalent to?",
       "choices": [
-        "false",
-        "error",
-        "null",
-        "true"
+        "!A && !B",
+        "!A || !B",
+        "!A && B",
+        "A || B"
       ],
-      "correct_answer": "true",
-      "explanation": "false || false → false. true && false → false. !false → true."
+      "correct_answer": "!A && !B",
+      "explanation": "Inverting an OR expression requires inverting both operands and changing OR to AND."
     },
     "difficulty": "hard"
   },
@@ -1411,15 +1411,15 @@
     "id": 89,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the output of: ((true && false) || (!true && false))?",
+      "question": "Given `int x=0; if(false && ++x > 0)`: What is x after execution?",
       "choices": [
-        "error",
-        "null",
-        "false",
-        "true"
+        "1",
+        "-1",
+        "0",
+        "Error"
       ],
-      "correct_answer": "false",
-      "explanation": "true && false → false. !true → false. false && false → false. Now false || false → false."
+      "correct_answer": "0",
+      "explanation": "Short-circuiting: Since the first part of AND is false, the second part (`++x`) is NEVER executed. x remains 0."
     },
     "difficulty": "hard"
   },
@@ -1427,15 +1427,15 @@
     "id": 90,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of: (true && false) || (true && true)?",
+      "question": "Which expression evaluates to false?",
       "choices": [
-        "null",
-        "true",
-        "error",
-        "false"
+        "!false",
+        "true || false",
+        "true && true",
+        "!true || false"
       ],
-      "correct_answer": "true",
-      "explanation": "true && false → false. true && true → true. Now false || true → true."
+      "correct_answer": "!true || false",
+      "explanation": "!true is false. false || false is false."
     },
     "difficulty": "hard"
   },
@@ -1443,15 +1443,15 @@
     "id": 91,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What is the correct syntax for an if statement in Java?",
+      "question": "Which is the correct syntax for a standard 'if' statement in Java?",
       "choices": [
-        "if x > 10 { }",
-        "if x > 10 then { }",
-        "if x > 10: { }",
-        "if (x > 10) { }"
+        "if x > 10",
+        "if [x > 10]",
+        "if (x > 10)",
+        "if x > 10 then"
       ],
-      "correct_answer": "if (x > 10) { }",
-      "explanation": "Java requires parentheses around the condition and braces around the code block."
+      "correct_answer": "if (x > 10)",
+      "explanation": "Java requires the condition of an 'if' statement to be enclosed in parentheses ()."
     },
     "difficulty": "easy"
   },
@@ -1459,15 +1459,15 @@
     "id": 92,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What will be the output of this code?\nint x = 5;\nif (x < 10) {\n    System.out.println(\"Small\");\n}",
+      "question": "What output is produced by: `if (true) System.out.print(\"A\"); else System.out.print(\"B\");`?",
       "choices": [
-        "Nothing",
-        "5",
-        "Small",
-        "Error"
+        "A",
+        "B",
+        "AB",
+        "Nothing"
       ],
-      "correct_answer": "Small",
-      "explanation": "Since 5 is less than 10, the if condition is true, so 'Small' is printed."
+      "correct_answer": "A",
+      "explanation": "Since the condition is explicitly `true`, the first block executes and prints 'A'."
     },
     "difficulty": "easy"
   },
@@ -1475,15 +1475,15 @@
     "id": 93,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "When using if‑else in Java, what keyword specifies the alternative block?",
+      "question": "When does the code inside an `else` block execute?",
       "choices": [
-        "fallback",
-        "elif",
-        "otherwise",
-        "else"
+        "When the condition is true",
+        "Always",
+        "Never",
+        "When the condition is false"
       ],
-      "correct_answer": "else",
-      "explanation": "Java uses else for the alternative path if the if condition is false."
+      "correct_answer": "When the condition is false",
+      "explanation": "The `else` block acts as a fallback and only runs if the corresponding `if` condition evaluates to false."
     },
     "difficulty": "easy"
   },
@@ -1491,15 +1491,15 @@
     "id": 94,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "Which best describes the purpose of an if statement?",
+      "question": "To execute multiple statements within an `if` block, what must enclose them?",
       "choices": [
-        "It repeats code",
-        "It defines a class",
-        "It prints variables",
-        "It checks a condition and executes code if true"
+        "Parentheses ()",
+        "Curly braces {}",
+        "Square brackets []",
+        "Nothing"
       ],
-      "correct_answer": "It checks a condition and executes code if true",
-      "explanation": "An if statement only runs its block if the condition evaluates to true."
+      "correct_answer": "Curly braces {}",
+      "explanation": "Curly braces {} are required to group multiple statements into a single code block."
     },
     "difficulty": "easy"
   },
@@ -1507,15 +1507,15 @@
     "id": 95,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What is the output of:\nint a = 7;\nif (a % 2 == 0)\n    System.out.println(\"Even\");\nelse\n    System.out.println(\"Odd\");",
+      "question": "Which keyword allows you to check a second condition if the first one is false?",
       "choices": [
-        "Even",
-        "Nothing",
-        "Error",
-        "Odd"
+        "else",
+        "if else",
+        "then",
+        "else if"
       ],
-      "correct_answer": "Odd",
-      "explanation": "7 is not divisible evenly by 2, so a % 2 == 0 is false, thus 'Odd' is printed."
+      "correct_answer": "else if",
+      "explanation": "The `else if` structure allows for checking a new condition sequentially after the previous `if` failed."
     },
     "difficulty": "easy"
   },
@@ -1523,15 +1523,15 @@
     "id": 96,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What happens if the if condition is false and no else is provided?",
+      "question": "What is the result of: `int x=5; if(x=10) System.out.print(\"Hi\");`?",
       "choices": [
-        "Nothing happens",
-        "Java throws an error",
-        "The program crashes",
-        "Java automatically adds an else"
+        "Compilation Error",
+        "Hi",
+        "Nothing",
+        "10"
       ],
-      "correct_answer": "Nothing happens",
-      "explanation": "The program simply skips the if block and moves on; no error occurs."
+      "correct_answer": "Compilation Error",
+      "explanation": "`x=10` is an assignment, which returns an int (10). An `if` statement requires a boolean. This causes a type mismatch error."
     },
     "difficulty": "medium"
   },
@@ -1539,15 +1539,15 @@
     "id": 97,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "Which code properly nests if‑else statements?",
+      "question": "In a chain of `if-else if-else` statements, how many blocks can be executed?",
       "choices": [
-        "if (x > 0)\n    if x < 10\n        print(\"Between\");",
-        "if (x > 0)\n    else if (x < 10)\n        System.out.println(\"Between\");",
-        "if x > 0 then\n    if x < 10\n        print(\"Between\");",
-        "if (x > 0)\n    if (x < 10)\n        System.out.println(\"Between 1 and 9\");\n    else\n        System.out.println(\"10 or more\");"
+        "All of them",
+        "Exactly two",
+        "At most one",
+        "At least one"
       ],
-      "correct_answer": "if (x > 0)\n    if (x < 10)\n        System.out.println(\"Between 1 and 9\");\n    else\n        System.out.println(\"10 or more\");",
-      "explanation": "Java allows nested `if` blocks; the inner `else` corresponds to the second `if`."
+      "correct_answer": "At most one",
+      "explanation": "Java executes the first block where the condition is true and skips the rest. If none are true, the `else` (if present) runs."
     },
     "difficulty": "medium"
   },
@@ -1555,15 +1555,15 @@
     "id": 98,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "Which is true about an if‑else ladder?",
+      "question": "What is the output? `int a=1; if(a>0) if(a>5) print(\"Big\"); else print(\"Small\");`",
       "choices": [
-        "All blocks may execute",
-        "It does not allow comparisons",
-        "It always runs the last block",
-        "Only one block executes"
+        "Big",
+        "Small",
+        "Nothing",
+        "Error"
       ],
-      "correct_answer": "Only one block executes",
-      "explanation": "In an if‑else chain, exactly one branch is chosen—the first true one."
+      "correct_answer": "Small",
+      "explanation": "The `else` belongs to the nearest `if` (`if(a>5)`). Since 1>0 is true, we check 1>5 (false), so the `else` runs, printing 'Small'."
     },
     "difficulty": "medium"
   },
@@ -1571,15 +1571,15 @@
     "id": 99,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "Identify the output:\nint x = 3;\nif (x > 5)\n    System.out.println(\"Greater\");\nelse if (x == 3)\n    System.out.println(\"Equal\");\nelse\n    System.out.println(\"Less\");",
+      "question": "Which operator is commonly used inside `if` statements to check multiple conditions at once?",
       "choices": [
-        "No output",
-        "Equal",
-        "Greater",
-        "Less"
+        "&&",
+        "+",
+        "=",
+        "++"
       ],
-      "correct_answer": "Equal",
-      "explanation": "Since x equals 3, the else if block is true, so 'Equal' prints."
+      "correct_answer": "&&",
+      "explanation": "Logical operators like `&&` (AND) and `||` (OR) are used to combine boolean expressions inside conditions."
     },
     "difficulty": "medium"
   },
@@ -1587,15 +1587,15 @@
     "id": 100,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What is the main issue here?\nif (x = 5) {\n    System.out.println(\"Five\");\n}",
+      "question": "What happens here: `if (false); { System.out.print(\"Hello\"); }`?",
       "choices": [
-        "No brackets",
-        "Missing semicolon",
-        "Nothing wrong",
-        "= should be =="
+        "Prints Nothing",
+        "Compilation Error",
+        "Runtime Error",
+        "Prints Hello"
       ],
-      "correct_answer": "= should be ==",
-      "explanation": "= is for assignment, not comparison. You must use == to compare x with 5."
+      "correct_answer": "Prints Hello",
+      "explanation": "The semicolon after `if (false)` terminates the if statement immediately. The block `{...}` following it is treated as separate code and runs normally."
     },
     "difficulty": "medium"
   },
@@ -1603,15 +1603,15 @@
     "id": 101,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What is the output?\nint a = 4, b = 2;\nif (a > b)\n    if (a < 10)\n        System.out.println(\"Valid\");\n    else\n        System.out.println(\"Too High\");\nelse\n    System.out.println(\"Invalid\");",
+      "question": "Which structure is best for checking a single variable against many specific constant values?",
       "choices": [
-        "Error",
-        "Too High",
-        "Valid",
-        "Invalid"
+        "if-else",
+        "switch",
+        "while",
+        "for"
       ],
-      "correct_answer": "Valid",
-      "explanation": "a > b is true and a < 10 is also true, so 'Valid' prints."
+      "correct_answer": "switch",
+      "explanation": "The `switch` statement is optimized for selecting one of many code blocks based on the value of a single variable."
     },
     "difficulty": "hard"
   },
@@ -1619,15 +1619,15 @@
     "id": 102,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "Which code snippet demonstrates a common logic error despite correct syntax?",
+      "question": "What applies to the variable `y` declared here: `if(x>0) { int y=5; }`?",
       "choices": [
-        "if (score > 90) {\n    System.out.println(\"Excellent\");\n}",
-        "if (score > 90);\n    System.out.println(\"Excellent\");",
-        "if (score > 90)\n    System.out.println(\"Excellent\");",
-        "if (score > 90)\n    System.out.println(\"Excellent\");\nelse\n    System.out.println(\"Good\");"
+        "It is available in the else block",
+        "It is global",
+        "It is only available inside the if curly braces",
+        "It is available after the if block"
       ],
-      "correct_answer": "if (score > 90);\n    System.out.println(\"Excellent\");",
-      "explanation": "The semicolon ends the if block, so 'Excellent' always prints, regardless of the score."
+      "correct_answer": "It is only available inside the if curly braces",
+      "explanation": "Variables declared inside a block `{}` have block scope and cannot be accessed outside of it."
     },
     "difficulty": "hard"
   },
@@ -1635,15 +1635,15 @@
     "id": 103,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "How many times will \"Hi\" print?\nint x = 7;\nif (x > 5)\n    if (x < 10)\n        System.out.println(\"Hi\");\n    else\n        System.out.println(\"Bye\");",
+      "question": "Given `boolean b = false; if (b = true) print(\"True\"); else print(\"False\");` What prints?",
       "choices": [
-        "1",
-        "0",
-        "Infinite",
-        "2"
+        "True",
+        "False",
+        "Compilation Error",
+        "Nothing"
       ],
-      "correct_answer": "1",
-      "explanation": "Both conditions are true (x is 7), so 'Hi' prints once."
+      "correct_answer": "True",
+      "explanation": "`b = true` is an assignment, not a comparison. It assigns true to b, and the expression evaluates to `true`, so the if block executes."
     },
     "difficulty": "hard"
   },
@@ -1651,15 +1651,15 @@
     "id": 104,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "Which of the following if-else structures ensures both conditions must be true?",
+      "question": "What is a 'nested' if statement?",
       "choices": [
-        "if (a > 0) || (b > 0)\n    System.out.println(\"Both positive\");",
-        "if (a > 0)\n    if (b > 0)\n        System.out.println(\"Both positive\");",
-        "if (a && b)\n    System.out.println(\"Both positive\");",
-        "if (a > 0 && b > 0)\n    System.out.println(\"Both positive\");"
+        "An if statement with multiple conditions",
+        "An if statement with no braces",
+        "An if statement followed by an else",
+        "An if statement inside another if statement"
       ],
-      "correct_answer": "if (a > 0 && b > 0)\n    System.out.println(\"Both positive\");",
-      "explanation": "The '&&' operator ensures both 'a > 0' and 'b > 0' must hold true for the print statement to run."
+      "correct_answer": "An if statement inside another if statement",
+      "explanation": "Nesting allows for hierarchical decision making by placing one control structure inside the body of another."
     },
     "difficulty": "hard"
   },
@@ -1667,15 +1667,15 @@
     "id": 105,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What will this output?\nint x = 3;\nif (x > 1)\n    if (x < 4)\n        if (x == 3)\n            System.out.println(\"Matched\");\n        else\n            System.out.println(\"No Match\");",
+      "question": "Is it possible to have an `if` statement without an `else`?",
       "choices": [
-        "No Match",
-        "Error",
-        "Nothing",
-        "Matched"
+        "No, it causes an error",
+        "Yes, perfectly valid",
+        "Only if the condition is true",
+        "Only if braces are used"
       ],
-      "correct_answer": "Matched",
-      "explanation": "All nested conditions evaluate true, so it prints 'Matched'."
+      "correct_answer": "Yes, perfectly valid",
+      "explanation": "The `else` block is optional. An `if` statement can stand alone to execute code only when the condition is true."
     },
     "difficulty": "hard"
   },
@@ -1683,15 +1683,15 @@
     "id": 106,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "Main difference between while and do‑while?",
+      "question": "Which loop checks the condition *before* executing the body?",
       "choices": [
-        "do‑while not used in Java",
-        "while runs at least once",
-        "do‑while runs at least once, while may not",
-        "Both same"
+        "do-while",
+        "repeat-until",
+        "while",
+        "switch"
       ],
-      "correct_answer": "do‑while runs at least once, while may not",
-      "explanation": "A do‑while loop always executes the body at least once before checking the condition."
+      "correct_answer": "while",
+      "explanation": "The `while` loop is a pre-test loop; it evaluates the condition before running the code block."
     },
     "difficulty": "easy"
   },
@@ -1699,15 +1699,15 @@
     "id": 107,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is the output of this code?\nint x = 0;\nwhile (x < 3) {\n    System.out.print(x);\n    x++;\n}",
+      "question": "Which loop guarantees the body executes at least once?",
       "choices": [
-        "01",
-        "123",
-        "012",
-        "0123"
+        "for",
+        "if",
+        "while",
+        "do-while"
       ],
-      "correct_answer": "012",
-      "explanation": "The loop prints 0, increments to 1, prints 1, then prints 2, and stops when x is 3."
+      "correct_answer": "do-while",
+      "explanation": "The `do-while` loop is a post-test loop; it runs the body first, then checks the condition."
     },
     "difficulty": "easy"
   },
@@ -1715,15 +1715,15 @@
     "id": 108,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "Which of the following is the correct syntax of a do-while loop?",
+      "question": "What is required at the end of a `do-while` loop?",
       "choices": [
-        "do while (condition) {\n    // code\n}",
-        "do {\n    // code\n}\nwhile(condition);",
-        "do {\n    // code\n} while (condition)",
-        "do (condition) {\n    // code\n};"
+        "Semicolon (;)",
+        "Colon (:)",
+        "Comma (,)",
+        "Period (.)"
       ],
-      "correct_answer": "do {\n    // code\n}\nwhile(condition);",
-      "explanation": "Java requires `do { } while (condition);` with a semicolon at the end."
+      "correct_answer": "Semicolon (;)",
+      "explanation": "Syntax rule: `do { ... } while (condition);` must end with a semicolon."
     },
     "difficulty": "easy"
   },
@@ -1731,15 +1731,15 @@
     "id": 109,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is a possible risk when using while or do-while loops?",
+      "question": "What happens if the condition in a `while` loop is initially false?",
       "choices": [
-        "Variable scope mismatch",
-        "Infinite loop",
-        "Compilation error",
-        "Array index error"
+        "The loop runs once",
+        "The loop body never executes",
+        "It enters an infinite loop",
+        "The program crashes"
       ],
-      "correct_answer": "Infinite loop",
-      "explanation": "If the loop condition never becomes false, it runs indefinitely—and that's usually bad."
+      "correct_answer": "The loop body never executes",
+      "explanation": "Because `while` checks the condition first, if it is false, the code inside is skipped entirely."
     },
     "difficulty": "easy"
   },
@@ -1747,15 +1747,15 @@
     "id": 110,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "Which loop ensures the body is executed at least once?",
+      "question": "Which keyword stops the current iteration and jumps to the loop condition check?",
       "choices": [
-        "while",
-        "switch",
-        "for",
-        "do‑while"
+        "break",
+        "return",
+        "continue",
+        "exit"
       ],
-      "correct_answer": "do‑while",
-      "explanation": "do‑while always runs the loop body at least once before checking the condition."
+      "correct_answer": "continue",
+      "explanation": "`continue` skips the remainder of the current loop body and jumps to the next iteration/check."
     },
     "difficulty": "easy"
   },
@@ -1763,15 +1763,15 @@
     "id": 111,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is the output?\nint x = 5;\ndo {\n    System.out.print(x);\n    x--;\n} while (x > 2);",
+      "question": "What creates an infinite loop in a `while` statement?",
       "choices": [
-        "54",
-        "543",
-        "5432",
-        "54321"
+        "Using a counter variable",
+        "A condition that is always false",
+        "Nesting loops",
+        "A condition that never becomes false"
       ],
-      "correct_answer": "543",
-      "explanation": "Print 5, decrement to 4, print 4, decrement to 3, print 3; stops when x becomes 2."
+      "correct_answer": "A condition that never becomes false",
+      "explanation": "If the loop condition remains true (e.g., the update step is missing), the loop will run forever."
     },
     "difficulty": "medium"
   },
@@ -1779,15 +1779,15 @@
     "id": 112,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What's wrong here?\nint i = 0;\nwhile (i < 5)\n    System.out.println(i);\n    i++;",
+      "question": "What is the output? `int i=0; while(i<3) { System.out.print(i); i++; }`",
       "choices": [
-        "Nothing",
-        "i++ is outside loop",
-        "Compilation error",
-        "Infinite loop"
+        "012",
+        "0123",
+        "123",
+        "01"
       ],
-      "correct_answer": "i++ is outside loop",
-      "explanation": "Only the first line after while is inside the loop. i++ runs after the loop ends, causing infinite printing."
+      "correct_answer": "012",
+      "explanation": "It prints 0, increments to 1. Prints 1, increments to 2. Prints 2, increments to 3. Stops because 3 is not < 3."
     },
     "difficulty": "medium"
   },
@@ -1795,15 +1795,15 @@
     "id": 113,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "Identify the correct while loop to print numbers 1 to 5:",
+      "question": "In a `do-while` loop, when is the condition evaluated?",
       "choices": [
-        "int i = 0;\nwhile (i < 5)\n    System.out.println(++i);",
-        "int i = 1;\nwhile (i <= 5)\n    System.out.println(i++);",
-        "Both A and B",
-        "Neither"
+        "Before the loop starts",
+        "Only if the body fails",
+        "After the loop body executes",
+        "In the middle of the loop"
       ],
-      "correct_answer": "Both A and B",
-      "explanation": "Both increment inside the loop make them print 1 through 5."
+      "correct_answer": "After the loop body executes",
+      "explanation": "This is the defining feature of `do-while`; the code runs, then the condition is checked."
     },
     "difficulty": "medium"
   },
@@ -1811,15 +1811,15 @@
     "id": 114,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is the output?\nint count = 1;\ndo {\n    if (count == 3)\n        break;\n    System.out.print(count);\n    count++;\n} while (count <= 5);",
+      "question": "What keyword immediately terminates the entire loop?",
       "choices": [
-        "12",
-        "1",
-        "123",
-        "12345"
+        "stop",
+        "break",
+        "exit",
+        "end"
       ],
-      "correct_answer": "12",
-      "explanation": "The loop breaks when count is 3, so it only prints 1 and 2."
+      "correct_answer": "break",
+      "explanation": "The `break` statement exits the loop immediately, resuming execution after the loop's closing brace."
     },
     "difficulty": "medium"
   },
@@ -1827,15 +1827,15 @@
     "id": 115,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "In which scenario would do-while be preferable over while?",
+      "question": "Consider `int x=5; do{ x--; } while(x>2);`. What is x after the loop?",
       "choices": [
-        "Using recursion",
-        "Infinite loop",
-        "When you want to test before executing",
-        "When condition might be false"
+        "3",
+        "1",
+        "0",
+        "2"
       ],
-      "correct_answer": "When condition might be false",
-      "explanation": "Use do‑while when you need the loop body to run at least once, even if the condition is false on first check."
+      "correct_answer": "2",
+      "explanation": "Loops: 5->4 (true), 4->3 (true), 3->2 (false). Loop stops when x is 2."
     },
     "difficulty": "medium"
   },
@@ -1843,15 +1843,15 @@
     "id": 116,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is the output of the following code?\nint x = 0;\ndo {\n    x++;\n    if (x == 3) continue;\n    System.out.print(x);\n} while (x < 5);",
+      "question": "Why is `while(true) { ... }` sometimes used?",
       "choices": [
-        "1245",
-        "1345",
-        "12345",
-        "12456"
+        "To create a loop that runs until explicitly broken",
+        "It is a syntax error",
+        "To run the loop exactly once",
+        "To save memory"
       ],
-      "correct_answer": "1245",
-      "explanation": "x increments from 1 to 5. When x is 3, continue skips the print, so prints 1,2,4,5."
+      "correct_answer": "To create a loop that runs until explicitly broken",
+      "explanation": "This creates an intentional infinite loop, often controlled internally by a `break` statement based on dynamic conditions."
     },
     "difficulty": "hard"
   },
@@ -1859,15 +1859,15 @@
     "id": 117,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "How many times will this loop execute?\nint i = 1;\nwhile (i <= 10)\n    i *= 2;",
+      "question": "What happens if you forget the update step (e.g., `i++`) inside a `while` loop?",
       "choices": [
-        "10",
-        "Infinite",
-        "4",
-        "5"
+        "The compiler adds it automatically",
+        "The loop runs once",
+        "Infinite loop occurs",
+        "The loop never runs"
       ],
-      "correct_answer": "5",
-      "explanation": "i evolves: 1→2→4→8→16. The loop stops after i=16, so five steps."
+      "correct_answer": "Infinite loop occurs",
+      "explanation": "Without updating the control variable, the condition likely remains true forever, causing an infinite loop."
     },
     "difficulty": "hard"
   },
@@ -1875,15 +1875,15 @@
     "id": 118,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is the output?\nint x = 1;\ndo {\n    System.out.print(x * 2 + \" \");\n    x++;\n} while (x <= 3);",
+      "question": "What is printed? `int i=0; while(i++ < 2) System.out.print(i);`",
       "choices": [
-        "2 4",
-        "2 6",
-        "2 4 6",
-        "1 2 3"
+        "01",
+        "12",
+        "012",
+        "123"
       ],
-      "correct_answer": "2 4 6",
-      "explanation": "x=1 prints 2, x=2 prints 4, x=3 prints 6, then stops."
+      "correct_answer": "12",
+      "explanation": "`i++` increments AFTER comparison. 1) 0<2 (true, i becomes 1), print 1. 2) 1<2 (true, i becomes 2), print 2. 3) 2<2 (false, i becomes 3). Stop."
     },
     "difficulty": "hard"
   },
@@ -1891,15 +1891,15 @@
     "id": 119,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "Which of the following causes an infinite loop?",
+      "question": "Can a `do-while` loop be replaced by a `while` loop?",
       "choices": [
-        "int x = 1;\ndo { x++; } while (x < 0);",
-        "int x = 0;\nwhile (x == 0) { /* no increment */ }",
-        "int x = 2;\nwhile (x < 10) { x += 2; }",
-        "int x = 1;\nwhile (x != 5) { x += 2; }"
+        "No, never",
+        "Yes, they are identical",
+        "Only if the loop is empty",
+        "Yes, but logic may need adjustment"
       ],
-      "correct_answer": "int x = 0;\nwhile (x == 0) { /* no increment */ }",
-      "explanation": "The loop condition never changes, so it never ends—true infinite loop."
+      "correct_answer": "Yes, but logic may need adjustment",
+      "explanation": "Any loop can be rewritten as another type, but a `while` loop might need code duplicated before the loop to match the `do-while`'s 'run-once' guarantee."
     },
     "difficulty": "hard"
   },
@@ -1907,15 +1907,15 @@
     "id": 120,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is printed?\nint i = 1;\ndo {\n    if (i % 2 == 0)\n        System.out.print(i + \" \");\n    i++;\n} while (i <= 5);",
+      "question": "If `int a=0; do{ System.out.print(a); a++; } while(a<0);`, what is output?",
       "choices": [
-        "2 4 6",
-        "1 2 3 4 5",
-        "2 4",
-        "1 3 5"
+        "0",
+        "Nothing",
+        "Error",
+        "Infinite"
       ],
-      "correct_answer": "2 4",
-      "explanation": "It prints only even numbers (i=2 and i=4) inside the do‑while loop."
+      "correct_answer": "0",
+      "explanation": "The body executes once before checking. Prints 0, increments a to 1. Check 1<0 (false). Loop ends."
     },
     "difficulty": "hard"
   },
@@ -1923,15 +1923,15 @@
     "id": 121,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "Which of the following is the correct syntax of a for loop?",
+      "question": "What are the three parts of a standard `for` loop header?",
       "choices": [
-        "for int i = 0 to 5 {\n    System.out.println(i);\n}",
-        "for (int i = 0; i < 5; i++) {\n    System.out.println(i);\n}",
-        "for i = 0; i < 5; i++ {\n    System.out.println(i);\n}",
-        "for (i = 0; i < 5; i++) {\n    print(i);\n}"
+        "Start, Stop, Pause",
+        "Initialization, Condition, Update",
+        "Check, Do, Return",
+        "Declaration, Assignment, Print"
       ],
-      "correct_answer": "for (int i = 0; i < 5; i++) {\n    System.out.println(i);\n}",
-      "explanation": "This is the proper Java syntax for a for loop: for (initialization; condition; update). Option A follows this format and uses Java's System.out.println() correctly."
+      "correct_answer": "Initialization, Condition, Update",
+      "explanation": "The syntax is `for (init; condition; update)`."
     },
     "difficulty": "easy"
   },
@@ -1939,15 +1939,15 @@
     "id": 122,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "How many times will the following loop run?\nfor (int i = 0; i < 3; i++) {\n    System.out.print(i);\n}",
+      "question": "How many times does `for(int i=0; i<5; i++)` execute?",
       "choices": [
-        "2",
-        "Infinite",
         "4",
-        "3"
+        "6",
+        "5",
+        "0"
       ],
-      "correct_answer": "3",
-      "explanation": "i starts at 0, and loop runs while i < 3. It executes for i = 0, 1, 2 — total of 3 times."
+      "correct_answer": "5",
+      "explanation": "It runs for i = 0, 1, 2, 3, 4. That is exactly 5 iterations."
     },
     "difficulty": "easy"
   },
@@ -1955,15 +1955,15 @@
     "id": 123,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What is the output of this loop?\nfor (int i = 1; i <= 3; i++) {\n    System.out.print(i + \" \");\n}",
+      "question": "Which loop is best when you know the exact number of iterations in advance?",
       "choices": [
-        "1 2 3",
-        "0 1 2",
-        "1 2",
-        "2 3 4"
+        "while",
+        "do-while",
+        "if-else",
+        "for"
       ],
-      "correct_answer": "1 2 3",
-      "explanation": "Loop prints i from 1 to 3 inclusive. So output is 1 2 3."
+      "correct_answer": "for",
+      "explanation": "The `for` loop is designed for definite iteration (fixed number of times)."
     },
     "difficulty": "easy"
   },
@@ -1971,15 +1971,15 @@
     "id": 124,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What is the value of i after the loop ends?\nint i;\nfor (i = 0; i < 4; i++) {\n    // loop body\n}\nSystem.out.println(i);",
+      "question": "What allows the 'Enhanced For-Loop' (for-each) to traverse an array?",
       "choices": [
-        "4",
-        "Error",
-        "3",
-        "0"
+        "It uses a manual counter",
+        "It automatically handles the index and iteration",
+        "It converts array to int",
+        "It runs backwards"
       ],
-      "correct_answer": "4",
-      "explanation": "After the loop ends, i has already been incremented beyond 3. So it becomes 4."
+      "correct_answer": "It automatically handles the index and iteration",
+      "explanation": "Syntax `for(Type var : array)` simplifies iteration by hiding the index management."
     },
     "difficulty": "easy"
   },
@@ -1987,15 +1987,15 @@
     "id": 125,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "Which keyword is used to skip the current iteration of a for loop?",
+      "question": "What is the correct syntax to decrement a loop counter?",
       "choices": [
-        "skip",
-        "break",
-        "exit",
-        "continue"
+        "i--",
+        "i = i * 2",
+        "i++",
+        "i + 1"
       ],
-      "correct_answer": "continue",
-      "explanation": "continue skips the current iteration and jumps to the next one in the loop. It's the correct choice."
+      "correct_answer": "i--",
+      "explanation": "`i--` is the decrement operator, reducing the value of i by 1 in each step."
     },
     "difficulty": "easy"
   },
@@ -2003,15 +2003,15 @@
     "id": 126,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What is printed?\n\nfor (int i = 5; i > 0; i -= 2) {\n    System.out.print(i + \" \");\n}",
+      "question": "What is output? `for(int i=0; i<10; i+=2) print(i + \" \");`",
       "choices": [
-        "5 2",
-        "5 3 2",
-        "5 3 1",
-        "5 4 3"
+        "0 1 2 3 4",
+        "0 2 4 6 8 10",
+        "0 2 4 6 8",
+        "2 4 6 8"
       ],
-      "correct_answer": "5 3 1",
-      "explanation": "i goes from 5 → 3 → 1. Each step decreases by 2. All are printed."
+      "correct_answer": "0 2 4 6 8",
+      "explanation": "i starts at 0 and increases by 2 each time. 10 is not less than 10, so the loop stops before printing 10."
     },
     "difficulty": "medium"
   },
@@ -2019,15 +2019,15 @@
     "id": 127,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "Which of the following is a valid infinite loop?",
+      "question": "What does `for(;;)` create?",
       "choices": [
-        "All of the above",
-        "for (;;) {\n    // code\n}",
-        "for (int i = 0; i < 10; i--) {\n    // code\n}",
-        "for (int i = 0; i < 10;) {\n    i--;\n}"
+        "A loop that runs once",
+        "A syntax error",
+        "An empty loop",
+        "An infinite loop"
       ],
-      "correct_answer": "All of the above",
-      "explanation": "A is classic infinite loop.\nB and C decrease i or keep condition always true. All of them never reach termination. Hence, all valid."
+      "correct_answer": "An infinite loop",
+      "explanation": "In Java, missing components in a for loop header defaults to an infinite loop."
     },
     "difficulty": "medium"
   },
@@ -2035,15 +2035,15 @@
     "id": 128,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What happens here?\n\nfor (int i = 0; i < 5; i++) {\n    if (i == 3)\n        break;\n    System.out.print(i);\n}",
+      "question": "Which is a valid Enhanced For-Loop for `int[] nums`?",
       "choices": [
-        "1234",
-        "012",
-        "01234",
-        "0123"
+        "for (nums : int n)",
+        "for (int n : nums)",
+        "for (int i=0 : nums)",
+        "foreach (n in nums)"
       ],
-      "correct_answer": "012",
-      "explanation": "Loop prints until i == 3, then hits break and exits. So it prints 0, 1, 2."
+      "correct_answer": "for (int n : nums)",
+      "explanation": "The syntax is `for (DataType item : collection)`."
     },
     "difficulty": "medium"
   },
@@ -2051,15 +2051,15 @@
     "id": 129,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What is printed?\n\nfor (int i = 1; i <= 5; i++) {\n    if (i % 2 == 0)\n        continue;\n    System.out.print(i);\n}",
+      "question": "What happens if the loop condition is false at the start?",
       "choices": [
-        "12345",
-        "24",
-        "135",
-        "12"
+        "Runs zero times",
+        "Infinite loop",
+        "Errors",
+        "Runs once"
       ],
-      "correct_answer": "135",
-      "explanation": "i % 2 == 0 skips even numbers. So it prints only odd: 1, 3, 5."
+      "correct_answer": "Runs zero times",
+      "explanation": "Like a while loop, the for loop checks the condition before the first iteration. If false, it skips the body."
     },
     "difficulty": "medium"
   },
@@ -2067,15 +2067,15 @@
     "id": 130,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "How many times will this print \"Hello\"?\n\nfor (int i = 1; i < 10; i *= 2) {\n    System.out.println(\"Hello\");\n}",
+      "question": "Output of: `for(int i=1; i<=3; i++) { for(int j=1; j<=2; j++) print(\"*\"); }`?",
       "choices": [
-        "Infinite",
-        "5",
-        "4",
-        "3"
+        "*****",
+        "***",
+        "******",
+        "**"
       ],
-      "correct_answer": "4",
-      "explanation": "i = 1 → 2 → 4 → 8 → 16 → stops at 16. That's 4 iterations."
+      "correct_answer": "******",
+      "explanation": "Outer loop runs 3 times. Inner loop runs 2 times per outer iteration. 3 * 2 = 6 stars."
     },
     "difficulty": "medium"
   },
@@ -2083,15 +2083,15 @@
     "id": 131,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What will be printed?\n\nfor (int i = 0, j = 5; i < j; i++, j--) {\n    System.out.print(i + j + \" \");\n}",
+      "question": "Can you declare multiple variables in the initialization part of a for loop?",
       "choices": [
-        "5 5",
-        "5 5 5",
-        "5 6 7",
-        "5 6"
+        "No",
+        "Only in enhanced loops",
+        "Yes, any types",
+        "Yes, if they are the same type"
       ],
-      "correct_answer": "5 5",
-      "explanation": "1st: i = 0, j = 5 → 0 + 5 = 5\n2nd: i = 1, j = 4 → 1 + 4 = 5\n3rd: i = 2, j = 3 → 2 + 3 = 5, but i not < j after this\nSo output: 5 5."
+      "correct_answer": "Yes, if they are the same type",
+      "explanation": "You can write `for(int i=0, j=10; ...)` as long as both are the same type (int)."
     },
     "difficulty": "hard"
   },
@@ -2099,15 +2099,15 @@
     "id": 132,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "Which loop prints 1 to 10 in reverse?",
+      "question": "How do you skip the current iteration but continue the loop?",
       "choices": [
-        "for (int i = 10; i <= 1; i++) {\n    System.out.print(i);\n}",
-        "for (int i = 1; i <= 10; i--) {\n    System.out.print(i);\n}",
-        "for (int i = 0; i <= 10; i--) {\n    System.out.print(i);\n}",
-        "for (int i = 10; i >= 1; i--) {\n    System.out.print(i + \" \");\n}"
+        "skip",
+        "continue",
+        "break",
+        "next"
       ],
-      "correct_answer": "for (int i = 10; i >= 1; i--) {\n    System.out.print(i + \" \");\n}",
-      "explanation": "Decrements from 10 to 1 using i--. Other options either don't stop or go wrong direction."
+      "correct_answer": "continue",
+      "explanation": "`continue` jumps to the update step of the for loop, skipping the rest of the body for the current iteration."
     },
     "difficulty": "hard"
   },
@@ -2115,15 +2115,15 @@
     "id": 133,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What's the output?\n\nint sum = 0;\nfor (int i = 1; i <= 5; i++) {\n    sum += i;\n}\nSystem.out.println(sum);",
+      "question": "Is the 'Update' part of the for loop required to be an increment?",
       "choices": [
-        "10",
-        "20",
-        "5",
-        "15"
+        "No, it can be any statement (decrement, multiply, etc.)",
+        "No, it must be --",
+        "No, it cannot be empty",
+        "Yes, always ++"
       ],
-      "correct_answer": "15",
-      "explanation": "Sum of 1+2+3+4+5 = 15."
+      "correct_answer": "No, it can be any statement (decrement, multiply, etc.)",
+      "explanation": "The update step can be any valid expression, such as `i--`, `i*=2`, or even a method call."
     },
     "difficulty": "hard"
   },
@@ -2131,15 +2131,15 @@
     "id": 134,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "Identify the error:\n\nfor (int i = 0; i < 10; i++) {\n    int x = 5;\n}\nSystem.out.println(x);",
+      "question": "What is the scope of `i` in `for(int i=0; i<5; i++)`?",
       "choices": [
-        "x is out of scope",
-        "x not initialized",
-        "Syntax error",
-        "No error"
+        "The entire method",
+        "Global",
+        "Only inside the loop body and header",
+        "Available after the loop"
       ],
-      "correct_answer": "x is out of scope",
-      "explanation": "Variable x is declared inside the loop. So it's not visible (out of scope) outside the loop when System.out.println(x); is called."
+      "correct_answer": "Only inside the loop body and header",
+      "explanation": "Variables declared in the initialization part of a for loop are local to that loop structure."
     },
     "difficulty": "hard"
   },
@@ -2147,15 +2147,15 @@
     "id": 135,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What's printed?\n\nfor (int i = 1; i < 3; i++) {\n    for (int j = 1; j < 3; j++) {\n        System.out.print(i + \"\" + j + \" \");\n    }\n}",
+      "question": "Limitations of the Enhanced For-Loop (for-each)?",
       "choices": [
-        "11 12 21 22",
-        "12 11 22 21",
-        "12 22 11 21",
-        "11 21 12 22"
+        "Always infinite",
+        "Slower than standard loop",
+        "Cannot work with Arrays",
+        "Cannot access index or modify the array structure"
       ],
-      "correct_answer": "11 12 21 22",
-      "explanation": "Nested loops produce all combinations of i and j: → 11, 12, 21, 22"
+      "correct_answer": "Cannot access index or modify the array structure",
+      "explanation": "The enhanced loop abstracts away the index, meaning you cannot read/write based on position or remove elements easily."
     },
     "difficulty": "hard"
   },
@@ -2163,14 +2163,14 @@
     "id": 136,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is the primary purpose of declaring a variable in Java?",
+      "question": "What is the primary function of a variable in Java?",
       "choices": [
-        "To execute code",
-        "To create a named storage location in memory",
-        "To import libraries",
-        "To define a class"
+        "To perform calculations",
+        "To compile code",
+        "To store data in memory",
+        "To print text"
       ],
-      "correct_answer": "To create a named storage location in memory",
+      "correct_answer": "To store data in memory",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -2179,14 +2179,14 @@
     "id": 137,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which naming convention should be used for variable names in Java?",
+      "question": "Where is a local variable accessible?",
       "choices": [
-        "snake_case",
-        "PascalCase",
-        "camelCase",
-        "kebab-case"
+        "Anywhere in the class",
+        "Only within the method/block where it is declared",
+        "Globally",
+        "In other classes"
       ],
-      "correct_answer": "camelCase",
+      "correct_answer": "Only within the method/block where it is declared",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2195,14 +2195,14 @@
     "id": 138,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What happens when you try to use a local variable before declaring it?",
+      "question": "What happens if you use a local variable before initializing it?",
       "choices": [
-        "It gets a default value",
-        "Runtime error occurs",
-        "Compilation error occurs",
-        "It becomes null"
+        "Compilation Error",
+        "Runtime Error",
+        "It uses a default value",
+        "It prints null"
       ],
-      "correct_answer": "Compilation error occurs",
+      "correct_answer": "Compilation Error",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2211,14 +2211,14 @@
     "id": 139,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which modifier prevents a variable from being reassigned after initialization?",
+      "question": "Which of the following is a valid variable identifier?",
       "choices": [
-        "static",
-        "final",
-        "private",
-        "const"
+        "2total",
+        "class",
+        "total-sum",
+        "$totalSum"
       ],
-      "correct_answer": "final",
+      "correct_answer": "$totalSum",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2227,14 +2227,14 @@
     "id": 140,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is variable shadowing in Java?",
+      "question": "Which keyword makes a variable belong to the class rather than an instance?",
       "choices": [
-        "When a variable is declared twice in the same scope",
-        "When a local variable hides an instance variable with the same name",
-        "When a variable is not initialized",
-        "When a variable goes out of scope"
+        "static",
+        "void",
+        "public",
+        "final"
       ],
-      "correct_answer": "When a local variable hides an instance variable with the same name",
+      "correct_answer": "static",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2243,14 +2243,14 @@
     "id": 141,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which data type would you use to store a single character?",
+      "question": "Which primitive type is best for storing 3.14?",
       "choices": [
-        "String",
         "int",
-        "char",
-        "byte"
+        "long",
+        "boolean",
+        "double"
       ],
-      "correct_answer": "char",
+      "correct_answer": "double",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -2259,14 +2259,14 @@
     "id": 142,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What is the size of a double data type in Java?",
+      "question": "What is the result of `(int) 5.9`?",
       "choices": [
-        "32 bits",
-        "64 bits",
-        "16 bits",
-        "8 bits"
+        "5",
+        "6",
+        "5.9",
+        "Error"
       ],
-      "correct_answer": "64 bits",
+      "correct_answer": "5",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2275,14 +2275,14 @@
     "id": 143,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which primitive types are promoted to int during arithmetic operations?",
+      "question": "What is the size of a `short`?",
       "choices": [
-        "float and double",
-        "byte, short, and char",
-        "long and double",
-        "boolean and char"
+        "8-bit",
+        "32-bit",
+        "16-bit",
+        "64-bit"
       ],
-      "correct_answer": "byte, short, and char",
+      "correct_answer": "16-bit",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2291,14 +2291,14 @@
     "id": 144,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What is the range of values for a byte data type?",
+      "question": "Attempting to store 200 in a byte causes?",
       "choices": [
-        "-127 to 128",
-        "-128 to 127",
-        "0 to 255",
-        "-256 to 255"
+        "Truncation",
+        "Overflow",
+        "Runtime Error",
+        "Compilation Error"
       ],
-      "correct_answer": "-128 to 127",
+      "correct_answer": "Compilation Error",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2307,14 +2307,14 @@
     "id": 145,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "Which primitive type is unsigned in Java?",
+      "question": "What is the range of `byte`?",
       "choices": [
-        "int",
-        "byte",
-        "char",
-        "short"
+        "0 to 255",
+        "-128 to 128",
+        "-128 to 127",
+        "-32768 to 32767"
       ],
-      "correct_answer": "char",
+      "correct_answer": "-128 to 127",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2323,14 +2323,14 @@
     "id": 146,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What is the default value of a String instance variable?",
+      "question": "Which keyword instantiates a new object?",
       "choices": [
-        "empty string",
-        "null",
-        "undefined",
-        "0"
+        "make",
+        "new",
+        "create",
+        "class"
       ],
-      "correct_answer": "null",
+      "correct_answer": "new",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -2339,14 +2339,14 @@
     "id": 147,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Where are non-primitive objects stored in memory?",
+      "question": "What does `s1.equals(s2)` compare?",
       "choices": [
-        "Stack",
-        "Heap",
-        "Register",
-        "Cache"
+        "Memory Address",
+        "Length",
+        "Variable Name",
+        "Text Content"
       ],
-      "correct_answer": "Heap",
+      "correct_answer": "Text Content",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2355,14 +2355,14 @@
     "id": 148,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What does the 'new' keyword do in Java?",
+      "question": "Given `int[] x = {5, 10};`, what is `x[1]`?",
       "choices": [
-        "Creates a primitive variable",
-        "Creates an object in heap memory",
-        "Imports a class",
-        "Declares a method"
+        "10",
+        "5",
+        "0",
+        "null"
       ],
-      "correct_answer": "Creates an object in heap memory",
+      "correct_answer": "10",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2371,14 +2371,14 @@
     "id": 149,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "Why should you use .equals() instead of == for String comparison?",
+      "question": "What happens when modifying a String?",
       "choices": [
-        "== compares content, .equals() compares references",
-        "== compares references, .equals() compares content",
-        "They are identical in functionality",
-        "== only works with primitives"
+        "It creates a new String object",
+        "It changes the original memory",
+        "It deletes the variable",
+        "It throws an error"
       ],
-      "correct_answer": "== compares references, .equals() compares content",
+      "correct_answer": "It creates a new String object",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2387,14 +2387,14 @@
     "id": 150,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What characteristic makes Strings immutable in Java?",
+      "question": "Calling a method on `null` causes?",
       "choices": [
-        "They cannot be declared",
-        "Once created, their values cannot be changed",
-        "They must be initialized immediately",
-        "They can only store numbers"
+        "0",
+        "NullPointerException",
+        "Nothing",
+        "false"
       ],
-      "correct_answer": "Once created, their values cannot be changed",
+      "correct_answer": "NullPointerException",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2403,15 +2403,15 @@
     "id": 151,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the result of 8 % 3?",
+      "question": "Which operator is used to calculate the remainder of a division?",
       "choices": [
-        "2",
-        "3",
-        "2.67",
-        "1"
+        "#",
+        "%",
+        "REM",
+        "/"
       ],
-      "correct_answer": "2",
-      "explanation": ""
+      "correct_answer": "%",
+      "explanation": "The modulus operator (%) returns the remainder of a division operation (e.g., 5 % 2 is 1)."
     },
     "difficulty": "easy"
   },
@@ -2419,15 +2419,15 @@
     "id": 152,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What happens in integer division when the result has a decimal part?",
+      "question": "What is the result of 12 % 4?",
       "choices": [
-        "It rounds to the nearest integer",
-        "It truncates the decimal part",
-        "It converts to double",
-        "It throws an error"
+        "3",
+        "0",
+        "4",
+        "1"
       ],
-      "correct_answer": "It truncates the decimal part",
-      "explanation": ""
+      "correct_answer": "0",
+      "explanation": "12 divides evenly by 4, so the remainder is 0."
     },
     "difficulty": "medium"
   },
@@ -2435,15 +2435,15 @@
     "id": 153,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "Which operation has the highest precedence?",
+      "question": "Evaluate the expression: (5 - 2) * 4",
       "choices": [
-        "Addition (+)",
-        "Multiplication (*)",
-        "Subtraction (-)",
-        "Division (/)"
+        "18",
+        "13",
+        "8",
+        "12"
       ],
-      "correct_answer": "Multiplication (*)",
-      "explanation": ""
+      "correct_answer": "12",
+      "explanation": "Parentheses take precedence. (5 - 2) is 3. Then 3 * 4 is 12."
     },
     "difficulty": "medium"
   },
@@ -2451,15 +2451,15 @@
     "id": 154,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What is the result of (3 + 4) * 2 - 1?",
+      "question": "What is the result of `1 + 2 + \"3\"`?",
       "choices": [
-        "13",
-        "14",
-        "11",
-        "12"
+        "15",
+        "33",
+        "123",
+        "6"
       ],
-      "correct_answer": "13",
-      "explanation": ""
+      "correct_answer": "33",
+      "explanation": "Left-to-right associativity: 1 + 2 = 3. Then 3 + \"3\" performs string concatenation, resulting in \"33\"."
     },
     "difficulty": "hard"
   },
@@ -2467,15 +2467,15 @@
     "id": 155,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "If int x = 15; x %= 4; what is the value of x?",
+      "question": "What is the value of `10 * 10 / 5 + 3 - 1 * 4 / 2`?",
       "choices": [
-        "3",
-        "4",
-        "3.75",
-        "15"
+        "21",
+        "20",
+        "18",
+        "23"
       ],
-      "correct_answer": "3",
-      "explanation": ""
+      "correct_answer": "21",
+      "explanation": "1) 10*10=100. 2) 100/5=20. 3) 1*4=4. 4) 4/2=2. Expression becomes 20 + 3 - 2 = 21."
     },
     "difficulty": "hard"
   },
@@ -2483,15 +2483,15 @@
     "id": 156,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Which operator checks for inequality?",
+      "question": "Which operator checks if two values are equal?",
       "choices": [
-        "!=",
+        "=",
         "==",
-        "<=",
-        ">="
+        "<>",
+        "==="
       ],
-      "correct_answer": "!=",
-      "explanation": ""
+      "correct_answer": "==",
+      "explanation": "The `==` operator is used for equality comparison in Java."
     },
     "difficulty": "easy"
   },
@@ -2499,15 +2499,15 @@
     "id": 157,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What does the expression (5 >= 5) evaluate to?",
+      "question": "If `int a = 5` and `int b = 10`, which is true?",
       "choices": [
-        "false",
-        "true",
-        "error",
-        "null"
+        "a > b",
+        "a >= b",
+        "a == b",
+        "a != b"
       ],
-      "correct_answer": "true",
-      "explanation": ""
+      "correct_answer": "a != b",
+      "explanation": "5 is not equal to 10, so `a != b` is true."
     },
     "difficulty": "medium"
   },
@@ -2515,15 +2515,15 @@
     "id": 158,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Which comparison will return false?",
+      "question": "What is the result of `10 >= 10`?",
       "choices": [
-        "7 > 3",
-        "4 <= 4",
-        "6 != 6",
-        "8 >= 7"
+        "null",
+        "false",
+        "true",
+        "Error"
       ],
-      "correct_answer": "6 != 6",
-      "explanation": ""
+      "correct_answer": "true",
+      "explanation": "`>=` checks for greater than OR equal to. Since 10 equals 10, it is true."
     },
     "difficulty": "medium"
   },
@@ -2531,15 +2531,15 @@
     "id": 159,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What is the result of !(3 < 5)?",
+      "question": "Given `String s1 = new String(\"hi\");` and `String s2 = new String(\"hi\");`, what is `s1 == s2`?",
       "choices": [
         "true",
-        "false",
-        "3",
-        "5"
+        "Error",
+        "null",
+        "false"
       ],
       "correct_answer": "false",
-      "explanation": ""
+      "explanation": "Using `new` creates distinct objects in memory. `==` checks references, which are different here."
     },
     "difficulty": "hard"
   },
@@ -2547,15 +2547,15 @@
     "id": 160,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Given int a = 10, b = 20; what does (a + b) == 30 return?",
+      "question": "Which statement correctly compares the *content* of two Strings `str1` and `str2`?",
       "choices": [
-        "false",
-        "true",
-        "30",
-        "error"
+        "str1 == str2",
+        "str1.compare(str2)",
+        "str1.equals(str2)",
+        "str1 = str2"
       ],
-      "correct_answer": "true",
-      "explanation": ""
+      "correct_answer": "str1.equals(str2)",
+      "explanation": "The `.equals()` method is required to compare the actual text content of String objects."
     },
     "difficulty": "hard"
   },
@@ -2563,15 +2563,15 @@
     "id": 161,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of true && false?",
+      "question": "Which symbol represents the Logical AND operator?",
       "choices": [
-        "true",
-        "false",
-        "null",
-        "error"
+        "&",
+        "AND",
+        "&&",
+        "||"
       ],
-      "correct_answer": "false",
-      "explanation": ""
+      "correct_answer": "&&",
+      "explanation": "The double ampersand (`&&`) is the logical AND operator in Java."
     },
     "difficulty": "easy"
   },
@@ -2579,15 +2579,15 @@
     "id": 162,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "Which logical operator returns true if at least one operand is true?",
+      "question": "Evaluate: `(5 > 3) && (8 > 5)`",
       "choices": [
-        "&&",
-        "||",
-        "!",
-        "=="
+        "false",
+        "true",
+        "0",
+        "1"
       ],
-      "correct_answer": "||",
-      "explanation": ""
+      "correct_answer": "true",
+      "explanation": "5>3 is true. 8>5 is true. true && true is true."
     },
     "difficulty": "medium"
   },
@@ -2595,15 +2595,15 @@
     "id": 163,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What does !false || true evaluate to?",
+      "question": "Evaluate: `(5 > 10) || (10 > 5)`",
       "choices": [
         "false",
-        "true",
         "null",
-        "error"
+        "true",
+        "Error"
       ],
       "correct_answer": "true",
-      "explanation": ""
+      "explanation": "5>10 is false. 10>5 is true. false || true is true."
     },
     "difficulty": "medium"
   },
@@ -2611,15 +2611,15 @@
     "id": 164,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of true && (false || true)?",
+      "question": "If `boolean b = false;`, what is `b || !b`?",
       "choices": [
         "false",
-        "true",
         "null",
-        "error"
+        "Error",
+        "true"
       ],
       "correct_answer": "true",
-      "explanation": ""
+      "explanation": "This is a tautology. If b is false, !b is true. false || true is true."
     },
     "difficulty": "hard"
   },
@@ -2627,15 +2627,15 @@
     "id": 165,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "Which expression is equivalent to !(a && b)?",
+      "question": "What is the result of `true || false && false`?",
       "choices": [
-        "!a && !b",
-        "!a || !b",
-        "a || b",
-        "a && b"
+        "false",
+        "true",
+        "Error",
+        "null"
       ],
-      "correct_answer": "!a || !b",
-      "explanation": ""
+      "correct_answer": "true",
+      "explanation": "AND (&&) happens before OR (||). false && false is false. Then true || false is true."
     },
     "difficulty": "hard"
   },
@@ -2643,15 +2643,15 @@
     "id": 166,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What is the correct syntax for an if statement?",
+      "question": "Which line demonstrates the correct syntax for an if statement in Java?",
       "choices": [
-        "if (condition) { }",
-        "if condition { }",
-        "if (condition) then { }",
-        "if condition: { }"
+        "if num > 8 { }",
+        "if num > 8 then { }",
+        "if num > 8: { }",
+        "if (num > 8) { }"
       ],
-      "correct_answer": "if (condition) { }",
-      "explanation": ""
+      "correct_answer": "if (num > 8) { }",
+      "explanation": "In Java, the condition must be wrapped in parentheses, and the body must be placed inside braces."
     },
     "difficulty": "easy"
   },
@@ -2659,15 +2659,15 @@
     "id": 167,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "In an if-else-if ladder, how many blocks can execute?",
+      "question": "If a condition in an if-statement evaluates to false and no else block exists, what happens?",
       "choices": [
-        "All blocks",
-        "Only the first block",
-        "At most one block",
-        "Only the last block"
+        "The program skips that code section",
+        "An exception is thrown",
+        "The application stops executing",
+        "Java inserts a default else block"
       ],
-      "correct_answer": "At most one block",
-      "explanation": ""
+      "correct_answer": "The program skips that code section",
+      "explanation": "When the if condition is false and no else exists, the statement is simply bypassed with no error."
     },
     "difficulty": "medium"
   },
@@ -2675,15 +2675,15 @@
     "id": 168,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What happens if an if condition is false and no else block is provided?",
+      "question": "Which example properly shows nested if-else statements in Java?",
       "choices": [
-        "Program crashes",
-        "Compilation error",
-        "Nothing happens",
-        "Default block executes"
+        "if (count > 0)\n    if count < 7\n        System.out.println(\"Inside Range\");",
+        "if (count > 0)\n    else if (count < 7)\n        System.out.println(\"Inside Range\");",
+        "if count > 0 then\n    if count < 7\n        print(\"Inside Range\");",
+        "if (count > 0)\n    if (count < 7)\n        System.out.println(\"Between limits\");\n    else\n        System.out.println(\"Too Large\");"
       ],
-      "correct_answer": "Nothing happens",
-      "explanation": ""
+      "correct_answer": "if (count > 0)\n    if (count < 7)\n        System.out.println(\"Between limits\");\n    else\n        System.out.println(\"Too Large\");",
+      "explanation": "The inner else attaches to the closest preceding if, forming a valid nested structure."
     },
     "difficulty": "medium"
   },
@@ -2691,15 +2691,15 @@
     "id": 169,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What is wrong with: if (x = 5) System.out.println(\"Five\");?",
+      "question": "What will this program output?\nint a = 6, b = 3;\nif (a > b)\n    if (a <= 12)\n        System.out.println(\"Pass\");\n    else\n        System.out.println(\"High\");\nelse\n    System.out.println(\"Fail\");",
       "choices": [
-        "Missing braces",
-        "Should use == instead of =",
-        "Missing semicolon",
-        "Nothing is wrong"
+        "Pass",
+        "Fail",
+        "High",
+        "No output"
       ],
-      "correct_answer": "Should use == instead of =",
-      "explanation": ""
+      "correct_answer": "Pass",
+      "explanation": "Both conditions evaluate to true, making the inner \"Pass\" statement the executed block."
     },
     "difficulty": "hard"
   },
@@ -2707,15 +2707,15 @@
     "id": 170,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "In nested if statements, which else corresponds to which if?",
+      "question": "Which statement looks valid but actually contains a logical flaw?",
       "choices": [
-        "First else to first if",
-        "Each else to the nearest unmatched if",
-        "Last else to last if",
-        "All else blocks to all if blocks"
+        "if (level > 50) {\n    System.out.println(\"Master\");\n}",
+        "if (level > 50);\n    System.out.println(\"Master\");",
+        "if (level > 50)\n    System.out.println(\"Master\");",
+        "if (level > 50)\n    System.out.println(\"Master\");\nelse\n    System.out.println(\"Novice\");"
       ],
-      "correct_answer": "Each else to the nearest unmatched if",
-      "explanation": ""
+      "correct_answer": "if (level > 50);\n    System.out.println(\"Master\");",
+      "explanation": "The stray semicolon terminates the if-statement early, causing the message to print regardless of the condition."
     },
     "difficulty": "hard"
   },
@@ -2723,15 +2723,15 @@
     "id": 171,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is the main difference between while and do-while loops?",
+      "question": "What distinguishes a do-while loop from a standard while loop?",
       "choices": [
-        "while is faster",
-        "do-while executes at least once",
-        "while uses different syntax",
-        "No difference"
+        "Java no longer supports do-while loops",
+        "A while loop always executes once before testing",
+        "A do-while loop executes its body at least once",
+        "Both loops behave identically"
       ],
-      "correct_answer": "do-while executes at least once",
-      "explanation": ""
+      "correct_answer": "A do-while loop executes its body at least once",
+      "explanation": "A do-while loop guarantees at least one execution because the condition is evaluated after the loop body runs."
     },
     "difficulty": "easy"
   },
@@ -2739,15 +2739,10 @@
     "id": 172,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What does the break statement do in a loop?",
-      "choices": [
-        "Skips current iteration",
-        "Exits the loop completely",
-        "Restarts the loop",
-        "Pauses the loop"
-      ],
-      "correct_answer": "Exits the loop completely",
-      "explanation": ""
+      "question": "What output is produced by the following code?\nint n = 7;\ndo {\n    System.out.print(n);\n    n--;\n} while (n > 4);",
+      "choices": ["76", "765", "7654", "76543"],
+      "correct_answer": "765",
+      "explanation": "The loop prints 7,6,5 and stops when n becomes 4."
     },
     "difficulty": "medium"
   },
@@ -2755,15 +2750,15 @@
     "id": 173,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What does the continue statement do in a loop?",
+      "question": "What mistake occurs in this snippet?\nint index = 0;\nwhile (index < 4)\n    System.out.println(index);\n    index++;",
       "choices": [
-        "Exits the loop",
-        "Skips to next iteration",
-        "Restarts from beginning",
-        "Pauses execution"
+        "There is no problem",
+        "The increment executes outside the loop",
+        "This code generates a compilation error",
+        "The program gets stuck in an infinite loop"
       ],
-      "correct_answer": "Skips to next iteration",
-      "explanation": ""
+      "correct_answer": "The increment executes outside the loop",
+      "explanation": "Since only the print statement is part of the loop, index++ never runs inside it, causing endless printing."
     },
     "difficulty": "medium"
   },
@@ -2771,15 +2766,10 @@
     "id": 174,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What causes an infinite loop?",
-      "choices": [
-        "Missing break statement",
-        "Loop condition never becomes false",
-        "Using continue statement",
-        "Nested loops"
-      ],
-      "correct_answer": "Loop condition never becomes false",
-      "explanation": ""
+      "question": "What is printed by this code?\nint x = 1;\ndo {\n    x++;\n    if (x == 4) continue;\n    System.out.print(x);\n} while (x <= 6);",
+      "choices": ["2356", "23456", "2456", "2567"],
+      "correct_answer": "2356",
+      "explanation": "x becomes 2,3,(skip 4),5,6 — producing 2,3,5,6 in sequence."
     },
     "difficulty": "hard"
   },
@@ -2787,15 +2777,10 @@
     "id": 175,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "In a do-while loop, where is the condition checked?",
-      "choices": [
-        "Before each iteration",
-        "After each iteration",
-        "Only at the beginning",
-        "Never checked"
-      ],
-      "correct_answer": "After each iteration",
-      "explanation": ""
+      "question": "What does the loop print?\nint k = 2;\ndo {\n    System.out.print(k * 3 + \" \");\n    k++;\n} while (k <= 4);",
+      "choices": ["6 9", "6 9 12", "3 6 9", "9 12"],
+      "correct_answer": "6 9 12",
+      "explanation": "The values printed are 6 (2*3), 9 (3*3), and 12 (4*3)."
     },
     "difficulty": "hard"
   },
@@ -2803,15 +2788,15 @@
     "id": 176,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What are the three parts of a for loop?",
+      "question": "Which of the following is a correctly written for-loop in Java?",
       "choices": [
-        "condition, body, increment",
-        "initialization, condition, update",
-        "start, middle, end",
-        "declare, test, execute"
+        "for count = 0 to 4 {\n   System.out.println(count);\n}",
+        "for (int count = 0; count < 4; count++) {\n   System.out.println(count);\n}",
+        "for count = 0; count < 4; count++ {\n   System.out.println(count);\n}",
+        "for (count = 0; count < 4; count++) {\n   System.out.println(count);\n}"
       ],
-      "correct_answer": "initialization, condition, update",
-      "explanation": ""
+      "correct_answer": "for (int count = 0; count < 4; count++) {\n   System.out.println(count);\n}",
+      "explanation": "This follows the Java for-loop structure of initialization, condition, and update."
     },
     "difficulty": "easy"
   },
@@ -2819,15 +2804,10 @@
     "id": 177,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "How many times will this loop run: for(int i = 0; i < 5; i++)?",
-      "choices": [
-        "4",
-        "5",
-        "6",
-        "Infinite"
-      ],
-      "correct_answer": "5",
-      "explanation": ""
+      "question": "What does the following loop output?\nfor (int i = 6; i > 1; i -= 2) {\n    System.out.print(i + \" \");\n}",
+      "choices": ["6 4", "6 4 2", "6 5 4", "6 3 1"],
+      "correct_answer": "6 4 2",
+      "explanation": "i decreases as 6 → 4 → 2, then stops."
     },
     "difficulty": "medium"
   },
@@ -2835,15 +2815,10 @@
     "id": 178,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What happens if you omit the condition in a for loop?",
-      "choices": [
-        "Compilation error",
-        "Loop runs once",
-        "Infinite loop",
-        "Loop doesn't run"
-      ],
-      "correct_answer": "Infinite loop",
-      "explanation": ""
+      "question": "What happens when this loop runs?\nfor (int num = 1; num < 6; num++) {\n    if (num == 4)\n        break;\n    System.out.print(num);\n}",
+      "choices": ["12345", "123", "124", "12"],
+      "correct_answer": "123",
+      "explanation": "The loop prints 1, 2, 3 and stops when num reaches 4 due to break."
     },
     "difficulty": "medium"
   },
@@ -2851,15 +2826,10 @@
     "id": 179,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What is the value of i after: for(int i = 0; i < 3; i++) { }?",
-      "choices": [
-        "2",
-        "3",
-        "i is out of scope",
-        "0"
-      ],
-      "correct_answer": "i is out of scope",
-      "explanation": ""
+      "question": "What output results from this loop?\nfor (int x = 1, y = 8; x < y; x++, y--) {\n    System.out.print(x + y + \" \");\n}",
+      "choices": ["9 9", "9 10", "9 9 9", "10 10"],
+      "correct_answer": "9 9",
+      "explanation": "Two iterations occur: 1+8=9 and 2+7=9."
     },
     "difficulty": "hard"
   },
@@ -2867,15 +2837,10 @@
     "id": 180,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "Which for loop counts backwards from 10 to 1?",
-      "choices": [
-        "for(int i=10; i>=1; i--)",
-        "for(int i=1; i<=10; i++)",
-        "for(int i=10; i>0; i++)",
-        "for(int i=1; i<10; i--)"
-      ],
-      "correct_answer": "for(int i=10; i>=1; i--)",
-      "explanation": ""
+      "question": "What is printed by this code?\nint total = 0;\nfor (int n = 2; n <= 6; n++) {\n    total += n;\n}\nSystem.out.println(total);",
+      "choices": ["15", "20", "18", "10"],
+      "correct_answer": "20",
+      "explanation": "The sum is 2+3+4+5+6 = 20."
     },
     "difficulty": "hard"
   },
@@ -2883,14 +2848,14 @@
     "id": 181,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Why do programmers declare variables in Java?",
+      "question": "Which variable name follows standard Java naming conventions?",
       "choices": [
-        "To run methods",
-        "To reserve named memory space for data",
-        "To load external files",
-        "To create new classes"
+        "PlayerScore",
+        "playerScore",
+        "player_score",
+        "PLAYERSCORE"
       ],
-      "correct_answer": "To reserve named memory space for data",
+      "correct_answer": "playerScore",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -2899,14 +2864,14 @@
     "id": 182,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is the correct variable naming style in Java?",
+      "question": "What feature allows `var x = 10;`?",
       "choices": [
-        "under_score_style",
-        "CapitalFirstLetter",
-        "firstWordLowercaseRestCapitalized",
-        "hyphen-separated"
+        "Dynamic Typing",
+        "Auto-Boxing",
+        "Type Inference",
+        "Polymorphism"
       ],
-      "correct_answer": "firstWordLowercaseRestCapitalized",
+      "correct_answer": "Type Inference",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2915,14 +2880,14 @@
     "id": 183,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What is the result of attempting to access an undeclared local variable?",
+      "question": "What is 'Variable Shadowing'?",
       "choices": [
-        "Program assigns zero",
-        "Execution fails",
-        "Compiler rejects the code",
-        "Variable becomes empty"
+        "Deleting a variable",
+        "Making a variable private",
+        "A local variable hiding an instance variable of the same name",
+        "Copying a variable"
       ],
-      "correct_answer": "Compiler rejects the code",
+      "correct_answer": "A local variable hiding an instance variable of the same name",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2931,14 +2896,14 @@
     "id": 184,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What keyword makes a variable immutable once it receives its initial value?",
+      "question": "What is the correct logic to swap two variables `a` and `b`?",
       "choices": [
-        "constant",
-        "readonly",
-        "fixed",
-        "final"
+        "a = b; b = a;",
+        "int t = a; a = b; b = t;",
+        "swap(a, b);",
+        "a = b; t = a;"
       ],
-      "correct_answer": "final",
+      "correct_answer": "int t = a; a = b; b = t;",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2947,14 +2912,14 @@
     "id": 185,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which scenario describes variable shadowing?",
+      "question": "What happens if you try to reassign a `final` variable?",
       "choices": [
-        "Two variables exist in identical scope",
-        "A method variable conceals a class field of identical name",
-        "A variable lacks initialization",
-        "A variable loses scope visibility"
+        "Compilation Error",
+        "Runtime Error",
+        "Warning",
+        "Successful reassignment"
       ],
-      "correct_answer": "A method variable conceals a class field of identical name",
+      "correct_answer": "Compilation Error",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -2963,14 +2928,14 @@
     "id": 186,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What primitive type holds one letter or symbol?",
+      "question": "How many bits does a boolean logically represent?",
       "choices": [
-        "text",
-        "number",
-        "character",
-        "small"
+        "8",
+        "1",
+        "32",
+        "16"
       ],
-      "correct_answer": "character",
+      "correct_answer": "1",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -2979,14 +2944,14 @@
     "id": 187,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "How many bits does a double primitive occupy?",
+      "question": "What is the default value of a `char`?",
       "choices": [
-        "4 bytes worth",
-        "8 bytes worth",
-        "2 bytes worth",
-        "1 byte worth"
+        "null",
+        "\\u0000",
+        "' '",
+        "'0'"
       ],
-      "correct_answer": "8 bytes worth",
+      "correct_answer": "\\u0000",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -2995,14 +2960,14 @@
     "id": 188,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "During calculations, which types automatically convert to int?",
+      "question": "Which conversion is implicit (widening)?",
       "choices": [
-        "decimal types",
-        "smaller integer types and character",
-        "larger integer types",
-        "truth and character types"
+        "double to int",
+        "long to short",
+        "float to long",
+        "int to long"
       ],
-      "correct_answer": "smaller integer types and character",
+      "correct_answer": "int to long",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3011,14 +2976,14 @@
     "id": 189,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What values can a byte primitive store?",
+      "question": "Which is a valid `long` literal?",
       "choices": [
-        "negative 127 to positive 128",
-        "negative 128 to positive 127",
-        "zero to 255",
-        "negative 256 to positive 255"
+        "long x = 500.0;",
+        "long x = 500L;",
+        "long x = \"500\";",
+        "long x = 500f;"
       ],
-      "correct_answer": "negative 128 to positive 127",
+      "correct_answer": "long x = 500L;",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3027,14 +2992,14 @@
     "id": 190,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What primitive type only stores non-negative values?",
+      "question": "Can `boolean` be cast to `int`?",
       "choices": [
-        "integer",
-        "small integer",
-        "character",
-        "medium integer"
+        "No, incompatible types",
+        "Yes, true becomes 1",
+        "Yes, false becomes -1",
+        "Yes, explicit cast only"
       ],
-      "correct_answer": "character",
+      "correct_answer": "No, incompatible types",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3043,14 +3008,14 @@
     "id": 191,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What initial value does an uninitialized String field have?",
+      "question": "Access the first element of array `a`?",
       "choices": [
-        "blank text",
-        "no reference",
-        "not defined",
-        "zero"
+        "a.get(0)",
+        "a(0)",
+        "a[1]",
+        "a[0]"
       ],
-      "correct_answer": "no reference",
+      "correct_answer": "a[0]",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -3059,14 +3024,14 @@
     "id": 192,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "In which memory area do object instances reside?",
+      "question": "Exception for negative array index?",
       "choices": [
-        "Method area",
-        "Object space",
-        "CPU memory",
-        "Temporary storage"
+        "NullPointerException",
+        "NegativeIndexError",
+        "ArrayIndexOutOfBoundsException",
+        "Error"
       ],
-      "correct_answer": "Object space",
+      "correct_answer": "ArrayIndexOutOfBoundsException",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3075,14 +3040,14 @@
     "id": 193,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What is the purpose of the 'new' operator?",
+      "question": "Where are String literals stored?",
       "choices": [
-        "Makes a basic data type",
-        "Instantiates an object in memory",
-        "Loads external code",
-        "Defines a function"
+        "Stack",
+        "String Constant Pool",
+        "Registry",
+        "Disk"
       ],
-      "correct_answer": "Instantiates an object in memory",
+      "correct_answer": "String Constant Pool",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3091,14 +3056,14 @@
     "id": 194,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What's the difference between == and .equals() for String objects?",
+      "question": "Can `int[]` hold a `String`?",
       "choices": [
-        "== checks text, .equals() checks memory location",
-        "== checks memory location, .equals() checks text",
-        "Both check identical properties",
-        "== is primitive-only"
+        "Yes",
+        "Only if cast",
+        "Yes, if empty",
+        "No, strict typing prevents it"
       ],
-      "correct_answer": "== checks memory location, .equals() checks text",
+      "correct_answer": "No, strict typing prevents it",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3107,14 +3072,14 @@
     "id": 195,
     "subtopic_id": 3,
     "question_choices_correctanswer": {
-      "question": "What does String immutability mean?",
+      "question": "Difference: `String a` vs `char b`?",
       "choices": [
-        "Strings require immediate declaration",
-        "String content is fixed after creation",
-        "Strings need instant initialization",
-        "Strings accept only numeric data"
+        "Both are objects",
+        "Both are primitives",
+        "String is reference, char is primitive",
+        "No difference"
       ],
-      "correct_answer": "String content is fixed after creation",
+      "correct_answer": "String is reference, char is primitive",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3123,14 +3088,14 @@
     "id": 196,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "What does 8 % 3 evaluate to?",
+      "question": "What is the result of the expression `10 % 3`?",
       "choices": [
-        "remainder 2",
-        "quotient 3",
-        "decimal 2.67",
-        "remainder 1"
+        "3",
+        "0",
+        "1",
+        "3.33"
       ],
-      "correct_answer": "remainder 2",
+      "correct_answer": "1",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -3139,14 +3104,14 @@
     "id": 197,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "How does Java handle fractional results in integer division?",
+      "question": "What is the result of `7 / 2` (integer division)?",
       "choices": [
-        "Rounds to closest whole number",
-        "Drops the fractional portion",
-        "Changes to floating point",
-        "Generates an exception"
+        "3.5",
+        "4",
+        "3",
+        "Error"
       ],
-      "correct_answer": "Drops the fractional portion",
+      "correct_answer": "3",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3155,14 +3120,14 @@
     "id": 198,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "Which arithmetic operator is evaluated first?",
+      "question": "If `int x = 5`, what is `x--`?",
       "choices": [
-        "Plus sign",
-        "Times sign",
-        "Minus sign",
-        "Divide sign"
+        "x becomes 4",
+        "x becomes 6",
+        "x becomes 50",
+        "x becomes 0"
       ],
-      "correct_answer": "Times sign",
+      "correct_answer": "x becomes 4",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3171,14 +3136,14 @@
     "id": 199,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "Calculate: (3 + 4) * 2 - 1",
+      "question": "Evaluate: `(3 + 2) * (4 - 1)`",
       "choices": [
-        "thirteen",
-        "fourteen",
-        "eleven",
-        "twelve"
+        "11",
+        "15",
+        "20",
+        "9"
       ],
-      "correct_answer": "thirteen",
+      "correct_answer": "15",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3187,14 +3152,14 @@
     "id": 200,
     "subtopic_id": 4,
     "question_choices_correctanswer": {
-      "question": "Given int x = 15; x %= 4; what does x contain?",
+      "question": "What happens if you divide `5.0 / 2`?",
       "choices": [
-        "three",
-        "four",
-        "three point seven five",
-        "fifteen"
+        "2",
+        "2.0",
+        "2.5",
+        "3"
       ],
-      "correct_answer": "three",
+      "correct_answer": "2.5",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3203,14 +3168,14 @@
     "id": 201,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What symbol tests if two values are different?",
+      "question": "Which operator means 'Equal To'?",
       "choices": [
-        "not equals",
-        "equals",
-        "less equal",
-        "greater equal"
+        "=",
+        "<>",
+        "==",
+        "!="
       ],
-      "correct_answer": "not equals",
+      "correct_answer": "==",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -3219,14 +3184,14 @@
     "id": 202,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What is the result of (5 >= 5)?",
+      "question": "Which comparison is true?",
       "choices": [
-        "incorrect",
-        "correct",
-        "invalid",
-        "empty"
+        "10 < 5",
+        "5 == 5",
+        "8 != 8",
+        "2 > 4"
       ],
-      "correct_answer": "correct",
+      "correct_answer": "5 == 5",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3235,14 +3200,14 @@
     "id": 203,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "Which expression evaluates to false?",
+      "question": "What is the result of `'a' < 'b'`?",
       "choices": [
-        "seven greater than three",
-        "four less equal four",
-        "six not equal six",
-        "eight greater equal seven"
+        "false",
+        "error",
+        "true",
+        "null"
       ],
-      "correct_answer": "six not equal six",
+      "correct_answer": "true",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3251,14 +3216,14 @@
     "id": 204,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "What does !(3 < 5) evaluate to?",
+      "question": "Comparing two new String objects with `==` checks for:",
       "choices": [
-        "correct",
-        "incorrect",
-        "three",
-        "five"
+        "Same Content",
+        "Same Length",
+        "Same Memory Address",
+        "Same HashCode"
       ],
-      "correct_answer": "incorrect",
+      "correct_answer": "Same Memory Address",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3267,14 +3232,14 @@
     "id": 205,
     "subtopic_id": 5,
     "question_choices_correctanswer": {
-      "question": "With int a = 10, b = 20; what is (a + b) == 30?",
+      "question": "Why is `0.1 + 0.2 == 0.3` often false?",
       "choices": [
-        "incorrect",
-        "correct",
-        "thirty",
-        "invalid"
+        "Math error",
+        "Precision error in floating-point",
+        "Syntax error",
+        "Logic error"
       ],
-      "correct_answer": "correct",
+      "correct_answer": "Precision error in floating-point",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3283,14 +3248,14 @@
     "id": 206,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What does true && false evaluate to?",
+      "question": "Symbol for Logical AND?",
       "choices": [
-        "correct",
-        "incorrect",
-        "empty",
-        "invalid"
+        "||",
+        "&",
+        "!",
+        "&&"
       ],
-      "correct_answer": "incorrect",
+      "correct_answer": "&&",
       "explanation": ""
     },
     "difficulty": "easy"
@@ -3299,14 +3264,14 @@
     "id": 207,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What operator gives true when any condition is true?",
+      "question": "Result of `(5 > 1) && (2 < 4)`?",
       "choices": [
-        "AND",
-        "OR",
-        "NOT",
-        "EQUALS"
+        "false",
+        "true",
+        "null",
+        "error"
       ],
-      "correct_answer": "OR",
+      "correct_answer": "true",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3315,14 +3280,14 @@
     "id": 208,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What is the result of !false || true?",
+      "question": "Result of `! (10 == 10)`?",
       "choices": [
-        "incorrect",
-        "correct",
-        "empty",
-        "invalid"
+        "true",
+        "false",
+        "null",
+        "error"
       ],
-      "correct_answer": "correct",
+      "correct_answer": "false",
       "explanation": ""
     },
     "difficulty": "medium"
@@ -3331,14 +3296,14 @@
     "id": 209,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What does true && (false || true) equal?",
+      "question": "Result of `!false || false`?",
       "choices": [
-        "incorrect",
-        "correct",
-        "empty",
-        "invalid"
+        "false",
+        "null",
+        "true",
+        "error"
       ],
-      "correct_answer": "correct",
+      "correct_answer": "true",
       "explanation": ""
     },
     "difficulty": "hard"
@@ -3347,31 +3312,27 @@
     "id": 210,
     "subtopic_id": 6,
     "question_choices_correctanswer": {
-      "question": "What equals !(a && b) according to De Morgan's Law?",
+      "question": "De Morgan's Law: `!(A && B)` equals?",
       "choices": [
-        "NOT a AND NOT b",
-        "NOT a OR NOT b",
-        "a OR b",
-        "a AND b"
+        "!A && !B",
+        "A || B",
+        "!A || !B",
+        "A && B"
       ],
-      "correct_answer": "NOT a OR NOT b",
+      "correct_answer": "!A || !B",
       "explanation": ""
     },
     "difficulty": "hard"
   },
+  
   {
     "id": 211,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "Which shows proper if statement format?",
-      "choices": [
-        "if (test) { code }",
-        "if test { code }",
-        "if (test) then { code }",
-        "if test: { code }"
-      ],
-      "correct_answer": "if (test) { code }",
-      "explanation": ""
+      "question": "What will be printed when this code runs?\nint y = 4;\nif (y < 9) {\n    System.out.println(\"Low\");\n}",
+      "choices": ["No message", "4", "Low", "Compilation issue"],
+      "correct_answer": "Low",
+      "explanation": "Since 4 < 9, the output is \"Low\"."
     },
     "difficulty": "easy"
   },
@@ -3379,15 +3340,15 @@
     "id": 212,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "How many branches run in an if-else-if chain?",
+      "question": "Which statement best explains how an if-else ladder operates?",
       "choices": [
-        "Every branch",
-        "Just the initial branch",
-        "Maximum one branch",
-        "Just the final branch"
+        "Multiple branches may run",
+        "It cannot check numerical comparisons",
+        "The final else always executes",
+        "A single branch is selected"
       ],
-      "correct_answer": "Maximum one branch",
-      "explanation": ""
+      "correct_answer": "A single branch is selected",
+      "explanation": "An if-else chain executes exactly one matching block."
     },
     "difficulty": "medium"
   },
@@ -3395,15 +3356,10 @@
     "id": 213,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What occurs when an if test fails and there's no else clause?",
-      "choices": [
-        "Application fails",
-        "Build error",
-        "Code skips to next statement",
-        "Fallback code runs"
-      ],
-      "correct_answer": "Code skips to next statement",
-      "explanation": ""
+      "question": "Predict the output:\nint z = 2;\nif (z > 4)\n    System.out.println(\"Higher\");\nelse if (z == 2)\n    System.out.println(\"Match\");\nelse\n    System.out.println(\"Lower\");",
+      "choices": ["Nothing", "Match", "Higher", "Lower"],
+      "correct_answer": "Match",
+      "explanation": "The else-if condition z == 2 evaluates to true."
     },
     "difficulty": "medium"
   },
@@ -3411,15 +3367,10 @@
     "id": 214,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "What's incorrect about: if (x = 5) System.out.println(\"Five\");?",
-      "choices": [
-        "Needs curly brackets",
-        "Needs comparison operator not assignment",
-        "Needs statement terminator",
-        "Code is correct"
-      ],
-      "correct_answer": "Needs comparison operator not assignment",
-      "explanation": ""
+      "question": "How many times is the message \"Hello\" printed?\nint v = 9;\nif (v > 6)\n    if (v <= 12)\n        System.out.println(\"Hello\");\n    else\n        System.out.println(\"Goodbye\");",
+      "choices": ["One time", "Zero times", "Two times", "Infinite loop"],
+      "correct_answer": "One time",
+      "explanation": "Both conditions are true, so the inner block prints once."
     },
     "difficulty": "hard"
   },
@@ -3427,15 +3378,15 @@
     "id": 215,
     "subtopic_id": 7,
     "question_choices_correctanswer": {
-      "question": "How do else clauses match with if statements in nested structures?",
+      "question": "Which line ensures both conditions must be satisfied before running the statement?",
       "choices": [
-        "Initial else with initial if",
-        "Every else with closest unpaired if",
-        "Final else with final if",
-        "Every else with every if"
+        "if (p > 0) || (q > 0)\n    System.out.println(\"Both positive\");",
+        "if (p > 0)\n    if (q > 0)\n        System.out.println(\"Both positive\");",
+        "if (p && q)\n    System.out.println(\"Both positive\");",
+        "if (p > 0 && q > 0)\n    System.out.println(\"Both positive\");"
       ],
-      "correct_answer": "Every else with closest unpaired if",
-      "explanation": ""
+      "correct_answer": "if (p > 0 && q > 0)\n    System.out.println(\"Both positive\");",
+      "explanation": "The logical AND operator requires both conditions to be true."
     },
     "difficulty": "hard"
   },
@@ -3443,15 +3394,10 @@
     "id": 216,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "How do while and do-while loops differ fundamentally?",
-      "choices": [
-        "while performs better",
-        "do-while guarantees one execution",
-        "while has unique format",
-        "They are identical"
-      ],
-      "correct_answer": "do-while guarantees one execution",
-      "explanation": ""
+      "question": "What is printed by this while loop?\nint t = 1;\nwhile (t < 4) {\n    System.out.print(t);\n    t++;\n}",
+      "choices": ["12", "234", "123", "1234"],
+      "correct_answer": "123",
+      "explanation": "The loop prints 1, 2, and 3."
     },
     "difficulty": "easy"
   },
@@ -3459,15 +3405,15 @@
     "id": 217,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What is the effect of a break statement?",
+      "question": "Which while-loop(s) output numbers 2 through 6?",
       "choices": [
-        "Bypasses present cycle",
-        "Terminates the entire loop",
-        "Begins loop again",
-        "Suspends loop execution"
+        "int m = 1;\nwhile (m < 6)\n    System.out.println(++m);",
+        "int m = 2;\nwhile (m <= 6)\n    System.out.println(m++);",
+        "Both options",
+        "Neither option"
       ],
-      "correct_answer": "Terminates the entire loop",
-      "explanation": ""
+      "correct_answer": "Both options",
+      "explanation": "Both patterns print 2, 3, 4, 5, 6."
     },
     "difficulty": "medium"
   },
@@ -3475,15 +3421,10 @@
     "id": 218,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What happens when continue is executed?",
-      "choices": [
-        "Loop terminates",
-        "Jumps to following cycle",
-        "Returns to start",
-        "Halts processing"
-      ],
-      "correct_answer": "Jumps to following cycle",
-      "explanation": ""
+      "question": "How will this loop behave?\nint c = 2;\ndo {\n    if (c == 5)\n        break;\n    System.out.print(c);\n    c++;\n} while (c <= 8);",
+      "choices": ["23", "2", "234", "23456"],
+      "correct_answer": "23",
+      "explanation": "Execution stops when c becomes 5, so only 2 and 3 print."
     },
     "difficulty": "medium"
   },
@@ -3491,15 +3432,10 @@
     "id": 219,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "What creates an endless loop?",
-      "choices": [
-        "Absent break command",
-        "Test condition remains permanently true",
-        "Employing continue command",
-        "Loops within loops"
-      ],
-      "correct_answer": "Test condition remains permanently true",
-      "explanation": ""
+      "question": "How many iterations will occur?\nint b = 1;\nwhile (b <= 20)\n    b *= 2;",
+      "choices": ["20", "Infinite", "4", "5"],
+      "correct_answer": "5",
+      "explanation": "Sequence: 1 → 2 → 4 → 8 → 16 → 32, so 5 updates."
     },
     "difficulty": "hard"
   },
@@ -3507,15 +3443,15 @@
     "id": 220,
     "subtopic_id": 8,
     "question_choices_correctanswer": {
-      "question": "When is the test evaluated in a do-while loop?",
+      "question": "Which snippet creates an infinite loop?",
       "choices": [
-        "Prior to every cycle",
-        "Following every cycle",
-        "Just at loop start",
-        "Condition ignored"
+        "int r = 1;\ndo { r--; } while (r > 5);",
+        "int r = 3;\nwhile (r == 3) { }",
+        "int r = 2;\nwhile (r < 12) { r += 3; }",
+        "int r = 0;\nwhile (r != 4) { r += 2; }"
       ],
-      "correct_answer": "Following every cycle",
-      "explanation": ""
+      "correct_answer": "int r = 3;\nwhile (r == 3) { }",
+      "explanation": "The condition never changes, so the loop cannot exit."
     },
     "difficulty": "hard"
   },
@@ -3523,15 +3459,10 @@
     "id": 221,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What three components make up a for loop?",
-      "choices": [
-        "test, code, change",
-        "setup, test, modify",
-        "begin, center, finish",
-        "create, check, run"
-      ],
-      "correct_answer": "setup, test, modify",
-      "explanation": ""
+      "question": "How many times will this for-loop run?\nfor (int k = 1; k < 4; k++) {\n    System.out.print(k);\n}",
+      "choices": ["1", "Infinite", "4", "3"],
+      "correct_answer": "3",
+      "explanation": "The values printed are 1, 2, and 3."
     },
     "difficulty": "easy"
   },
@@ -3539,15 +3470,15 @@
     "id": 222,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "How many iterations: for(int i = 0; i < 5; i++)?",
+      "question": "Which of the following creates an endless for loop?",
       "choices": [
-        "four",
-        "five",
-        "six",
-        "endless"
+        "All listed choices",
+        "for (;;) {\n   // code\n}",
+        "for (int q = 0; q < 5; q--) {\n   // code\n}",
+        "for (int q = 3; q < 6;) {\n   q--;\n}"
       ],
-      "correct_answer": "five",
-      "explanation": ""
+      "correct_answer": "All listed choices",
+      "explanation": "Each loop never reaches a terminating condition."
     },
     "difficulty": "medium"
   },
@@ -3555,15 +3486,10 @@
     "id": 223,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What occurs when the for loop condition is missing?",
-      "choices": [
-        "Build failure",
-        "Single execution",
-        "Endless execution",
-        "No execution"
-      ],
-      "correct_answer": "Endless execution",
-      "explanation": ""
+      "question": "What does this for-loop output?\nfor (int h = 2; h <= 8; h++) {\n    if (h % 2 == 0)\n        continue;\n    System.out.print(h);\n}",
+      "choices": ["2468", "357", "2357", "24"],
+      "correct_answer": "357",
+      "explanation": "Even numbers are skipped, so the printed values are 3, 5, and 7."
     },
     "difficulty": "medium"
   },
@@ -3571,15 +3497,10 @@
     "id": 224,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "After for(int i = 0; i < 3; i++) { }, what can you say about i?",
-      "choices": [
-        "i equals 2",
-        "i equals 3",
-        "i is no longer accessible",
-        "i equals 0"
-      ],
-      "correct_answer": "i is no longer accessible",
-      "explanation": ""
+      "question": "How many times is \"Welcome\" printed?\nfor (int a = 1; a < 20; a *= 3) {\n    System.out.println(\"Welcome\");\n}",
+      "choices": ["Infinite", "4", "3", "5"],
+      "correct_answer": "3",
+      "explanation": "Iterations: a = 1, 3, 9 → three runs before a becomes 27."
     },
     "difficulty": "hard"
   },
@@ -3587,15 +3508,15 @@
     "id": 225,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "Which for loop decrements from 10 down to 1?",
+      "question": "Identify the issue in this code:\nfor (int x = 0; x < 5; x++) {\n    int temp = 10;\n}\nSystem.out.println(temp);",
       "choices": [
-        "for(int i=10; i>=1; i--)",
-        "for(int i=1; i<=10; i++)",
-        "for(int i=10; i>0; i++)",
-        "for(int i=1; i<10; i--)"
+        "temp cannot be accessed here",
+        "temp was not properly initialized",
+        "There is a syntax problem",
+        "No issue exists"
       ],
-      "correct_answer": "for(int i=10; i>=1; i--)",
-      "explanation": ""
+      "correct_answer": "temp cannot be accessed here",
+      "explanation": "temp is local to the loop and out of scope afterward."
     },
     "difficulty": "hard"
   }

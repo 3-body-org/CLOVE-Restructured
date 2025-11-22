@@ -156,7 +156,7 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
               <span className="retention-test-stage__number">2</span>
               <div>
                 <h4>Second Retention Test</h4>
-                <p>Available after 3 days</p>
+                <p>Available after 1.5 days</p>
               </div>
             </div>
             <div className="retention-test-stage__status">
