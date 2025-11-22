@@ -329,7 +329,7 @@ async def check_retention_test_availability(
     Check which retention test stages are available based on assessment completion timing.
     Both stages share the same timer (count from when both assessments are completed).
     First stage: Available after 10 hours
-    Second stage: Available after 3 days (72 hours)
+    Second stage: Available after 1.5 days (36 hours)
     Returns information about available stages and countdown timers.
     """
     from datetime import datetime, timezone, timedelta
@@ -445,11 +445,11 @@ async def check_retention_test_availability(
             "minutes": int((hours_remaining % 1) * 60)
         }
     
-    # Check second stage availability (3 days = 72 hours)
-    second_stage_available = hours_since_completion >= 72  # 3 days = 72 hours
+    # Check second stage availability (1.5 days = 36 hours)
+    second_stage_available = hours_since_completion >= 36  # 1.5 days = 36 hours
     second_stage_countdown = None
     if not second_stage_available:
-        hours_remaining = 72 - hours_since_completion
+        hours_remaining = 36 - hours_since_completion
         days_remaining = int(hours_remaining / 24)
         hours_in_day = hours_remaining % 24
         second_stage_countdown = {
