@@ -19,7 +19,7 @@
     "id": 2,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Which of these is a valid variable name?",
+      "question": "Which of these is a valid variable name in Java?",
       "choices": [
         "userScore",
         "1stScore",
@@ -435,7 +435,7 @@
     "id": 28,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "'A' + 1 result type?",
+      "question": "What is the resulting data type and value of the expression 'A' + 1?",
       "choices": [
         "Error",
         "int (66)",

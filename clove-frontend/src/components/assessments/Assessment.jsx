@@ -13,6 +13,59 @@ import { showErrorNotification, showSuccessNotification } from "../../utils/noti
 import { getSubtopicContent } from "features/mydeck/content/subtopicContent";
 import DOMPurify from 'dompurify';
 import { getThemeCursor } from "../../utils/themeCursors";
+
+// Utility function to format code snippets in questions
+const formatQuestionText = (text) => {
+  if (!text) return '';
+  
+  // Helper function to escape HTML
+  const escapeHtml = (str) => {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  };
+  
+  let formatted = text;
+  
+  // Step 1: Replace inline code with backticks: `code`
+  formatted = formatted.replace(/`([^`]+)`/g, (match, code) => {
+    const escapedCode = escapeHtml(code);
+    return `<code class="inline-code">${escapedCode}</code>`;
+  });
+  
+  // Step 2: Handle multi-line code blocks (code that spans multiple lines)
+  // Pattern: starts with Java keywords/variables, contains newlines, looks like code
+  // Must have at least 2 lines and contain Java-like syntax
+  const multilinePattern = /((?:int|String|boolean|char|double|float|long|byte|short|void|public|private|static|final|class|interface|if|else|for|while|do|switch|case|break|continue|return|new|System\.out\.(print|println)|print|println|var|const|boolean)\s+[^\n]+(?:\n[^\n]+){1,})/g;
+  
+  formatted = formatted.replace(multilinePattern, (match) => {
+    // Skip if already contains HTML tags
+    if (match.includes('<code') || match.includes('<pre')) return match;
+    
+    const cleanCode = match.trim();
+    const escapedCode = escapeHtml(cleanCode);
+    const formattedCode = escapedCode.replace(/\n/g, '<br>');
+    return `<pre class="code-block"><code>${formattedCode}</code></pre>`;
+  });
+  
+  // Step 3: Replace newlines in regular text with <br>
+  // We need to be careful not to replace newlines inside pre tags
+  const parts = formatted.split(/(<pre[^>]*>.*?<\/pre>)/gs);
+  const processedParts = parts.map((part, index) => {
+    // If it's a code block, return as-is
+    if (part.includes('<pre') && part.includes('</pre>')) {
+      return part;
+    }
+    // Otherwise, replace newlines with <br>
+    return part.replace(/\n/g, '<br>');
+  });
+  
+  return processedParts.join('');
+};
+
 const Assessment = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -352,7 +405,15 @@ const Assessment = () => {
 
         <div
           className="assessment-question-text"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(currentQuestion.question_choices_correctanswer?.question) }}
+          dangerouslySetInnerHTML={{ 
+            __html: DOMPurify.sanitize(
+              formatQuestionText(currentQuestion.question_choices_correctanswer?.question),
+              { 
+                ALLOWED_TAGS: ['code', 'pre', 'br'],
+                ALLOWED_ATTR: ['class']
+              }
+            ) 
+          }}
         />
 
         <div>
