@@ -2288,22 +2288,6 @@
   "difficulty": "medium"
 },
 {
-  "id": 143,
-  "subtopic_id": 2,
-  "question_choices_correctanswer": {
-    "question": "What describes the capacity of the `short` data type?",
-    "choices": [
-      "Smallest whole number",
-      "Medium-sized whole number",
-      "Large scale whole number",
-      "Decimal number"
-    ],
-    "correct_answer": "Medium-sized whole number",
-    "explanation": "The lesson defines a `short` as a 'Medium-sized whole number', sitting between the smaller `byte` and the larger `int`."
-  },
-  "difficulty": "medium"
-},
-{
     "id": 144,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
