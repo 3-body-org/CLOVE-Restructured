@@ -142,7 +142,8 @@ const TopicPage = () => {
   useEffect(() => {
     let mounted = true;
     
-    if (!topics || topics.length === 0) {
+    // Only load if topics are empty and user is available
+    if ((!topics || topics.length === 0) && user?.id) {
       setLoading(true);
       setError("");
       getTopicsWithProgress()
@@ -162,14 +163,16 @@ const TopicPage = () => {
             setLoading(false);
           }
         });
-    } else {
+    } else if (topics && topics.length > 0) {
       setLoading(false);
     }
     
     return () => {
       mounted = false;
     };
-  }, [setTopics, getTopicsWithProgress, user?.id]); // Removed checkRetentionTestAvailability to prevent infinite loop
+    // Only depend on user?.id and topics length to prevent infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, topics?.length]);
 
 
 

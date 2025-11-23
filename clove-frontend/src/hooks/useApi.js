@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useAuth } from 'contexts/AuthContext';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
@@ -27,14 +28,14 @@ export const useApi = () => {
    * @param {Object} options - Fetch options (method, headers, body, etc.)
    * @returns {Promise<Response>} The fetch response
    */
-  const apiCall = async (url, options = {}) => {
+  const apiCall = useCallback(async (url, options = {}) => {
     try {
       const response = await makeAuthenticatedRequest(withBase(url), options);
       return response;
     } catch (error) {
       throw error;
     }
-  };
+  }, [makeAuthenticatedRequest]);
 
   /**
    * Make a GET request
@@ -42,9 +43,9 @@ export const useApi = () => {
    * @param {Object} options - Additional fetch options
    * @returns {Promise<Response>} The fetch response
    */
-  const get = async (url, options = {}) => {
+  const get = useCallback(async (url, options = {}) => {
     return apiCall(url, { ...options, method: 'GET' });
-  };
+  }, [apiCall]);
 
   /**
    * Make a POST request
@@ -53,7 +54,7 @@ export const useApi = () => {
    * @param {Object} options - Additional fetch options
    * @returns {Promise<Response>} The fetch response
    */
-  const post = async (url, data = null, options = {}) => {
+  const post = useCallback(async (url, data = null, options = {}) => {
     const requestOptions = {
       ...options,
       method: 'POST',
@@ -68,7 +69,7 @@ export const useApi = () => {
     }
 
     return apiCall(url, requestOptions);
-  };
+  }, [apiCall]);
 
   /**
    * Make a PUT request
@@ -77,7 +78,7 @@ export const useApi = () => {
    * @param {Object} options - Additional fetch options
    * @returns {Promise<Response>} The fetch response
    */
-  const put = async (url, data = null, options = {}) => {
+  const put = useCallback(async (url, data = null, options = {}) => {
     const requestOptions = {
       ...options,
       method: 'PUT',
@@ -92,7 +93,7 @@ export const useApi = () => {
     }
 
     return apiCall(url, requestOptions);
-  };
+  }, [apiCall]);
 
   /**
    * Make a DELETE request
@@ -101,7 +102,7 @@ export const useApi = () => {
    * @param {Object} options - Additional fetch options
    * @returns {Promise<Response>} The fetch response
    */
-  const del = async (url, data = null, options = {}) => {
+  const del = useCallback(async (url, data = null, options = {}) => {
     const requestOptions = {
       ...options,
       method: 'DELETE',
@@ -116,7 +117,7 @@ export const useApi = () => {
     }
 
     return apiCall(url, requestOptions);
-  };
+  }, [apiCall]);
 
   /**
    * Make a PATCH request
@@ -125,7 +126,7 @@ export const useApi = () => {
    * @param {Object} options - Additional fetch options
    * @returns {Promise<Response>} The fetch response
    */
-  const patch = async (url, data = null, options = {}) => {
+  const patch = useCallback(async (url, data = null, options = {}) => {
     const requestOptions = {
       ...options,
       method: 'PATCH',
@@ -140,7 +141,7 @@ export const useApi = () => {
     }
 
     return apiCall(url, requestOptions);
-  };
+  }, [apiCall]);
 
   return {
     apiCall,
