@@ -3,7 +3,7 @@
  * @description Topic selection page for MyDeck. Shows all topics as cards with progress and theme-aware styles.
  */
 
-import React, { useCallback, useState, useEffect, useContext } from "react";
+import React, { useCallback, useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import TitleAndProfile from "../../../components/layout/Navbar/TitleAndProfile";
@@ -49,6 +49,12 @@ const TopicPage = () => {
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [retentionTestStatus, setRetentionTestStatus] = useState([]);
   
+  // Store latest getTopicsWithProgress in ref to avoid stale closures
+  const getTopicsWithProgressRef = useRef(getTopicsWithProgress);
+  useEffect(() => {
+    getTopicsWithProgressRef.current = getTopicsWithProgress;
+  }, [getTopicsWithProgress]);
+  
   // Simple retention test state
   const [isProcessingRetentionTests, setIsProcessingRetentionTests] = useState(false);
   
@@ -66,8 +72,9 @@ const TopicPage = () => {
 
     // Check retention test status for ALL topics
     // Icon appears if user has completed at least the first retention test
-  const checkRetentionTestAvailability = useCallback(async () => {
-    if (!user?.id || !topics || topics.length === 0) {
+  const checkRetentionTestAvailability = useCallback(async (topicsToCheck = null) => {
+    const topicsToUse = topicsToCheck || topics;
+    if (!user?.id || !topicsToUse || topicsToUse.length === 0) {
       return;
     }
     
@@ -76,7 +83,7 @@ const TopicPage = () => {
       
       // Check ALL topics for retention test completion status
       // This ensures the icon appears after completing a retention test
-      for (const topic of topics) {
+      for (const topic of topicsToUse) {
         try {
           // Always check retention test availability API for each topic
           // This will return completion status even if assessments aren't done
@@ -124,7 +131,7 @@ const TopicPage = () => {
     // Refresh retention test status after closing popup (in case test was completed)
     if (user?.id && topics && topics.length > 0) {
       setTimeout(() => {
-        checkRetentionTestAvailability();
+        checkRetentionTestAvailability(topics);
       }, 500); // Small delay to ensure backend has updated
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,7 +140,7 @@ const TopicPage = () => {
   // Trigger retention test check when topics are loaded (only once)
   useEffect(() => {
     if (user?.id && topics && topics.length > 0) {
-      checkRetentionTestAvailability();
+      checkRetentionTestAvailability(topics);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, topics?.length]); // Only depend on topics length, not the whole array
@@ -142,11 +149,13 @@ const TopicPage = () => {
   useEffect(() => {
     let mounted = true;
     
-    // Only load if topics are empty and user is available
-    if ((!topics || topics.length === 0) && user?.id) {
+    // Only fetch if we don't have topics or user changed
+    if (!topics || topics.length === 0) {
       setLoading(true);
       setError("");
-      getTopicsWithProgress()
+      
+      // Use ref to get latest function version, avoiding stale closures
+      getTopicsWithProgressRef.current()
         .then((topicsData) => {
           if (mounted) {
             setTopics(topicsData);
@@ -163,16 +172,17 @@ const TopicPage = () => {
             setLoading(false);
           }
         });
-    } else if (topics && topics.length > 0) {
+    } else {
       setLoading(false);
     }
     
     return () => {
       mounted = false;
     };
-    // Only depend on user?.id and topics length to prevent infinite loops
+    // Note: We use a ref to store getTopicsWithProgress to avoid infinite loops
+    // The ref is updated whenever getTopicsWithProgress changes, so we always use the latest version
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, topics?.length]);
+  }, [user?.id]); // Only depend on user.id - triggers fetch when user changes
 
 
 
