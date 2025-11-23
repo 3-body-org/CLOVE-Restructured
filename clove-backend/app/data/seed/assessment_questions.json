@@ -115,7 +115,7 @@
     "id": 8,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "What happens if you reassign a 'final' variable?",
+      "question": "What happens if you reassign a `final` variable?",
       "choices": [
         "Warning",
         "Value updates",
@@ -147,7 +147,7 @@
     "id": 10,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Why is 'int class = 5;' invalid?",
+      "question": "Why is `int class = 5;` invalid?",
       "choices": [
         "'class' is a reserved keyword.",
         "It's not capitalized.",
@@ -211,7 +211,7 @@
     "id": 14,
     "subtopic_id": 1,
     "question_choices_correctanswer": {
-      "question": "Difference between 'int x;' and 'x=5;'?",
+      "question": "Difference between `int x;` and `x=5;`?",
       "choices": [
         "None",
         "Assignment vs Casting",
@@ -435,15 +435,15 @@
     "id": 28,
     "subtopic_id": 2,
     "question_choices_correctanswer": {
-      "question": "What is the resulting data type and value of the expression 'A' + 1?",
+      "question": "What is the result of the arithmetic expression `'A' + 1`?",
       "choices": [
-        "Error",
-        "int (66)",
-        "char ('B')",
-        "String (\"A1\")"
+        "\"A1\"",
+        "'B'",
+        "66",
+        "Error"
       ],
-      "correct_answer": "int (66)",
-      "explanation": "Arithmetic operations on chars promote them to integers. 65 + 1 equals the integer 66."
+      "correct_answer": "66",
+      "explanation": "In Java, the `+` operator treats `char` as an integer (ASCII value). 'A' is 65, so 65 + 1 results in the integer 66. It does not perform String concatenation (\"A1\") or keep the char type ('B')."
     },
     "difficulty": "hard"
   },
@@ -2003,7 +2003,7 @@
     "id": 126,
     "subtopic_id": 9,
     "question_choices_correctanswer": {
-      "question": "What is output? `for(int i=0; i<10; i+=2) print(i + \" \");`",
+      "question": "What is the output of the following code? `for(int i=0; i<10; i+=2) print(i + \" \");`",
       "choices": [
         "0 1 2 3 4",
         "0 2 4 6 8 10",
@@ -2219,7 +2219,7 @@
       "double size = 5.5;"
     ],
     "correct_answer": "boolean isReady = \"true\";",
-    "explanation": "The lesson warns against placing a String into the wrong container. \"true\" (with quotes) is a String, but the variable type is boolean."
+    "explanation": ""
   },
   "difficulty": "hard"
 },
@@ -2235,7 +2235,7 @@
       "Runtime exception"
     ],
     "correct_answer": "Unknown symbol error",
-    "explanation": "Attempting to use a variable before declaration leads to an 'unknown symbol' error, as the container has not been forged yet."
+    "explanation": ""
   },
   "difficulty": "hard"
 },
@@ -2283,7 +2283,7 @@
       "Decimal number"
     ],
     "correct_answer": "Medium-sized whole number",
-    "explanation": "The lesson defines a `short` as a 'Medium-sized whole number', sitting between the smaller `byte` and the larger `int`."
+    "explanation": ""
   },
   "difficulty": "medium"
 },
@@ -2363,7 +2363,7 @@
       "Variable names"
     ],
     "correct_answer": "Memory addresses",
-    "explanation": "The lesson warns that using `==` on objects compares where the object is stored (its memory address), not the actual data content. Use `.equals()` for content comparison."
+    "explanation": ""
   },
   "difficulty": "medium"
 },
@@ -2411,7 +2411,7 @@
         "/"
       ],
       "correct_answer": "%",
-      "explanation": "The modulus operator (%) returns the remainder of a division operation (e.g., 5 % 2 is 1)."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -2427,7 +2427,7 @@
         "1"
       ],
       "correct_answer": "0",
-      "explanation": "12 divides evenly by 4, so the remainder is 0."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2443,7 +2443,7 @@
         "12"
       ],
       "correct_answer": "12",
-      "explanation": "Parentheses take precedence. (5 - 2) is 3. Then 3 * 4 is 12."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2459,7 +2459,7 @@
         "6"
       ],
       "correct_answer": "33",
-      "explanation": "Left-to-right associativity: 1 + 2 = 3. Then 3 + \"3\" performs string concatenation, resulting in \"33\"."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2475,7 +2475,7 @@
         "23"
       ],
       "correct_answer": "21",
-      "explanation": "1) 10*10=100. 2) 100/5=20. 3) 1*4=4. 4) 4/2=2. Expression becomes 20 + 3 - 2 = 21."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2491,7 +2491,7 @@
         "==="
       ],
       "correct_answer": "==",
-      "explanation": "The `==` operator is used for equality comparison in Java."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -2507,7 +2507,7 @@
         "a != b"
       ],
       "correct_answer": "a != b",
-      "explanation": "5 is not equal to 10, so `a != b` is true."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2523,7 +2523,7 @@
         "Error"
       ],
       "correct_answer": "true",
-      "explanation": "`>=` checks for greater than OR equal to. Since 10 equals 10, it is true."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
@@ -2539,7 +2539,7 @@
         "false"
       ],
       "correct_answer": "false",
-      "explanation": "Using `new` creates distinct objects in memory. `==` checks references, which are different here."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2555,7 +2555,7 @@
         "str1 = str2"
       ],
       "correct_answer": "str1.equals(str2)",
-      "explanation": "The `.equals()` method is required to compare the actual text content of String objects."
+      "explanation": ""
     },
     "difficulty": "hard"
   },
@@ -2571,7 +2571,7 @@
         "||"
       ],
       "correct_answer": "&&",
-      "explanation": "The double ampersand (`&&`) is the logical AND operator in Java."
+      "explanation": ""
     },
     "difficulty": "easy"
   },
@@ -2587,7 +2587,7 @@
         "1"
       ],
       "correct_answer": "true",
-      "explanation": "5>3 is true. 8>5 is true. true && true is true."
+      "explanation": ""
     },
     "difficulty": "medium"
   },
