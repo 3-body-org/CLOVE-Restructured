@@ -33,10 +33,11 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
     }
   };
 
-  const calculateTargetTime = (hoursSinceCompletion, requiredMinutes) => {
-    const now = new Date();
+  const calculateTargetTime = (requiredHours) => {
+    if (!availability?.completed_at) return null;
     const completionTime = new Date(availability.completed_at);
-    const targetTime = new Date(completionTime.getTime() + (requiredMinutes * 60 * 1000));
+    // Add required hours to completion time (convert hours to milliseconds)
+    const targetTime = new Date(completionTime.getTime() + (requiredHours * 60 * 60 * 1000));
     return targetTime.toISOString();
   };
 
@@ -141,7 +142,7 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
             <div className="retention-test-stage__countdown">
               <p>Available in:</p>
               <CountdownTimer
-                targetTime={calculateTargetTime(availability.hours_since_completion, 1)}
+                targetTime={calculateTargetTime(10)}
                 size="small"
                 showDays={false}
               />
@@ -149,14 +150,14 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
           )}
         </div>
 
-        {/* Second Stage (5 days) - Always show both stages when viewing results */}
+        {/* Second Stage (1 day) - Always show both stages when viewing results */}
         <div className={`retention-test-stage ${second_stage_completed ? 'completed' : ''}`}>
           <div className="retention-test-stage__header">
             <div className="retention-test-stage__title">
               <span className="retention-test-stage__number">2</span>
               <div>
                 <h4>Second Retention Test</h4>
-                <p>Available after 1.5 days</p>
+                <p>Available after 1 day</p>
               </div>
             </div>
             <div className="retention-test-stage__status">
@@ -187,9 +188,9 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
             <div className="retention-test-stage__countdown">
               <p>Available in:</p>
               <CountdownTimer
-                targetTime={calculateTargetTime(availability.hours_since_completion, 5)}
+                targetTime={calculateTargetTime(24)}
                 size="small"
-                showDays={false}
+                showDays={true}
               />
             </div>
           )}
