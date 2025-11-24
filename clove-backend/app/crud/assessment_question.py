@@ -326,41 +326,15 @@ async def check_retention_test_availability(
     topic_id: int
 ) -> Dict[str, Any]:
     """
-    Check which retention test stages are available based on assessment completion timing.
-    Both stages share the same timer (count from when both assessments are completed).
+    Check which retention test stages are available based on topic completion timing.
+    Both stages share the same timer (count from when user_topic.completed_at).
     First stage: Available after 10 hours
-    Second stage: Available after 1.5 days (36 hours)
+    Second stage: Available after 1 day (24 hours)
     Returns information about available stages and countdown timers.
     """
     from datetime import datetime, timezone, timedelta
     
-    # OLD LOGIC - Commented out: Required topic to be fully completed (all subtopics)
-    # # Get user topic completion info
-    # result = await db.execute(
-    #     select(UserTopic).where(
-    #         UserTopic.user_id == user_id,
-    #         UserTopic.topic_id == topic_id,
-    #         UserTopic.is_completed == True
-    #     )
-    # )
-    # user_topic = result.scalar_one_or_none()
-    # 
-    # if not user_topic or not user_topic.completed_at:
-    #     return {
-    #         "first_stage_available": False,
-    #         "second_stage_available": False,
-    #         "first_stage_countdown": None,
-    #         "second_stage_countdown": None,
-    #         "message": "Topic not completed yet"
-    #     }
-    # 
-    # current_time = datetime.now(timezone.utc)
-    # completed_at = user_topic.completed_at
-    
-    # NEW LOGIC: Check if both pre and post assessments are completed
-    # (subtopics completion is not required)
-    
-    # Get user topic (without requiring is_completed)
+    # Get user topic completion info (reference old logic)
     result = await db.execute(
         select(UserTopic).where(
             UserTopic.user_id == user_id,
@@ -378,7 +352,7 @@ async def check_retention_test_availability(
             "message": "User topic not found"
         }
     
-    # Get pre and post assessments
+    # Verify both pre and post assessments are completed (requirement check)
     pre_assessments = await get_pre_assessment_for_user_topic(db, user_id, topic_id)
     post_assessments = await get_post_assessment_for_user_topic(db, user_id, topic_id)
     
@@ -409,33 +383,27 @@ async def check_retention_test_availability(
             "message": "Both pre and post assessments must be completed"
         }
     
-    # Both assessments must have completion timestamps
-    # Retention test timing starts from when BOTH assessments are completed
-    current_time = datetime.now(timezone.utc)
-    pre_taken_at = pre_assessment.taken_at
-    post_taken_at = post_assessment.taken_at
-    
-    if not pre_taken_at or not post_taken_at:
+    # Use user_topic.completed_at as the basis for countdown (reference old logic)
+    if not user_topic.completed_at:
         return {
             "first_stage_available": False,
             "second_stage_available": False,
             "first_stage_countdown": None,
             "second_stage_countdown": None,
-            "message": "Both assessments must have completion timestamps"
+            "message": "Topic completion timestamp not found"
         }
     
-    # Use the later of the two assessment completion times
-    # This ensures timing starts from when BOTH assessments are fully completed
-    completed_at = max(pre_taken_at, post_taken_at)
+    current_time = datetime.now(timezone.utc)
+    completed_at = user_topic.completed_at
     
     # Calculate time differences
-    # Both stages share the same timer - count from when both assessments are completed
+    # Both stages share the same timer - count from when topic is completed (user_topic.completed_at)
     time_since_completion = current_time - completed_at
     hours_since_completion = time_since_completion.total_seconds() / 3600
     days_since_completion = hours_since_completion / 24
     
     # Check first stage availability (10 hours)
-    # Timer starts from when both assessments are completed (completed_at)
+    # Timer starts from when topic is completed (user_topic.completed_at)
     first_stage_available = hours_since_completion >= 10  # 10 hours
     first_stage_countdown = None
     if not first_stage_available:
@@ -446,11 +414,11 @@ async def check_retention_test_availability(
         }
         
     
-    # Check second stage availability (1.5 days = 36 hours)
-    second_stage_available = hours_since_completion >= 36  # 1.5 days = 36 hours
+    # Check second stage availability (1 day = 24 hours)
+    second_stage_available = hours_since_completion >= 24  # 1 day = 24 hours
     second_stage_countdown = None
     if not second_stage_available:
-        hours_remaining = 36 - hours_since_completion
+        hours_remaining = 24 - hours_since_completion
         days_remaining = int(hours_remaining / 24)
         hours_in_day = hours_remaining % 24
         second_stage_countdown = {
