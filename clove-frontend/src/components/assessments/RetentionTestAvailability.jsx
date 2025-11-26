@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApi } from '../../hooks/useApi';
-import CountdownTimer from '../common/CountdownTimer';
+// import CountdownTimer from '../common/CountdownTimer';
 import './styles/RetentionTestAvailability.scss';
 
 const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = false }) => {
@@ -33,13 +33,14 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
     }
   };
 
-  const calculateTargetTime = (requiredHours) => {
-    if (!availability?.completed_at) return null;
-    const completionTime = new Date(availability.completed_at);
-    // Add required hours to completion time (convert hours to milliseconds)
-    const targetTime = new Date(completionTime.getTime() + (requiredHours * 60 * 60 * 1000));
-    return targetTime.toISOString();
-  };
+  // Commented out - countdown timer function (not needed when tests are available immediately)
+  // const calculateTargetTime = (requiredHours) => {
+  //   if (!availability?.completed_at) return null;
+  //   const completionTime = new Date(availability.completed_at);
+  //   // Add required hours to completion time (convert hours to milliseconds)
+  //   const targetTime = new Date(completionTime.getTime() + (requiredHours * 60 * 60 * 1000));
+  //   return targetTime.toISOString();
+  // };
 
   if (loading) {
     return (
@@ -104,14 +105,14 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
       )}
 
       <div className="retention-test-availability__stages">
-        {/* First Stage (10 hours) - Always show both stages when viewing results */}
+        {/* First Stage - Available immediately after completing pre/post assessments */}
         <div className={`retention-test-stage ${first_stage_completed ? 'completed' : ''}`}>
           <div className="retention-test-stage__header">
             <div className="retention-test-stage__title">
               <span className="retention-test-stage__number">1</span>
               <div>
                 <h4>First Retention Test</h4>
-                <p>Available after 10 hours</p>
+                <p>Available immediately</p>
               </div>
             </div>
             <div className="retention-test-stage__status">
@@ -138,7 +139,8 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
             </div>
           </div>
           
-          {!first_stage_completed && !first_stage_available && first_stage_countdown && (
+          {/* Commented out - countdown timer (not needed when tests are available immediately) */}
+          {/* {!first_stage_completed && !first_stage_available && first_stage_countdown && (
             <div className="retention-test-stage__countdown">
               <p>Available in:</p>
               <CountdownTimer
@@ -147,17 +149,17 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
                 showDays={false}
               />
             </div>
-          )}
+          )} */}
         </div>
 
-        {/* Second Stage (1 day) - Always show both stages when viewing results */}
+        {/* Second Stage - Available immediately after completing pre/post assessments */}
         <div className={`retention-test-stage ${second_stage_completed ? 'completed' : ''}`}>
           <div className="retention-test-stage__header">
             <div className="retention-test-stage__title">
               <span className="retention-test-stage__number">2</span>
               <div>
                 <h4>Second Retention Test</h4>
-                <p>Available after 1 day</p>
+                <p>Available immediately</p>
               </div>
             </div>
             <div className="retention-test-stage__status">
@@ -184,7 +186,8 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
             </div>
           </div>
           
-          {!second_stage_completed && !second_stage_available && second_stage_countdown && (
+          {/* Commented out - countdown timer (not needed when tests are available immediately) */}
+          {/* {!second_stage_completed && !second_stage_available && second_stage_countdown && (
             <div className="retention-test-stage__countdown">
               <p>Available in:</p>
               <CountdownTimer
@@ -193,7 +196,7 @@ const RetentionTestAvailability = ({ topicId, onStartTest, showResultsOnly = fal
                 showDays={true}
               />
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
