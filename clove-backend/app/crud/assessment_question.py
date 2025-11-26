@@ -327,9 +327,9 @@ async def check_retention_test_availability(
 ) -> Dict[str, Any]:
     """
     Check which retention test stages are available based on topic completion timing.
-    Both stages share the same timer (count from when user_topic.completed_at).
-    First stage: Available after 10 hours
-    Second stage: Available after 1 day (24 hours)
+    Both stages are available immediately (0 hours) after topic completion.
+    First stage: Available immediately after completing pre/post assessments
+    Second stage: Available immediately after completing pre/post assessments
     Returns information about available stages and countdown timers.
     """
     from datetime import datetime, timezone, timedelta
@@ -396,36 +396,42 @@ async def check_retention_test_availability(
     current_time = datetime.now(timezone.utc)
     completed_at = user_topic.completed_at
     
-    # Calculate time differences
-    # Both stages share the same timer - count from when topic is completed (user_topic.completed_at)
+    # Calculate time differences (for informational purposes)
     time_since_completion = current_time - completed_at
     hours_since_completion = time_since_completion.total_seconds() / 3600
-    days_since_completion = hours_since_completion / 24
     
-    # Check first stage availability (10 hours)
-    # Timer starts from when topic is completed (user_topic.completed_at)
-    first_stage_available = hours_since_completion >= 10  # 10 hours
-    first_stage_countdown = None
-    if not first_stage_available:
-        hours_remaining = 10 - hours_since_completion
-        first_stage_countdown = {
-            "hours": int(hours_remaining),
-            "minutes": int((hours_remaining % 1) * 60)
-        }
-        
+    # Both stages are available immediately (0 hours) after topic completion
+    # No countdown needed since they're available right away
+    first_stage_available = True  # Available immediately
+    first_stage_countdown = None  # No countdown needed
     
-    # Check second stage availability (1 day = 24 hours)
-    second_stage_available = hours_since_completion >= 24  # 1 day = 24 hours
-    second_stage_countdown = None
-    if not second_stage_available:
-        hours_remaining = 24 - hours_since_completion
-        days_remaining = int(hours_remaining / 24)
-        hours_in_day = hours_remaining % 24
-        second_stage_countdown = {
-            "days": days_remaining,
-            "hours": int(hours_in_day),
-            "minutes": int((hours_in_day % 1) * 60)
-        }
+    second_stage_available = True  # Available immediately
+    second_stage_countdown = None  # No countdown needed
+    
+    # COMMENTED OUT - Old countdown logic (for reference if needed in the future)
+    # # Check first stage availability (10 hours)
+    # # Timer starts from when topic is completed (user_topic.completed_at)
+    # first_stage_available = hours_since_completion >= 10  # 10 hours
+    # first_stage_countdown = None
+    # if not first_stage_available:
+    #     hours_remaining = 10 - hours_since_completion
+    #     first_stage_countdown = {
+    #         "hours": int(hours_remaining),
+    #         "minutes": int((hours_remaining % 1) * 60)
+    #     }
+    # 
+    # # Check second stage availability (1 day = 24 hours)
+    # second_stage_available = hours_since_completion >= 24  # 1 day = 24 hours
+    # second_stage_countdown = None
+    # if not second_stage_available:
+    #     hours_remaining = 24 - hours_since_completion
+    #     days_remaining = int(hours_remaining / 24)
+    #     hours_in_day = hours_remaining % 24
+    #     second_stage_countdown = {
+    #         "days": days_remaining,
+    #         "hours": int(hours_in_day),
+    #         "minutes": int((hours_in_day % 1) * 60)
+    #     }
     
     # Check if stages are completed
     # ALWAYS check completion status, regardless of availability
