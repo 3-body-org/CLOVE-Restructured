@@ -17,7 +17,7 @@ class RetentionTest(Base):
     completed_at = Column(TIMESTAMP(timezone=True), nullable=True)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
     # New fields for two-stage retention test system
-    stage = Column(Integer, nullable=False, default=1)  # 1 for first retention test (12 hours), 2 for second (5 days)
+    stage = Column(Integer, nullable=False, default=1)  # 1 for first retention test (10 hours), 2 for second (5 days)
     first_stage_completed = Column(Boolean, nullable=False, default=False)
     second_stage_completed = Column(Boolean, nullable=False, default=False)
 

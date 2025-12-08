@@ -6,7 +6,7 @@ const AnimateOnScroll = ({ children, delay = 0 }) => {
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   useEffect(() => {
-    console.log("Component is in view: ", isInView);
+    //console.log("Component is in view: ", isInView);
   }, [isInView]);
 
   const variants = {
