@@ -59,7 +59,7 @@ async def seed_new_topic_for_existing_users(db: AsyncSession, topic_id: int):
                 user_topic_id=user_topic.id,
                 total_score=0.0,
                 total_items=0,
-                is_unlocked=True,  # Post-assessment always unlocked (same as pre-assessment)
+                is_unlocked=False,
                 subtopic_scores={},
                 questions_answers_iscorrect={},
                 attempt_count=0

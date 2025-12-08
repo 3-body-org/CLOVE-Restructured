@@ -38,55 +38,30 @@ export const useRetentionTestNotifications = () => {
       
       const availableTests = [];
 
-      // Check each topic for retention test availability
-      // NEW LOGIC: Retention tests appear when both pre and post assessments are completed
-      // (subtopics completion is not required)
+      // Check each completed topic for retention test availability
       for (const topic of topics) {
-        // OLD LOGIC - Commented out: Required all subtopics to be completed
-        // // Check if topic is completed
-        // let isTopicCompleted = false;
-        // 
-        // if (topic.progress === 1 || topic.progress === 100) {
-        //   // Topic might be completed, verify with detailed overview
-        //   try {
-        //     const topicOverview = await getTopicOverview(topic.id);
-        //     const { pre_assessment, subtopics, post_assessment } = topicOverview;
-        //     
-        //     const isPreAssessmentCompleted = pre_assessment?.is_completed || false;
-        //     const areAllSubtopicsCompleted = subtopics?.every(subtopic => subtopic.is_completed) || false;
-        //     const isPostAssessmentCompleted = post_assessment?.is_completed || false;
-        //     
-        //     isTopicCompleted = isPreAssessmentCompleted && areAllSubtopicsCompleted && isPostAssessmentCompleted;
-        //   } catch (err) {
-        //     // If overview fails, use progress as fallback
-        //     isTopicCompleted = topic.progress === 1 || topic.progress === 100;
-        //   }
-        // }
-        // 
-        // if (isTopicCompleted) {
+        // Check if topic is completed
+        let isTopicCompleted = false;
         
-        // Check if both assessments are completed (regardless of subtopics)
-        let areAssessmentsCompleted = false;
-        
-        try {
-          const topicOverview = await getTopicOverview(topic.id);
-          if (topicOverview) {
-            const { pre_assessment, post_assessment } = topicOverview;
+        if (topic.progress === 1 || topic.progress === 100) {
+          // Topic might be completed, verify with detailed overview
+          try {
+            const topicOverview = await getTopicOverview(topic.id);
+            const { pre_assessment, subtopics, post_assessment } = topicOverview;
             
             const isPreAssessmentCompleted = pre_assessment?.is_completed || false;
+            const areAllSubtopicsCompleted = subtopics?.every(subtopic => subtopic.is_completed) || false;
             const isPostAssessmentCompleted = post_assessment?.is_completed || false;
             
-            // Retention test available if both assessments are completed
-            areAssessmentsCompleted = isPreAssessmentCompleted && isPostAssessmentCompleted;
+            isTopicCompleted = isPreAssessmentCompleted && areAllSubtopicsCompleted && isPostAssessmentCompleted;
+          } catch (err) {
+            // If overview fails, use progress as fallback
+            isTopicCompleted = topic.progress === 1 || topic.progress === 100;
           }
-        } catch (err) {
-          // If overview fails, skip this topic
-          continue;
         }
 
-        if (areAssessmentsCompleted) {
-          // Check retention test availability using the API
-          // The API will handle timing (1 minute for first stage, 3 days for second stage)
+        if (isTopicCompleted) {
+          // Check retention test availability
           try {
             const response = await get(`/assessment_questions/topic/${topic.id}/retention-test/availability`);
             if (response.ok) {

@@ -25,7 +25,7 @@ class UserTopicCreate(UserTopicBase):
 class UserTopicUpdate(BaseModel):
     pre_assessment_completed: bool | None = False
     post_assessment_completed: bool | None = False
-    is_unlocked: bool | None = True
+    is_unlocked: bool | None = False
     is_completed: bool | None = False
     introduction_seen: bool | None = False
     completed_subtopics_count: int | None = 0
